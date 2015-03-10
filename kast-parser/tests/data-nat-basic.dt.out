@@ -1,0 +1,18 @@
+<k>
+    nf2 ( ( ((Lambda x Nat x)  Succ Zero ) , Nat ) )
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<tenv>
+    .Map
+</tenv>
+<data>
+    Nat |-> Set 0
+    One |-> Nat
+    Succ |-> (Pi x Nat Nat)
+    Zero |-> Nat
+</data>
+<meta>
+    .Map
+</meta>

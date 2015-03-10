@@ -1,0 +1,10 @@
+data List (a : Set 0) : Set 0 where
+  Nil : List a,
+  Cons : Pi x a (Pi y (List a) (List a))
+
+data Nat : Set 0 where
+  Zero : Nat,
+  Succ : Pi x Nat Nat
+
+
+expr = Cons ? (Succ Zero) (Nil ?)

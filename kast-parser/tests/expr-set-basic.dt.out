@@ -1,0 +1,15 @@
+<k>
+    nf2 ( ( Set 2 , Set 3 ) )
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<tenv>
+    .Map
+</tenv>
+<data>
+    .Map
+</data>
+<meta>
+    .Map
+</meta>

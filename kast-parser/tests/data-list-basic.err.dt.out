@@ -1,0 +1,23 @@
+<k>
+    (  Cons Nat Set 0  , applyMgu ( clash(Set 1,, Nat) , #symExpr(27) ) )
+       ~> tsubst ( Set 0 / #symVariable(25) ) ~> whnf2 ( HOLE ) ~>  HOLE Cons 
+      Nat Succ Zero Nil Nat  ~> (( (Lambda x List Nat Cons Nat Zero x) , (Pi x
+       List Nat List Nat) ) HOLE)
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<tenv>
+    .Map
+</tenv>
+<data>
+    Cons |-> (Pi a Set 0 (Pi x a (Pi y List a List a)))
+    List |-> (Pi a Set 0 Set 0)
+    Nat |-> Set 0
+    Nil |-> (Pi a Set 0 List a)
+    Succ |-> (Pi x Nat Nat)
+    Zero |-> Nat
+</data>
+<meta>
+    .Map
+</meta>

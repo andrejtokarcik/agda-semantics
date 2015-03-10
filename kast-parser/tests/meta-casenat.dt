@@ -1,0 +1,6 @@
+data Nat : Set where  // FIXME: CaseNat nie je konstruktor!
+  Zero : Nat,
+  Succ : Pi x Nat Nat,
+  CaseNat : Pi p (Pi x Nat Set) (Pi y (p Zero) (Pi z (Pi n Nat (p (Succ n))) (Pi n Nat (p n))))
+
+expr = CaseNat ? Zero (Lambda x Nat x)

@@ -1,0 +1,16 @@
+<k>
+    nf2 ( (  Constr Set 0  , Test ) )
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<tenv>
+    .Map
+</tenv>
+<data>
+    Constr |-> (Pi x Set 1 Test)
+    Test |-> Set 0
+</data>
+<meta>
+    .Map
+</meta>

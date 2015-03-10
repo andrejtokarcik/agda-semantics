@@ -1,0 +1,16 @@
+data Nat : Set 0 where
+  Zero : Nat,
+  Succ : Pi x Nat Nat
+
+data Top : Set 0 where
+  T : Top
+
+data Wrap (a : Set), (n : a) : Set where
+  W : Wrap a n
+
+data Vect (a : Set) : Pi x Nat Set where
+  Vnil : Vect a T,
+  Vcons : (Pi k Top (Pi x a (Pi xs (Vect a k) (Vec a (Succ k)))))
+
+
+expr = Vcons (Wrap Top T) T (W Top T) (Vnil (Wrap Top T))

@@ -1,0 +1,16 @@
+<k>
+    nf2 ( ( ((Lambda y Set 6 ((Lambda x Set 9 Set 2) Set 8)) Set 5) , Set 
+      3 ) )
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<tenv>
+    .Map
+</tenv>
+<data>
+    .Map
+</data>
+<meta>
+    .Map
+</meta>

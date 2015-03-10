@@ -1,0 +1,15 @@
+<k>
+    nf2 ( ( (Pi x Set 2 Set 4) , Set 5 ) )
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<tenv>
+    .Map
+</tenv>
+<data>
+    .Map
+</data>
+<meta>
+    .Map
+</meta>

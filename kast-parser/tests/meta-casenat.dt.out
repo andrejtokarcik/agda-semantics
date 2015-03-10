@@ -1,0 +1,20 @@
+<k>
+    constructsType ( Nat , p ) ~> true? ~> processConstrs ( Nat ,  ) ~> ((
+      (CaseNat (?)) Zero) (Lambda x Nat x))
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<tenv>
+    .Map
+</tenv>
+<data>
+    CaseNat |-> (Pi p (Pi x Nat Set 0) (Pi y p Zero (Pi z (Pi n Nat p Succ n) 
+      (Pi n Nat p n))))
+    Nat |-> Set 0
+    Succ |-> (Pi x Nat Nat)
+    Zero |-> Nat
+</data>
+<meta>
+    .Map
+</meta>

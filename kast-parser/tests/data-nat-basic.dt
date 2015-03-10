@@ -1,0 +1,6 @@
+data Nat : Set 0 where
+  Zero : Nat,
+  One : Nat,
+  Succ : Pi x Nat Nat
+
+expr = (Lambda x Nat x) (Succ Zero)

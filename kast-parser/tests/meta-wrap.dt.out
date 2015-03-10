@@ -1,0 +1,18 @@
+<k>
+    nf2 ( (  W #symExpr(7) T  ,  Wrap Top T  ) )
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<tenv>
+    .Map
+</tenv>
+<data>
+    T |-> Top
+    Top |-> Set 0
+    W |-> (Pi a Set 0 (Pi n a Wrap a n))
+    Wrap |-> (Pi a Set 0 (Pi n a Set 0))
+</data>
+<meta>
+    #symExpr(7) |-> ( Top , Set 0 )
+</meta>
