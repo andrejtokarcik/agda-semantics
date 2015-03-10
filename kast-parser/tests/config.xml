@@ -2,7 +2,7 @@
 <tests>
 
   <test
-    definition="lambda.k"
+    definition="agda.k"
     programs="."
     extension="dt"
     results="." >
