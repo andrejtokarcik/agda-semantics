@@ -1,0 +1,6 @@
+.*.sw[op]
+*~
+*.bak
+
+.k
+*-kompiled
