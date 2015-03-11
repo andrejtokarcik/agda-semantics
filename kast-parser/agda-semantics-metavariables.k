@@ -5,14 +5,6 @@ module AGDA-SEMANTICS-METAVARIABLES
   imports AGDA-SYNTAX
   imports AGDA-SEMANTICS-NORMAL
 
-  syntax Bool ::= isSymExpr(Expr) [function]
-  rule isSymExpr(#symExpr(_)) => true
-  //rule isSymExpr(#symWhnf(_)) => true
-  //rule isSymExpr(#symNf(_)) => true
-
-  rule isWhnf(#symExpr(_)) => true
-  rule isNf(#symExpr(_)) => true
-
   rule <k> ? => (E, T) ...</k>
        <meta>... . => E |-> (E, T) ...</meta>
     when fresh(E:Expr) andBool fresh(T:Expr)
@@ -20,6 +12,14 @@ module AGDA-SEMANTICS-METAVARIABLES
   rule <k> E => Et ...</k>
        <meta>... E |-> Et ...</meta>
     when isSymExpr(E)
+
+  syntax Bool ::= isSymExpr(Expr) [function]
+  rule isSymExpr(#symExpr(_)) => true
+  //rule isSymExpr(#symWhnf(_)) => true
+  //rule isSymExpr(#symNf(_)) => true
+
+  rule isWhnf(#symExpr(_)) => true
+  rule isNf(#symExpr(_)) => true
 
   syntax Expr ::= leftMost(Expr) [function]
   rule leftMost(E:Expr _:Expr) => leftMost(E)

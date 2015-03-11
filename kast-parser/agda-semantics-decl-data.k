@@ -35,11 +35,11 @@ module AGDA-SEMANTICS-DECL-DATA
   // --- already being handled since T is in whnf?
   rule <k> processConstr(D:Expr, C:Name, (T:Expr, _:Universe)) => constructsType(D, piTarget(T)) ~> true? ...</k>
        <data> Data (. => C |-> T) </data>
-         when notBool(C in keys(Data))
+         when notBool (C in keys(Data))
 
   rule <k> data N:Name Ps:Params : (T:Expr, Set I:Int) where Cs:Constrs => isUniverse(piTarget(T)) ~> true? ~> processConstrs(applyParams(Ps, N), prependParams(Ps, Cs)) ...</k>
        <data> Data (. => N |-> prependParams(Ps, T)) </data>
-         when notBool(N in keys(Data)) andBool /* FIXME? --> */ I >=Int 1
+         when notBool (N in keys(Data)) andBool /* FIXME? --> */ I >=Int 1
 
   syntax KItem ::= "true?"
   rule true ~> true? => .

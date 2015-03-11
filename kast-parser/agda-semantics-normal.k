@@ -39,7 +39,6 @@ module AGDA-SEMANTICS-NORMAL
                 | Neut
                 | Universe
                 | "Pi" Variable Nf Nf [binder]
-                | "Pi" Variable Variable Nf [binder]
                 | "Lambda" Variable Nf Nf [binder]
   syntax Neut ::= Name
                 | Variable   // FIXME?

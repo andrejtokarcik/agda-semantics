@@ -1,17 +1,14 @@
 module AGDA-SYNTAX
   syntax Variable ::= Token{[a-z][a-zA-Z0-9\_]*}  [onlyLabel]
-  syntax Name ::= Token{[A-Z][a-zA-Z0-9\_]*}     [onlyLabel]
+  syntax Name ::= Token{[A-Z][a-zA-Z0-9\_]*}      [onlyLabel]
 
   syntax Universe ::= "Set" Int
   syntax Expr ::= "(" Expr ")" [bracket]
-                | Variable
-                | Name
-                | "Set"
-                | Universe
-                > Expr Expr [left, strict(1(context('whnf2)), 2)]
-                > "Pi" Variable Expr Expr [binder, strict(2(context('whnf21),result(TypeT)))]
-                | "Lambda" Variable Expr Expr [binder, strict(2(context('whnf21),result(TypeT)))]
-                | "?"
+                | Variable | Name | "?"
+                | Universe | "Set"
+                > Expr Expr                       [left, strict(1(context('whnf2)), 2)]
+                > "Pi" Variable Expr Expr         [binder, strict(2(context('whnf21),result(TypeT)))]
+                | "Lambda" Variable Expr Expr     [binder, strict(2(context('whnf21),result(TypeT)))]
   rule Set => Set 0 [macro]
 
   syntax DataDecl ::= "(" DataDecl ")" [bracket]

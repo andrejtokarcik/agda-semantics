@@ -17,12 +17,12 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule <k> Pi X:Variable (T1:Expr, _) _ ~> (. => tenv(TEnv)) ...</k>
        <tenv> TEnv => TEnv[T1/X] </tenv>  //[structural]
-  context Pi _ _ (HOLE:Expr => whnf2(HOLE)) ~> tenv(_)  [result(TypeT)]
+  context Pi _ _ (HOLE:Expr => whnf21(HOLE)) ~> tenv(_)  [result(TypeT)]
   rule Pi X:Variable (T1:Expr, Set I1:Int) (T2:Expr, Set I2:Int) => (Pi X T1 T2, Set maxInt(I1, I2))
 
   rule <k> Lambda X:Variable (T:Expr, _) _ ~> (. => tenv(TEnv)) ...</k>
        <tenv> TEnv => TEnv[T/X] </tenv>  //[structural]
-  context Lambda _ _ HOLE:Expr ~> tenv(_)
+  context Lambda _ _ (HOLE:Expr => whnf2(HOLE)) ~> tenv(_)  [result(Whnf2ExprT)]
   rule Lambda X:Variable (T:Expr, _:Universe) (E:Expr, T':Expr) => (Lambda X T E, Pi X T T')
 
   rule (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => T1 == Pi X T T' ~> T2 == T ~> (E1 E2, T') ~> tsubst(E2/X)
