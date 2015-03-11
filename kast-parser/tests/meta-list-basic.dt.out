@@ -1,22 +1,26 @@
-<k>
-    nf2 ( (  Cons #symExpr(10)  Succ Zero   Nil #symExpr(21)   ,  List Nat
-        ) )
-</k>
-<mgu>
-    subst(.KList)
-</mgu>
-<tenv>
-    .Map
-</tenv>
-<data>
-    Cons |-> (Pi a Set 0 (Pi x a (Pi y List a List a)))
-    List |-> (Pi a Set 0 Set 0)
-    Nat |-> Set 0
-    Nil |-> (Pi a Set 0 List a)
-    Succ |-> (Pi x Nat Nat)
-    Zero |-> Nat
-</data>
-<meta>
-    #symExpr(10) |-> ( Nat , Set 0 )
-    #symExpr(21) |-> ( Nat , Set 0 )
-</meta>
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenv>
+        expr |->  List Nat 
+    </tenv>
+    <data>
+        Cons |-> (Pi a Set 0 (Pi x a (Pi y List a List a)))
+        List |-> (Pi a Set 0 Set 0)
+        Nat |-> Set 0
+        Nil |-> (Pi a Set 0 List a)
+        Succ |-> (Pi x Nat Nat)
+        Zero |-> Nat
+    </data>
+    <fun>
+        expr |->  Cons #symExpr(10)  Succ Zero   Nil #symExpr(21)  
+    </fun>
+    <meta>
+        #symExpr(10) |-> ( Nat , Set 0 )
+        #symExpr(21) |-> ( Nat , Set 0 )
+    </meta>
+</T>

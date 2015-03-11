@@ -1,18 +1,23 @@
-<k>
-    nf2 ( ( (((Lambda a Set 0 (Lambda x a x)) #symExpr(1)) Zero) , Nat ) )
-      
-</k>
-<mgu>
-    subst(.KList)
-</mgu>
-<tenv>
-    .Map
-</tenv>
-<data>
-    Nat |-> Set 0
-    Succ |-> (Pi x Nat Nat)
-    Zero |-> Nat
-</data>
-<meta>
-    #symExpr(1) |-> ( Nat , Set 0 )
-</meta>
+<T>
+    <k>
+        whnf ( (((Lambda a Set 0 (Lambda x a x)) #symExpr(1)) Zero) ) ~> 
+          whnf21 ( ( HOLE , Nat ) ) ~> expr = HOLE
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenv>
+        .Map
+    </tenv>
+    <data>
+        Nat |-> Set 0
+        Succ |-> (Pi x Nat Nat)
+        Zero |-> Nat
+    </data>
+    <fun>
+        .Map
+    </fun>
+    <meta>
+        #symExpr(1) |-> ( Nat , Set 0 )
+    </meta>
+</T>

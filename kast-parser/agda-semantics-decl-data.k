@@ -1,7 +1,7 @@
 require "agda-syntax.k"
 require "agda-semantics-normal.k"
 
-module AGDA-SEMANTICS-DATATYPES
+module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SYNTAX
   imports AGDA-SEMANTICS-NORMAL
 

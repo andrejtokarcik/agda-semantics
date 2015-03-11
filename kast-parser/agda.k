@@ -12,20 +12,24 @@ module AGDA
   syntax KResult ::= ExprT
 
   syntax KItem ::= parseProgram(Program) [function]
-  rule parseProgram(expr = E:Expr) => E
-  rule parseProgram(D:DataDecl P:Program) => D ~> parseProgram(P)
+  rule parseProgram(.Program) => .
+  rule parseProgram(D:Decl P:Program) => D ~> parseProgram(P)
 
-  configuration <k color="green"> parseProgram($PGM:Program) </k>
-                <tenv color="red"> .Map </tenv>
-                <data> .Map </data>   // signatures
-                <meta> .Map </meta>
-                <mgu color="blue"> .Mgu </mgu>
-                //<orig> $PGM </orig>
+  configuration <T color="yellow">
+                  <k color="green"> parseProgram($PGM:Program) </k>
+                  <data color="violet"> .Map </data>   // signatures
+                  <fun color="cyan"> .Map </fun>
+                  <tenv color="red"> .Map </tenv>
+                  <meta color="black"> .Map </meta>
+                  <mgu color="blue"> .Mgu </mgu>
+                  //<orig> $PGM </orig>
+                </T>
+                //<out stream="stdout"> .List </out>
 
-  // a separate tag <solution /> as in logik.k?
+  // Run with `krun --output none`, cf. kool-typed-static.k
   /*
-  syntax KItem ::= "Solution" ExprT [strict(all(context('nf2)))]
-  rule <k> S:ExprT => Solution S </k>
+  rule (<T>... <k> .K </k> <mgu> _:Mgu </mgu> ...</T> => .)
+       <out>... . => ListItem("Type checked!\n") </out>
+    [structural]
   */
-  rule <k> T:ExprT => nf2(T) </k>
 endmodule

@@ -1,26 +1,32 @@
-<k>
-    nf2 ( (  Vcons #symExpr(28) Zero W Top T Vnil #symExpr(45)  ,  Vect 
-      Wrap Top T Succ Zero  ) )
-</k>
-<mgu>
-    subst(.KList)
-</mgu>
-<tenv>
-    .Map
-</tenv>
-<data>
-    Nat |-> Set 0
-    Succ |-> (Pi x Nat Nat)
-    T |-> Top
-    Top |-> Set 0
-    Vcons |-> (Pi a Set 0 (Pi k Nat (Pi x a (Pi xs Vect a k Vect a Succ k))))
-    Vect |-> (Pi a Set 0 (Pi x Nat Set 0))
-    Vnil |-> (Pi a Set 0 Vect a Zero)
-    W |-> (Pi a Set 0 (Pi n a Wrap a n))
-    Wrap |-> (Pi a Set 0 (Pi n a Set 0))
-    Zero |-> Nat
-</data>
-<meta>
-    #symExpr(28) |-> (  Wrap Top T  , Set 0 )
-    #symExpr(45) |-> (  Wrap Top T  , Set 0 )
-</meta>
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenv>
+        expr |->  Vect Wrap Top T Succ Zero 
+    </tenv>
+    <data>
+        Nat |-> Set 0
+        Succ |-> (Pi x Nat Nat)
+        T |-> Top
+        Top |-> Set 0
+        Vcons |-> (Pi a Set 0 (Pi k Nat (Pi x a (Pi xs Vect a k Vect a Succ k)
+          )))
+        Vect |-> (Pi a Set 0 (Pi x Nat Set 0))
+        Vnil |-> (Pi a Set 0 Vect a Zero)
+        W |-> (Pi a Set 0 (Pi n a Wrap a n))
+        Wrap |-> (Pi a Set 0 (Pi n a Set 0))
+        Zero |-> Nat
+    </data>
+    <fun>
+        expr |->  Vcons #symExpr(28) Zero  W Top T   Vnil #symExpr(45)  
+          
+    </fun>
+    <meta>
+        #symExpr(28) |-> (  Wrap Top T  , Set 0 )
+        #symExpr(45) |-> (  Wrap Top T  , Set 0 )
+    </meta>
+</T>

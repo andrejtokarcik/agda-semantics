@@ -1,16 +1,21 @@
-<k>
-    nf2 ( (  Constr Set 0  , Test ) )
-</k>
-<mgu>
-    subst(.KList)
-</mgu>
-<tenv>
-    .Map
-</tenv>
-<data>
-    Constr |-> (Pi x Set 1 Test)
-    Test |-> Set 0
-</data>
-<meta>
-    .Map
-</meta>
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenv>
+        expr |-> Test
+    </tenv>
+    <data>
+        Constr |-> (Pi x Set 1 Test)
+        Test |-> Set 0
+    </data>
+    <fun>
+        expr |->  Constr Set 0 
+    </fun>
+    <meta>
+        .Map
+    </meta>
+</T>

@@ -25,11 +25,11 @@ module AGDA-SEMANTICS-TYPESYSTEM
   context Lambda _ _ HOLE:Expr ~> tenv(_)
   rule Lambda X:Variable (T:Expr, _:Universe) (E:Expr, T':Expr) => (Lambda X T E, Pi X T T')
 
-  rule (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => T1 = Pi X T T' ~> T2 = T ~> (E1 E2, T') ~> tsubst(E2/X)
+  rule (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => T1 == Pi X T T' ~> T2 == T ~> (E1 E2, T') ~> tsubst(E2/X)
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
 
-  syntax KItem ::= Expr "=" Expr
-  rule <k> T = T' => . ...</k>
+  syntax KItem ::= Expr "==" Expr
+  rule <k> T == T' => . ...</k>
        <mgu> Theta => updateMgu(Theta, T, T') </mgu> //[transition]
 
   rule <k> (_, T:Expr => applyMgu(Theta, T)) ...</k>

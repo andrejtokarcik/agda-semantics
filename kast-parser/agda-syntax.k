@@ -28,9 +28,18 @@ module AGDA-SYNTAX
   // TODO: make Constrs newline-separated to match Agda's syntax
   syntax Constrs ::= List{Constr,","}
 
-  // klabel below necessary in order to avoid "Cannot use '__ as a right
-  // child of '__" errors (which is due to [left] attribute assigned
-  // to application above)
-  syntax Program ::= "expr" "=" Expr
-                   | DataDecl Program  [klabel(p)]
+  syntax FunDecl ::= Variable "=" Expr  [strict(2(context('whnf21))), prefer]
+
+  /*
+  syntax Program ::= FunDecl
+                   | DataDecl
+                   | Program Program  [assoc, id('.Program)]   // << doesn't work
+                   //| DataDecl Program [klabel(p)]
+  */
+
+  syntax Decl ::= DataDecl | FunDecl
+  // klabel below is necessary to avoid "Cannot use '__ as a right
+  // child of '__" errors (which are apparently due to [left] attribute
+  // assigned to Expr application)
+  syntax Program ::= List{Decl,""}  [klabel(p)]
 endmodule
