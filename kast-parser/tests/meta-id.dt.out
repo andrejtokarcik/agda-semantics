@@ -1,13 +1,12 @@
 <T>
     <k>
-        whnf ( (((Lambda a Set 0 (Lambda x a x)) #symExpr(1)) Zero) ) ~> 
-          whnf21 ( ( HOLE , Nat ) ) ~> expr = HOLE
+        .K
     </k>
     <mgu>
         subst(.KList)
     </mgu>
     <tenv>
-        .Map
+        expr |-> Nat
     </tenv>
     <data>
         Nat |-> Set 0
@@ -15,9 +14,9 @@
         Zero |-> Nat
     </data>
     <fun>
-        .Map
+        expr |-> (((Lambda a Set 0 (Lambda x a x)) #symExpr(2)) Zero)
     </fun>
     <meta>
-        #symExpr(1) |-> ( Nat , Set 0 )
+        #symExpr(2) |-> ( Nat , Set 0 )
     </meta>
 </T>

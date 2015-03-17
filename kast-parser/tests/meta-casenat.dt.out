@@ -1,7 +1,7 @@
 <T>
     <k>
-        constructsType ( Nat , p ) ~> true? ~> processConstrs ( Nat ,  )
-           ~> expr = (((CaseNat (?)) Zero) (Lambda x Nat x))
+        p constructorOf Nat ~> processConstrs ( Nat ,  ) ~> expr = (((
+          CaseNat (?)) Zero) (Lambda x Nat x))
     </k>
     <mgu>
         subst(.KList)

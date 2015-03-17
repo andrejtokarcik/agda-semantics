@@ -17,8 +17,8 @@
         Zero |-> Nat
     </data>
     <fun>
-        expr |->  Cons Nat Zero  Cons Nat Zero Cons Nat Succ Zero Nil Nat 
-           
+        expr |-> ((Lambda x List Nat Cons Nat Zero x)  Cons Nat Zero  Cons
+           Nat Succ Zero Nil Nat  )
     </fun>
     <meta>
         .Map

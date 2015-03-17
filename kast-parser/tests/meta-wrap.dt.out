@@ -15,9 +15,9 @@
         Wrap |-> (Pi a Set 0 (Pi n a Set 0))
     </data>
     <fun>
-        expr |->  W #symExpr(7) T 
+        expr |->  W #symExpr(8) T 
     </fun>
     <meta>
-        #symExpr(7) |-> ( Top , Set 0 )
+        #symExpr(8) |-> ( Top , Set 0 )
     </meta>
 </T>

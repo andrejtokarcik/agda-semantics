@@ -15,7 +15,7 @@
         Zero |-> Nat
     </data>
     <fun>
-        expr |->  Succ Zero 
+        expr |-> ((Lambda x Nat x)  Succ Zero )
     </fun>
     <meta>
         .Map

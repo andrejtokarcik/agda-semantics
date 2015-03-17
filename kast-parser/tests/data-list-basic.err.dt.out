@@ -1,16 +1,20 @@
 <T>
     <k>
-        (  Cons Nat Set 0  , applyMgu ( clash(Set 1,, Nat) , #symExpr(27) 
-          ) ) ~> tsubst ( Set 0 / #symVariable(25) ) ~> whnf2 ( HOLE ) ~>  
-          HOLE  Cons Nat  Succ Zero   Nil Nat    ~> (( (Lambda x List Nat Cons
-           Nat Zero x) , (Pi x List Nat List Nat) ) HOLE) ~> whnf2 ( HOLE )
-           ~> whnf21 ( HOLE ) ~> expr = HOLE
+        (  Cons Nat Set 0  , applyMgu ( clash(Set 1,, Nat) , #symExpr(28) 
+          ) ) ~> tsubst ( Set 0 / #symVariable(26) ) ~> whnf2 ( HOLE ) ~>  
+          HOLE Cons Nat Succ Zero Nil Nat  ~> (( (Lambda x List Nat Cons Nat 
+          Zero x) , (Pi x List Nat List Nat) ) HOLE) ~> whnf2 ( HOLE ) ~> ( 
+          expr , #symExpr(10) ) = HOLE ~> funDecl ( expr , .Map )
     </k>
     <mgu>
         subst(.KList)
     </mgu>
     <tenv>
-        .Map
+        expr |-> amb(
+            applyMgu ( clash(Set 1,, Nat) , #symExpr(10) ),
+            applyMgu ( clash(Set 1,, Nat) , #symExpr(10) ),
+            applyMgu ( clash(Set 1,, Nat) , #symExpr(10) )
+        )
     </tenv>
     <data>
         Cons |-> (Pi a Set 0 (Pi x a (Pi y List a List a)))

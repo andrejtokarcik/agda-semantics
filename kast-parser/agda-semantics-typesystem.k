@@ -15,9 +15,10 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule Set I:Int => (Set I, Set (I +Int 1))
 
-  rule <k> Pi X:Variable (T1:Expr, _) _ ~> (. => tenv(TEnv)) ...</k>
-       <tenv> TEnv => TEnv[T1/X] </tenv>  //[structural]
-  context Pi _ _ (HOLE:Expr => whnf21(HOLE)) ~> tenv(_)  [result(TypeT)]
+  rule <k> Pi X:Variable (T1:Expr, _) T2 ~> (. => tenv(TEnv)) ...</k>
+       <tenv> TEnv => TEnv[T1/X] </tenv>
+     when isExprT(T2) =/=K true     // << toto (+ zakomentovany TypeT nizsie) k pripadu, ked konstruktor targetuje novy parametricky datatyp ale bez parametru a teda nevie otypovat vysledny Pi
+  context Pi _ _ (HOLE:Expr => whnf21(HOLE)) ~> tenv(_)     [result(Whnf21ExprT)]   //[result(TypeT)]
   rule Pi X:Variable (T1:Expr, Set I1:Int) (T2:Expr, Set I2:Int) => (Pi X T1 T2, Set maxInt(I1, I2))
 
   rule <k> Lambda X:Variable (T:Expr, _) _ ~> (. => tenv(TEnv)) ...</k>
@@ -34,14 +35,16 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule <k> (_, T:Expr => applyMgu(Theta, T)) ...</k>
        <meta> Meta => applyMgu(Theta, Meta) </meta>
+       <tenv> TEnv => applyMgu(Theta, TEnv) </tenv>    // FIXME?
        <mgu> Theta => .Mgu </mgu>
-    when Theta =/=K .Mgu   // <-- necessary, else infinite recursion
+    when Theta =/=K .Mgu    // <-- necessary, else infinite recursion
 
   syntax KItem ::= "tsubst" "(" Expr "/" Variable ")"
   rule <k> (_, T:Expr => T[E/X]) ~> (tsubst(E/X) => .) ...</k>
        <mgu> Theta </mgu>   // <mgu> .Mgu </mgu> doesn't work properly; the [anywhere] rule expanding .Mgu isn't anywhere enough, eh?
     when Theta ==K .Mgu     // hence, need this to guarantee that <mgu /> has been applied on the ExprT
 
+  // TODO: move to some generic utils module
   syntax KItem ::= tenv(Map)
   rule <k> _:ExprT ~> (tenv(TEnv) => .) ...</k>
        <tenv> _ => TEnv </tenv> //[transition]

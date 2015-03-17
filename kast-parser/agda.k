@@ -9,6 +9,8 @@ module AGDA
   imports AGDA-SYNTAX
   imports AGDA-SEMANTICS
 
+  // XXX:
+  //   syntax KResult ::= Whnf2ExprT
   syntax KResult ::= ExprT
 
   syntax KItem ::= parseProgram(Program) [function]
@@ -18,7 +20,7 @@ module AGDA
   configuration <T color="yellow">
                   <k color="green"> parseProgram($PGM:Program) </k>
                   <data color="violet"> .Map </data>   // signatures
-                  <fun color="cyan"> .Map </fun>
+                  <fun color="cyan"> .Map </fun>   // perhaps convert into List since we wanna retain order of the definitions
                   <tenv color="red"> .Map </tenv>
                   <meta color="black"> .Map </meta>
                   <mgu color="blue"> .Mgu </mgu>

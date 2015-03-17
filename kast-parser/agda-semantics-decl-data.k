@@ -5,9 +5,42 @@ module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SYNTAX
   imports AGDA-SEMANTICS-NORMAL
 
-  syntax Expr ::= piTarget(Expr) [function]
-  rule piTarget((Pi _ _ E:Expr) => E)
-  rule piTarget(E:Expr) => E [owise]
+  syntax KItem ::= "Hihi"
+
+  // TODO: need to check whether params are well-typed and (not necessarily?) whether prependParams(Ps, T) yields a type as well
+  rule <k> data N:Name Ps:Params : (T:Expr, Set I:Int) where Cs:Constrs => T constructorOf Set (I -Int 1) ~> processConstrs(applyParams(Ps, N), prependParams(Ps, Cs)) ...</k>
+       <data> Data (. => N |-> prependParams(Ps, T)) </data>
+         when notBool (N in keys(Data)) andBool /* FIXME? --> */ I >=Int 1
+
+  syntax KItem ::= processConstrs(Expr, Constrs)
+  rule processConstrs(D:Expr, .Constrs) => . [structural]
+  rule processConstrs(D:Expr, ((C:Name : T:Expr), Cs:Constrs)) => processConstr(D, C, T) ~> processConstrs(D, Cs)
+
+  syntax KItem ::= processConstr(Expr, Name, Expr)  [strict(3(context('whnf21),result(TypeT)))]
+  rule <k> processConstr(D:Expr, C:Name, (T:Expr, _:Universe)) => T constructorOf D ...</k>
+       <data> Data (. => C |-> T) </data>
+         when notBool (C in keys(Data))
+
+  // this is bad, the bool arg has to be a function which is too restrictive
+  /*
+  syntax KItem ::= Bool "?"
+  rule true ? => .
+  */
+  /*
+  syntax KItem ::= "true?"
+  rule true ~> true? => .
+  */
+
+  // TODO: error handling/reporting like:
+  //  rule E ~> true? => error(E) when E =/=K true
+
+  //syntax KItem ::= Expr "constructorOf" Expr   [strict(1(context('piTarget)))]
+  syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf), result(Whnf)))]
+  rule (Pi _ _ T => T) constructorOf _:Expr
+  rule D:Name constructorOf D => .
+  rule Set I:Int constructorOf Set I => .
+  rule (T:Expr V:Variable => T) constructorOf (D:Expr V => D)
+  rule (T:Expr E:Expr => T) constructorOf _:Expr  [owise]
 
   syntax Expr ::= prependParams(Params, Expr) [function]
   rule prependParams(.Params, T:Expr) => T
@@ -21,29 +54,17 @@ module AGDA-SEMANTICS-DECL-DATA
   rule applyParams(.Params, E:Expr) => E
   rule applyParams((((X:Variable : _:Expr), Ps:Params) => Ps), (E:Expr => E X))
 
-  syntax KItem ::= processConstrs(Expr, Constrs)
-  rule processConstrs(D:Expr, .Constrs) => . [structural]
-  rule processConstrs(D:Expr, ((C:Name : T:Expr), Cs:Constrs)) => processConstr(D, C, T) ~> processConstrs(D, Cs)
+  /*
+  syntax Bool ::= notPi(Expr)   [function]
+  rule notPi(Pi _ _ _) => false
+  rule notPi(_:Expr) => true  [owise]
+  */
 
-  syntax Bool ::= constructsType(Expr, Expr) [function]
-  rule constructsType(D:Name, D) => true
-  rule constructsType((D1:Expr D2:Variable) => D1, (T:Expr D2) => T)
-  rule constructsType(_:Expr, (T:Expr _:Expr) => T)  [owise]
-
-  syntax KItem ::= processConstr(Expr, Name, Expr)  [strict(3(context('whnf21),result(TypeT)))]
-  // Constr's target may also be a function that computes the data type
-  // --- already being handled since T is in whnf?
-  rule <k> processConstr(D:Expr, C:Name, (T:Expr, _:Universe)) => constructsType(D, piTarget(T)) ~> true? ...</k>
-       <data> Data (. => C |-> T) </data>
-         when notBool (C in keys(Data))
-
-  rule <k> data N:Name Ps:Params : (T:Expr, Set I:Int) where Cs:Constrs => isUniverse(piTarget(T)) ~> true? ~> processConstrs(applyParams(Ps, N), prependParams(Ps, Cs)) ...</k>
-       <data> Data (. => N |-> prependParams(Ps, T)) </data>
-         when notBool (N in keys(Data)) andBool /* FIXME? --> */ I >=Int 1
-
-  syntax KItem ::= "true?"
-  rule true ~> true? => .
-
-  // TODO: error handling/reporting as in:
-  //  rule E ~> true? => error(_) when E =/=K true
+  /*
+  syntax K ::= piTarget(Expr)   [context(result('notPi))]
+  rule piTarget(Pi _ _ E:Expr => E)
+  */
+  syntax Expr ::= piTarget(Expr) [function]
+  rule piTarget(Pi _ _ E:Expr => E)
+  rule piTarget(E:Expr) => E [owise]
 endmodule

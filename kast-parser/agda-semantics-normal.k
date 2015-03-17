@@ -5,7 +5,7 @@ module AGDA-SEMANTICS-NORMAL
   imports SUBSTITUTION
   imports AGDA-SYNTAX
 
-  // TODO: move into agda-syntax-common.k
+  // TODO: move into agda-syntax-common.k or something
   syntax ExprT ::= (Expr, Expr)
   syntax Expr ::= ExprT
 
@@ -18,6 +18,7 @@ module AGDA-SEMANTICS-NORMAL
                   | WhNeut Whnf [left]
   syntax Expr ::= Whnf
 
+  // XXX: why not Whnf2ExprT ::= (Expr, Whnf)  actually?
   syntax Whnf2ExprT
   rule isWhnf2ExprT((_:Expr, _:Whnf)) => true
   syntax ExprT ::= Whnf2ExprT

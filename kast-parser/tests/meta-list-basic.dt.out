@@ -17,10 +17,10 @@
         Zero |-> Nat
     </data>
     <fun>
-        expr |->  Cons #symExpr(10)  Succ Zero   Nil #symExpr(21)  
+        expr |->  Cons #symExpr(11)  Succ Zero   Nil #symExpr(22)  
     </fun>
     <meta>
-        #symExpr(10) |-> ( Nat , Set 0 )
-        #symExpr(21) |-> ( Nat , Set 0 )
+        #symExpr(11) |-> ( Nat , Set 0 )
+        #symExpr(22) |-> ( Nat , Set 0 )
     </meta>
 </T>

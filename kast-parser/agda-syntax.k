@@ -1,6 +1,7 @@
 module AGDA-SYNTAX
   syntax Variable ::= Token{[a-z][a-zA-Z0-9\_]*}  [onlyLabel]
   syntax Name ::= Token{[A-Z][a-zA-Z0-9\_]*}      [onlyLabel]
+  // XXX: use Id instead of Variable?
 
   syntax Universe ::= "Set" Int
   syntax Expr ::= "(" Expr ")" [bracket]
@@ -25,7 +26,19 @@ module AGDA-SYNTAX
   // TODO: make Constrs newline-separated to match Agda's syntax
   syntax Constrs ::= List{Constr,","}
 
-  syntax FunDecl ::= Variable "=" Expr  [strict(2(context('whnf21))), prefer]
+  syntax Pattern ::= "(" Pattern ")" [bracket]
+    | Variable    //[klabel('autotype)]
+    //| patvar(Variable)
+    //| pat(Variable)  [strict(all(context('patvar)))]
+    //| Variable ":" Expr
+    | Name
+    | Name Pattern  [left]
+  //syntax Patterns ::= List{Pattern, ""}          //[strict] //[strict(all(context('pattype)))]
+  syntax LHS ::= Variable   //[klabel('autotype)]
+               | LHS Pattern  [left]
+  syntax FunDecl ::= LHS "=" Expr
+  //[strict(2(context('pattype2)))] //, 3(context('whnf21)))]
+  //rule F:Variable = E:Expr => F .Patterns = E    [macro]
 
   /*
   syntax Program ::= FunDecl
@@ -35,8 +48,10 @@ module AGDA-SYNTAX
   */
 
   syntax Decl ::= DataDecl | FunDecl
-  // klabel below is necessary to avoid "Cannot use '__ as a right
-  // child of '__" errors (which are apparently due to [left] attribute
-  // assigned to Expr application)
-  syntax Program ::= List{Decl,""}  [klabel(p)]
+
+  // Explicit klabel below is necessary to avoid the "Cannot use '__ as a right
+  // a right child of '__" error (which is apparently due to [left] attribute
+  // assigned to Expr application and identical auto-generated klabels).
+  // TODO: rename to Decls
+  syntax Program ::= List{Decl, ""}  [klabel(dl)]
 endmodule

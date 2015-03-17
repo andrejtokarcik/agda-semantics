@@ -12,7 +12,7 @@
         .Map
     </data>
     <fun>
-        expr |-> Set 0
+        expr |-> ((Lambda x Set 1 x) ((Lambda y Set 2 Set 0) Set 1))
     </fun>
     <meta>
         .Map

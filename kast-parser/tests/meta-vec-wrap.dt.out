@@ -6,7 +6,7 @@
         subst(.KList)
     </mgu>
     <tenv>
-        expr |->  Vect Wrap Top T Succ Zero 
+        expr |->  Vect  Wrap Top T   Succ Zero  
     </tenv>
     <data>
         Nat |-> Set 0
@@ -22,11 +22,11 @@
         Zero |-> Nat
     </data>
     <fun>
-        expr |->  Vcons #symExpr(28) Zero  W Top T   Vnil #symExpr(45)  
+        expr |->  Vcons #symExpr(29) Zero  W Top T   Vnil #symExpr(46)  
           
     </fun>
     <meta>
-        #symExpr(28) |-> (  Wrap Top T  , Set 0 )
-        #symExpr(45) |-> (  Wrap Top T  , Set 0 )
+        #symExpr(29) |-> ( Wrap Top T , Set 0 )
+        #symExpr(46) |-> ( Wrap Top T , Set 0 )
     </meta>
 </T>

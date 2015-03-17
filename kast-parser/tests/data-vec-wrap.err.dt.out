@@ -1,18 +1,18 @@
 <T>
     <k>
-        (  Vect a T  , applyMgu ( clash(Top,, Nat) , #symExpr(12) ) ) ~> 
+        ( Vect a T , applyMgu ( clash(Top,, Nat) , #symExpr(12) ) ) ~> 
           tsubst ( T / #symVariable(10) ) ~> whnf2 ( HOLE ) ~> whnf21 ( HOLE )
            ~> (Pi a ( Set 0 , Set 1 ) HOLE) ~> tenv ( .Map ) ~> whnf2 ( HOLE )
            ~> whnf21 ( HOLE ) ~> processConstr (  Vect a  , Vnil , HOLE ) ~> 
           processConstrs (  Vect a  , (Vcons : (Pi a Set 0 (Pi k Top (Pi x a (
-          Pi xs Vect a k Vec a Succ k))))) ) ~> expr =  Vcons  Wrap Top T  T  
-          W Top T   Vnil  Wrap Top T   
+          Pi xs Vect a k Vec a Succ k))))) ) ~> expr =  Vcons Wrap Top T T W 
+          Top T Vnil Wrap Top T 
     </k>
     <mgu>
         subst(.KList)
     </mgu>
     <tenv>
-        a |-> Set 0
+        a |-> applyMgu ( clash(Top,, Nat) , Set 0 )
     </tenv>
     <data>
         Nat |-> Set 0
