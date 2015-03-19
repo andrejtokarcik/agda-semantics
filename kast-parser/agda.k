@@ -15,12 +15,12 @@ module AGDA
 
   syntax KItem ::= parseProgram(Program) [function]
   rule parseProgram(.Program) => .
-  rule parseProgram(D:Decl P:Program) => D ~> parseProgram(P)
+  rule parseProgram(D:Decl ; P:Program) => D ~> parseProgram(P)
 
   configuration <T color="yellow">
                   <k color="green"> parseProgram($PGM:Program) </k>
                   <data color="violet"> .Map </data>   // signatures
-                  <fun color="cyan"> .Map </fun>   // perhaps convert into List since we wanna retain order of the definitions
+                  <fun color="cyan"> .Map </fun>       // XXX: use .MyMap instead?
                   <tenv color="red"> .Map </tenv>
                   <meta color="black"> .Map </meta>
                   <mgu color="blue"> .Mgu </mgu>

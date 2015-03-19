@@ -1,9 +1,11 @@
 require "modules/substitution.k"
 require "agda-syntax.k"
+require "agda-semantics-decl-fun.k"    // FIXME
 
 module AGDA-SEMANTICS-NORMAL
   imports SUBSTITUTION
   imports AGDA-SYNTAX
+  imports AGDA-SEMANTICS-DECL-FUN
 
   // TODO: move into agda-syntax-common.k or something
   syntax ExprT ::= (Expr, Expr)
@@ -12,8 +14,8 @@ module AGDA-SEMANTICS-NORMAL
   syntax Whnf ::= "(" Whnf ")" [bracket]
                 | WhNeut
                 | Universe
-                | "Pi" Variable Expr Expr [binder]
-                | "Lambda" Variable Expr Expr [binder]
+                | "Pi" Variable Expr Expr [binder(1 -> 3)]
+                | "Lambda" Variable Expr Expr [binder(1 -> 3)]
   syntax WhNeut ::= Name
                   | WhNeut Whnf [left]
   syntax Expr ::= Whnf
@@ -24,8 +26,15 @@ module AGDA-SEMANTICS-NORMAL
   syntax ExprT ::= Whnf2ExprT
 
   syntax K ::= whnf(Expr)                   [context(result(Whnf))]
-  // TODO: (contextual) closures for evaluation
+  context whnf((HOLE:Expr => whnf(HOLE)) _)      [result(Whnf)]
   rule whnf((Lambda X _ E1) E2 => E1[E2/X])
+  // XXX: does the principle that we don't evaluate/normalise anything we haven't type-checked yet hold with the rules below?
+  // should we limit them to the case of the first component of ExprT?
+  rule <k> whnf(F:Variable => E) ...</k>
+       <fun>... F |-> E ...</fun>
+  rule whnf(closure(X, E1, Fun) E2 => E1[Fun[E2/X]])
+  rule whnf(fun(Cs) E => matchCase(Cs, E))
+
   syntax K ::= whnf2(Expr)                  [strict, context(result(Whnf2ExprT))]
   context whnf2((_, (HOLE => whnf(HOLE))))  [result(Whnf)]
 
@@ -39,16 +48,18 @@ module AGDA-SEMANTICS-NORMAL
   syntax Nf ::= "(" Nf ")" [bracket]
                 | Neut
                 | Universe
-                | "Pi" Variable Nf Nf [binder]
-                | "Lambda" Variable Nf Nf [binder]
+                | "Pi" Variable Nf Nf [binder(1 -> 3)]
+                | "Lambda" Variable Nf Nf [binder(1 -> 3)]
   syntax Neut ::= Name
                 | Variable   // FIXME?
                 | Neut Nf [left]
-  syntax Whnf ::= Nf
+  //syntax Whnf ::= Nf     // this spoils Whnf because of the Variable production in Neut above
 
+  /*
   syntax Nf2ExprT
   rule isNf2ExprT((_:Expr, _:Nf)) => true
   syntax Whnf2ExprT ::= Nf2ExprT
+  */
 
   syntax K ::= nf(Expr)                   [strict(all(context('whnf))), context(result(Nf))]
   context nf(Pi _ (HOLE => nf(HOLE)) _)   [result(Nf)]
@@ -58,10 +69,12 @@ module AGDA-SEMANTICS-NORMAL
   context nf((HOLE => nf(HOLE)) _:Expr)   [result(Nf)]
   context nf(_:Expr (HOLE => nf(HOLE)))   [result(Nf)]
 
+  /*
   syntax K ::= nf2(Expr)                [strict, context(result(Nf2ExprT))]
   context nf2((_, (HOLE => nf(HOLE))))  [result(Nf)]
+  */
 
   syntax TypeT
   rule isTypeT((_:Expr, _:Universe)) => true
-  syntax Nf2ExprT ::= TypeT
+  //syntax Nf2ExprT ::= TypeT
 endmodule

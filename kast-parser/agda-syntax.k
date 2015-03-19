@@ -8,8 +8,8 @@ module AGDA-SYNTAX
                 | Variable | Name | "?"
                 | Universe | "Set"
                 > Expr Expr                       [left, strict(1(context('whnf2)), 2)]
-                > "Pi" Variable Expr Expr         [binder, strict(2(context('whnf21),result(TypeT)))]
-                | "Lambda" Variable Expr Expr     [binder, strict(2(context('whnf21),result(TypeT)))]
+                > "Pi" Variable Expr Expr         [binder(1 -> 3), strict(2(context('whnf2),result(TypeT)))]  // << bolo whnf21  -- daj whnf2eval1?
+                | "Lambda" Variable Expr Expr     [binder(1 -> 3), strict(2(context('whnf21),result(TypeT)))]  // << bolo whnf21
   rule Set => Set 0 [macro]
 
   syntax DataDecl ::= "(" DataDecl ")" [bracket]
@@ -35,8 +35,8 @@ module AGDA-SYNTAX
     | Name Pattern  [left]
   //syntax Patterns ::= List{Pattern, ""}          //[strict] //[strict(all(context('pattype)))]
   syntax LHS ::= Variable   //[klabel('autotype)]
-               | LHS Pattern  [left]
-  syntax FunDecl ::= LHS "=" Expr
+               | LHS Pattern  [left]  //, klabel(lhspat)]
+  syntax FunDecl ::= LHS "=" Expr    [binder]
   //[strict(2(context('pattype2)))] //, 3(context('whnf21)))]
   //rule F:Variable = E:Expr => F .Patterns = E    [macro]
 
@@ -53,5 +53,5 @@ module AGDA-SYNTAX
   // a right child of '__" error (which is apparently due to [left] attribute
   // assigned to Expr application and identical auto-generated klabels).
   // TODO: rename to Decls
-  syntax Program ::= List{Decl, ""}  [klabel(dl)]
+  syntax Program ::= List{Decl, ";"}  [klabel(dl)]
 endmodule

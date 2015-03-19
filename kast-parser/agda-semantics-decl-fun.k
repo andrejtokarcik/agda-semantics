@@ -94,8 +94,8 @@ module AGDA-SEMANTICS-DECL-FUN
     when notBool (X in keys(TEnv)) andBool fresh(T:Expr)
 
   syntax Variable ::= funName(LHS)  [function]
-  rule funName(F:Variable) => F  [macro]
-  rule funName(L:LHS _:Pattern) => funName(L)  [macro]
+  rule funName(F:Variable) => F
+  rule funName(L:LHS _:Pattern) => funName(L)
 
   syntax Expr ::= LHS
   syntax LHST ::= (LHS, Expr)
@@ -103,21 +103,63 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax FunDecl ::= LHST "=" ExprT
 
   // would be nice to create a separate task for typeVars() here
+  // well, not really context-based evaluation (defined below) of L = E _depends_ on typeVars() having been completed
+
+  syntax Int ::= numArgs(LHS)  [function]
+  rule numArgs(_:Variable) => 0
+  rule numArgs(L:LHS _:Pattern) => numArgs(L) +Int 1
+
+  rule <k> L:LHS = E:Expr ...</k>
+       <fun> Fun (. => funName(L) |-> fun(.List)) </fun>
+    when notBool (funName(L) in keys(Fun)) andBool numArgs(L) >Int 0
+
   rule <k> L:LHS = E:Expr => typeVars(L) ~> L = E ~> funDecl(funName(L), TEnv) ...</k>
        <tenv> TEnv </tenv>
+  // if a clause of the same function has been already processed, the type
+  // assigned to the function name will be re-used, causing type errors
+  // if the clauses' respective result/arg types aren't compatible
+
   context HOLE:LHS = _ ~> funDecl(_, _)
 
-  // NOTE: whnf21 nizsie blblo kvoli meta-id.dt (co je ale aj tak dzivne)
-  // aj tak nechcem evaluavat vyrazy pokial nemusim ci?
+  // NOTE: whnf21 nizsie blblo kvoli meta-id.dt -- co je ale aj tak dzivne
+  // whnf2 je ale ok lebo aj tak nechcem evaluavat vyrazy pokial nemusim ci?
   // (typy, narozdiel od striktnych 'vyrazov', musim kvoli checkingu)
   context _:LHST = (HOLE => whnf2(HOLE)) ~> funDecl(_, _)  [result(Whnf2ExprT)]
 
+  syntax Case ::= mkCase(LHS, Case)   [function]
+  rule mkCase(_:Variable, C:Case) => C
+  rule mkCase(L:LHS P:Pattern, C:Case) => mkCase(L, P -> C)
+
+  rule <k> ((L:LHS, Tl:Expr) = (E:Expr, Te:Expr) => notBool (F in keys(Fun)) ~> true? ~> Tl == Te) ~> funDecl(F:Variable, _) ...</k>
+       <fun> Fun (. => F |-> evalF(E, Fun)) </fun>
+     when numArgs(L) ==Int 0
+
   // XXX: manually apply updateMgu() & applyMgu() in order to get rid of funDecl()?
-  rule <k> (L:LHS, Tl:Expr) = (E:Expr, Te:Expr) => Tl == Te ...</k>
-       //<tenv> TEnv </tenv>
-       //<tenv>... F |-> Tf ...</tenv>     // << doesn't work: evidently cannot pattern match on function results
-       <fun> Fun (. => L |-> (E[Fun])) </fun>
-    //when funName(L) in keys(TEnv)
+  // TODO: check that number of patterns is the same as for the other definitional equations (see error msg in offic typechecker)
+  rule <k> ((L:LHS, Tl:Expr) = (E:Expr, Te:Expr) => Tl == Te) ~> funDecl(F:Variable, _) ...</k>
+       <fun> Fun (F |-> fun(_ (. => ListItem(mkCase(L, evalF(E, Fun)))))) </fun>
+     when numArgs(L) >Int 0
+
+  syntax Val ::= closure(Variable, Expr, Map)  [binder(1 -> 2)]     // ~ closure(Lambda X E, Fun)  kebyze mam netypovane lambda abstrakcie
+               //| Val Val
+               | app(Val, Val)
+               | pi(Val, Val)
+               | fun(List)
+               | Universe
+               | Name
+  syntax Case ::= Val
+                | Pattern "->" Case   [binder]
+  syntax Whnf ::= Val
+
+
+  syntax Val ::= evalF(Expr, Map)   [function]
+  rule evalF(X:Variable, Fun) => Fun(X)
+  rule evalF(Lambda X _ E, Fun) => closure(X, E, Fun)
+  rule evalF(E1:Expr E2:Expr, Fun) => app(evalF(E1, Fun), evalF(E2, Fun))
+  rule evalF(Pi X T1 T2, Fun) => pi(evalF(T1, Fun), closure(X, T2, Fun))
+  rule evalF(U:Universe, _) => U
+  rule evalF(N:Name, _) => N
+
 
   // TODO: Consolidate with the unification (triggered on encountering a 'final'
   //       typed expr) and type env restoration mechanisms from -typesystem.k.
@@ -126,15 +168,24 @@ module AGDA-SEMANTICS-DECL-FUN
        <meta> Meta => applyMgu(Theta, Meta) </meta>
        <tenv> TEnv' => TEnv[applyMgu(Theta, TEnv')(F)/F] </tenv>
        <mgu> Theta => .Mgu </mgu>
-    when Theta =/=K .Mgu
 
 
-  // TODO: generate closures only for binders?  including normal lambda in -typesystem
-  //syntax Expr ::= closure(Map, Expr)
+  syntax K ::= eval(Expr) [context(result(Val))]
+  rule <k> eval(E => evalF(E, Fun)) ...</k>
+       <fun> Fun </fun>  when notBool isVal(E)
+  rule eval(app(closure(X, E, Fun), V) => E[Fun[V/X]])
+  rule eval(app(fun(Cs), E) => matchCase(Cs, E))
+
   /*
-  syntax Binder
-  rule isBinder(Lambda _ _ _) => true
-  rule isBinder(Pi _ _ _) => true
-  syntax Whnf ::= Binder
+  syntax K ::= whnfEval1(Expr) [strict]  //, context(result(Whnf1ExprT))]
+  context whnfEval1((HOLE => eval(HOLE), _:Whnf))  when notBool isVal(HOLE)
+  context whnfEval1((HOLE:Val => whnf(HOLE), _:Whnf))
   */
+
+  syntax Expr ::= matchCase(List, Expr)  [function]
+  rule matchCase(ListItem(P -> E1) _, E2) => E1[getMatching(P, E2)]  when isMatching(P, E2)
+  rule matchCase(_ Cs:List => Cs, _)  [owise]
+
+
+
 endmodule

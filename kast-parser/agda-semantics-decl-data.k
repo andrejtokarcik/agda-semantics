@@ -8,7 +8,7 @@ module AGDA-SEMANTICS-DECL-DATA
   syntax KItem ::= "Hihi"
 
   // TODO: need to check whether params are well-typed and (not necessarily?) whether prependParams(Ps, T) yields a type as well
-  rule <k> data N:Name Ps:Params : (T:Expr, Set I:Int) where Cs:Constrs => T constructorOf Set (I -Int 1) ~> processConstrs(applyParams(Ps, N), prependParams(Ps, Cs)) ...</k>
+  rule <k> data N:Name Ps:Params : (T:Expr, Set I:Int) where Cs:Constrs => T constructorOf Set (I -Int 1) ~> true? ~> processConstrs(applyParams(Ps, N), prependParams(Ps, Cs)) ...</k>
        <data> Data (. => N |-> prependParams(Ps, T)) </data>
          when notBool (N in keys(Data)) andBool /* FIXME? --> */ I >=Int 1
 
@@ -17,7 +17,7 @@ module AGDA-SEMANTICS-DECL-DATA
   rule processConstrs(D:Expr, ((C:Name : T:Expr), Cs:Constrs)) => processConstr(D, C, T) ~> processConstrs(D, Cs)
 
   syntax KItem ::= processConstr(Expr, Name, Expr)  [strict(3(context('whnf21),result(TypeT)))]
-  rule <k> processConstr(D:Expr, C:Name, (T:Expr, _:Universe)) => T constructorOf D ...</k>
+  rule <k> processConstr(D:Expr, C:Name, (T:Expr, _:Universe)) => T constructorOf D ~> true? ...</k>
        <data> Data (. => C |-> T) </data>
          when notBool (C in keys(Data))
 
@@ -26,19 +26,18 @@ module AGDA-SEMANTICS-DECL-DATA
   syntax KItem ::= Bool "?"
   rule true ? => .
   */
-  /*
   syntax KItem ::= "true?"
   rule true ~> true? => .
-  */
 
   // TODO: error handling/reporting like:
   //  rule E ~> true? => error(E) when E =/=K true
 
   //syntax KItem ::= Expr "constructorOf" Expr   [strict(1(context('piTarget)))]
-  syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf), result(Whnf)))]
+  //syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf), result(Whnf)))]
+  syntax Bool ::= Expr "constructorOf" Expr          [strict(all(context('whnf), result(Whnf)))]
   rule (Pi _ _ T => T) constructorOf _:Expr
-  rule D:Name constructorOf D => .
-  rule Set I:Int constructorOf Set I => .
+  rule D:Name constructorOf D => true
+  rule Set I:Int constructorOf Set I => true
   rule (T:Expr V:Variable => T) constructorOf (D:Expr V => D)
   rule (T:Expr E:Expr => T) constructorOf _:Expr  [owise]
 
