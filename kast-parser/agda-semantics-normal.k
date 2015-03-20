@@ -8,7 +8,7 @@ module AGDA-SEMANTICS-NORMAL
   imports AGDA-SEMANTICS-DECL-FUN
 
   // TODO: move into agda-syntax-common.k or something
-  syntax ExprT ::= (Expr, Expr)
+  syntax ExprT ::= (Expr, Expr)    // syntax: Expr ":" Expr [cf. java-semantics, kde maju ::]
   syntax Expr ::= ExprT
 
   syntax Whnf ::= "(" Whnf ")" [bracket]
@@ -29,6 +29,11 @@ module AGDA-SEMANTICS-NORMAL
 
   syntax K ::= whnf2(Expr)                  [strict, context(result(Whnf2ExprT))]
   context whnf2((_, (HOLE => whnf(HOLE))))  [result(Whnf)]
+
+  syntax K ::= eval2(Expr)                  [superheat, strict, context(result(Whnf2ExprT))]
+  context eval2((_, HOLE => eval(HOLE)))    [superheat, result(Whnf)]
+  //rule eval2((_, E => stripNeut(E)))  when isNeutlessExpr(E) =/=K true
+  //context eval2((_, HOLE => eval(HOLE)))  when isNeutlessExpr(HOLE) ==K true   [result(Whnf)]
 
   syntax Whnf21ExprT
   rule isWhnf21ExprT((_:Whnf, _:Whnf)) => true

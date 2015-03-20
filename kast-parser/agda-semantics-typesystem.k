@@ -13,8 +13,6 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv>... X |-> T ...</tenv>
     //   <fun> Fun </fun>
     //when notBool (X in keys(Fun))
-  // FIXME: need to set X in Fun to undef in case a function gets overlayed
-  // by a var binding (i.e. a change to TEnv)!  store both types and values in env?
 
   rule <k> X:Name => (X, T) ...</k>
        <data>... X |-> T ...</data>
@@ -23,10 +21,10 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule <k> Pi X:Variable (T1:Expr, _) T2 ~> (. => env(TEnv, Fun)) ...</k>
        <tenv> TEnv => TEnv[T1/X] </tenv>
-       <fun> Fun:Map => Fun[undef/X] </fun>
+       <fun> Fun:Map => Fun[undef/X] </fun>       // also see http://lists.cs.uiuc.edu/pipermail/k-user/2012-February/000131.html for undef
      when isExprT(T2) =/=K true     // << toto (+ zakomentovany TypeT nizsie) ku krajsiemu vystupu pre pripadu, ked konstruktor targetuje novy
                                     // parametricky datatyp ale bez parametru a teda nevie otypovat vysledny Pi
-  context Pi _ _ (HOLE:Expr => whnf2eval1(HOLE)) ~> env(_, _)        [result(TypeT)]   //[result(Whnf21ExprT)]  // << bolo whnf21
+  context Pi _ _ (HOLE:Expr => whnf2(HOLE)) ~> env(_, _)        [result(TypeT)]   //[result(Whnf21ExprT)]  // << bolo whnf21
   rule Pi X:Variable (T1:Expr, Set I1:Int) (T2:Expr, Set I2:Int) => (Pi X T1 T2, Set maxInt(I1, I2))
 
   //context Lambda _ (HOLE:Expr => whnf2(HOLE)) _         [result(TypeT)]
@@ -35,15 +33,16 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule <k> Lambda X:Variable (T:Expr, _) _ ~> (. => env(TEnv, Fun)) ...</k>
        <tenv> TEnv => TEnv[T/X] </tenv>  //[structural]
        <fun> Fun => Fun[undef/X] </fun>
-  context Lambda _ _ (HOLE:Expr => whnf2(HOLE)) ~> env(_, _)  [result(Whnf2ExprT)]
+  context Lambda _ _ (HOLE:Expr => eval2(HOLE)) ~> env(_, _)  [result(Whnf2ExprT)]
   rule Lambda X:Variable (T:Expr, _:Universe) (E:Expr, T':Expr) => (Lambda X T E, Pi X T T')
 
+  // TODO: replace tsubst with a Fun update?
   rule (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => T1 == Pi X T T' ~> T2 == T ~> (E1 E2, T') ~> tsubst(E2/X)
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
 
   // NOTE: not every updateMgu is guaranteed to actually update the mgu.
   // e.g. if T is identical to T', no update occurs.
-  syntax KItem ::= Expr "==" Expr
+  syntax KItem ::= Expr "==" Expr   //[strict(all(context('eval)))]
   rule <k> T == T' => . ...</k>
        <mgu> Theta => updateMgu(Theta, T, T') </mgu>  [transition]
 

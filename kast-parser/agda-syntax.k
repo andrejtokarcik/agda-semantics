@@ -7,9 +7,9 @@ module AGDA-SYNTAX
   syntax Expr ::= "(" Expr ")" [bracket]
                 | Variable | Name | "?"
                 | Universe | "Set"
-                > Expr Expr                       [left, strict(1(context('whnf2)), 2)]
-                > "Pi" Variable Expr Expr         [binder(1 -> 3), strict(2(context('whnf2eval1),result(TypeT)))]  // << bolo whnf21  -- daj whnf2eval1?
-                | "Lambda" Variable Expr Expr     [binder(1 -> 3), strict(2(context('whnf2eval1),result(TypeT)))]  // << bolo whnf21
+                > Expr Expr                       [left, strict(1(context('eval2)), 2)]  // << bolo whnf2
+                > "Pi" Variable Expr Expr         [binder(1 -> 3), strict(2(context('eval2),result(TypeT)))]  // << bolo whnf21  -- daj whnf2eval1?
+                | "Lambda" Variable Expr Expr     [binder(1 -> 3), strict(2(context('eval2),result(TypeT)))]  // << bolo whnf21
   rule Set => Set 0 [macro]
 
   syntax DataDecl ::= "(" DataDecl ")" [bracket]

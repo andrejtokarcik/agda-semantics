@@ -147,14 +147,16 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax Closure ::= closure(Variable, Expr, Map)  [binder(1 -> 2)]
                    | closure(List, Map)
-  syntax Val ::= //"(" Val ")" [bracket]
+  syntax ValNeut ::= neut(Expr, Map)    // fakeval would be a more appropriate identifier
+  syntax Val ::= "(" Val ")" [bracket]
                  //closure(Variable, Expr, Map)  [binder(1 -> 2)]     // ~ closure(Lambda X E, Fun)  kebyze mam netypovane lambda abstrakcie
-                 lambda(Closure)
+               | lambda(Closure)
                | pi(Val, Closure)
                | fun(Closure)
                | Universe
                | Name
                | Val Val
+               | ValNeut
   /*
                | ValNeut
   syntax ValNeut ::= Name
@@ -162,15 +164,26 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax Whnf ::= Val
   */
 
+  /*
+  syntax NeutlessExpr //::= Expr
+  //rule isNeutlessExpr(neut(_, _)) => false
+  rule isNeutlessExpr(E:Expr) => isValNeut(E) =/=K true
+  //syntax Expr ::= NeutlessExpr
+  */
+
   syntax Expr ::= Val
+  rule isWhNeut(neut(_:Expr, _)) => true
 
   syntax Val ::= evalF(Expr, Map)   [function]
-  rule evalF(X:Variable, Fun) => Fun(X)
+  rule evalF(X:Variable, Fun) => Fun(X)  when X in keys(Fun)   // the condition isn't necessary, perhaps, if evalF() is matched from top to bottom
+  rule evalF(X:Variable, Fun) => neut(X, Fun) when notBool (X in keys(Fun))
+  //rule evalF(X:Variable, Fun) => V       when notBool (X in keys(Fun)) andBool fresh(V:Val)
   rule evalF(Lambda X _ E, Fun) => lambda(closure(X, E, Fun))
   rule evalF(Pi X T1 T2, Fun) => pi(evalF(T1, Fun), closure(X, T2, Fun))
-  rule evalF(U:Universe, _) => U
-  rule evalF(N:Name, _) => N
-  rule evalF(E1:Expr E2:Expr, Fun) => evalF(E1, Fun) evalF(E2, Fun)   [owise]
+  rule evalF(E1:Expr E2:Expr, Fun) => evalF(E1, Fun) evalF(E2, Fun)
+  //rule evalF(U:Universe, _) => U
+  //rule evalF(N:Name, _) => N
+  rule evalF(V:Val, _) => V
 
 
   // TODO: Consolidate with the unification (triggered on encountering a 'final'
@@ -203,10 +216,22 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax EnvRecovery ::= eval(Whnf)
 
-  syntax K ::= eval(Expr)     [context(result(Whnf))]
+  /*
+  syntax Expr ::= stripNeut(Expr)   [function] //[context(result(NeutlessExpr))]
+  rule stripNeut(neut(E, _) => E)
+  rule stripNeut(E) => E               [owise] //when isNeutlessExpr(E) ==K true
+  */
+
+  syntax K ::= eval(Expr)     [superheat, context(result(Whnf))]    // TODO: WhnfVal?
+  //context eval(HOLE => stripNeut(HOLE))   [result(NeutlessExpr)]
   rule <k> eval(E:Expr => evalF(E, Fun)) ...</k>
        <fun> Fun </fun>
     when isVal(E) =/=K true
+  rule <k> eval(neut(E:Expr, Fun) => E) ...</k>
+       <fun> Fun' </fun>
+    when Fun =/=Map Fun'
+  rule eval(E1:Expr neut(E2:Expr, Fun) => neut(E1 E2, Fun))
+  rule eval(neut(E1:Expr, Fun) E2:Expr => neut(E1 E2, Fun))
   rule <k> eval(lambda(closure(X, E, Fun)) V:Val => E) ~> (. => env(TEnv', Fun')) ...</k>
        <tenv> TEnv' </tenv>
        <fun> Fun' => Fun[V/X] </fun>
@@ -216,7 +241,21 @@ module AGDA-SEMANTICS-DECL-FUN
     when isMatching(P, V)
   rule eval(fun(closure(ListItem(P:Pattern -> _) Cs:List => Cs, _)) V:Val)
     when notBool isMatching(P, V)
-  // TODO: ^ for general P -> C:Case, not just when isExpr(C)
+  // TODO: add rules ^ for general P -> C:Case, not just when isExpr(C)
 
 
+  syntax KItem ::= "Hihi" Map Map
+
+
+  // deal with neut in typed expr
+  /*
+  rule <k> ... neut(E, Fun') => Hihi Fun Fun' ~> E ...</k>
+       <fun> Fun </fun>
+  [anywhere]
+  */
+  //rule (neut(E, _) => E, _) [anywhere]    // causes infinite recursion as it gets triggerred too soon (immediately after eval has finished, causing it to run once again)
+
+  // deal with neut in matching equations etc.
+  //rule eqns((eqn(neut(E:Expr),,E':Expr) => eqn(E,,E')),,_)   [anywhere]
+  //rule eqns((eqn(E':Expr,,neut(E:Expr)) => eqn(E,,E')),,_)   [anywhere]
 endmodule
