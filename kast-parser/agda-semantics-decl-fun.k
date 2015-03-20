@@ -105,12 +105,14 @@ module AGDA-SEMANTICS-DECL-FUN
   // would be nice to create a separate task for typeVars() here
   // well, not really context-based evaluation (defined below) of L = E _depends_ on typeVars() having been completed
 
+  // this is number of args before the equality sign `=',
+  // not counting possible arguments in inner lambdas
   syntax Int ::= numArgs(LHS)  [function]
   rule numArgs(_:Variable) => 0
   rule numArgs(L:LHS _:Pattern) => numArgs(L) +Int 1
 
   rule <k> L:LHS = E:Expr ...</k>
-       <fun> Fun (. => funName(L) |-> fun(.List)) </fun>
+       <fun> Fun (. => funName(L) |-> fun(closure(.List, Fun))) </fun>
     when notBool (funName(L) in keys(Fun)) andBool numArgs(L) >Int 0
 
   rule <k> L:LHS = E:Expr => typeVars(L) ~> L = E ~> funDecl(funName(L), TEnv) ...</k>
@@ -136,29 +138,39 @@ module AGDA-SEMANTICS-DECL-FUN
 
   // XXX: manually apply updateMgu() & applyMgu() in order to get rid of funDecl()?
   // TODO: check that number of patterns is the same as for the other definitional equations (see error msg in offic typechecker)
-  rule <k> ((L:LHS, Tl:Expr) = (E:Expr, Te:Expr) => Tl == Te) ~> funDecl(F:Variable, _) ...</k>
-       <fun> Fun (F |-> fun(_ (. => ListItem(mkCase(L, evalF(E, Fun)))))) </fun>
+  rule <k> ((L:LHS, Tl:Expr) = (E:Expr, Te:Expr) => Fun[undef/F] ==Map Fun'[undef/F] ~> true? ~> Tl == Te) ~> funDecl(F:Variable, _) ...</k>
+       <fun> Fun (F |-> fun(closure(_ (. => ListItem(mkCase(L, evalF(E, Fun)))), Fun'))) </fun>
      when numArgs(L) >Int 0
 
-  syntax Val ::= closure(Variable, Expr, Map)  [binder(1 -> 2)]     // ~ closure(Lambda X E, Fun)  kebyze mam netypovane lambda abstrakcie
-               //| Val Val
-               | app(Val, Val)
-               | pi(Val, Val)
-               | fun(List)
+  syntax Case ::= Expr
+                | Pattern "->" Case   [binder]
+
+  syntax Closure ::= closure(Variable, Expr, Map)  [binder(1 -> 2)]
+                   | closure(List, Map)
+  syntax Val ::= //"(" Val ")" [bracket]
+                 //closure(Variable, Expr, Map)  [binder(1 -> 2)]     // ~ closure(Lambda X E, Fun)  kebyze mam netypovane lambda abstrakcie
+                 lambda(Closure)
+               | pi(Val, Closure)
+               | fun(Closure)
                | Universe
                | Name
-  syntax Case ::= Val
-                | Pattern "->" Case   [binder]
+               | Val Val
+  /*
+               | ValNeut
+  syntax ValNeut ::= Name
+                   | ValNeut Val [left]
   syntax Whnf ::= Val
+  */
 
+  syntax Expr ::= Val
 
   syntax Val ::= evalF(Expr, Map)   [function]
   rule evalF(X:Variable, Fun) => Fun(X)
-  rule evalF(Lambda X _ E, Fun) => closure(X, E, Fun)
-  rule evalF(E1:Expr E2:Expr, Fun) => app(evalF(E1, Fun), evalF(E2, Fun))
+  rule evalF(Lambda X _ E, Fun) => lambda(closure(X, E, Fun))
   rule evalF(Pi X T1 T2, Fun) => pi(evalF(T1, Fun), closure(X, T2, Fun))
   rule evalF(U:Universe, _) => U
   rule evalF(N:Name, _) => N
+  rule evalF(E1:Expr E2:Expr, Fun) => evalF(E1, Fun) evalF(E2, Fun)   [owise]
 
 
   // TODO: Consolidate with the unification (triggered on encountering a 'final'
@@ -170,11 +182,13 @@ module AGDA-SEMANTICS-DECL-FUN
        <mgu> Theta => .Mgu </mgu>
 
 
+  /*
   syntax K ::= eval(Expr) [context(result(Val))]
   rule <k> eval(E => evalF(E, Fun)) ...</k>
        <fun> Fun </fun>  when notBool isVal(E)
   rule eval(app(closure(X, E, Fun), V) => E[Fun[V/X]])
   rule eval(app(fun(Cs), E) => matchCase(Cs, E))
+  */
 
   /*
   syntax K ::= whnfEval1(Expr) [strict]  //, context(result(Whnf1ExprT))]
@@ -182,10 +196,27 @@ module AGDA-SEMANTICS-DECL-FUN
   context whnfEval1((HOLE:Val => whnf(HOLE), _:Whnf))
   */
 
+  // TODO: rewrite for environments (substitution-based now)
   syntax Expr ::= matchCase(List, Expr)  [function]
   rule matchCase(ListItem(P -> E1) _, E2) => E1[getMatching(P, E2)]  when isMatching(P, E2)
   rule matchCase(_ Cs:List => Cs, _)  [owise]
 
+  syntax EnvRecovery ::= eval(Whnf)
+
+  syntax K ::= eval(Expr)     [context(result(Whnf))]
+  rule <k> eval(E:Expr => evalF(E, Fun)) ...</k>
+       <fun> Fun </fun>
+    when isVal(E) =/=K true
+  rule <k> eval(lambda(closure(X, E, Fun)) V:Val => E) ~> (. => env(TEnv', Fun')) ...</k>
+       <tenv> TEnv' </tenv>
+       <fun> Fun' => Fun[V/X] </fun>
+  rule <k> eval(fun(closure(ListItem(P:Pattern -> E:Expr) _, Fun)) V:Val => E) ~> (. => env(TEnv', Fun')) ...</k>
+       <tenv> TEnv' </tenv>
+       <fun> Fun' => Fun[getMatching(P, V)] </fun>
+    when isMatching(P, V)
+  rule eval(fun(closure(ListItem(P:Pattern -> _) Cs:List => Cs, _)) V:Val)
+    when notBool isMatching(P, V)
+  // TODO: ^ for general P -> C:Case, not just when isExpr(C)
 
 
 endmodule

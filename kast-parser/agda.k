@@ -11,6 +11,7 @@ module AGDA
 
   // XXX:
   //   syntax KResult ::= Whnf2ExprT
+  // ^ teraz ked som presunul normalizaciu do eval, tak tato zmena dava este vacsi zmysel
   syntax KResult ::= ExprT
 
   syntax KItem ::= parseProgram(Program) [function]

@@ -26,14 +26,6 @@ module AGDA-SEMANTICS-NORMAL
   syntax ExprT ::= Whnf2ExprT
 
   syntax K ::= whnf(Expr)                   [context(result(Whnf))]
-  context whnf((HOLE:Expr => whnf(HOLE)) _)      [result(Whnf)]
-  rule whnf((Lambda X _ E1) E2 => E1[E2/X])
-  // XXX: does the principle that we don't evaluate/normalise anything we haven't type-checked yet hold with the rules below?
-  // should we limit them to the case of the first component of ExprT?
-  rule <k> whnf(F:Variable => E) ...</k>
-       <fun>... F |-> E ...</fun>
-  rule whnf(closure(X, E1, Fun) E2 => E1[Fun[E2/X]])
-  rule whnf(fun(Cs) E => matchCase(Cs, E))
 
   syntax K ::= whnf2(Expr)                  [strict, context(result(Whnf2ExprT))]
   context whnf2((_, (HOLE => whnf(HOLE))))  [result(Whnf)]
@@ -42,8 +34,8 @@ module AGDA-SEMANTICS-NORMAL
   rule isWhnf21ExprT((_:Whnf, _:Whnf)) => true
   syntax Whnf2ExprT ::= Whnf21ExprT
 
-  syntax K ::= whnf21(Expr)            [strict(all(context('whnf2))), context(result(Whnf21ExprT))]
-  context whnf21(((HOLE => whnf(HOLE)), _:Whnf))   [result(Whnf)]
+  syntax K ::= whnf2eval1(Expr)            [strict(all(context('whnf2))), context(result(Whnf21ExprT))]
+  context whnf2eval1(((HOLE => eval(HOLE)), _:Whnf))   [result(Whnf)]
 
   syntax Nf ::= "(" Nf ")" [bracket]
                 | Neut

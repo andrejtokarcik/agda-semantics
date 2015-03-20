@@ -23,10 +23,10 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule <k> Pi X:Variable (T1:Expr, _) T2 ~> (. => env(TEnv, Fun)) ...</k>
        <tenv> TEnv => TEnv[T1/X] </tenv>
-       <fun> Fun => Fun[undef/X] </fun>
+       <fun> Fun:Map => Fun[undef/X] </fun>
      when isExprT(T2) =/=K true     // << toto (+ zakomentovany TypeT nizsie) ku krajsiemu vystupu pre pripadu, ked konstruktor targetuje novy
                                     // parametricky datatyp ale bez parametru a teda nevie otypovat vysledny Pi
-  context Pi _ _ (HOLE:Expr => whnf21(HOLE)) ~> env(_, _)        [result(TypeT)]   //[result(Whnf21ExprT)]
+  context Pi _ _ (HOLE:Expr => whnf2eval1(HOLE)) ~> env(_, _)        [result(TypeT)]   //[result(Whnf21ExprT)]  // << bolo whnf21
   rule Pi X:Variable (T1:Expr, Set I1:Int) (T2:Expr, Set I2:Int) => (Pi X T1 T2, Set maxInt(I1, I2))
 
   //context Lambda _ (HOLE:Expr => whnf2(HOLE)) _         [result(TypeT)]
@@ -58,13 +58,16 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <mgu> Theta </mgu>   // <mgu> .Mgu </mgu> doesn't work properly; the [anywhere] rule expanding .Mgu isn't anywhere enough, eh?
     when Theta ==K .Mgu     // hence, need this to guarantee that <mgu /> has been applied on the ExprT
 
+  syntax EnvRecovery ::= ExprT
+
   // TODO: move to some generic utils module
   syntax KItem ::= env(Map, Map)
-  rule <k> _:ExprT ~> (env(TEnv, Fun) => .) ...</k>
+  rule <k> _:EnvRecovery ~> (env(TEnv, Fun) => .) ...</k>
        <tenv> _ => TEnv </tenv>
        <fun> _ => Fun </fun>
 
   // special rules for unification
+  // TODO: remove, should be taken care of as part of eval [within whnf2eval1]
   rule eqns((eqn(((Lambda X:Variable _:Expr E1:Expr) E2:Expr),,E':Expr) => eqn(E1[E2/X],,E')),,_)   [anywhere]
   rule eqns((eqn(E':Expr,,((Lambda X:Variable _:Expr E1:Expr) E2:Expr)) => eqn(E1[E2/X],,E')),,_)   [anywhere]
 endmodule

@@ -16,7 +16,7 @@ module AGDA-SEMANTICS-DECL-DATA
   rule processConstrs(D:Expr, .Constrs) => . [structural]
   rule processConstrs(D:Expr, ((C:Name : T:Expr), Cs:Constrs)) => processConstr(D, C, T) ~> processConstrs(D, Cs)
 
-  syntax KItem ::= processConstr(Expr, Name, Expr)  [strict(3(context('whnf21),result(TypeT)))]
+  syntax KItem ::= processConstr(Expr, Name, Expr)  [strict(3(context('whnf2eval1),result(TypeT)))]   // << bolo whnf21
   rule <k> processConstr(D:Expr, C:Name, (T:Expr, _:Universe)) => T constructorOf D ~> true? ...</k>
        <data> Data (. => C |-> T) </data>
          when notBool (C in keys(Data))
