@@ -1,4 +1,4 @@
 data Test : Set 0 where   // FIXME je urcite zo Setu s vyssim indexom
   Constr : (Lambda x (Set 2) x) (Pi x (Set 1) Test)
 
-expr = Constr (Set 0)
+; expr = Constr (Set 0)

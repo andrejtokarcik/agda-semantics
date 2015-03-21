@@ -1,0 +1,29 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenv>
+        eqNat |-> 'Pi___(#symVariable(42),, Nat,, (Pi #symVariable(45) Nat
+           Bool))
+    </tenv>
+    <data>
+        Bool |-> Set 0
+        False |-> Bool
+        Nat |-> Set 0
+        Succ |-> 'Pi___(x,, Nat,, Nat)
+        True |-> Bool
+        Zero |-> Nat
+    </data>
+    <fun>
+        eqNat |-> fun ( closure ( ListItem(Zero -> Zero -> True) ListItem(
+          Zero -> (Succ y) -> False) ListItem((Succ x) -> Zero -> False) 
+          ListItem((Succ x) -> (Succ y) ->  neut ( eqNat , .Map ) neut ( x , 
+          .Map ) neut ( y , .Map ) ) , .Map ) )
+    </fun>
+    <meta>
+        .Map
+    </meta>
+</T>

@@ -1,0 +1,39 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenv>
+        f2 |-> (Pi x Bool (Pi y fun ( closure ( ListItem(True -> Bool) 
+          ListItem(False -> T) , .Map ) ) x fun ( closure ( ListItem(True -> 
+          Bool) ListItem(False -> T) , .Map ) ) x))
+        g |-> fun ( closure ( ListItem(True -> Bool) ListItem(False -> T) , 
+          .Map ) ) #symVariable(20)
+        h |-> fun ( closure ( ListItem(True -> Bool) ListItem(False -> T) , 
+          .Map ) ) #symVariable(13)
+        s |-> 'Pi___(#symVariable(5),, Bool,, Set 0)
+    </tenv>
+    <data>
+        Bool |-> Set 0
+        E |-> T
+        False |-> Bool
+        T |-> Set 0
+        True |-> Bool
+    </data>
+    <fun>
+        f2 |-> lambda ( closure ( x , (Lambda y  s x  y) , s |-> fun ( 
+          closure ( ListItem(True -> Bool) ListItem(False -> T) , .Map ) ) ) )
+        g |-> lambda ( closure ( x , (Lambda y  s x  y) , s |-> fun ( closure 
+          ( ListItem(True -> Bool) ListItem(False -> T) , .Map ) ) ) ) True 
+          True
+        h |-> lambda ( closure ( x , (Lambda y  s x  y) , s |-> fun ( closure 
+          ( ListItem(True -> Bool) ListItem(False -> T) , .Map ) ) ) ) False E
+        s |-> fun ( closure ( ListItem(True -> Bool) ListItem(False -> T) , 
+          .Map ) )
+    </fun>
+    <meta>
+        .Map
+    </meta>
+</T>

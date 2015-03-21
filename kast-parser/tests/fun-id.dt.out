@@ -6,14 +6,14 @@
         subst(.KList)
     </mgu>
     <tenv>
-        expr |-> Set 3
+        id |-> 'Pi___(#symVariable(3),, #symExpr(4),, #symExpr(4))
     </tenv>
     <data>
         .Map
     </data>
     <fun>
-        expr |-> lambda ( closure ( y , ((Lambda x Set 9 Set 2) Set 8) , 
-          .Map ) ) Set 5
+        id |-> fun ( closure ( ListItem(x -> neut ( x , .Map )) , .Map ) )
+          
     </fun>
     <meta>
         .Map

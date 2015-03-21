@@ -12,7 +12,8 @@
         .Map
     </data>
     <fun>
-        expr |-> ((Lambda x Set 1 x) ((Lambda y Set 2 Set 0) Set 1))
+        expr |-> lambda ( closure ( x , x , .Map ) ) lambda ( closure ( y 
+          , Set 0 , .Map ) ) Set 1
     </fun>
     <meta>
         .Map

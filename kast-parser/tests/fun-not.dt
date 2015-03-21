@@ -1,0 +1,6 @@
+data Bool : Set where
+  True : Bool,
+  False : Bool
+
+; not True = False
+; not a = True

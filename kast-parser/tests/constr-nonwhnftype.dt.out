@@ -9,7 +9,7 @@
         expr |-> Test
     </tenv>
     <data>
-        Constr |-> (Pi x Set 1 Test)
+        Constr |-> 'Pi___(x,, Set 1,, Test)
         Test |-> Set 0
     </data>
     <fun>

@@ -12,7 +12,7 @@
         .Map
     </data>
     <fun>
-        expr |-> (Pi x Set 2 Set 4)
+        expr |-> pi ( Set 2 , closure ( x , Set 4 , .Map ) )
     </fun>
     <meta>
         .Map

@@ -3,4 +3,4 @@ data Nat : Set 0 where
   One : Nat,
   Succ : Pi x Nat Nat
 
-expr = (Lambda x Nat x) (Succ Zero)
+; expr = (Lambda x Nat x) (Succ Zero)

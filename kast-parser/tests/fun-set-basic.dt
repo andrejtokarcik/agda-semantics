@@ -1,0 +1,2 @@
+  s = Set
+; f = Lambda x s x

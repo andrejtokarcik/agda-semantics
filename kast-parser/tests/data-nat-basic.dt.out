@@ -11,11 +11,11 @@
     <data>
         Nat |-> Set 0
         One |-> Nat
-        Succ |-> (Pi x Nat Nat)
+        Succ |-> 'Pi___(x,, Nat,, Nat)
         Zero |-> Nat
     </data>
     <fun>
-        expr |-> ((Lambda x Nat x)  Succ Zero )
+        expr |-> lambda ( closure ( x , x , .Map ) )  Succ Zero 
     </fun>
     <meta>
         .Map

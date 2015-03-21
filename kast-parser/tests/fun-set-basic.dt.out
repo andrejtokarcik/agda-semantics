@@ -6,14 +6,15 @@
         subst(.KList)
     </mgu>
     <tenv>
-        expr |-> Set 3
+        f |-> 'Pi___(x,, Set 0,, Set 0)
+        s |-> Set 1
     </tenv>
     <data>
         .Map
     </data>
     <fun>
-        expr |-> lambda ( closure ( y , ((Lambda x Set 9 Set 2) Set 8) , 
-          .Map ) ) Set 5
+        f |-> lambda ( closure ( x , x , s |-> Set 0 ) )
+        s |-> Set 0
     </fun>
     <meta>
         .Map

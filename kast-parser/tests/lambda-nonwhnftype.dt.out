@@ -6,13 +6,13 @@
         subst(.KList)
     </mgu>
     <tenv>
-        expr |-> (Pi x Set 0 Set 0)
+        expr |-> 'Pi___(x,, Set 0,, Set 0)
     </tenv>
     <data>
         .Map
     </data>
     <fun>
-        expr |-> (Lambda x Set 0 x)
+        expr |-> lambda ( closure ( x , x , .Map ) )
     </fun>
     <meta>
         .Map

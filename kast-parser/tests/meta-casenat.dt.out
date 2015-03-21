@@ -1,7 +1,8 @@
 <T>
     <k>
-        p constructorOf Nat ~> processConstrs ( Nat ,  ) ~> expr = (((
-          CaseNat (?)) Zero) (Lambda x Nat x))
+        whnf ( p ) ~> whnf (  HOLE n  ) ~> HOLE constructorOf Nat ~> true?
+           ~> processConstrs ( Nat ,  ) ~> expr =  CaseNat (?) Zero (Lambda x 
+          Nat x) 
     </k>
     <mgu>
         subst(.KList)
@@ -10,10 +11,10 @@
         .Map
     </tenv>
     <data>
-        CaseNat |-> (Pi p (Pi x Nat Set 0) (Pi y p Zero (Pi z (Pi n Nat p 
-          Succ n) (Pi n Nat p n))))
+        CaseNat |-> 'Pi___(p,, (Pi x Nat Set 0),, (Pi y p Zero (Pi z (Pi n
+           Nat p Succ n) (Pi n Nat p n))))
         Nat |-> Set 0
-        Succ |-> (Pi x Nat Nat)
+        Succ |-> 'Pi___(x,, Nat,, Nat)
         Zero |-> Nat
     </data>
     <fun>

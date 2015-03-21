@@ -1,0 +1,23 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenv>
+        not |-> 'Pi___(#symVariable(6),, Bool,, Bool)
+    </tenv>
+    <data>
+        Bool |-> Set 0
+        False |-> Bool
+        True |-> Bool
+    </data>
+    <fun>
+        not |-> fun ( closure ( ListItem(True -> False) ListItem(a -> True
+          ) , .Map ) )
+    </fun>
+    <meta>
+        .Map
+    </meta>
+</T>

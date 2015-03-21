@@ -6,15 +6,16 @@
         subst(.KList)
     </mgu>
     <tenv>
-        expr |-> Nat
+        expr |-> #symExpr(9)
     </tenv>
     <data>
         Nat |-> Set 0
-        Succ |-> (Pi x Nat Nat)
+        Succ |-> 'Pi___(x,, Nat,, Nat)
         Zero |-> Nat
     </data>
     <fun>
-        expr |-> (((Lambda a Set 0 (Lambda x a x)) #symExpr(2)) Zero)
+        expr |-> lambda ( closure ( a , (Lambda x a x) , .Map ) ) neut ( 
+          #symExpr(2) , .Map ) Zero
     </fun>
     <meta>
         #symExpr(2) |-> ( Nat , Set 0 )

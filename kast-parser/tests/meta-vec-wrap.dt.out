@@ -6,27 +6,28 @@
         subst(.KList)
     </mgu>
     <tenv>
-        expr |->  Vect  Wrap Top T   Succ Zero  
+        expr |->  Vect  Wrap #symVariable(37) #symVariable(40)   Succ Zero
+            
     </tenv>
     <data>
         Nat |-> Set 0
-        Succ |-> (Pi x Nat Nat)
+        Succ |-> 'Pi___(x,, Nat,, Nat)
         T |-> Top
         Top |-> Set 0
-        Vcons |-> (Pi a Set 0 (Pi k Nat (Pi x a (Pi xs Vect a k Vect a Succ k)
-          )))
-        Vect |-> (Pi a Set 0 (Pi x Nat Set 0))
-        Vnil |-> (Pi a Set 0 Vect a Zero)
-        W |-> (Pi a Set 0 (Pi n a Wrap a n))
-        Wrap |-> (Pi a Set 0 (Pi n a Set 0))
+        Vcons |-> 'Pi___(a,, Set 0,, (Pi k Nat (Pi x a (Pi xs  Vect a k   Vect
+           a (Succ k) ))))
+        Vect |-> 'Pi___(a,, Set 0,, (Pi x Nat Set 0))
+        Vnil |-> 'Pi___(a,, Set 0,,  Vect a Zero )
+        W |-> 'Pi___(a,, Set 0,, (Pi n a  Wrap a n ))
+        Wrap |-> 'Pi___(a,, Set 0,, (Pi n a Set 0))
         Zero |-> Nat
     </data>
     <fun>
-        expr |->  Vcons #symExpr(29) Zero  W Top T   Vnil #symExpr(46)  
-          
+        expr |->  Vcons neut ( #symExpr(29) , .Map ) Zero  W Top T   Vnil 
+          neut ( #symExpr(46) , .Map )  
     </fun>
     <meta>
-        #symExpr(29) |-> ( Wrap Top T , Set 0 )
-        #symExpr(46) |-> ( Wrap Top T , Set 0 )
+        #symExpr(29) |-> ( #symExpr(29) , Set 0 )
+        #symExpr(46) |-> ( #symExpr(46) , Set 0 )
     </meta>
 </T>

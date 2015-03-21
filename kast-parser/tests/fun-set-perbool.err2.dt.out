@@ -1,0 +1,45 @@
+<T>
+    <k>
+        ( f E , applyMgu ( clash(T,, Bool) , #symExpr(19) ) ) ~> fenv ( f
+           |-> lambda ( closure ( x , x , s |-> fun ( closure ( ListItem(True 
+          -> Bool) ListItem(False -> T) , .Map ) ) ) ) g |-> lambda ( closure 
+          ( x , x , s |-> fun ( closure ( ListItem(True -> Bool) ListItem(
+          False -> T) , .Map ) ) ) ) True s |-> fun ( closure ( ListItem(True 
+          -> Bool) ListItem(False -> T) , .Map ) ) ) ~> whnf2 ( HOLE ) ~> ( h 
+          , #symExpr(16) ) = HOLE ~> funDecl ( h , f |-> 'Pi___(x,, Bool,, 
+          Bool) g |-> Bool s |-> 'Pi___(#symVariable(5),, Bool,, Set 0) )
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenv>
+        f |-> applyMgu ( clash(T,, Bool) , 'Pi___(x,, Bool,, Bool) )
+        g |-> amb(
+            applyMgu ( clash(T,, Bool) , Bool ),
+            applyMgu ( clash(T,, Bool) , Bool ),
+            applyMgu ( clash(T,, Bool) , Bool )
+        )
+        h |-> 'applyMgu(clash(T,, Bool),, #symExpr(16))
+        s |-> applyMgu ( clash(T,, Bool) , 'Pi___(#symVariable(5),, Bool,, Set
+           0) )
+    </tenv>
+    <data>
+        Bool |-> Set 0
+        E |-> T
+        False |-> Bool
+        T |-> Set 0
+        True |-> Bool
+    </data>
+    <fun>
+        #symVariable(17) |-> E
+        f |-> lambda ( closure ( x , x , s |-> fun ( closure ( ListItem(True 
+          -> Bool) ListItem(False -> T) , .Map ) ) ) )
+        g |-> lambda ( closure ( x , x , s |-> fun ( closure ( ListItem(True 
+          -> Bool) ListItem(False -> T) , .Map ) ) ) ) True
+        s |-> fun ( closure ( ListItem(True -> Bool) ListItem(False -> T) , 
+          .Map ) )
+    </fun>
+    <meta>
+        .Map
+    </meta>
+</T>

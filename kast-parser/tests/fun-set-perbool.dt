@@ -1,0 +1,13 @@
+data Bool : Set where
+  True : Bool,
+  False : Bool
+;
+data T : Set where
+  E : T
+
+; s True = Bool
+; s False = T
+; f = Lambda x (s True) x
+; g = f True
+; f2 = Lambda x Bool (Lambda y (s x) y)
+; h = f2 False E

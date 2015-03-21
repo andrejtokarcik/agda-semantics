@@ -9,16 +9,16 @@
         expr |->  List Nat 
     </tenv>
     <data>
-        Cons |-> (Pi a Set 0 (Pi x a (Pi y List a List a)))
-        List |-> (Pi a Set 0 Set 0)
+        Cons |-> 'Pi___(a,, Set 0,, (Pi x a (Pi y List a List a)))
+        List |-> 'Pi___(a,, Set 0,, Set 0)
         Nat |-> Set 0
-        Nil |-> (Pi a Set 0 List a)
-        Succ |-> (Pi x Nat Nat)
+        Nil |-> 'Pi___(a,, Set 0,,  List a )
+        Succ |-> 'Pi___(x,, Nat,, Nat)
         Zero |-> Nat
     </data>
     <fun>
-        expr |-> ((Lambda x List Nat Cons Nat Zero x)  Cons Nat Zero  Cons
-           Nat Succ Zero Nil Nat  )
+        expr |-> lambda ( closure ( x ,  Cons Nat Zero x  , .Map ) )   
+          Cons Nat Zero    Cons Nat  Succ Zero    Nil Nat   
     </fun>
     <meta>
         .Map

@@ -1,7 +1,7 @@
 data Wrap (a : Set 0), (n : a) : Set 0 where
   W : Wrap a n
-
+;
 data Top : Set 0 where
   T : Top
 
-expr = W ? T
+; expr = W ? T
