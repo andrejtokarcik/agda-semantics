@@ -9,17 +9,29 @@ module AGDA-SEMANTICS-METAVARIABLES
        <meta>... . => E |-> (E, T) ...</meta>
     when fresh(E:Expr) andBool fresh(T:Expr)
 
-  rule <k> E => Et ...</k>
+  // WAAT? was E => Et
+  rule <k> E:SymExpr => (E, Et) ...</k>
        <meta>... E |-> Et ...</meta>
-    when isSymExpr(E)
+    //when isSymExpr(E)
 
-  syntax Bool ::= isSymExpr(Expr) [function]
+  // NOTE: is*() functions are assumed to correspond to syntax sorts
+  //syntax Bool ::= isSymExpr(Expr) [function]
+  syntax SymExpr
   rule isSymExpr(#symExpr(_)) => true
+  //syntax Expr ::= SymExpr
+  syntax Whnf ::= SymExpr
+  //syntax Nf ::= SymExpr // is Nf a subsort of Whnf already?
   //rule isSymExpr(#symWhnf(_)) => true
   //rule isSymExpr(#symNf(_)) => true
 
+  /*
   rule isWhnf(#symExpr(_)) => true
   rule isNf(#symExpr(_)) => true
+  */
+  /*
+  rule isWhnf(_:SymExpr) => true
+  rule isNf(_:SymExpr) => true
+  */
 
   syntax Expr ::= leftMost(Expr) [function]
   rule leftMost(E:Expr _:Expr) => leftMost(E)

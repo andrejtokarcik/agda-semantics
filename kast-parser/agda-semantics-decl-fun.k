@@ -147,7 +147,7 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax Closure ::= closure(Variable, Expr, Map)  [binder(1 -> 2)]
                    | closure(List, Map)
-  syntax ValNeut ::= neut(Expr, Map)    // fakeval would be a more appropriate identifier
+  /*
   syntax Val ::= "(" Val ")" [bracket]
                  //closure(Variable, Expr, Map)  [binder(1 -> 2)]     // ~ closure(Lambda X E, Fun)  kebyze mam netypovane lambda abstrakcie
                | lambda(Closure)
@@ -156,7 +156,23 @@ module AGDA-SEMANTICS-DECL-FUN
                | Universe
                | Name
                | Val Val
-               | ValNeut
+               | fakeval(Expr, Map)
+  */
+  syntax ValWhnf ::= //closure(Binder, Map)
+                   //| closure(fun(List), Map)
+                     lambda(Closure)
+                   | pi(ValWhnf, Closure)
+                   | fun(Closure)
+                   | Universe
+                   | ValNeut
+                   | fakeval(Expr, Map)
+                   | SymExpr
+  //rule isValWhnf(_:SymExpr) => true
+  syntax ValNeut ::= Name
+                   | ValNeut ValWhnf [left]
+  syntax Val ::= ValWhnf
+               | pi(Val, Closure)
+               | Val Val
   /*
                | ValNeut
   syntax ValNeut ::= Name
@@ -164,19 +180,35 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax Whnf ::= Val
   */
 
+  // rename: readback?
+  syntax Expr ::= unval(Expr)   [function]
+  rule unval(lambda(closure(X, E, _))) => Lambda X T unval(E) when fresh(T:Expr)
+  rule unval(pi(T, closure(X, E, _))) => Pi X unval(T) unval(E)
+  rule unval(U:Universe) => U
+  rule unval(fakeval(E, _)) => unval(E)
+  rule unval(N:Name) => N
+  rule unval(V1:Val V2:Val) => unval(V1) unval(V2)
+  rule unval(E:Expr) => E [owise]
+
   /*
   syntax NeutlessExpr //::= Expr
-  //rule isNeutlessExpr(neut(_, _)) => false
-  rule isNeutlessExpr(E:Expr) => isValNeut(E) =/=K true
+  //rule isNeutlessExpr(fakeval(_, _)) => false
+  rule isNeutlessExpr(E:Expr) => isValfakeval(E) =/=K true
   //syntax Expr ::= NeutlessExpr
   */
 
+
   syntax Expr ::= Val
-  rule isWhNeut(neut(_:Expr, _)) => true
+  syntax Whnf ::= ValWhnf
+  syntax ValWhnf2ExprT
+  rule isValWhnf2ExprT((_:Expr, _:ValWhnf)) => true
+  syntax Whnf2ExprT ::= ValWhnf2ExprT
+
+  //rule isWhNeut(fakeval(_:Expr, _)) => true
 
   syntax Val ::= evalF(Expr, Map)   [function]
   rule evalF(X:Variable, Fun) => Fun(X)  when X in keys(Fun)   // the condition isn't necessary, perhaps, if evalF() is matched from top to bottom
-  rule evalF(X:Variable, Fun) => neut(X, Fun) when notBool (X in keys(Fun))
+  rule evalF(X:Variable, Fun) => fakeval(X, Fun) when notBool (X in keys(Fun))
   //rule evalF(X:Variable, Fun) => V       when notBool (X in keys(Fun)) andBool fresh(V:Val)
   rule evalF(Lambda X _ E, Fun) => lambda(closure(X, E, Fun))
   rule evalF(Pi X T1 T2, Fun) => pi(evalF(T1, Fun), closure(X, T2, Fun))
@@ -214,29 +246,47 @@ module AGDA-SEMANTICS-DECL-FUN
   rule matchCase(ListItem(P -> E1) _, E2) => E1[getMatching(P, E2)]  when isMatching(P, E2)
   rule matchCase(_ Cs:List => Cs, _)  [owise]
 
-  syntax EnvRecovery ::= eval(Whnf)
+  //syntax EnvRecovery ::= eval(Whnf)
+  rule isEnvRecovery(eval(_:Whnf)) => true
 
   /*
-  syntax Expr ::= stripNeut(Expr)   [function] //[context(result(NeutlessExpr))]
-  rule stripNeut(neut(E, _) => E)
-  rule stripNeut(E) => E               [owise] //when isNeutlessExpr(E) ==K true
+  syntax Expr ::= stripfakeval(Expr)   [function] //[context(result(NeutlessExpr))]
+  rule stripfakeval(fakeval(E, _) => E)
+  rule stripfakeval(E) => E               [owise] //when isNeutlessExpr(E) ==K true
   */
 
-  syntax K ::= eval(Expr)     [superheat, context(result(Whnf))]    // TODO: WhnfVal?
-  //context eval(HOLE => stripNeut(HOLE))   [result(NeutlessExpr)]
+  syntax K ::= eval(Expr)     [context(result(ValWhnf))] //superheat]
+  //context eval((HOLE:Val => eval(HOLE)) _:Val)   [result(ValWhnf)]
+  //context eval(_:Val (HOLE:Val => eval(HOLE)))   [result(ValWhnf)]
+  /*
+  syntax KItem ::= "WAAT"
+  context eval(pi((HOLE:Val => eval(HOLE) ~> WAAT), _))    [result(ValWhnf)]
+  */
+
   rule <k> eval(E:Expr => evalF(E, Fun)) ...</k>
        <fun> Fun </fun>
     when isVal(E) =/=K true
-  rule <k> eval(neut(E:Expr, Fun) => E) ...</k>
+  rule <k> eval(fakeval(E:Expr, Fun) => E) ...</k>
        <fun> Fun' </fun>
     when Fun =/=Map Fun'
-  rule eval(E1:Expr neut(E2:Expr, Fun) => neut(E1 E2, Fun))
-  rule eval(neut(E1:Expr, Fun) E2:Expr => neut(E1 E2, Fun))
-  rule <k> eval(lambda(closure(X, E, Fun)) V:Val => E) ~> (. => env(TEnv', Fun')) ...</k>
-       <tenv> TEnv' </tenv>
+  /*
+  rule <k> eval(E1:Expr fakeval(E2:Expr, Fun) => E1 E2) ...</k>
+       <fun> Fun </fun>
+    when Fun =/=Map Fun'
+  rule <k> eval(fakeval(E1:Expr, Fun) E2:Expr => fakeval(E1 E2, Fun)) ...</k>
+       <Fun> Fun' </fun>
+    when Fun =/=Map Fun'
+  */
+
+  rule <k> eval(E1:Expr fakeval(E2:Expr, Fun) => fakeval(E1 E2, Fun)) ...</k>
+       //<fun> Fun </fun>
+  rule <k> eval(fakeval(E1:Expr, Fun) E2:Expr => fakeval(E1 E2, Fun)) ...</k>
+       //<fun> Fun </fun>
+  rule <k> eval(lambda(closure(X, E, Fun)) V:Val => E) ~> (. => fenv(Fun')) ...</k>
+       //<tenv> TEnv' </tenv>
        <fun> Fun' => Fun[V/X] </fun>
-  rule <k> eval(fun(closure(ListItem(P:Pattern -> E:Expr) _, Fun)) V:Val => E) ~> (. => env(TEnv', Fun')) ...</k>
-       <tenv> TEnv' </tenv>
+  rule <k> eval(fun(closure(ListItem(P:Pattern -> E:Expr) _, Fun)) V:Val => E) ~> (. => fenv(Fun')) ...</k>
+       //<tenv> TEnv' </tenv>
        <fun> Fun' => Fun[getMatching(P, V)] </fun>
     when isMatching(P, V)
   rule eval(fun(closure(ListItem(P:Pattern -> _) Cs:List => Cs, _)) V:Val)
@@ -249,13 +299,13 @@ module AGDA-SEMANTICS-DECL-FUN
 
   // deal with neut in typed expr
   /*
-  rule <k> ... neut(E, Fun') => Hihi Fun Fun' ~> E ...</k>
+  rule <k> ... fakeval(E, Fun') => Hihi Fun Fun' ~> E ...</k>
        <fun> Fun </fun>
   [anywhere]
   */
-  //rule (neut(E, _) => E, _) [anywhere]    // causes infinite recursion as it gets triggerred too soon (immediately after eval has finished, causing it to run once again)
+  //rule (fakeval(E, _) => E, _) [anywhere]    // causes infinite recursion as it gets triggerred too soon (immediately after eval has finished, causing it to run once again)
 
   // deal with neut in matching equations etc.
-  //rule eqns((eqn(neut(E:Expr),,E':Expr) => eqn(E,,E')),,_)   [anywhere]
-  //rule eqns((eqn(E':Expr,,neut(E:Expr)) => eqn(E,,E')),,_)   [anywhere]
+  //rule eqns((eqn(fakeval(E:Expr),,E':Expr) => eqn(E,,E')),,_)   [anywhere]
+  //rule eqns((eqn(E':Expr,,fakeval(E:Expr)) => eqn(E,,E')),,_)   [anywhere]
 endmodule

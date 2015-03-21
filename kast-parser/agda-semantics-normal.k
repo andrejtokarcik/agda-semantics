@@ -30,10 +30,15 @@ module AGDA-SEMANTICS-NORMAL
   syntax K ::= whnf2(Expr)                  [strict, context(result(Whnf2ExprT))]
   context whnf2((_, (HOLE => whnf(HOLE))))  [result(Whnf)]
 
-  syntax K ::= eval2(Expr)                  [superheat, strict, context(result(Whnf2ExprT))]
-  context eval2((_, HOLE => eval(HOLE)))    [superheat, result(Whnf)]
+  syntax K ::= eval2(Expr)                  [strict, context(result(ValWhnf2ExprT))] //superheat]
+  context eval2((_, HOLE => eval(HOLE)))    [result(ValWhnf)] //superheat]
   //rule eval2((_, E => stripNeut(E)))  when isNeutlessExpr(E) =/=K true
   //context eval2((_, HOLE => eval(HOLE)))  when isNeutlessExpr(HOLE) ==K true   [result(Whnf)]
+  /*
+  rule <k> eval2((E, T)) => eval(T) ~> (E, HOLE) ~> fenv(Fun) ...</k>
+       <fun> Fun </fun>   when isValWhnf(T) =/=K true
+  rule eval(T) ~> (E, HOLE) => (E, T)  when isValWhnf(T) ==K true
+  */
 
   syntax Whnf21ExprT
   rule isWhnf21ExprT((_:Whnf, _:Whnf)) => true
