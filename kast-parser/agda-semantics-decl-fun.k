@@ -258,10 +258,7 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax K ::= eval(Expr)     [context(result(ValWhnf))] //superheat]
   //context eval((HOLE:Val => eval(HOLE)) _:Val)   [result(ValWhnf)]
   //context eval(_:Val (HOLE:Val => eval(HOLE)))   [result(ValWhnf)]
-  /*
-  syntax KItem ::= "WAAT"
-  context eval(pi((HOLE:Val => eval(HOLE) ~> WAAT), _))    [result(ValWhnf)]
-  */
+  context eval(pi(HOLE => eval(HOLE), _))  /*when isValWhnf(HOLE) =/=K true*/   [result(ValWhnf)]
 
   rule <k> eval(E:Expr => evalF(E, Fun)) ...</k>
        <fun> Fun </fun>

@@ -41,7 +41,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   //rule cond(_:Expr, E:Expr) => #parseToken("Name", "E") ==K E
 
   syntax KItem ::= "Chich"
-  rule <k> (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => T1 == Pi X T T' ~> T2 == T ~> applyMguT((E1 E2, T')) ~> fenv(Fun) ~> Chich ...</k> //~> tenv(TEnv) ~> fenv(Fun) ...</k>  //~> tsubst(E2/X)
+  rule <k> (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => T1 == Pi X T T' ~> T2 == T ~> applyMguT((E1 E2, T')) ~> fenv(Fun) ...</k> //~> tenv(TEnv) ~> fenv(Fun) ...</k>  //~> tsubst(E2/X)
        //<tenv> TEnv => TEnv[T2/X] </tenv>
        <fun> Fun => Fun[E2/X] </fun>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2)
