@@ -55,6 +55,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   // NOTE: not every updateMgu is guaranteed to actually update the mgu.
   // e.g. if T is identical to T', <mgu /> content remains the same
+  // TODO: turn whnf into a unval'ing context and use here?
   syntax KItem ::= Expr "==" Expr   //[transition, strict(all(context('eval)))]
   rule <k> T == T' => . ...</k>
        <mgu> Theta => updateMgu(Theta, unval(T), unval(T')) </mgu>  [transition]
