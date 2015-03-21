@@ -88,7 +88,8 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax KItem ::= autotype(Variable)
   rule <k> autotype(X) => . ...</k>
-       <tenv>... X |-> _ ...</tenv>
+       <tenv> TEnv </tenv>
+    when X in keys(TEnv)
   rule <k> autotype(X) => . ...</k>
        <tenv> TEnv (. => X |-> T) </tenv>
     when notBool (X in keys(TEnv)) andBool fresh(T:Expr)
@@ -123,10 +124,14 @@ module AGDA-SEMANTICS-DECL-FUN
 
   context HOLE:LHS = _ ~> funDecl(_, _)
 
-  // NOTE: whnf21 nizsie blblo kvoli meta-id.dt -- co je ale aj tak dzivne
-  // whnf2 je ale ok lebo aj tak nechcem evaluavat vyrazy pokial nemusim ci?
+  // NOTE: eval21 nizsie blblo kvoli meta-id.dt -- co je ale aj tak dzivne
+  // eval2 je ale ok lebo aj tak nechcem evaluavat vyrazy pokial nemusim ci?
   // (typy, narozdiel od striktnych 'vyrazov', musim kvoli checkingu)
-  context _:LHST = (HOLE => whnf2(HOLE)) ~> funDecl(_, _)  [result(Whnf2ExprT)]
+  // XXX: jj, imo nech mam pristup: be as lazy as possible [a nech sa evaluuje aj viackrat to iste,
+  // hoci to bude neefektivne -- hram predovsetkym na korektnost]
+  // ved aj tak robim typechecker a nie interpreter... ci?
+  // (pozri poznamky ku kompilacii agdy, main ako entry point = vyraz na vyhodnotenie)
+  context _:LHST = (HOLE => eval2(HOLE)) ~> funDecl(_, _)  [result(Whnf2ExprT)]
 
   syntax Case ::= mkCase(LHS, Case)   [function]
   rule mkCase(_:Variable, C:Case) => C
@@ -168,7 +173,7 @@ module AGDA-SEMANTICS-DECL-FUN
   //rule isValWhnf(_:SymExpr) => true
   syntax ValNeut ::= Name
                    | neut(Expr, Map)
-                   | ValNeut Expr [left]
+                   | ValNeut Val [left]
                    | SymExpr
   syntax Val ::= ValWhnf
                | pi(Val, Closure)
@@ -203,6 +208,11 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax ValWhnf2ExprT
   rule isValWhnf2ExprT((_:Expr, _:ValWhnf)) => true
   syntax Whnf2ExprT ::= ValWhnf2ExprT
+  syntax ValWhnf21ExprT
+  rule isValWhnf21ExprT((_:ValWhnf, _:ValWhnf)) => true
+  syntax ValWhnf2ExprT ::= ValWhnf21ExprT
+  syntax Whnf21ExprT ::= ValWhnf21ExprT
+
 
   //rule isWhNeut(neut(_:Expr, _)) => true
 
@@ -247,7 +257,7 @@ module AGDA-SEMANTICS-DECL-FUN
   rule matchCase(_ Cs:List => Cs, _)  [owise]
 
   //syntax EnvRecovery ::= eval(Whnf)
-  rule isEnvRecovery(eval(_:Whnf)) => true
+  rule isEnvRecovery(eval(_:ValWhnf)) => true
 
   /*
   syntax Expr ::= stripneut(Expr)   [function] //[context(result(NeutlessExpr))]
@@ -260,6 +270,7 @@ module AGDA-SEMANTICS-DECL-FUN
   //context eval(_:Val (HOLE:Val => eval(HOLE)))   [result(ValWhnf)]
   context eval(pi(HOLE => eval(HOLE), _))  /*when isValWhnf(HOLE) =/=K true*/   [result(ValWhnf)]
 
+  // TODO implement evalF() here directly since/if we don't use it anywhere else
   rule <k> eval(E:Expr => evalF(E, Fun)) ...</k>
        <fun> Fun </fun>
     when isVal(E) =/=K true

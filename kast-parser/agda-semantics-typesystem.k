@@ -37,11 +37,13 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule Lambda X:Variable (T:Expr, _:Universe) (E:Expr, T':Expr) => (Lambda X T E, Pi X T T')
 
   syntax Bool ::= cond(Expr, Expr)  [function]
-  rule cond(E:Expr, _:Expr) => #parseToken("Variable", "f2") ==K E
+  //rule cond(E:Expr, _:Expr) => #parseToken("Name", "Cons") ==K E
+  rule cond(_:Expr, E:Expr) => #parseToken("Name", "Succ") #parseToken("Name", "Zero") ==K E
+  //rule cond(E:Expr, _:Expr) => #parseToken("Variable", "f2") ==K E
   //rule cond(_:Expr, E:Expr) => #parseToken("Name", "E") ==K E
 
   syntax KItem ::= "Chich"
-  rule <k> (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => T1 == Pi X T T' ~> T2 == T ~> applyMguT((E1 E2, T')) ~> fenv(Fun) ...</k> //~> tenv(TEnv) ~> fenv(Fun) ...</k>  //~> tsubst(E2/X)
+  rule <k> (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => Chich ~> T1 == Pi X T T' ~> T2 == T ~> applyMguT((E1 E2, T')) ~> Chich ~> fenv(Fun) ...</k> //~> tenv(TEnv) ~> fenv(Fun) ...</k>  //~> tsubst(E2/X)
        //<tenv> TEnv => TEnv[T2/X] </tenv>
        <fun> Fun => Fun[E2/X] </fun>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2)

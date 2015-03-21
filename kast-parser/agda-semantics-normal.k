@@ -26,8 +26,11 @@ module AGDA-SEMANTICS-NORMAL
   syntax ExprT ::= Whnf2ExprT
 
   // TODO, what result context to use, when Val < Expr, ValWhnf < Whnf, etc.?
+  // rename Whnf -> ExprWhnf and then set Whnf ::= ExprWhnf,
+  // whnf context to have ExprWhnf as result
+
   //syntax K ::= whnf(Expr)                   [strict(all(context('eval))), context(result(Whnf))]
-  //rule whnf(V:ValWhnf => unval(V))
+  //rule whnf(V:ValWhnf => unval(V))         // << TODO ^ implement unval here directly
   syntax K ::= whnf(Expr)                     [context(result(Whnf))]
   context whnf((HOLE:Expr => whnf(HOLE)) _) [result(Whnf)]
   rule whnf((Lambda X _ E1) E2 => E1[E2/X])
@@ -58,10 +61,8 @@ module AGDA-SEMANTICS-NORMAL
   syntax K ::= whnf2eval1(Expr)            [strict(all(context('whnf2))), context(result(Whnf21ExprT))]
   context whnf2eval1(((HOLE => eval(HOLE)), _:Whnf))   [result(Whnf)]
   */
-  /*
   syntax K ::= eval21(Expr)            [strict(all(context('eval2))), context(result(ValWhnf21ExprT))]
   context eval21(((HOLE => eval(HOLE)), _:ValWhnf))   [result(ValWhnf)]
-  */
 
 
   syntax Nf ::= "(" Nf ")" [bracket]
