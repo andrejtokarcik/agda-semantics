@@ -5,6 +5,9 @@ module AGDA-SEMANTICS-METAVARIABLES
   imports AGDA-SYNTAX
   imports AGDA-SEMANTICS-NORMAL
 
+  // XXX: the #sym*(_) things appear to be part of Variable, i.e. the E:SymExpr rule isn't necessary
+  // -- it's handled already in the base typesystem with X:Variable!
+
   rule <k> ? => (E, T) ...</k>
        <meta>... . => E |-> (E, T) ...</meta>
     when fresh(E:Expr) andBool fresh(T:Expr)
@@ -14,7 +17,9 @@ module AGDA-SEMANTICS-METAVARIABLES
        <meta>... E |-> Et ...</meta>
     //when isSymExpr(E)
 
-  // NOTE: is*() functions are assumed to correspond to syntax sorts
+  // NOTE: is*() functions are assumed to correspond to syntax sorts;
+  // in builtins/k-equal.k they use it as a Bool function too
+
   //syntax Bool ::= isSymExpr(Expr) [function]
   syntax SymExpr
   rule isSymExpr(#symExpr(_)) => true

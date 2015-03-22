@@ -11,6 +11,9 @@ module AGDA-SEMANTICS-NORMAL
   syntax ExprT ::= (Expr, Expr)    // syntax: Expr ":" Expr [cf. java-semantics, kde maju ::]
   syntax Expr ::= ExprT
 
+  // kedze nemam vo WhNeut premenne tak je to dost obmedzuju, mat Whnf takto ako explicitnu syntakticku kategoriu
+  // dufam ale ze pri prepise na agda-parser tie idenfikatory lepsie poriesim (v c-semantics to maju zda sa v poho)
+  // a teda budem vediet dobre odchytavat premenne oproti nazvom funkcii (ci to sa vlastne ani neda, resp. to nechcem?)
   syntax Whnf ::= "(" Whnf ")" [bracket]
                 | WhNeut
                 | Universe
@@ -95,6 +98,6 @@ module AGDA-SEMANTICS-NORMAL
   */
 
   syntax TypeT
-  rule isTypeT((_:Expr, _:Universe)) => true
+  rule isTypeT((_:Expr, U:Universe)) => true
   //syntax Nf2ExprT ::= TypeT
 endmodule
