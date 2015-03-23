@@ -102,15 +102,18 @@ module AGDA-SEMANTICS-DECL-FUN
   //syntax WhNeut ::= Variable
   //syntax WhNeut ::= Variable "@" Map
 
-  syntax ValWhnf ::= Universe | Name
-  // may replace these with an isBinder() and an #if clause for the case of updating Fun
-  rule X:Variable@_ => X [structural, anywhere]
-  rule U:Universe@_ => U [structural, anywhere]
-  rule N:Name@_ => N   [structural, anywhere]
-  rule (E1 E2)@Rho => E1@Rho E2@Rho [structural, anywhere]
+  syntax ValWhnf ::= Universe | WhNeut
   rule isValWhnf(_:Whnf@_) => true
+
   //rule isValWhnf(E) => true  when isEmptySet(freeVariables(E))
   //rule E@_ => E  when isEmptySet(freeVariables(E))  [structural, anywhere]
+
+  // may replace these with an isBinder() and an #if clause for the case of updating Fun
+  rule X:Variable@_ => [X] [structural, anywhere]
+  rule U:Universe@_ => U [structural, anywhere]
+  rule N:WhNeut@_ => N   [structural, anywhere]
+  rule (E1 E2)@Rho => E1@Rho E2@Rho [structural, anywhere]
+
   syntax Val ::= ValWhnf
 
   syntax Expr ::= Val
@@ -139,18 +142,52 @@ module AGDA-SEMANTICS-DECL-FUN
 
   rule isEnvRecovery(eval(_:ValWhnf)) => true
 
-  syntax ValWhnf ::= "[" Expr "]"    // <<< XXX THIS IS MY FIX FOR DA WHNF SPOIL OF OBDRZALEK REVISION
+  syntax WhNeut ::= "[" Variable "]"    // <<< XXX THIS IS MY FIX FOR DA WHNF SPOIL OF OBDRZALEK REVISION
 
 
-  // TODO eval + deval ~~ normalne whnf
+  // whnf-eval-deval
+  syntax K ::= whnfED(Expr)     [context(result(Whnf))]
+  context whnfED((HOLE:Expr => whnfED(HOLE)) _)      [result(Whnf)]
 
+  rule whnfED(V:ValWhnf => deval(V))
+  rule <k> whnfED(X:Variable => #if X in keys(Fun) #then Fun(X) #else [X] #fi) ...</k>
+       <fun> Fun </fun>
+
+  rule <k> whnfED(Pi X T T' => (Pi X whnfED(T) T')@Fun) ...</k>
+       <fun> Fun </fun>
+  rule <k> whnfED(Lambda X T E => (Lambda X whnfED(T) E)@Fun) ...</k>
+       <fun> Fun </fun>
+
+  rule <k> whnfED((Lambda X _ E)@Fun V => E) ~> (. => fenv(Fun')) ...</k>
+       <fun> Fun' => Fun[V/X] </fun>
+  rule <k> whnfED(fun(ListItem(P:Pattern -> E:Expr _))@Fun V:Val => E) ~> (. => fenv(Fun')) ...</k>
+       <fun> Fun' => Fun[getMatching(P, V)] </fun>
+    when isMatching(P, V)
+  rule whnfED((fun(ListItem(P:Pattern -> _) Cs:List => Cs))@_ V:Val)
+    when notBool isMatching(P, V)
+  // TODO: add rules ^ for general P -> C:Case, not just when isExpr(C)
+
+
+
+
+
+  // TODO eval + deval ~~ normalne whnf (see above)
+  // turn eval() into normal function, aj tak neviem vymysliet context, ktory by vravel 'vyevaluovane vsetky premenne' -- co tak ValNf?
   syntax K ::= eval(Expr)     [context(result(ValWhnf))]
   context eval((HOLE:Expr => eval(HOLE)) _)      [result(ValWhnf)]
+  context eval(_:Expr (HOLE => eval(HOLE)))      [result(ValWhnf)]
   context eval(Pi _ (HOLE => eval(HOLE)) _)      [result(ValWhnf)]
   context eval(Lambda _ (HOLE => eval(HOLE)) _)  [result(ValWhnf)]
 
   rule <k> eval(X:Variable => #if X in keys(Fun) #then Fun(X) #else [X] #fi) ...</k>
        <fun> Fun </fun>
+
+  /*
+  rule eval([E1] E2 => [E1 E2])
+  rule eval(E1 [E2] => [E1 E2])
+  rule [_:Expr ([E] => E)]  [structural, anywhere]
+  rule [([E:Expr] => E) _]  [structural, anywhere]
+  */
 
   /*
   rule <k> eval(X:Variable => E) ...</k>
@@ -162,7 +199,7 @@ module AGDA-SEMANTICS-DECL-FUN
     when notBool (X in keys(Fun))
   rule <k> eval(X:Variable@Fun => X) ...</k>
        <fun> Fun' </fun>
-    when Fun =/=Map Fun'   // Fun is just informational, functionally the condition should be equivalent to   X in keys(Fun)
+    when Fun =/=Map Fun'   // Fun is attached to X as trigger only, functionally the condition should be equivalent to   X in keys(Fun')
   */
   /*
   rule <k> eval(E:Expr => E@Fun) ...</k>
@@ -196,11 +233,11 @@ module AGDA-SEMANTICS-DECL-FUN
 
   // TODO: remove
   syntax Expr ::= deval(Expr)  [function]
-  rule deval([E]) => E
-  rule deval(E:Expr@_) => E
+  rule deval([E] => E)
+  rule deval(E:Expr@_ => E)
   //rule deval(E:Expr@_ => E)  //when isEmptySet(freeVariables(E))
   //rule deval(Pi X _ (E => deval(E)))  //when freeVariables(E) <=Set SetItem(X)
   //rule deval(Lambda X _ (E => deval(E)))  //when freeVariables(E) <= SetItem(X)
-  //rule deval((E1 => deval(E1)) (E2 => deval(E2)))
+  rule deval((E1 => deval(E1)) (E2 => deval(E2)))
   rule deval(E:Expr) => E  [owise]
 endmodule

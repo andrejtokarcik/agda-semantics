@@ -50,17 +50,17 @@ module AGDA-SEMANTICS-TYPESYSTEM
   //rule condChich(_:Expr, E:Expr) => #parseToken("Name", "E") ==K E
 
   syntax KItem ::= "Chich"
-  rule <k> (E1:Expr, T1:Whnf@Fun) (E2:Expr, T2:Expr) => T1@Fun == Pi X T T' ~> T2 == T@Fun ~> applyMguT((E1 E2, T')) ~> fenv(Fun') ...</k>
+  rule <k> (E1:Expr, T1:Whnf@Fun) (E2:Expr, T2:Expr) => /*Chich ~>*/ T1@Fun == Pi X T T' ~> T2 == T@Fun ~> applyMguT((E1 E2, T')) ~> fenv(Fun') ...</k>
        //<tenv> TEnv => TEnv[T2/X] </tenv>
        <fun> Fun' => Fun[E2/X] </fun>
-    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool condChich(E1, E2) ==K true
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool true //condChich(E1, E2) ==K true
 
 
   // TODO: replace tsubst with a Fun update?
-  rule <k> (E1, T1@Fun) (E2, T2) => T1 == Pi X T T' ~> T2 == T ~> applyMguT((E1 E2, T')) ~> fenv(Fun') ...</k> //~> tenv(TEnv) ~> fenv(Fun) ...</k>  //~> tsubst(E2/X)
+  rule <k> (E1, T1@Fun) (E2, T2) => T1@Fun == Pi X T T' ~> T2 == T@Fun ~> applyMguT((E1 E2, T')) ~> fenv(Fun') ...</k> //~> tenv(TEnv) ~> fenv(Fun) ...</k>  //~> tsubst(E2/X)
        //<tenv> TEnv => TEnv[T2/X] </tenv>
        <fun> Fun' => Fun[E2/X] </fun>
-    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool condChich(E1, E2) =/=K true
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool false //condChich(E1, E2) =/=K true
 
   // NOTE: not every updateMgu is guaranteed to actually update the mgu.
   // e.g. if T is identical to T', <mgu /> content remains the same
@@ -81,6 +81,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <meta> Meta => applyMgu(Theta, Meta) </meta>
        <tenv> TEnv => applyMgu(Theta, TEnv) </tenv>    // remove?
        <mgu> Theta => .Mgu </mgu>        //[transition]
+       <fun> Fun </fun>
 
   syntax EnvRecovery ::= ExprT
 
