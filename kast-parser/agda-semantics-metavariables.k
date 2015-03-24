@@ -5,26 +5,34 @@ module AGDA-SEMANTICS-METAVARIABLES
   imports AGDA-SYNTAX
   imports AGDA-SEMANTICS-NORMAL
 
-  // XXX: the #sym*(_) things appear to be part of Variable, i.e. the E:SymExpr rule isn't necessary
-  // -- it's handled already in the base typesystem with X:Variable!
-
+  // kvoli tomuto to NEcykli
+  syntax KItem ::= "Mmm"
   rule <k> ? => (E, T) ...</k>
        <meta>... . => E |-> (E, T) ...</meta>
+       <tenv>... . => E |-> T ...</tenv>
     when fresh(E:Expr) andBool fresh(T:Expr)
 
+
+  // XXX: the #sym*(_) things appear to be part of Variable, i.e. the E:SymExpr rule isn't necessary
+  // -- it's handled already in the base typesystem when matching on Variables!
+  // -- commenting out the following rule
+
   // WAAT? was E => Et
+  /*
   rule <k> E:SymExpr => (E, Et) ...</k>
        <meta>... E |-> Et ...</meta>
     //when isSymExpr(E)
+  */
 
   // NOTE: is*() functions are assumed to correspond to syntax sorts;
   // in builtins/k-equal.k they use it as a Bool function too
 
   //syntax Bool ::= isSymExpr(Expr) [function]
+  // XXX: veci z builtins/smt.k (e.g. collectConstants()) by tiez mohli byt relevantne k SymExpr
   syntax SymExpr
   rule isSymExpr(#symExpr(_)) => true
   //syntax Expr ::= SymExpr
-  syntax Whnf ::= SymExpr
+  //syntax Whnf ::= SymExpr
   //syntax Nf ::= SymExpr // is Nf a subsort of Whnf already?
   //rule isSymExpr(#symWhnf(_)) => true
   //rule isSymExpr(#symNf(_)) => true

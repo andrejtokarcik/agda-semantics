@@ -9,8 +9,14 @@ module AGDA-SEMANTICS-TYPESYSTEM
   imports AGDA-SEMANTICS-NORMAL
   imports AGDA-SEMANTICS-DECL-FUN
 
+  rule <k> X:Variable => (X, T) /*~> false*/ ...</k>
+       <tenv>... X |-> T ...</tenv>
+    when #parseToken("Variable", "expr") =/=K X andBool #parseToken("Variable", "x") ==K X //andBool #parseToken("Variable", "x") =/=K X
+
+
   rule <k> X:Variable => (X, T) ...</k>
        <tenv>... X |-> T ...</tenv>
+    when #parseToken("Variable", "x") =/=K X
     //   <fun> Fun </fun>
     //when notBool (X in keys(Fun))
 
@@ -24,20 +30,22 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule <k> Pi X:Variable (T1:Expr, _) T2 ~> (. => tenv(TEnv) ~> fenv(Fun)) ...</k>
        <tenv> TEnv => TEnv[T1/X] </tenv>
-       <fun> Fun:Map => Fun[undef/X] </fun>       // also see http://lists.cs.uiuc.edu/pipermail/k-user/2012-February/000131.html for undef
+       <fun> Fun => Fun[^/X] </fun>       // also see http://lists.cs.uiuc.edu/pipermail/k-user/2012-February/000131.html for undef
      when isExprT(T2) =/=K true     // << toto (+ zakomentovany TypeT nizsie) ku krajsiemu vystupu pre pripadu, ked konstruktor targetuje novy
                                     // parametricky datatyp ale bez parametru a teda nevie otypovat vysledny Pi
-  context Pi _ _ (HOLE:Expr => eval2(HOLE)) ~> tenv(_) ~> fenv(_)        [result(TypeT)]   //[result(Whnf21ExprT)]  // << bolo whnf21
-  rule Pi X:Variable (T1:Expr, Set I1:Int) (T2:Expr, Set I2:Int) => (Pi X T1 T2, Set maxInt(I1, I2))
+  context Pi _ _ (HOLE:Expr => evalWhnf2(HOLE)) ~> tenv(_) ~> fenv(_)        [result(TypeT)]   //[result(Whnf21ExprT)]  // << bolo whnf21
+  rule <k> Pi X:Variable (T1:Expr, Set I1:Int) (T2:Expr, Set I2:Int)
+           => freeVariables(T2) <=Set SetItem(X) keys(Fun) ~> true? ~> (Pi X T1 T2, Set maxInt(I1, I2)) ...</k>
+       <fun> Fun </fun>
 
-  //context Lambda _ (HOLE:Expr => whnf2(HOLE)) _         [result(TypeT)]
-  //context Lambda _ ((HOLE:Expr => eval(HOLE)), _:Whnf) _  [result(Val)]
-  //context Lambda _ (HOLE:Val => whnf(HOLE), _:Whnf) _   [result(Whnf)]
-  rule <k> Lambda X:Variable (T:Expr, _) _ ~> (. => tenv(TEnv) ~> fenv(Fun)) ...</k>
-       <tenv> TEnv => TEnv[T/X] </tenv>  //[structural]
-       <fun> Fun => Fun[undef/X] </fun>
-  context Lambda _ _ (HOLE:Expr => eval2(HOLE)) ~> tenv(_) ~> fenv(_)  [result(Whnf2ExprT)]
-  rule Lambda X:Variable (T:Expr, _:Universe) (E:Expr, T':Expr) => (Lambda X T E, Pi X T deval(T'))
+  rule <k> Lambda X:Variable (T:Expr, _) E ~> (. => tenv(TEnv) ~> fenv(Fun)) ...</k>
+       <tenv> TEnv => TEnv[T/X] </tenv>
+       <fun> Fun => Fun[^/X] </fun>
+    when isExprT(E) =/=K true
+  context Lambda _ _ (HOLE:Expr => evalWhnf2(HOLE)) ~> tenv(_) ~> fenv(_)  [result(Whnf2ExprT)]
+  rule <k> Lambda X:Variable (T:Expr, _:Universe) (E:Expr, T':Expr)
+           => freeVariables(E) <=Set SetItem(X) keys(Fun) ~> true? ~> /*false ~>*/ (Lambda X T E, Pi X T T') ...</k>
+       <fun> Fun </fun>
 
   syntax Bool ::= condChich(Expr, Expr)  [function]
   //rule condChich(E:Expr, _:Expr) => #parseToken("Name", "Cons") ==K E
@@ -50,9 +58,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
   //rule condChich(_:Expr, E:Expr) => #parseToken("Name", "E") ==K E
 
   syntax KItem ::= "Chich"
-  rule <k> (E1:Expr, T1:Whnf@Fun) (E2:Expr, T2:Expr) => /*Chich ~>*/ T1@Fun == Pi X T T' ~> T2 == T@Fun ~> applyMguT((E1 E2, T')) ~> fenv(Fun') ...</k>
-       //<tenv> TEnv => TEnv[T2/X] </tenv>
-       <fun> Fun' => Fun[E2/X] </fun>
+  rule <k> (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => /*Chich ~>*/ T1 == Pi X T T' ~> T2 == T ~> applyMguT((E1 E2, T')) ~> tenv(TEnv) ~> fenv(Fun) ...</k>
+       <tenv> TEnv => TEnv[T2/X] </tenv>
+       <fun> Fun => Fun[E2/X] </fun>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool true //condChich(E1, E2) ==K true
 
 
@@ -64,10 +72,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   // NOTE: not every updateMgu is guaranteed to actually update the mgu.
   // e.g. if T is identical to T', <mgu /> content remains the same
-  // TODO: turn whnf into a deval'ing context and use here?
-  syntax KItem ::= Expr "==" Expr   [strict(all(context('eval)))]
+  syntax KItem ::= Expr "==" Expr   //[strict(all(context('eval)))]
   rule <k> T == T' => . ...</k>
-       <mgu> Theta => updateMgu(Theta, deval(T), deval(T')) </mgu>    //[transition]
+       <mgu> Theta => updateMgu(Theta, T, T') </mgu>    //[transition]
 
   syntax KItem ::= applyMguT(ExprT)
   /*
@@ -87,13 +94,12 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   // TODO: move to some generic utils module
   syntax KItem ::= tenv(Map)
-  context (HOLE:ExprT => eval2(HOLE)) ~> tenv(_)   [result(ValWhnf2ExprT)]
+  context (HOLE:ExprT => evalNf2(HOLE)) ~> tenv(_)   [result(Nf2ExprT)]
   rule <k> _:EnvRecovery ~> (tenv(TEnv) => .) ...</k>
        <tenv> _ => TEnv </tenv>
 
-  syntax KItem ::= Muh(EnvRecovery) | "Muh"
   syntax KItem ::= fenv(Map)
-  context (HOLE:ExprT => eval2(HOLE)) ~> fenv(_)   [result(ValWhnf2ExprT)]
+  context (HOLE:ExprT => evalNf2(HOLE)) ~> fenv(_)   [result(Nf2ExprT)]
   rule <k> _:EnvRecovery ~> (fenv(Fun) => .) ...</k>
        <fun> _ => Fun </fun>
 

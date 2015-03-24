@@ -16,7 +16,7 @@ module AGDA-SEMANTICS-DECL-DATA
   rule processConstrs(D:Expr, .Constrs) => . [structural]
   rule processConstrs(D:Expr, ((C:Name : T:Expr), Cs:Constrs)) => processConstr(D, C, T) ~> processConstrs(D, Cs)
 
-  syntax KItem ::= processConstr(Expr, Name, Expr)  [strict(3(context('eval2),result(TypeT)))]   // << bolo whnf21
+  syntax KItem ::= processConstr(Expr, Name, Expr)  [strict(3(context('evalWhnf2),result(TypeT)))]   // << bolo whnf21
   rule <k> processConstr(D:Expr, C:Name, (T:Expr, _:Universe)) => T constructorOf D ~> true? ...</k>
        <data> Data (. => C |-> T) </data>
          when notBool (C in keys(Data))
@@ -34,7 +34,7 @@ module AGDA-SEMANTICS-DECL-DATA
 
   //syntax KItem ::= Expr "constructorOf" Expr   [strict(1(context('piTarget)))]
   //syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf), result(Whnf)))]
-  syntax Bool ::= Expr "constructorOf" Expr          [strict(all(context('whnf), result(Whnf)))]
+  syntax Bool ::= Expr "constructorOf" Expr          [strict(all(context('evalWhnf), result(Whnf)))]
   rule (Pi _ _ T => T) constructorOf _:Expr
   rule D:Name constructorOf D => true
   rule Set I:Int constructorOf Set I => true
