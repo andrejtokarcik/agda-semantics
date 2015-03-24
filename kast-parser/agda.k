@@ -28,6 +28,7 @@ module AGDA
                   //<orig> $PGM </orig>
                 </T>
                 //<out stream="stdout"> .List </out>
+                <dbg> .List </dbg>
 
   // Run with `krun --output none`, cf. kool-typed-static.k
   /*

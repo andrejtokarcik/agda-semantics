@@ -11,6 +11,17 @@ module AGDA-SEMANTICS-DECL-FUN
   imports AGDA-SEMANTICS-NORMAL
   imports AGDA-SEMANTICS-DECL-DATA
 
+
+  // put into -metavariables.k
+  syntax Set ::= freeVariablesM(K)    [function]   // free vars without metas
+  rule freeVariablesM(K) => removeMetas(freeVariables(K))
+  syntax Set ::= removeMetas(Set)  [function]
+  rule removeMetas(.Set) => .Set
+  rule removeMetas(SetItem(_:MetaVar) S:Set => S)
+  rule removeMetas(SetItem(E:Expr) S:Set) => SetItem(E) removeMetas(S)  [owise]
+
+
+
   // TODO: skratit/zlucit tieto dve
   syntax KItem ::= typeVars(LHS)
   rule typeVars(L:LHS P:Pattern) => typeVars(L) ~> typeVarsP(P)
@@ -72,7 +83,7 @@ module AGDA-SEMANTICS-DECL-FUN
            (L:LHS, Tl:Expr) = (E:Expr, Te:Expr)
              =>
            notBool (F in keys(Fun)) ~> true? ~>                             // verify that F isn't already defined
-           freeVariables(E) <=Set freeVariables(L) keys(Fun) ~> true? ~>    // that the body of F doesn't contain undefined functions (check TEnv instead b/c of mutual recursion)
+           freeVariablesM(E) <=Set freeVariablesM(L) keys(Fun) ~> true? ~>    // that the body of F doesn't contain undefined functions (check TEnv instead b/c of mutual recursion)
            Tl == Te
          ) ~> funDecl(F:Variable, _)
        ...</k>
@@ -135,11 +146,21 @@ module AGDA-SEMANTICS-DECL-FUN
   //syntax WhNeut ::= "[" Variable "]"    // <<< XXX THIS IS MY FIX FOR DA WHNF SPOIL OF OBDRZALEK REVISION
   // `--- added to Whnf as well as Nf's Neut
 
-  syntax Val ::= "^"
+  syntax Val ::= "^"   // bound -- vraj historicky symbol na oznacenie prave bound premennych
+
+  syntax Set ::= boundKeys(Map)  [function]
+  rule boundKeys(M) => onlyBound(keys(M), M)
+  // prepend these helper functions with $ or #?
+  syntax Set ::= onlyBound(Set, Map)  [function]
+  rule onlyBound(.Set, _) => .Set
+  rule onlyBound(SetItem(K) S:Set, M) => SetItem(K) onlyBound(S, M)  when M(K) ==K ^
+  rule onlyBound(SetItem(K) S:Set => S, _)  [owise]
+
+
 
   // may replace these with an isBinder() and an #if clause for the case of updating Fun
   //rule X:Variable@Rho => #if X in keys(Rho) #then Rho(X) #else S #fi when fresh(S:Expr) [structural, anywhere]
-  rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X) #else X #fi  [structural, anywhere]
+  rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
   rule U:Universe@_ => U [structural, anywhere]
   rule N:WhNeut@_ => N   [structural, anywhere]
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
@@ -169,18 +190,37 @@ module AGDA-SEMANTICS-DECL-FUN
   rule isEnvRecovery(evalWhnf(_:Whnf)) => true
 
 
+  
 
   syntax K ::= evalWhnf(Expr)     [context(result(Whnf))]
   context evalWhnf((HOLE:Expr => evalWhnf(HOLE)) _)      [result(Whnf)]
 
-  rule evalWhnf(E:ValWhnf => Hihi ~> deval(E))  when notBool isWhnf(E)
+  /*
+  rule <k> evalWhnf(E1:Expr E2:Expr) => evalWhnf(E1) ~> evalWhnf(HOLE E2) ...</k>
+       <fun> Fun </fun>
+    when needEval(E1, Fun) [heat]
+
+  rule <k> evalWhnf(E1:Whnf) ~> evalWhnf(HOLE E2:Expr) => evalWhnf(E1 E2) ...</k>
+       <fun> Fun </fun>
+    when notBool needEval(E1, Fun) [cool]
+  */
+
+
+  rule evalWhnf(E:ValWhnf => deval(E))  when isWhnf(E) =/=K true
+
+  // to force evaluation
+  /*
+  syntax Expr ::= Expr "@-"
+  rule <k> evalWhnf(E:Expr@- => E@Fun) ...</k>
+       <fun> Fun </fun>
+  */
 
   rule <k> evalWhnf(X:Variable => X@Fun) ...</k>
        <fun> Fun </fun>
     when X in keys(Fun)
   rule <k> evalWhnf(E:Expr => E@Fun) ...</k>
        <fun> Fun </fun>
-    when isWhnf(E) =/=K true andBool isVal(E) =/=K true
+    when /*isWhnf(E) =/=K true andBool // << implicit in context(result(Whnf)) */ isVal(E) =/=K true
 
   rule <k> evalWhnf((Lambda X _ E)@Fun V => E) ~> (. => fenv(Fun')) ...</k>
        <fun> Fun' => Fun[V/X] </fun>
@@ -193,11 +233,81 @@ module AGDA-SEMANTICS-DECL-FUN
 
 
 
-  syntax K ::= evalNf(Expr)     [strict(all(context('evalWhnf))), context(result(Nf))]
+  syntax K ::= evalNf(Expr)     [strict(all(context('evalWhnf)))]   //, context(result(Nf))]
+  /*
   context evalNf((HOLE:Expr => evalNf(HOLE)) _)      [result(Nf)]
   context evalNf(_:Expr (HOLE => evalNf(HOLE)))      [result(Nf)]
   context evalNf(Pi _ (HOLE => evalNf(HOLE)) _)      [result(Nf)]
+  context evalNf(Pi _ _ (HOLE => evalNf(HOLE)))      [result(Nf)]
   context evalNf(Lambda _ (HOLE => evalNf(HOLE)) _)  [result(Nf)]
+  context evalNf(Lambda _ _ (HOLE => evalNf(HOLE)))  [result(Nf)]
+  */
+
+  syntax KItem ::= "nft"
+
+  /*
+  rule <k> evalNf(E:Expr) => evalWhnf(E) ~> evalNf(HOLE) ...</k>
+       <fun> Fun </fun>
+    when isWhnf(E) =/=K true //orBool needEval(E, Fun) //[heat]
+  rule <k> evalWhnf(E:Whnf) ~> evalNf(HOLE) => evalNf(E) ...</k>
+       <fun> Fun </fun>
+    //when notBool needEval(E, Fun) //[cool]
+  */
+  
+
+  // TODO: some general scheme/function for all the rules below, or something
+  rule <k> evalNf(E1:Expr E2:Expr) => evalNf(E1@Fun) ~> evalNf(HOLE:Expr E2) ...</k>
+       <fun> Fun </fun>
+    when needEval(E1, Fun) //andBool isWhnf(E1 E2) //[heat]
+
+  rule <k> evalNf(E1:Nf) ~> evalNf(HOLE:Expr E2:Expr) => evalNf(E1 E2) ...</k>
+       <fun> Fun </fun>
+    when notBool needEval(E1, Fun) //[cool]
+
+  rule <k> evalNf(E1:Expr E2:Expr) => evalNf(E2@Fun) ~> evalNf(E1 HOLE:Expr) ...</k>
+       <fun> Fun </fun>
+    when needEval(E2, Fun) //andBool isWhnf(E1 E2) //[heat]
+
+  rule <k> evalNf(E2:Nf) ~> evalNf(E1:Expr HOLE:Expr) => evalNf(E1 E2) ...</k>
+       <fun> Fun </fun>
+    when notBool needEval(E2, Fun) //[cool]
+
+
+  rule <k> evalNf(Pi X:Variable E1:Expr E2:Expr) => evalNf(E1@Fun) ~> evalNf(Pi X HOLE E2) ...</k>
+       <fun> Fun </fun>
+    when needEval(E1, Fun) //[heat]
+
+  rule <k> evalNf(E1:Nf) ~> evalNf(Pi X:Variable HOLE E2:Expr) => evalNf(Pi X E1 E2) ...</k>
+       <fun> Fun </fun>
+    when notBool needEval(E1, Fun) //[cool]
+
+  rule <k> evalNf(Pi X:Variable E1:Expr E2:Expr) => evalNf(E2@Fun) ~> evalNf(Pi X E1 HOLE) ...</k>
+       <fun> Fun </fun>
+    when needEval(E2, Fun) //[heat]
+
+  rule <k> evalNf(E2:Nf) ~> evalNf(Pi X:Variable E1:Expr HOLE) => evalNf(Pi X E1 E2) ...</k>
+       <fun> Fun </fun>
+    when notBool needEval(E2, Fun) //[cool]
+
+
+  rule <k> evalNf(Lambda X:Variable E1:Expr E2:Expr) => evalNf(E1@Fun) ~> evalNf(Lambda X HOLE E2) ...</k>
+       <fun> Fun </fun>
+    when needEval(E1, Fun) //[heat]
+
+  rule <k> evalNf(E1:Nf) ~> evalNf(Lambda X:Variable HOLE E2:Expr) => evalNf(Lambda X E1 E2) ...</k>
+       <fun> Fun </fun>
+    when notBool needEval(E1, Fun) //[cool]
+
+  rule <k> evalNf(Lambda X:Variable E1:Expr E2:Expr) => evalNf(E2@Fun) ~> evalNf(Lambda X E1 HOLE) ...</k>
+       <fun> Fun </fun>
+    when needEval(E2, Fun) //[heat]
+
+  rule <k> evalNf(E2:Nf) ~> evalNf(Lambda X:Variable E1:Expr HOLE) => evalNf(Lambda X E1 E2) ...</k>
+       <fun> Fun </fun>
+    when notBool needEval(E2, Fun) //[cool]
+
+
+
 
   /*
   rule <k> evalNf(Pi X [T] T' => (Pi X T T')@Fun) ...</k>

@@ -36,7 +36,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   context Pi _ _ (HOLE:Expr => evalWhnf2(HOLE)) ~> tenv(_) ~> fenv(_)        [result(TypeT)]   //[result(Whnf21ExprT)]  // << bolo whnf21
   rule <k> Pi X:Variable (T1:Expr, Set I1:Int) (T2:Expr, Set I2:Int)
            => freeVariables(T2) <=Set SetItem(X) keys(Fun) ~> true? ~> (Pi X T1 T2, Set maxInt(I1, I2)) ...</k>
-       <fun> Fun </fun>
+       <fun> Fun </fun>   // asi treba zmenit freeVariables na freeVariablesM (postarat sa o meta), zatial necham tak
 
   rule <k> Lambda X:Variable (T:Expr, _) E ~> (. => tenv(TEnv) ~> fenv(Fun)) ...</k>
        <tenv> TEnv => TEnv[T/X] </tenv>
@@ -58,17 +58,17 @@ module AGDA-SEMANTICS-TYPESYSTEM
   //rule condChich(_:Expr, E:Expr) => #parseToken("Name", "E") ==K E
 
   syntax KItem ::= "Chich"
-  rule <k> (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => /*Chich ~>*/ T1 == Pi X T T' ~> T2 == T ~> applyMguT((E1 E2, T')) ~> tenv(TEnv) ~> fenv(Fun) ...</k>
-       <tenv> TEnv => TEnv[T2/X] </tenv>
+  rule <k> (E1:Expr, T1:Whnf) (E2:Expr, T2:Expr) => T1 == Pi X T T' ~> T2 == T ~> applyMguT((E1 E2, T')) ~> /*tenv(TEnv) ~>*/ fenv(Fun) /*~> Chich*/ ...</k>
+       //<tenv> TEnv => TEnv[T2/X] </tenv>    // < we wanna keep all changes to TEnv yet just remove X from the map afterwards, make tenv(Variable) which indacates what to _remove_?
        <fun> Fun => Fun[E2/X] </fun>
-    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool true //condChich(E1, E2) ==K true
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool condChich(E1, E2) ==K true
 
 
   // TODO: replace tsubst with a Fun update?
-  rule <k> (E1, T1@Fun) (E2, T2) => T1@Fun == Pi X T T' ~> T2 == T@Fun ~> applyMguT((E1 E2, T')) ~> fenv(Fun') ...</k> //~> tenv(TEnv) ~> fenv(Fun) ...</k>  //~> tsubst(E2/X)
+  rule <k> (E1, T1) (E2, T2) => T1 == Pi X T T' ~> T2 == T ~> applyMguT((E1 E2, T')) ~> /*tenv(TEnv) ~>*/ fenv(Fun) ...</k> //~> tenv(TEnv) ~> fenv(Fun) ...</k>  //~> tsubst(E2/X)
        //<tenv> TEnv => TEnv[T2/X] </tenv>
-       <fun> Fun' => Fun[E2/X] </fun>
-    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool false //condChich(E1, E2) =/=K true
+       <fun> Fun => Fun[E2/X] </fun>
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool condChich(E1, E2) =/=K true
 
   // NOTE: not every updateMgu is guaranteed to actually update the mgu.
   // e.g. if T is identical to T', <mgu /> content remains the same
@@ -90,18 +90,37 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <mgu> Theta => .Mgu </mgu>        //[transition]
        <fun> Fun </fun>
 
-  syntax EnvRecovery ::= ExprT
+  syntax EnvRecovery ::= Nf2ExprT
 
   // TODO: move to some generic utils module
   syntax KItem ::= tenv(Map)
-  context (HOLE:ExprT => evalNf2(HOLE)) ~> tenv(_)   [result(Nf2ExprT)]
+  //context (HOLE:ExprT => evalNf2(HOLE)) ~> tenv(_)   [result(Nf2ExprT)]
   rule <k> _:EnvRecovery ~> (tenv(TEnv) => .) ...</k>
        <tenv> _ => TEnv </tenv>
 
   syntax KItem ::= fenv(Map)
-  context (HOLE:ExprT => evalNf2(HOLE)) ~> fenv(_)   [result(Nf2ExprT)]
-  rule <k> _:EnvRecovery ~> (fenv(Fun) => .) ...</k>
-       <fun> _ => Fun </fun>
+  // @Fun to enforce evaluation, else evalWhnf may return immediately if the result is in Whnf without any evaluation whatsoever
+  rule <k> ((E, T:Expr) => evalNf(T@Fun) ~> (E, HOLE)) ~> fenv(_) ...</k>
+       <fun> Fun </fun>
+       <dbg>... . => ListItem(T) </dbg>
+    when needEval(T, Fun) //[heat]
+  rule <k> (evalNf(T:Nf) ~> (E, HOLE) => (E, T)) ~> (fenv(Fun') => .) ...</k>
+       <fun> Fun => Fun' </fun>
+    when notBool needEval(T, Fun) //[cool]
+  syntax KItem ::= l(Map) | s(Set) // need wrappersssz
+  rule <k> R:EnvRecovery ~> (fenv(Fun') => .) ...</k>
+       <fun> Fun => Fun' </fun>
+       //<dbg>... . => ListItem(R) ListItem(l(Fun)) ListItem(isNf2ExprT(R)) ListItem(needEval(R, Fun)) </dbg>
+    when isNf2ExprT(R) ==K true impliesBool notBool needEval(R, Fun)   // prevent bypassing of the specialised rules above
+
+  syntax Bool ::= needEval(K, Map)  [function]
+  rule needEval((_, T:Expr) => T, _)
+  rule needEval(E:Expr, _) => true when isNf(E) =/=K true
+  // do *not* want freeVariablesM here
+  rule needEval(E, Rho) => notBool isEmptySet(intersectSet(freeVariables(E), keys(Rho) -Set boundKeys(Rho))) [owise]
+  // -Set boundKeys not necessary because binder takes care of it?
+  // -- it *is* necessary since the var may have been bound in a 'higher' bounder, not in this one,
+  //    i.e. it will be superfluous only for the var bound just now
 
   // special rules for unification
   // TODO: remove, should be taken care of as part of eval [within whnf2eval1]

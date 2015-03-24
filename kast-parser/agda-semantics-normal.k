@@ -17,10 +17,10 @@ module AGDA-SEMANTICS-NORMAL
   syntax Whnf ::= "(" Whnf ")" [bracket]
                 | WhNeut
                 | Universe
-                | "Pi" Variable Expr Expr [binder(1 -> 3)]
+                | "Pi" Variable Expr Expr     [binder(1 -> 3)]
                 | "Lambda" Variable Expr Expr [binder(1 -> 3)]
   syntax WhNeut ::= Name
-                  | Variable    // see Nf's Neut
+                  | Variable   // see Nf's Neut
                   | WhNeut Expr [left]
   syntax Expr ::= Whnf
 
@@ -48,8 +48,18 @@ module AGDA-SEMANTICS-NORMAL
   context evalWhnf2((_, HOLE => evalWhnf(HOLE)))    [result(Whnf)] //superheat]
 
 
-  syntax K ::= evalNf2(Expr)                  [strict, context(result(Nf2ExprT))] //superheat]
-  context evalNf2((_, HOLE => evalNf(HOLE)))    [result(Nf)] //superheat]
+  /*
+  syntax K ::= evalNf2(Expr)                  [strict] //, context(result(Nf2ExprT))] //superheat]
+  //context evalNf2((_, HOLE => evalNf(HOLE)))    [result(Nf)] //superheat]
+
+  rule <k> evalNf2((E1:Expr, E2:Expr)) => evalNf(E2) ~> evalNf2((E1, HOLE)) ...</k>
+       <fun> Fun </fun>
+    when needEval(E2, Fun) [heat]
+
+  rule <k> evalNf(E2:Nf) ~> evalNf2((E1:Expr, HOLE)) => evalNf2((E1, E2)) ...</k>
+       <fun> Fun </fun>
+    when notBool needEval(E2, Fun) [cool]
+  */
 
 
   syntax Whnf21ExprT
@@ -74,12 +84,21 @@ module AGDA-SEMANTICS-NORMAL
   syntax Nf ::= "(" Nf ")" [bracket]
                 | Neut
                 | Universe
-                | "Pi" Variable Nf Nf [binder(1 -> 3)]
+                | "Pi" Variable Nf Nf     [binder(1 -> 3)]
                 | "Lambda" Variable Nf Nf [binder(1 -> 3)]
   syntax Neut ::= Name
                 | Variable       // << checked to be bound
                 | Neut Nf [left]
   syntax Whnf ::= Nf     // ALREADY DEALT WITH THIS: this spoils Whnf because of the Variable production in Neut above
+
+  /*
+  syntax Expr ::= "[" Expr "]"
+                | deneut(Expr)   [function]
+  rule [X:Variable] [Y:Variable] => [X Y]  [structural, anywhere]
+  rule [E1:Expr E2:Expr] => [E1] [E2]  [structural, anywhere]
+  rule [E:Expr] => E when isExprApp(E) =/=K true andBool isVariable(E) =/=K true [structural, anywhere]
+  rule Pi _ () _
+  */
 
 
   syntax Nf2ExprT
