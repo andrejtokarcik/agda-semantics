@@ -1,21 +1,25 @@
+<dbg>
+    .List
+</dbg>
 <T>
     <k>
-        .K
+        ( id x , #symExpr(5) ) = ( x , #symExpr(4) ) ~> funDecl ( id , 
+          .Map )
     </k>
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        id |-> 'Pi___(#symVariable(3),, #symExpr(4),, #symExpr(4))
-    </tenv>
     <data>
         .Map
     </data>
-    <fun>
-        id |-> fun ( closure ( ListItem(x -> neut ( x , .Map )) , .Map ) )
-          
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        .Map
+    </fun>
+    <tenv>
+        id |-> (Pi #symVariable(3) #symExpr(4) #symExpr(5))
+        x |-> #symExpr(4)
+    </tenv>
 </T>

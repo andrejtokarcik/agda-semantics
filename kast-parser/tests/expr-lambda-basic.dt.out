@@ -1,3 +1,6 @@
+<dbg>
+    .List
+</dbg>
 <T>
     <k>
         .K
@@ -5,16 +8,16 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        expr |-> 'Pi___(x,, Set 2,, Set 2)
-    </tenv>
     <data>
         .Map
     </data>
-    <fun>
-        expr |-> lambda ( closure ( x , x , .Map ) )
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        expr |-> ((Lambda x Set 2 x) @ .Map)
+    </fun>
+    <tenv>
+        expr |-> (Pi x Set 2 Set 2)
+    </tenv>
 </T>

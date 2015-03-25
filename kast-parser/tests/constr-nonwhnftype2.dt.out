@@ -1,3 +1,6 @@
+<dbg>
+    ListItem((Pi x Set 1 Test #symVariable(8)))
+</dbg>
 <T>
     <k>
         .K
@@ -5,17 +8,17 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        expr |->  Test #symVariable(8) 
-    </tenv>
     <data>
-        Constr |-> (Pi a Set 4 ((Lambda x Set 2 x) (Pi x Set 1  Test a )))
-        Test |-> 'Pi___(a,, Set 4,, Set 0)
+        Constr |-> (Pi a Set 4 ((Lambda x Set 2 x) (Pi x Set 1 Test a)))
+        Test |-> (Pi a Set 4 Set 0)
     </data>
-    <fun>
-        expr |->   Constr Set 3  Set 0 
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        expr |->  Constr Set 3 Set 0 
+    </fun>
+    <tenv>
+        expr |->  Test Set 3 
+    </tenv>
 </T>

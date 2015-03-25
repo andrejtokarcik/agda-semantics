@@ -1,14 +1,34 @@
+<dbg>
+    ListItem((Pi x #symVariable(14) (Pi y List #symVariable(14) List 
+      #symVariable(14))))
+    ListItem((Pi x #symVariable(23) (Pi y List #symVariable(23) List 
+      #symVariable(23))))
+</dbg>
 <T>
     <k>
         (  Cons Nat Set 0  , applyMgu ( clash(Set 1,, Nat) , #symExpr(28) 
-          ) ) ~> fenv ( .Map ) ~> eval2 ( HOLE ) ~>  HOLE Cons Nat Succ Zero 
-          Nil Nat  ~> (( (Lambda x  List Nat   Cons Nat Zero x ) , pi ( List 
-          Nat , closure ( x ,  List Nat  , .Map ) ) ) HOLE) ~> whnf2 ( HOLE )
-           ~> ( expr , #symExpr(10) ) = HOLE ~> funDecl ( expr , .Map )
+          ) ) ~> fenv ( .Map ) ~> evalWhnf2 ( HOLE ) ~>  HOLE  Cons Nat (Succ 
+          Zero) (Nil Nat)   ~> (( (Lambda x List Nat Cons Nat Zero x) , (Pi x 
+          List Nat List Nat) ) HOLE) ~> evalWhnf2 ( HOLE ) ~> ( expr , 
+          #symExpr(10) ) = HOLE ~> funDecl ( expr , .Map )
     </k>
     <mgu>
         subst(.KList)
     </mgu>
+    <data>
+        Cons |-> (Pi a Set 0 (Pi x a (Pi y List a List a)))
+        List |-> (Pi a Set 0 Set 0)
+        Nat |-> Set 0
+        Nil |-> (Pi a Set 0 List a)
+        Succ |-> (Pi x Nat Nat)
+        Zero |-> Nat
+    </data>
+    <meta>
+        .Map
+    </meta>
+    <fun>
+        #symVariable(26) |-> Set 0
+    </fun>
     <tenv>
         expr |-> amb(
             applyMgu ( clash(Set 1,, Nat) , #symExpr(10) ),
@@ -16,18 +36,4 @@
             applyMgu ( clash(Set 1,, Nat) , #symExpr(10) )
         )
     </tenv>
-    <data>
-        Cons |-> 'Pi___(a,, Set 0,, (Pi x a (Pi y List a List a)))
-        List |-> 'Pi___(a,, Set 0,, Set 0)
-        Nat |-> Set 0
-        Nil |-> 'Pi___(a,, Set 0,,  List a )
-        Succ |-> 'Pi___(x,, Nat,, Nat)
-        Zero |-> Nat
-    </data>
-    <fun>
-        #symVariable(26) |-> Set 0
-    </fun>
-    <meta>
-        .Map
-    </meta>
 </T>

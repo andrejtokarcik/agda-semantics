@@ -1,3 +1,8 @@
+<dbg>
+    ListItem((Pi x #symVariable(13) (Pi y List #symVariable(13) List 
+      #symVariable(13))))
+    ListItem( List #symVariable(24) )
+</dbg>
 <T>
     <k>
         .K
@@ -5,23 +10,22 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        expr |->  List #symVariable(13) 
-    </tenv>
     <data>
-        Cons |-> 'Pi___(a,, Set 0,, (Pi x a (Pi y List a List a)))
-        List |-> 'Pi___(a,, Set 0,, Set 0)
+        Cons |-> (Pi a Set 0 (Pi x a (Pi y List a List a)))
+        List |-> (Pi a Set 0 Set 0)
         Nat |-> Set 0
-        Nil |-> 'Pi___(a,, Set 0,,  List a )
-        Succ |-> 'Pi___(x,, Nat,, Nat)
+        Nil |-> (Pi a Set 0 List a)
+        Succ |-> (Pi x Nat Nat)
         Zero |-> Nat
     </data>
-    <fun>
-        expr |->  Cons neut ( #symExpr(11) , .Map )  Succ Zero   Nil neut 
-          ( #symExpr(22) , .Map )  
-    </fun>
     <meta>
         #symExpr(11) |-> ( Nat , Set 0 )
-        #symExpr(22) |-> ( #symExpr(22) , Set 0 )
+        #symExpr(22) |-> ( Nat , Set 0 )
     </meta>
+    <fun>
+        expr |->  Cons #symExpr(11)  Succ Zero   Nil #symExpr(22)  
+    </fun>
+    <tenv>
+        expr |->  List Nat 
+    </tenv>
 </T>

@@ -1,3 +1,6 @@
+<dbg>
+    ListItem((Pi x s s))
+</dbg>
 <T>
     <k>
         .K
@@ -5,18 +8,18 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        f |-> 'Pi___(x,, Set 0,, Set 0)
-        s |-> Set 1
-    </tenv>
     <data>
         .Map
     </data>
-    <fun>
-        f |-> lambda ( closure ( x , x , s |-> Set 0 ) )
-        s |-> Set 0
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        f |-> ((Lambda x s x) @ s |-> Set 0)
+        s |-> Set 0
+    </fun>
+    <tenv>
+        f |-> (Pi x Set 0 Set 0)
+        s |-> Set 1
+    </tenv>
 </T>

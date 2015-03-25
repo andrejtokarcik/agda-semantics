@@ -1,20 +1,15 @@
+<dbg>
+    .List
+</dbg>
 <T>
     <k>
-        .K
+        ( s True , #symExpr(4) ) = ( Bool , Set 0 ) ~> funDecl ( s , .Map 
+          ) ~> s False = T ~> f2 = (Lambda x Bool (Lambda y s x y)) ~> h =  f2
+           False E  ~> g =  f2 True True 
     </k>
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        f2 |-> (Pi x Bool (Pi y fun ( closure ( ListItem(True -> Bool) 
-          ListItem(False -> T) , .Map ) ) x fun ( closure ( ListItem(True -> 
-          Bool) ListItem(False -> T) , .Map ) ) x))
-        g |-> fun ( closure ( ListItem(True -> Bool) ListItem(False -> T) , 
-          .Map ) ) #symVariable(20)
-        h |-> fun ( closure ( ListItem(True -> Bool) ListItem(False -> T) , 
-          .Map ) ) #symVariable(13)
-        s |-> 'Pi___(#symVariable(5),, Bool,, Set 0)
-    </tenv>
     <data>
         Bool |-> Set 0
         E |-> T
@@ -22,18 +17,13 @@
         T |-> Set 0
         True |-> Bool
     </data>
-    <fun>
-        f2 |-> lambda ( closure ( x , (Lambda y  s x  y) , s |-> fun ( 
-          closure ( ListItem(True -> Bool) ListItem(False -> T) , .Map ) ) ) )
-        g |-> lambda ( closure ( x , (Lambda y  s x  y) , s |-> fun ( closure 
-          ( ListItem(True -> Bool) ListItem(False -> T) , .Map ) ) ) ) True 
-          True
-        h |-> lambda ( closure ( x , (Lambda y  s x  y) , s |-> fun ( closure 
-          ( ListItem(True -> Bool) ListItem(False -> T) , .Map ) ) ) ) False E
-        s |-> fun ( closure ( ListItem(True -> Bool) ListItem(False -> T) , 
-          .Map ) )
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        .Map
+    </fun>
+    <tenv>
+        s |-> (Pi #symVariable(2) Bool #symExpr(4))
+    </tenv>
 </T>

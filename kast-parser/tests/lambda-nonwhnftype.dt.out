@@ -1,20 +1,27 @@
+<dbg>
+    .List
+</dbg>
 <T>
     <k>
-        .K
+        ( (Lambda x ((Lambda x Set 1 x) Set 0) x) , (Pi x ((Lambda x Set 1
+           x) Set 0) ((Lambda x Set 1 x) Set 0)) ) ~> tenv ( expr |-> #symExpr
+          (1) ) ~> fenv ( .Map ) ~> evalWhnf2 ( HOLE ) ~> ( expr , #symExpr(1)
+           ) = HOLE ~> funDecl ( expr , .Map )
     </k>
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        expr |-> 'Pi___(x,, Set 0,, Set 0)
-    </tenv>
     <data>
         .Map
     </data>
-    <fun>
-        expr |-> lambda ( closure ( x , x , .Map ) )
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        x |-> (^)
+    </fun>
+    <tenv>
+        expr |-> #symExpr(1)
+        x |-> ((Lambda x Set 1 x) Set 0)
+    </tenv>
 </T>

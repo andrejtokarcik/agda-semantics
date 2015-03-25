@@ -1,23 +1,26 @@
+<dbg>
+    .List
+</dbg>
 <T>
     <k>
-        .K
+        ( not True , #symExpr(4) ) = ( False , Bool ) ~> funDecl ( not , 
+          .Map ) ~> not a = True
     </k>
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        not |-> 'Pi___(#symVariable(6),, Bool,, Bool)
-    </tenv>
     <data>
         Bool |-> Set 0
         False |-> Bool
         True |-> Bool
     </data>
-    <fun>
-        not |-> fun ( closure ( ListItem(True -> False) ListItem(a -> True
-          ) , .Map ) )
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        .Map
+    </fun>
+    <tenv>
+        not |-> (Pi #symVariable(2) Bool #symExpr(4))
+    </tenv>
 </T>

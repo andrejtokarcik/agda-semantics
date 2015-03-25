@@ -1,3 +1,6 @@
+<dbg>
+    ListItem((Pi x #symVariable(4) #symVariable(4)))
+</dbg>
 <T>
     <k>
         .K
@@ -5,19 +8,19 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        expr |-> #symExpr(9)
-    </tenv>
     <data>
         Nat |-> Set 0
-        Succ |-> 'Pi___(x,, Nat,, Nat)
+        Succ |-> (Pi x Nat Nat)
         Zero |-> Nat
     </data>
-    <fun>
-        expr |-> lambda ( closure ( a , (Lambda x a x) , .Map ) ) neut ( 
-          #symExpr(2) , .Map ) Zero
-    </fun>
     <meta>
         #symExpr(2) |-> ( Nat , Set 0 )
     </meta>
+    <fun>
+        expr |-> ((((Lambda a Set 0 (Lambda x a x)) @ .Map) #symExpr(2)) 
+          Zero)
+    </fun>
+    <tenv>
+        expr |-> Nat
+    </tenv>
 </T>

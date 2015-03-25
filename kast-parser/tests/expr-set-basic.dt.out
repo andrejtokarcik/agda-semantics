@@ -1,3 +1,6 @@
+<dbg>
+    .List
+</dbg>
 <T>
     <k>
         .K
@@ -5,16 +8,16 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        expr |-> Set 3
-    </tenv>
     <data>
         .Map
     </data>
-    <fun>
-        expr |-> Set 2
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        expr |-> Set 2
+    </fun>
+    <tenv>
+        expr |-> Set 3
+    </tenv>
 </T>

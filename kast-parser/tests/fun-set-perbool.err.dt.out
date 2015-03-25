@@ -1,20 +1,15 @@
+<dbg>
+    .List
+</dbg>
 <T>
     <k>
-        ( s , applyMgu ( clash(1,, 2) , 'Pi___(#symVariable(5),, Bool,, 
-          Set 1) ) ) ~> eval2 ( HOLE ) ~>  HOLE True  ~> eval2 ( HOLE ) ~> 
-          'Lambda___(x,, HOLE,, x) ~> whnf2 ( HOLE ) ~> ( f , #symExpr(8) ) = 
-          HOLE ~> funDecl ( f , s |-> applyMgu ( clash(1,, 2) , 'Pi___(
-          #symVariable(5),, Bool,, Set 1) ) ) ~> g =  f Bool  ~> h =  f T 
-          
+        ( s True , #symExpr(4) ) = ( Set 0 , Set 1 ) ~> funDecl ( s , .Map
+           ) ~> s False = Set 1 ~> f = (Lambda x s True x) ~> g =  f Bool  ~> 
+          h =  f T 
     </k>
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        f |-> #symExpr(8)
-        s |-> applyMgu ( clash(1,, 2) , 'Pi___(#symVariable(5),, Bool,, Set 1)
-           )
-    </tenv>
     <data>
         Bool |-> Set 0
         E |-> T
@@ -22,11 +17,13 @@
         T |-> Set 1
         True |-> Bool
     </data>
-    <fun>
-        s |-> fun ( closure ( ListItem(True -> Set 0) ListItem(False -> 
-          Set 1) , .Map ) )
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        .Map
+    </fun>
+    <tenv>
+        s |-> (Pi #symVariable(2) Bool #symExpr(4))
+    </tenv>
 </T>

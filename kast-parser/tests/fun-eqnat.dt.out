@@ -1,29 +1,31 @@
+<dbg>
+    .List
+</dbg>
 <T>
     <k>
-        .K
+        ( eqNat Zero Zero , #symExpr(7) ) = ( True , Bool ) ~> funDecl ( 
+          eqNat , .Map ) ~> eqNat Zero (Succ y) = False ~> eqNat (Succ x) Zero
+           = False ~> eqNat (Succ x) (Succ y) =  eqNat x y 
     </k>
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        eqNat |-> 'Pi___(#symVariable(42),, Nat,, (Pi #symVariable(45) Nat
-           Bool))
-    </tenv>
     <data>
         Bool |-> Set 0
         False |-> Bool
         Nat |-> Set 0
-        Succ |-> 'Pi___(x,, Nat,, Nat)
+        Succ |-> (Pi x Nat Nat)
         True |-> Bool
         Zero |-> Nat
     </data>
-    <fun>
-        eqNat |-> fun ( closure ( ListItem(Zero -> Zero -> True) ListItem(
-          Zero -> (Succ y) -> False) ListItem((Succ x) -> Zero -> False) 
-          ListItem((Succ x) -> (Succ y) ->  neut ( eqNat , .Map ) neut ( x , 
-          .Map ) neut ( y , .Map ) ) , .Map ) )
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        .Map
+    </fun>
+    <tenv>
+        eqNat |-> (Pi #symVariable(2) Nat (Pi #symVariable(5) Nat #symExpr
+          (7)))
+    </tenv>
 </T>

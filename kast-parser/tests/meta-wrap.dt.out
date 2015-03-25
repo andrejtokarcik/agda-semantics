@@ -1,3 +1,8 @@
+<dbg>
+    ListItem((Pi n #symVariable(1) Set 0))
+    ListItem((Pi n #symVariable(10) Wrap #symVariable(10) n))
+    ListItem( Wrap Top #symVariable(13) )
+</dbg>
 <T>
     <k>
         .K
@@ -5,19 +10,19 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        expr |->  Wrap #symVariable(10) #symVariable(13) 
-    </tenv>
     <data>
         T |-> Top
         Top |-> Set 0
-        W |-> 'Pi___(a,, Set 0,, (Pi n a  Wrap a n ))
-        Wrap |-> 'Pi___(a,, Set 0,, (Pi n a Set 0))
+        W |-> (Pi a Set 0 (Pi n a Wrap a n))
+        Wrap |-> (Pi a Set 0 (Pi n a Set 0))
     </data>
-    <fun>
-        expr |->  W neut ( #symExpr(8) , .Map ) T 
-    </fun>
     <meta>
         #symExpr(8) |-> ( Top , Set 0 )
     </meta>
+    <fun>
+        expr |->  W #symExpr(8) T 
+    </fun>
+    <tenv>
+        expr |->  Wrap Top T 
+    </tenv>
 </T>

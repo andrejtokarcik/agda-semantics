@@ -1,3 +1,6 @@
+<dbg>
+    .List
+</dbg>
 <T>
     <k>
         .K
@@ -5,17 +8,17 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenv>
-        expr |-> Set 3
-    </tenv>
     <data>
         .Map
     </data>
-    <fun>
-        expr |-> lambda ( closure ( y , ((Lambda x Set 9 Set 2) Set 8) , 
-          .Map ) ) Set 5
-    </fun>
     <meta>
         .Map
     </meta>
+    <fun>
+        expr |-> (((Lambda y Set 6 ((Lambda x Set 9 Set 2) Set 8)) @ .Map)
+           Set 5)
+    </fun>
+    <tenv>
+        expr |-> Set 3
+    </tenv>
 </T>

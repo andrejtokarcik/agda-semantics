@@ -1,6 +1,8 @@
+.vim
 .*.sw[op]
 *~
 *.bak
 
 .k
 *-kompiled
+*.log
