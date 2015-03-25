@@ -3,8 +3,7 @@
 </dbg>
 <T>
     <k>
-        ( id x , #symExpr(5) ) = ( x , #symExpr(4) ) ~> funDecl ( id , 
-          .Map )
+        .K
     </k>
     <mgu>
         subst(.KList)
@@ -16,10 +15,9 @@
         .Map
     </meta>
     <fun>
-        .Map
+        id |-> ((fun ( ListItem(x -> x) )) @ .Map)
     </fun>
     <tenv>
-        id |-> (Pi #symVariable(3) #symExpr(4) #symExpr(5))
-        x |-> #symExpr(4)
+        id |-> (Pi #symVariable(3) #symExpr(4) #symExpr(4))
     </tenv>
 </T>

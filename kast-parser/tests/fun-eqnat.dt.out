@@ -3,9 +3,7 @@
 </dbg>
 <T>
     <k>
-        ( eqNat Zero Zero , #symExpr(7) ) = ( True , Bool ) ~> funDecl ( 
-          eqNat , .Map ) ~> eqNat Zero (Succ y) = False ~> eqNat (Succ x) Zero
-           = False ~> eqNat (Succ x) (Succ y) =  eqNat x y 
+        .K
     </k>
     <mgu>
         subst(.KList)
@@ -22,10 +20,12 @@
         .Map
     </meta>
     <fun>
-        .Map
+        eqNat |-> ((fun ( ListItem(Zero -> Zero -> True) ListItem(Zero -> 
+          (Succ y) -> False) ListItem((Succ x) -> Zero -> False) ListItem((
+          Succ x) -> (Succ y) ->  eqNat x y ) )) @ .Map)
     </fun>
     <tenv>
-        eqNat |-> (Pi #symVariable(2) Nat (Pi #symVariable(5) Nat #symExpr
-          (7)))
+        eqNat |-> (Pi #symVariable(42) Nat (Pi #symVariable(45) Nat Bool))
+          
     </tenv>
 </T>

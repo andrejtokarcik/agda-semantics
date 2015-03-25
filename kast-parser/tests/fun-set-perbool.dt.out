@@ -1,11 +1,15 @@
 <dbg>
-    .List
+    ListItem((Pi x s True s True))
 </dbg>
 <T>
     <k>
-        ( s True , #symExpr(4) ) = ( Bool , Set 0 ) ~> funDecl ( s , .Map 
-          ) ~> s False = T ~> f = (Lambda x s True x) ~> g =  f True  ~> f2 = 
-          (Lambda x Bool (Lambda y s x y)) ~> h =  f2 False E 
+        evalNf ( (fun ( ListItem(True -> Bool) ListItem(False -> T) )) )
+           ~> evalNf (  HOLE True  ) ~> evalNf ( (Pi x HOLE s True) ) ~> ( (
+          Lambda x s True x) , HOLE ) ~> fenv ( s |-> ((fun ( ListItem(True ->
+           Bool) ListItem(False -> T) )) @ .Map) ) ~> evalWhnf2 ( HOLE ) ~> ( 
+          f , #symExpr(8) ) = HOLE ~> funDecl ( f , s |-> (Pi #symVariable(5) 
+          Bool Set 0) ) ~> g =  f True  ~> f2 = (Lambda x Bool (Lambda y s x y
+          )) ~> h =  f2 False E 
     </k>
     <mgu>
         subst(.KList)
@@ -21,9 +25,12 @@
         .Map
     </meta>
     <fun>
-        .Map
+        s |-> ((fun ( ListItem(True -> Bool) ListItem(False -> T) )) @ 
+          .Map)
+        x |-> (^)
     </fun>
     <tenv>
-        s |-> (Pi #symVariable(2) Bool #symExpr(4))
+        f |-> #symExpr(8)
+        s |-> (Pi #symVariable(9) Bool Set 0)
     </tenv>
 </T>

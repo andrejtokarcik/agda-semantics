@@ -1,11 +1,17 @@
 <dbg>
-    .List
+    ListItem((Pi y s x s x))
 </dbg>
 <T>
     <k>
-        ( s True , #symExpr(4) ) = ( Bool , Set 0 ) ~> funDecl ( s , .Map 
-          ) ~> s False = T ~> f2 = (Lambda x Bool (Lambda y s x y)) ~> h =  f2
-           False E  ~> g =  f2 True E 
+        evalNf ( (fun ( ListItem(True -> Bool) ListItem(False -> T) )) )
+           ~> evalNf (  HOLE x  ) ~> evalNf ( (Pi y HOLE s x) ) ~> ( (Lambda y
+           s x y) , HOLE ) ~> fenv ( s |-> ((fun ( ListItem(True -> Bool) 
+          ListItem(False -> T) )) @ .Map) x |-> (^) ) ~> (Lambda x ( Bool , 
+          Set 0 ) HOLE) ~> tenv ( f2 |-> #symExpr(8) s |-> (Pi #symVariable(5)
+           Bool Set 0) ) ~> fenv ( s |-> ((fun ( ListItem(True -> Bool) 
+          ListItem(False -> T) )) @ .Map) ) ~> evalWhnf2 ( HOLE ) ~> ( f2 , 
+          #symExpr(8) ) = HOLE ~> funDecl ( f2 , s |-> (Pi #symVariable(5) 
+          Bool Set 0) ) ~> h =  f2 False E  ~> g =  f2 True E 
     </k>
     <mgu>
         subst(.KList)
@@ -21,9 +27,14 @@
         .Map
     </meta>
     <fun>
-        .Map
+        s |-> ((fun ( ListItem(True -> Bool) ListItem(False -> T) )) @ 
+          .Map)
+        x |-> (^)
+        y |-> (^)
     </fun>
     <tenv>
-        s |-> (Pi #symVariable(2) Bool #symExpr(4))
+        f2 |-> #symExpr(8)
+        s |-> (Pi #symVariable(9) Bool Set 0)
+        x |-> Bool
     </tenv>
 </T>

@@ -3,8 +3,7 @@
 </dbg>
 <T>
     <k>
-        ( not True , #symExpr(4) ) = ( False , Bool ) ~> funDecl ( not , 
-          .Map ) ~> not a = True
+        .K
     </k>
     <mgu>
         subst(.KList)
@@ -18,9 +17,10 @@
         .Map
     </meta>
     <fun>
-        .Map
+        not |-> ((fun ( ListItem(True -> False) ListItem(a -> True) )) @ 
+          .Map)
     </fun>
     <tenv>
-        not |-> (Pi #symVariable(2) Bool #symExpr(4))
+        not |-> (Pi #symVariable(6) Bool Bool)
     </tenv>
 </T>

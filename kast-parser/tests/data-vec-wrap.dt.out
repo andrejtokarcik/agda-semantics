@@ -38,6 +38,6 @@
           
     </fun>
     <tenv>
-        expr |->  Vect Wrap Top T Succ Zero 
+        expr |->  Vect  Wrap Top T   Succ Zero  
     </tenv>
 </T>

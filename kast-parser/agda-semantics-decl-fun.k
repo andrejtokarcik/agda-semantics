@@ -22,7 +22,7 @@ module AGDA-SEMANTICS-DECL-FUN
 
 
 
-  // TODO: skratit/zlucit tieto dve
+  // TODO: skratit/zlucit tieto dve typeVars
   syntax KItem ::= typeVars(LHS)
   rule typeVars(L:LHS P:Pattern) => typeVars(L) ~> typeVarsP(P)
   rule typeVars(X:Variable) => autotype(X)
@@ -61,7 +61,7 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax KItem ::= "Hihi"
   rule <k> L:LHS = E:Expr => typeVars(L) ~> L = E ~> funDecl(funName(L), TEnv) ...</k>
        <tenv> TEnv </tenv>
-    when notBool (funName(L) in keys(TEnv))
+    //when notBool (funName(L) in keys(TEnv))
   // if a clause of the same function has been already processed, the type
   // assigned to the function name will be re-used, causing type errors
   // if the clauses' respective result/arg types aren't unifiable
@@ -88,19 +88,20 @@ module AGDA-SEMANTICS-DECL-FUN
          ) ~> funDecl(F:Variable, _)
        ...</k>
        <fun> Fun (. => F |-> E@Fun) </fun>
-     when numArgs(L) ==Int 0
+     when numArgs(L) ==Int 0 //andBool notBool (F in keys(Fun))  // << checked for with 'true?'
+  // it is an error to have numArgs == 0 && F in keys(Fun)
 
+  rule <k> (L:LHS, _) = _ ~> funDecl(F:Variable, _) ...</k>
+       <fun> Fun (. => F |-> fun(.List)@Fun) </fun>
+    when numArgs(L) >Int 0 andBool notBool (F in keys(Fun))
 
-  rule <k> L:LHS = E:Expr ...</k>
-       <fun> Fun (. => funName(L) |-> fun(.List)/*@Fun*/) </fun>
-    when numArgs(L) >Int 0 andBool notBool (funName(L) in keys(Fun))
-
-  // XXX: manually apply updateMgu() & applyMgu() in order to get rid of funDecl()?
   // TODO: check that number of patterns is the same as for the other definitional equations (see error msg in offic typechecker)
   // TODO: podobny check s freeVariables ako vyssie
-  rule <k> ((L:LHS, Tl:Expr) = (E:Expr, Te:Expr) => keys(Fun') <=Set keys(Fun) ~> true? ~> Tl == Te) ~> funDecl(F:Variable, _) ...</k>
-       <fun> Fun (F |-> fun(_ (. => ListItem(mkCase(L, E))))@(Fun' => Fun)) </fun>
-     when numArgs(L) >Int 0
+  syntax KItem ::= s(Set)
+  rule <k> ((L:LHS, Tl:Expr) = (E:Expr, Te:Expr) => /*Fun <=Map Fun' ~> true? ~> keys(Fun') -Set keys(Fun) <=Set SetItem(F) ~> true? ~>*/ Tl == Te) ~> funDecl(F:Variable, _) ...</k>
+       <fun> Fun (F |-> fun(_:List (. => ListItem(mkCase(L, E))))@Fun) </fun>
+       //// Fun' may contain F as key (from the funDecl <fun/> update), Fun certainly does not (since Fun is matched as the rest of the map besides F)
+     when numArgs(L) >Int 0 //andBool F in keys(Fun)
 
   syntax Case ::= mkCase(LHS, Case)   [function]
   rule mkCase(_:Variable, C:Case) => C
@@ -116,6 +117,7 @@ module AGDA-SEMANTICS-DECL-FUN
   rule <k> funDecl(F, TEnv) => . ...</k>
        <meta> Meta => applyMgu(Theta, Meta) </meta>
        <tenv> TEnv' => TEnv[applyMgu(Theta, TEnv')(F)/F] </tenv>
+       //<fun> Fun => Fun[Fun(F)@Fun/F] </fun>   // XXX enclose the function body within the complete decl environment
        <mgu> Theta => .Mgu </mgu>
 
 
@@ -175,6 +177,7 @@ module AGDA-SEMANTICS-DECL-FUN
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
 
   // have to take advantage of abstract syntax here, or else K complains about E@RhoOrig's not being an Expr but a Val
+  // i.e. (E@R1)@R2 => update
   rule '_@_(E:Expr@RhoOrig,, Map2KLabel(RhoNew:Map)(.KList)) => E@(RhoNew[RhoOrig]) [structural, anywhere]     // original context has higher priority, its values are just extended not modified
   //rule K:Expr@M => nft [structural, anywhere]
   //rule '_@_(E:Expr@RhoOrig,, RhoNew:Map) => E@(RhoNew[RhoOrig]) [structural, anywhere]
@@ -311,9 +314,9 @@ module AGDA-SEMANTICS-DECL-FUN
        <fun> Fun </fun>
     when notBool needEval(E1, Fun) //[cool]
 
-  rule <k> evalNf(Pi X:Variable E1:Expr E2:Expr) => evalNf(E2@Fun) ~> evalNf(Pi X E1 HOLE) ...</k>
+  rule <k> evalNf(Pi X:Variable E1:Expr E2:Expr) => evalNf(E2@(Fun[^/X])) ~> evalNf(Pi X E1 HOLE) ...</k>
        <fun> Fun </fun>
-    when needEval(E2, Fun) //[heat]
+    when needEval(E2, Fun[^/X]) //[heat]
 
   rule <k> evalNf(E2:Nf) ~> evalNf(Pi X:Variable E1:Expr HOLE) => evalNf(Pi X E1 E2) ...</k>
        <fun> Fun </fun>
@@ -328,9 +331,9 @@ module AGDA-SEMANTICS-DECL-FUN
        <fun> Fun </fun>
     when notBool needEval(E1, Fun) //[cool]
 
-  rule <k> evalNf(Lambda X:Variable E1:Expr E2:Expr) => evalNf(E2@Fun) ~> evalNf(Lambda X E1 HOLE) ...</k>
+  rule <k> evalNf(Lambda X:Variable E1:Expr E2:Expr) => evalNf(E2@(Fun[^/X])) ~> evalNf(Lambda X E1 HOLE) ...</k>
        <fun> Fun </fun>
-    when needEval(E2, Fun) //[heat]
+    when needEval(E2, Fun[^/X]) //[heat]
 
   rule <k> evalNf(E2:Nf) ~> evalNf(Lambda X:Variable E1:Expr HOLE) => evalNf(Lambda X E1 E2) ...</k>
        <fun> Fun </fun>

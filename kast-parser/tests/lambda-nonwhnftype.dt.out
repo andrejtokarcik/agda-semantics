@@ -1,12 +1,9 @@
 <dbg>
-    .List
+    ListItem((Pi x ((Lambda x Set 1 x) Set 0) ((Lambda x Set 1 x) Set 0)))
 </dbg>
 <T>
     <k>
-        ( (Lambda x ((Lambda x Set 1 x) Set 0) x) , (Pi x ((Lambda x Set 1
-           x) Set 0) ((Lambda x Set 1 x) Set 0)) ) ~> tenv ( expr |-> #symExpr
-          (1) ) ~> fenv ( .Map ) ~> evalWhnf2 ( HOLE ) ~> ( expr , #symExpr(1)
-           ) = HOLE ~> funDecl ( expr , .Map )
+        .K
     </k>
     <mgu>
         subst(.KList)
@@ -18,10 +15,9 @@
         .Map
     </meta>
     <fun>
-        x |-> (^)
+        expr |-> ((Lambda x ((Lambda x Set 1 x) Set 0) x) @ .Map)
     </fun>
     <tenv>
-        expr |-> #symExpr(1)
-        x |-> ((Lambda x Set 1 x) Set 0)
+        expr |-> (Pi x Set 0 Set 0)
     </tenv>
 </T>
