@@ -1,17 +1,22 @@
 <dbg>
-    ListItem((Pi y s x s x))
+    ListItem((Pi y  s x   s x ))
+    ListItem((Pi y fun ( ListItem(True -> Bool) ListItem(False -> T) ) 
+      #symVariable(13) fun ( ListItem(True -> Bool) ListItem(False -> T) ) 
+      #symVariable(13)))
+    ListItem((Pi y fun ( ListItem(True -> Bool) ListItem(False -> T) ) 
+      #symVariable(20) fun ( ListItem(True -> Bool) ListItem(False -> T) ) 
+      #symVariable(20)))
 </dbg>
 <T>
     <k>
-        evalNf ( (fun ( ListItem(True -> Bool) ListItem(False -> T) )) )
-           ~> evalNf (  HOLE x  ) ~> evalNf ( (Pi y HOLE s x) ) ~> ( (Lambda y
-           s x y) , HOLE ) ~> fenv ( s |-> ((fun ( ListItem(True -> Bool) 
-          ListItem(False -> T) )) @ .Map) x |-> (^) ) ~> (Lambda x ( Bool , 
-          Set 0 ) HOLE) ~> tenv ( f2 |-> #symExpr(8) s |-> (Pi #symVariable(5)
-           Bool Set 0) ) ~> fenv ( s |-> ((fun ( ListItem(True -> Bool) 
-          ListItem(False -> T) )) @ .Map) ) ~> evalWhnf2 ( HOLE ) ~> ( f2 , 
-          #symExpr(8) ) = HOLE ~> funDecl ( f2 , s |-> (Pi #symVariable(5) 
-          Bool Set 0) ) ~> h =  f2 False E  ~> g =  f2 True E 
+        ( f2 True E , applyMgu ( clash(T,, Bool) , #symExpr(25) ) ) ~> 
+          fenv ( f2 |-> ((Lambda x Bool (Lambda y  s x  y)) @ s |-> (fun ( 
+          ListItem(True -> Bool) ListItem(False -> T) ) @ .Map)) h |->   f2 
+          False  E  s |-> (fun ( ListItem(True -> Bool) ListItem(False -> T) )
+           @ .Map) ) ~> evalWhnf2 ( HOLE ) ~> ( g , #symExpr(19) ) = HOLE ~> 
+          funDecl ( g , f2 |-> (Pi x Bool (Pi y fun ( ListItem(True -> Bool) 
+          ListItem(False -> T) ) x fun ( ListItem(True -> Bool) ListItem(False
+           -> T) ) x)) h |-> T s |-> (Pi #symVariable(5) Bool Set 0) )
     </k>
     <mgu>
         subst(.KList)
@@ -27,14 +32,25 @@
         .Map
     </meta>
     <fun>
-        s |-> ((fun ( ListItem(True -> Bool) ListItem(False -> T) )) @ 
-          .Map)
-        x |-> (^)
-        y |-> (^)
+        #symVariable(23) |-> E
+        f2 |-> ((Lambda x Bool (Lambda y  s x  y)) @ s |-> (fun ( ListItem(
+          True -> Bool) ListItem(False -> T) ) @ .Map))
+        h |->   f2 False  E 
+        s |-> (fun ( ListItem(True -> Bool) ListItem(False -> T) ) @ .Map)
+          
     </fun>
     <tenv>
-        f2 |-> #symExpr(8)
-        s |-> (Pi #symVariable(9) Bool Set 0)
-        x |-> Bool
+        f2 |-> applyMgu ( clash(T,, Bool) , (Pi #symVariable(20) Bool (Pi 
+          y fun ( ListItem(True -> Bool) ListItem(False -> T) ) #symVariable(
+          20) fun ( ListItem(True -> Bool) ListItem(False -> T) ) #symVariable
+          (20))) )
+        g |-> 'applyMgu(clash(T,, Bool),, #symExpr(19))
+        h |-> amb(
+            applyMgu ( clash(T,, Bool) , T ),
+            applyMgu ( clash(T,, Bool) , T ),
+            applyMgu ( clash(T,, Bool) , T )
+        )
+        s |-> applyMgu ( clash(T,, Bool) , (Pi #symVariable(5) Bool Set 0) )
+          
     </tenv>
 </T>
