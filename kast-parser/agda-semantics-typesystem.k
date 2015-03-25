@@ -94,12 +94,12 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <mgu> Theta => .Mgu </mgu>        //[transition]
        <fun> Fun </fun>
 
-  syntax EnvRecovery ::= Nf2ExprT
+  syntax FunRestore ::= Nf2ExprT
 
   // TODO: move to some generic utils module
   syntax KItem ::= tenv(Map)
   //context (HOLE:ExprT => evalNf2(HOLE)) ~> tenv(_)   [result(Nf2ExprT)]
-  rule <k> _:EnvRecovery ~> (tenv(TEnv) => .) ...</k>
+  rule <k> _:ExprT ~> (tenv(TEnv) => .) ...</k>
        <tenv> _ => TEnv </tenv>
 
   syntax KItem ::= fenv(Map)
@@ -112,7 +112,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <fun> Fun => Fun' </fun>
     when notBool needEval(T, Fun) //[cool]
   syntax KItem ::= l(Map) | s(Set) // need wrappersssz
-  rule <k> R:EnvRecovery ~> (fenv(Fun') => .) ...</k>
+  rule <k> R:FunRestore ~> (fenv(Fun') => .) ...</k>
        <fun> Fun => Fun' </fun>
        //<dbg>... . => ListItem(R) ListItem(l(Fun)) ListItem(isNf2ExprT(R)) ListItem(needEval(R, Fun)) </dbg>
     when isNf2ExprT(R) ==K true impliesBool notBool needEval(R, Fun)   // prevent bypassing of the specialised rules above

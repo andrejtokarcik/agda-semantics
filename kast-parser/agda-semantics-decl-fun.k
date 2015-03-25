@@ -208,7 +208,7 @@ module AGDA-SEMANTICS-DECL-FUN
 
 
 
-  rule isEnvRecovery(evalWhnf(_:Whnf)) => true
+  rule isFunRestore(evalWhnf(_:Whnf)) => true
 
 
   
