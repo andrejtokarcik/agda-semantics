@@ -33,7 +33,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <fun> Fun => Fun[^/X] </fun>       // also see http://lists.cs.uiuc.edu/pipermail/k-user/2012-February/000131.html for undef
      when isExprT(T2) =/=K true     // << toto (+ zakomentovany TypeT nizsie) ku krajsiemu vystupu pre pripadu, ked konstruktor targetuje novy
                                     // parametricky datatyp ale bez parametru a teda nevie otypovat vysledny Pi
-  context Pi _ _ (HOLE:Expr => evalWhnf2(HOLE)) ~> tenv(_) ~> fenv(_)        [result(TypeT)]   //[result(Whnf21ExprT)]  // << bolo whnf21
+  context Pi _ _ (HOLE => evalWhnf2(HOLE)) ~> tenv(_) ~> fenv(_)        [result(TypeT)]   //[result(Whnf21ExprT)]  // << bolo whnf21
   rule <k> Pi X:Variable (T1:Expr, Set I1:Int) (T2:Expr, Set I2:Int)
            => freeVariables(T2) <=Set SetItem(X) keys(Fun) ~> true? ~> (Pi X T1 T2, Set maxInt(I1, I2)) ...</k>
        <fun> Fun </fun>   // asi treba zmenit freeVariables na freeVariablesM (postarat sa o meta), zatial necham tak
@@ -42,9 +42,13 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> TEnv => TEnv[T/X] </tenv>
        <fun> Fun => Fun[^/X] </fun>
     when isExprT(E) =/=K true
-  context Lambda _ _ (HOLE:Expr => evalWhnf2(HOLE)) ~> tenv(_) ~> fenv(_)  [result(Whnf2ExprT)]
+  // I guess the following doesn't have to be evalNf2 as the target type of Pi gets fully evaluated
+  // when needed after application.
+  // actually do we need evalWhnf2 even, according to the same reasoning?
+  //context Lambda _ _ (HOLE:Expr => evalWhnf2(HOLE)) ~> tenv(_) ~> fenv(_)  [result(Whnf2ExprT)]
+  context Lambda _ _ HOLE ~> tenv(_) ~> fenv(_)
   rule <k> Lambda X:Variable (T:Expr, _:Universe) (E:Expr, T':Expr)
-           => freeVariables(E) <=Set SetItem(X) keys(Fun) ~> true? ~> /*false ~>*/ (Lambda X T E, Pi X T T') ...</k>
+           => freeVariables(E) <=Set SetItem(X) keys(Fun) ~> true? ~> (Lambda X T E, Pi X T T') ...</k>
        <fun> Fun </fun>
 
   syntax Bool ::= condChich(Expr, Expr)  [function]
@@ -99,7 +103,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> _ => TEnv </tenv>
 
   syntax KItem ::= fenv(Map)
-  // @Fun to enforce evaluation, else evalWhnf may return immediately if the result is in Whnf without any evaluation whatsoever
+  // T@Fun below to enforce evaluation, else evalWhnf may return immediately (in case T is already in Whnf) without any evaluation whatsoever
   rule <k> ((E, T:Expr) => evalNf(T@Fun) ~> (E, HOLE)) ~> fenv(_) ...</k>
        <fun> Fun </fun>
        <dbg>... . => ListItem(T) </dbg>

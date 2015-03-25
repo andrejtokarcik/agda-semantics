@@ -14,11 +14,11 @@ module AGDA-SEMANTICS-DECL-FUN
 
   // put into -metavariables.k
   syntax Set ::= freeVariablesM(K)    [function]   // free vars without metas
-  rule freeVariablesM(K) => removeMetas(freeVariables(K))
+  rule freeVariablesM(K) => removeMetas(freeVariables(K))  [structural]
   syntax Set ::= removeMetas(Set)  [function]
-  rule removeMetas(.Set) => .Set
-  rule removeMetas(SetItem(_:MetaVar) S:Set => S)
-  rule removeMetas(SetItem(E:Expr) S:Set) => SetItem(E) removeMetas(S)  [owise]
+  rule removeMetas(.Set) => .Set   [structural]
+  rule removeMetas(SetItem(_:MetaVar) S:Set => S)  [structural]
+  rule removeMetas(SetItem(E:Expr) S:Set => S) (. => SetItem(E))  [owise, structural]
 
 
 
@@ -66,7 +66,7 @@ module AGDA-SEMANTICS-DECL-FUN
   // assigned to the function name will be re-used, causing type errors
   // if the clauses' respective result/arg types aren't unifiable
 
-  context (HOLE:LHS => HOLE) = _ ~> funDecl(_, _)
+  context HOLE:LHS = _ ~> funDecl(_, _)
 
   // NOTE: eval21 nizsie blblo kvoli meta-id.dt -- co je ale aj tak dzivne
   // eval2 je ale ok lebo aj tak nechcem evaluavat vyrazy pokial nemusim ci?
@@ -92,14 +92,14 @@ module AGDA-SEMANTICS-DECL-FUN
 
 
   rule <k> L:LHS = E:Expr ...</k>
-       <fun> Fun (. => funName(L) |-> fun(.List)@Fun) </fun>
+       <fun> Fun (. => funName(L) |-> fun(.List)/*@Fun*/) </fun>
     when numArgs(L) >Int 0 andBool notBool (funName(L) in keys(Fun))
 
   // XXX: manually apply updateMgu() & applyMgu() in order to get rid of funDecl()?
   // TODO: check that number of patterns is the same as for the other definitional equations (see error msg in offic typechecker)
   // TODO: podobny check s freeVariables ako vyssie
-  rule <k> ((L:LHS, Tl:Expr) = (E:Expr, Te:Expr) => Fun[undef/F] ==Map Fun'[undef/F] ~> true? ~> Tl == Te) ~> funDecl(F:Variable, _) ...</k>
-       <fun> Fun (F |-> fun(_ (. => ListItem(mkCase(L, E@Fun))))@Fun') </fun>
+  rule <k> ((L:LHS, Tl:Expr) = (E:Expr, Te:Expr) => keys(Fun') <=Set keys(Fun) ~> true? ~> Tl == Te) ~> funDecl(F:Variable, _) ...</k>
+       <fun> Fun (F |-> fun(_ (. => ListItem(mkCase(L, E))))@(Fun' => Fun)) </fun>
      when numArgs(L) >Int 0
 
   syntax Case ::= mkCase(LHS, Case)   [function]
@@ -134,10 +134,13 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax Val ::= "(" Val ")" [bracket]
                | Expr "@" Map   // closure
+               | Val Val
+
   // XXX: rewrite with [prec(_)] attribute? perhaps my K version doesn't support it yet?
   syntax priorities '_@_ > '__      // closure > app
 
   syntax ValWhnf ::= Universe | WhNeut
+  syntax ValWhnf ::= WhNeut Val [left]
   rule isValWhnf(E:Whnf@_) => true  when isWhNeut(E) =/=K true    // ValWhnf contains WhNeut directly, don't wanna @Fun duplications
 
   //rule isValWhnf(E) => true  when isEmptySet(freeVariables(E))
@@ -149,12 +152,18 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax Val ::= "^"   // bound -- vraj historicky symbol na oznacenie prave bound premennych
 
   syntax Set ::= boundKeys(Map)  [function]
+  rule boundKeys(.Map) => .Set   [structural]
+  rule boundKeys((E |-> ^ => .) _) (. => SetItem(E)) [structural]
+  rule boundKeys((_ |-> _ => .) _) [owise, structural]
+  /*
+  syntax Set ::= boundKeys(Map)  [function]
   rule boundKeys(M) => onlyBound(keys(M), M)
   // prepend these helper functions with $ or #?
   syntax Set ::= onlyBound(Set, Map)  [function]
   rule onlyBound(.Set, _) => .Set
   rule onlyBound(SetItem(K) S:Set, M) => SetItem(K) onlyBound(S, M)  when M(K) ==K ^
   rule onlyBound(SetItem(K) S:Set => S, _)  [owise]
+  */
 
 
 
@@ -165,9 +174,21 @@ module AGDA-SEMANTICS-DECL-FUN
   rule N:WhNeut@_ => N   [structural, anywhere]
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
 
+  // have to take advantage of abstract syntax here, or else K complains about E@RhoOrig's not being an Expr but a Val
+  rule '_@_(E:Expr@RhoOrig,, Map2KLabel(RhoNew:Map)(.KList)) => E@(RhoNew[RhoOrig]) [structural, anywhere]     // original context has higher priority, its values are just extended not modified
+  //rule K:Expr@M => nft [structural, anywhere]
+  //rule '_@_(E:Expr@RhoOrig,, RhoNew:Map) => E@(RhoNew[RhoOrig]) [structural, anywhere]
+  //rule (((E:Expr@RhoOrig)::Expr)@RhoNew) => E@(RhoNew[RhoOrig]) [structural, anywhere]     // original context has higher priority
+
+  /*
+  syntax Val ::= extendCon(Val, Map) [function]
+  rule extendCon(V@RhoOrig, RhoNew) => V@(RhoNew[RhoOrig])   // original context has higher priority
+  rule exntedCon(V, RhoNew) => V@RhoNew [owise]
+  */
+
   syntax Val ::= ValWhnf
 
-  syntax Expr ::= Val
+  //syntax Expr ::= Val
   /*
   syntax Whnf ::= ValWhnf
   syntax ValWhnf2ExprT
@@ -192,8 +213,12 @@ module AGDA-SEMANTICS-DECL-FUN
 
   
 
-  syntax K ::= evalWhnf(Expr)     [context(result(Whnf))]
-  context evalWhnf((HOLE:Expr => evalWhnf(HOLE)) _)      [result(Whnf)]
+  syntax K ::= evalWhnf(K)     [context(result(Whnf))]
+  // XXX !!! HOLE:<sort> does NOT enforce dynamic checks that HOLE is of sort <sort>,
+  // possibly a bug in K (check newer versions before reporting),
+  // it might be just an indication how to _parse_ the item [as with ::]
+  context evalWhnf((HOLE:Expr => nft ~> isExpr(HOLE) ~> evalWhnf(HOLE)) _)
+      when isExpr(HOLE)    [result(Whnf)]  // << 'when' clause necessary due to the bug mentioned above
 
   /*
   rule <k> evalWhnf(E1:Expr E2:Expr) => evalWhnf(E1) ~> evalWhnf(HOLE E2) ...</k>
@@ -215,17 +240,22 @@ module AGDA-SEMANTICS-DECL-FUN
        <fun> Fun </fun>
   */
 
+  // the following rule isn't ever triggerred anyway as Variable is in Whnf,
+  // which is the context result of evalWhnf and thus evalWhnf stops
+  // on encountering it
+  /*
   rule <k> evalWhnf(X:Variable => X@Fun) ...</k>
        <fun> Fun </fun>
     when X in keys(Fun)
+  */
   rule <k> evalWhnf(E:Expr => E@Fun) ...</k>
        <fun> Fun </fun>
     when /*isWhnf(E) =/=K true andBool // << implicit in context(result(Whnf)) */ isVal(E) =/=K true
 
-  rule <k> evalWhnf((Lambda X _ E)@Fun V => E) ~> (. => fenv(Fun')) ...</k>
-       <fun> Fun' => Fun[V/X] </fun>
-  rule <k> evalWhnf(fun(ListItem(P:Pattern -> E:Expr _))@Fun V:Val => E) ~> (. => fenv(Fun')) ...</k>
-       <fun> Fun' => Fun[getMatching(P, V)] </fun>
+  rule <k> evalWhnf((Lambda X _ E:Expr)@Fun V:Val => E@(Fun[V/X])) ~> (. => fenv(Fun')) ...</k>
+       <fun> Fun' </fun>
+  rule <k> evalWhnf(fun(ListItem(P:Pattern -> E:Expr) _)@Fun V:Val => E@(Fun[getMatching(P, V)])) ~> (. => fenv(Fun')) ...</k>
+       <fun> Fun' </fun>
     when isMatching(P, V)
   rule evalWhnf((fun(ListItem(P:Pattern -> _) Cs:List => Cs))@_ V:Val)
     when notBool isMatching(P, V)
@@ -233,7 +263,7 @@ module AGDA-SEMANTICS-DECL-FUN
 
 
 
-  syntax K ::= evalNf(Expr)     [strict(all(context('evalWhnf)))]   //, context(result(Nf))]
+  syntax K ::= evalNf(K)     [strict(all(context('evalWhnf)))]   //, context(result(Nf))]
   /*
   context evalNf((HOLE:Expr => evalNf(HOLE)) _)      [result(Nf)]
   context evalNf(_:Expr (HOLE => evalNf(HOLE)))      [result(Nf)]
@@ -322,7 +352,7 @@ module AGDA-SEMANTICS-DECL-FUN
 
 
   // TODO: remove  resp. slo by to urobit jak context? co by bol ale result? akesi BaseExpr?
-  syntax Expr ::= deval(Expr)  [function]
+  syntax Expr ::= deval(K)  [function]
   //rule deval([E] => E)
   rule deval(E:Expr@_ => E)
   //rule deval(E:Expr@_ => E)  //when isEmptySet(freeVariables(E))

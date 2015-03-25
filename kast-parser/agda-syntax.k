@@ -4,18 +4,20 @@ module AGDA-SYNTAX
   // XXX: use Id instead of Variable?
 
   syntax Universe ::= "Set" Int
+
+  // use getKLabel in checks instead of these Binder/ExprApp sorts
   /*
   syntax Binder ::= "Pi" Variable Expr Expr         [binder(1 -> 3), strict(2(context('eval2),result(TypeT)))]  // << bolo whnf21  -- daj whnf2eval1?
                   | "Lambda" Variable Expr Expr     [binder(1 -> 3), strict(2(context('eval2),result(TypeT)))]  // << bolo whnf21
+  syntax ExprApp ::= Expr Expr                       [left, strict(1(context('evalWhnf2)), 2)]  // << bolo whnf2
   */
 
-  syntax ExprApp ::= Expr Expr                       [left, strict(1(context('evalWhnf2)), 2)]  // << bolo whnf2
   // the [binder] attribute is useless for environment-based semantics
   // --- well not really it gets utilised within freeVariables()
   syntax Expr ::= "(" Expr ")" [bracket]
                 | Variable | Name | "?"
                 | Universe | "Set"
-                > ExprApp
+                > Expr Expr                       [left, strict(1(context('evalWhnf2)), 2)]  // << bolo whnf2
                 > "Pi" Variable Expr Expr         [binder(1 -> 3), strict(2(context('evalWhnf2),result(TypeT)))]  // << bolo whnf21  -- daj whnf2eval1?
                 | "Lambda" Variable Expr Expr     [binder(1 -> 3), strict(2(context('evalWhnf2),result(TypeT)))]  // << bolo whnf21
 
