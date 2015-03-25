@@ -11,3 +11,5 @@ data T : Set where
 ; g = f True
 ; f2 = Lambda x Bool (Lambda y (s x) y)
 ; h = f2 False E
+; i = f2 True
+; j = f2 False

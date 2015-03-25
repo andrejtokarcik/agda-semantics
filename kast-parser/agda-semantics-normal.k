@@ -11,7 +11,7 @@ module AGDA-SEMANTICS-NORMAL
   syntax ExprT ::= (Expr, Expr)    // syntax: Expr ":" Expr [cf. java-semantics, kde maju ::]
   syntax Expr ::= ExprT
 
-  // kedze nemam vo WhNeut premenne tak je to dost obmedzuju, mat Whnf takto ako explicitnu syntakticku kategoriu
+  // kedze nemam vo WhNeut premenne [UZ MAM] tak je to dost obmedzujuce, mat Whnf takto ako explicitnu syntakticku kategoriu
   // dufam ale ze pri prepise na agda-parser tie idenfikatory lepsie poriesim (v c-semantics to maju zda sa v poho)
   // a teda budem vediet dobre odchytavat premenne oproti nazvom funkcii (ci to sa vlastne ani neda, resp. to nechcem?)
   syntax Whnf ::= "(" Whnf ")" [bracket]
@@ -89,7 +89,8 @@ module AGDA-SEMANTICS-NORMAL
   syntax Neut ::= Name
                 | Variable       // << checked to be bound
                 | Neut Nf [left]
-  syntax Whnf ::= Nf     // ALREADY DEALT WITH THIS: this spoils Whnf because of the Variable production in Neut above
+  syntax Whnf ::= Nf     // this spoils Whnf because of the Variable production in Neut above  -- already dealt with this
+  syntax WhNeut ::= Neut
 
   /*
   syntax Expr ::= "[" Expr "]"

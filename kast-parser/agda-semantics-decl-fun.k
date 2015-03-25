@@ -109,7 +109,12 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax Case ::= Expr
                 | Pattern "->" Case   [binder]
-  syntax Whnf ::= fun(List)     // ~ List{Case}
+  // NOTE: to put fun(List) into Nf isn't sufficient for fun may be applied to a variable that is only bound (not instantiated),
+  // in which case we can't know yet which branch of the cases list to follow
+  //syntax Neut ::= fun(List)     // ~ List{Case}
+  syntax FunL ::= fun(List)
+  syntax Nf ::= FunL
+  syntax Neut ::= FunL Variable
 
   // TODO: Consolidate with the unification (triggered on encountering a 'final'
   //       typed expr) and type env restoration mechanisms from -typesystem.k.
@@ -204,11 +209,6 @@ module AGDA-SEMANTICS-DECL-FUN
   */
 
 
-  // TODO: rewrite for environments (substitution-based now)
-  syntax Expr ::= matchCase(List, Expr)  [function]
-  rule matchCase(ListItem(P -> E1) _, E2) => E1[getMatching(P, E2)]  when isMatching(P, E2)
-  rule matchCase(_ Cs:List => Cs, _)  [owise]
-
 
 
   rule isFunRestore(evalWhnf(_:Whnf)) => true
@@ -257,12 +257,14 @@ module AGDA-SEMANTICS-DECL-FUN
 
   rule <k> evalWhnf((Lambda X _ E:Expr)@Fun V:Val => E@(Fun[V/X])) ~> (. => fenv(Fun')) ...</k>
        <fun> Fun' </fun>
-  rule <k> evalWhnf(fun(ListItem(P:Pattern -> E:Expr) _)@Fun V:Val => E@(Fun[getMatching(P, V)])) ~> (. => fenv(Fun')) ...</k>
+  rule <k> evalWhnf(fun(Cs:List)@Fun V:Val => matchCase(Cs, V, Fun)) ~> (. => fenv(Fun')) ...</k>
        <fun> Fun' </fun>
-    when isMatching(P, V)
-  rule evalWhnf((fun(ListItem(P:Pattern -> _) Cs:List => Cs))@_ V:Val)
-    when notBool isMatching(P, V)
   // TODO: add rules ^ for general P -> C:Case, not just when isExpr(C)
+
+  // TODO: ked sa zoznam zredukuje na .List (t.j. nenasli sme match) a zaroven V neobsahuje bound premenne (t.j. V je uplne konkretna) tak daj error?
+  syntax Expr ::= matchCase(List, Val, Map)  [function]
+  rule matchCase(ListItem(P -> E) _, V, Rho) => E@(Rho[getMatching(P, V)])  when isMatching(P, V)
+  rule matchCase(_ Cs:List => Cs, _, _)  [owise]
 
 
 
@@ -286,7 +288,7 @@ module AGDA-SEMANTICS-DECL-FUN
        <fun> Fun </fun>
     //when notBool needEval(E, Fun) //[cool]
   */
-  
+
 
   // TODO: some general scheme/function for all the rules below, or something
   rule <k> evalNf(E1:Expr E2:Expr) => evalNf(E1@Fun) ~> evalNf(HOLE:Expr E2) ...</k>
@@ -338,6 +340,18 @@ module AGDA-SEMANTICS-DECL-FUN
   rule <k> evalNf(E2:Nf) ~> evalNf(Lambda X:Variable E1:Expr HOLE) => evalNf(Lambda X E1 E2) ...</k>
        <fun> Fun </fun>
     when notBool needEval(E2, Fun) //[cool]
+
+
+  // XXX added fun(List) to Nf (was Whnf), the following shouldn't be necessary
+  /*
+  rule <k> evalNf(fun(L:List)) => evalNf(L@Fun) ~> evalNf(fun(HOLE)) ...</k>
+       <fun> Fun </fun>
+    when needEval(L, Fun) //[heat]
+
+  rule <k> evalNf(L:List) ~> evalNf(fun(HOLE)) => evalNf(L) ...</k>
+       <fun> Fun </fun>
+    when notBool needEval(L, Fun) //[cool]
+  */
 
 
 
