@@ -1,10 +1,15 @@
 module AGDA-SYNTAX
-  // perhaps I don't have to include at all? is it good for anything
+  // perhaps I don't have to include ranges at all? is it good for anything
   // besides error reporting?
 
-  // output z `agda` je teraz dvakrat zabaleny zoznam (neviem preco),
-  // takze toto by malo byt este v jednom liste vnorene.
-  // parsuje sa to ale spravne tak zatial necham tak.
+  // TODO: remove brackets?
+
+  // output z `agda` je teraz dvakrat zabaleny zoznam (neviem preco)
+  //syntax Program ::= List{DeclarationL, ","}
+
+  // elementom DeclarationL moze byt aj samotne DeclarationL, kedze
+  // K automaticky zoznam nastavi ako subsort toho sortu elementov,
+  // t. j. DeclarationL < Declaration
   syntax DeclarationL ::= List{Declaration, ","}
 
   // TODO: skus to urobit tak ze tu v K budem pracovat s peknou beznou citatelnou syntaxou
@@ -20,7 +25,6 @@ module AGDA-SYNTAX
     | "Syntax" Name Notation
     | "Postulate" TypeSignatureOrInstanceBlockL
     | "Module" QName TypedBindingsL DeclarationL
-    | "annotated" Range Declaration
 
   syntax Expr ::= "(" Expr ")" [bracket]
     //| String   [klabel('unparsedExpr)]
@@ -86,19 +90,20 @@ module AGDA-SYNTAX
   // ---
   // preliminaries:
 
-  syntax QName ::= Name | Name "." QName
+  syntax QName ::= Name | Name"."QName
   syntax Name ::= Id   // XXX or Token as in kast-parser?
   // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
-  syntax Literal ::= Int | Float | "\","String"\"," | "'"Char"'" | QName
+  syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" | QName
 
-  syntax Hiding ::= "(" Hiding ")" [bracket] 
-    | "Hidden" | "NotHidden"
-  syntax Relevance ::= "(" Relevance ")" [bracket] 
-    | "Relevant" | "Irrelevant" | "UnusedArg"
+  syntax Hiding ::= //"(" Hiding ")" [bracket] 
+    "Hidden" | "NotHidden"
+  syntax Relevance ::= //"(" Relevance ")" [bracket] 
+    "Relevant" | "Irrelevant" | "UnusedArg"
   syntax Color ::= Expr
   syntax ColorL ::= List{Color, ","}
-  syntax ArgInfo ::= "(" ArgInfo ")" [bracket] 
-    | "ArgInfo" Hiding Relevance ColorL
+  syntax ArgInfo ::= //"(" ArgInfo ")" [bracket] 
+    //| "ArgInfo" Hiding Relevance ColorL
+    Hiding Relevance ColorL   [klabel('ArgInfo___)]
 
   syntax TypeSignatureOrInstanceBlockL ::= List{TypeSignatureOrInstanceBlock, ","}
   syntax TypeSignatureOrInstanceBlock ::= Declaration
@@ -108,5 +113,7 @@ module AGDA-SYNTAX
   syntax Range ::= "@noRange"
     | Token{([a-zA-Z0-9\/\-]+ "." "l"? "agda" ":")? [0-9]+ "," [0-9]+ "-" ([0-9]+ ",")? [0-9]+}  [notInRules]
     | "@someRange"
-  //syntax K ::= "annotated" Range K
+  syntax K ::= "annotated" Range K  //[strict(2)]   // metadata wrapper
+  //rule isDeclaration(annotated _ D) => isDeclaration(D)
+  //rule annotated _ R:KResult => R
 endmodule

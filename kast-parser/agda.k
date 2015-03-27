@@ -21,7 +21,7 @@ module AGDA
   configuration <T color="yellow">
                   <k color="green"> parseProgram($PGM:Program) </k>
                   <data color="violet"> .Map </data>   // signatures
-                  <fun color="cyan"> .Map </fun>       // XXX: use .MyMap instead?
+                  <fun color="cyan"> .Map </fun>
                   <tenv color="red"> .Map </tenv>
                   <meta color="black"> .Map </meta>
                   <mgu color="blue"> .Mgu </mgu>

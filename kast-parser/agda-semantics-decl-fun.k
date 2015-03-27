@@ -364,10 +364,6 @@ module AGDA-SEMANTICS-DECL-FUN
   */
 
 
-
-
-
-
   // TODO: remove  resp. slo by to urobit jak context? co by bol ale result? akesi BaseExpr?
   syntax Expr ::= deval(K)  [function]
   //rule deval([E] => E)
