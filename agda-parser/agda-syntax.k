@@ -2,6 +2,8 @@ module AGDA-SYNTAX
   // perhaps I don't have to include ranges at all? is it good for anything
   // besides error reporting?
 
+  // TODO: get rid of Color as done for Range...
+
   // output z `agda` je teraz dvakrat zabaleny zoznam (neviem preco)
   syntax Program ::= List{DeclarationL, ","}
 
@@ -16,7 +18,7 @@ module AGDA-SYNTAX
   // pekne pravidla v semantike.
 
   syntax Declaration ::= "(" Declaration ")" [bracket]
-    | "TypeSig" ArgInfo AgdaName Expr  //[strict(3)]
+    | "TypeSig" ArgInfo AgdaName Expr
     | "FunClause" LHS RHS WhereClause
     | "DataSig" Induction AgdaName LamBindingL Expr
     | "Data" Induction AgdaName LamBindingL ExprM TypeSignatureOrInstanceBlockL
@@ -27,6 +29,7 @@ module AGDA-SYNTAX
   syntax Expr ::= "(" Expr ")" [bracket]
     | "Ident" AgdaName
     | "Lam" LamBindingL Expr
+    | "App" Expr ArgExpr
     | "Fun" Expr Expr
     | "Pi" Telescope Expr
     | "Set"
@@ -68,7 +71,7 @@ module AGDA-SYNTAX
   syntax ArgTypedBinding ::= "(" ArgTypedBinding ")" [bracket]
     | "Arg" ArgInfo TypedBinding
   syntax TypedBinding ::= "(" TypedBinding ")" [bracket]
-    | "TBind" BoundNameL Expr  //[strict(3)]
+    | "TBind" BoundNameL Expr
     | "TLet" DeclarationL Expr
   syntax BoundNameL ::= List{BoundName, ","}
   syntax BoundName ::= "(" BoundName ")" [bracket]
@@ -82,6 +85,8 @@ module AGDA-SYNTAX
   syntax Notation ::= GenPartL [bracket]
   syntax GenPartL ::= List{Bool, ","}   // FIXME
 
+  syntax ArgExpr ::= "(" ArgExpr ")" [bracket]
+                   | "Arg" ArgInfo Expr
 
   // ---
   // preliminaries:
@@ -107,8 +112,7 @@ module AGDA-SYNTAX
   syntax Range ::= "@noRange"
     | Token{([a-zA-Z0-9\/\-]+ "." "l"? "agda" ":")? [0-9]+ "," [0-9]+ "-" ([0-9]+ ",")? [0-9]+}  [notInRules]
     | "@someRange"
-  syntax MetaData ::= Range
-  syntax K ::= m(MetaData, K)    // generic metadata wrapper
+  syntax K ::= m(Range, K)    // generic metadata wrapper
 
 // the following set of rules doesn't work, from which follows that the problem is *not*
 // restricted to dynamic sort checks -- the 'annotated' keyword apparently has to be moved
