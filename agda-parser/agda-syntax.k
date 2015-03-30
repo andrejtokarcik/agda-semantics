@@ -65,7 +65,8 @@ module AGDA-SYNTAX
     | "DomainFree" ArgInfo BoundName
     | "DomainFull" TypedBindings
 
-  syntax Telescope ::= List{TypedBindings, ","}
+  syntax Telescope ::= "(" Telescope ")" [bracket]
+    | List{TypedBindings, ","}
   syntax TypedBindings ::= "(" TypedBindings ")" [bracket]
     | "TypedBindings" ArgTypedBinding
   syntax ArgTypedBinding ::= "(" ArgTypedBinding ")" [bracket]

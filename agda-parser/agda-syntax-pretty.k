@@ -29,29 +29,27 @@ module AGDA-SYNTAX-PRETTY
   syntax Pattern ::= AgdaName
   rule IdentP N => N [macro]
 
-  //syntax ArgName ::= ArgInfo AgdaName
-  syntax PrettyBinding ::= //"(" PrettyBinding ")" [bracket]
-                           "(" ArgInfo AgdaName ":" Expr ")"  [klabel('bnd), strict(3)]
+  syntax PrettyBinding ::= "(" ArgInfo AgdaName ":" Expr ")"  [strict(3)]
 
   syntax ArgTypedBinding ::= PrettyBinding
-                           | ArgTypedBinding PrettyBinding  [left]
+                           | PrettyBinding ArgTypedBinding [right]
   rule Arg _ (TBind .BoundNameL E) => . [macro]
-  rule Arg AInf (TBind (N,L:BoundNameL) E) => (Arg AInf (TBind L E)) (AInf N : E)  [macro]
+  rule Arg AInf (TBind (N,L:BoundNameL) E) => (AInf N : E) (Arg AInf (TBind L E))  [macro]
 
   syntax TypedBindings ::= ArgTypedBinding
   rule TypedBindings Bnds => Bnds [macro]
 
-  syntax Expr ::= PrettyBinding "->" Expr   [binder]     // this binds as expected?
+  syntax Expr ::= "(" ArgInfo AgdaName ":" Expr ")" "->" Expr   [binder(2 -> 4)]
   rule Pi .Telescope E => E   [macro]
-  rule Pi (.K,Tel:Telescope => Tel) _ [macro]
-  rule Pi (Bnds (AInf N : T),Tel:Telescope) E => Pi (Bnds,Tel) ((AInf N : T) -> E)  [macro]
+  rule Pi (., Tel:Telescope => Tel) _ [macro]
+  rule Pi (((AInf N : T) Bnds),Tel:Telescope) E => (AInf N : T) -> Pi (Bnds,Tel) E  [macro]
   rule Fun E1 E2 => (AInf N : E1) -> E2 when fresh(AInf:ArgInfo) andBool fresh(N:AgdaName) [macro]
 
   syntax LamBinding ::= PrettyBinding | TypedBindings
   rule DomainFree AInf BndN => (AInf BndN : T) when fresh(T:Expr)  [macro]
   rule DomainFull TypBnds => TypBnds  [macro]
 
-  syntax Expr ::= "\\" PrettyBinding "->" Expr  [binder]
+  syntax Expr ::= "\\" "(" ArgInfo AgdaName ":" Expr ")" "->" Expr   [binder(2 -> 4)]
   rule Lam .LamBindingL E => E   [macro]
   rule Lam ((AInf N : T), LamBnds) E =>  (\ (AInf N : T) -> Lam LamBnds E) [macro]
 

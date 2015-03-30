@@ -1,11 +1,11 @@
 require "agda-syntax-pretty.k"
 require "agda-semantics-common.k"
-//require "agda-semantics-typesystem.k"
+require "agda-semantics-typesystem.k"
 
 module AGDA-SEMANTICS
   imports AGDA-SYNTAX-PRETTY
   imports AGDA-SEMANTICS-COMMON
-  //imports AGDA-SEMANTICS-TYPESYSTEM
+  imports AGDA-SEMANTICS-TYPESYSTEM
 
   rule Module _ _ Decls => Decls
   rule Syntax _ _ => .
@@ -13,7 +13,7 @@ module AGDA-SEMANTICS
 
   rule <k> N : E => . ...</k>
        <tenv>... . => N |-> E ...</tenv>
-  rule <k> L = R => . ...</k>     // both L and R should be processed via strictness (type-checked)
+  rule <k> L = R => . ...</k>     // both L and R should be preprocessed via strictness (type-checked)
        <fenv>... . => L |-> R ...</fenv>   // << ako kluc chcem mat len fun name, kvoli partial application
                                          // ale asi by slo vymysliet, zeby som si vytvaral fresh funkcie
                                          // co by len lambda abstrakciou zaobalili tu pattern matching funkciu
