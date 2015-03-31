@@ -12,7 +12,7 @@ module AGDA-SEMANTICS
   rule Postulate Sigs => Sigs
 
   rule <k> N : E => . ...</k>
-       <tenv>... . => N |-> E ...</tenv>
+       <tenv>... . => N |-> E ...</tenv>   // TODO: this should go into <sig /> (was called <data /> in kast-parser version)
   rule <k> L = R => . ...</k>     // both L and R should be preprocessed via strictness (type-checked)
        <fenv>... . => L |-> R ...</fenv>   // << ako kluc chcem mat len fun name, kvoli partial application
                                          // ale asi by slo vymysliet, zeby som si vytvaral fresh funkcie

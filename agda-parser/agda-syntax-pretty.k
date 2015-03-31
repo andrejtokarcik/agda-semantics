@@ -23,13 +23,21 @@ module AGDA-SYNTAX-PRETTY
   syntax BoundName ::= AgdaName
   rule BName N _ _ => N [macro]
 
-  // these may cause troubles as AgdaName can be a literal as well
+  // these may cause troubles as AgdaName can be contained not only in an identifier but in a literal as well
   syntax Expr ::= AgdaName
   rule Ident N => N [macro]
   syntax Pattern ::= AgdaName
   rule IdentP N => N [macro]
 
-  syntax PrettyBinding ::= "(" ArgInfo AgdaName ":" Expr ")"  [strict(3)]
+  syntax ArgInfoName ::= ArgInfo AgdaName
+                    | "{" AgdaName "}"
+                    | "." AgdaName
+                    | AgdaName
+  rule (NotHidden Relevant) N => N [macro]
+  rule (Hidden Relevant) N => {N}  [macro]
+
+  syntax PrettyBinding ::= "(" PrettyBinding ")" [bracket]
+                         | ArgInfoName ":" Expr          [strict(2)]
 
   syntax ArgTypedBinding ::= PrettyBinding
                            | PrettyBinding ArgTypedBinding [right]
@@ -39,26 +47,27 @@ module AGDA-SYNTAX-PRETTY
   syntax TypedBindings ::= ArgTypedBinding
   rule TypedBindings Bnds => Bnds [macro]
 
-  syntax Expr ::= "(" ArgInfo AgdaName ":" Expr ")" "->" Expr   [binder(2 -> 4)]
+  // not using PrettyBinding in order to specify the binder attribute
+  syntax Expr ::= "(" ArgInfoName ":" Expr ")" "->" Expr   [strict(2(context('whnf))), binder(1 -> 3)]
   rule Pi .Telescope E => E   [macro]
   rule Pi (., Tel:Telescope => Tel) _ [macro]
-  rule Pi (((AInf N : T) Bnds),Tel:Telescope) E => (AInf N : T) -> Pi (Bnds,Tel) E  [macro]
-  rule Fun E1 E2 => (AInf N : E1) -> E2 when fresh(AInf:ArgInfo) andBool fresh(N:AgdaName) [macro]
+  rule Pi (((N : T) Bnds),Tel:Telescope) E => (N : T) -> Pi (Bnds,Tel) E  [macro]
+  rule Fun E1 E2 => (N : E1) -> E2 when fresh(N:ArgInfoName) [macro]
 
   syntax LamBinding ::= PrettyBinding | TypedBindings
-  rule DomainFree AInf BndN => (AInf BndN : T) when fresh(T:Expr)  [macro]
+  rule DomainFree AInf BndN => AInf BndN : T when fresh(T:Expr)  [macro]
   rule DomainFull TypBnds => TypBnds  [macro]
 
-  syntax Expr ::= "\\" "(" ArgInfo AgdaName ":" Expr ")" "->" Expr   [binder(2 -> 4)]
+  syntax Expr ::= "\\" "(" ArgInfoName ":" Expr ")" "->" Expr   [strict(2(context('whnf))), binder(1 -> 3)]
   rule Lam .LamBindingL E => E   [macro]
-  rule Lam ((AInf N : T), LamBnds) E =>  (\ (AInf N : T) -> Lam LamBnds E) [macro]
+  rule Lam ((N : T), LamBnds) E => \ (N : T) -> Lam LamBnds E [macro]
 
   syntax Expr ::= ArgExpr
   syntax Expr ::= Expr Expr [left]
   rule App E1 E2 => E1 E2   [macro]
 
   syntax Declaration ::= PrettyBinding
-  rule TypeSig AInf N T => (AInf N : T)  [macro]
+  rule TypeSig AInf N T => AInf N : T  [macro]
   // re TypeSig's AInf: ``Axioms and functions can be irrelevant. (Hiding should be NotHidden)''
   // --- we admit only NotHidden Relevant ATM
 

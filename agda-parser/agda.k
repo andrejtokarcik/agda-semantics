@@ -25,6 +25,7 @@ module AGDA
                   <k> $PGM:Program </k>
                   <tenv> .Map </tenv>
                   <fenv> .Map </fenv>
+                  <mgu> .Mgu </mgu>
                   <metadata>
                     <range> .K </range>
                   </metadata>
