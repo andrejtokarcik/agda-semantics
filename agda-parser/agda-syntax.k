@@ -36,7 +36,7 @@ module AGDA-SYNTAX
     | "Pi" Telescope Expr
     | "Set"  [onlyLabel]
     | "Set" Int
-  rule 'Set => 'Set_(0) [macro]
+  rule 'Set(.KList) => (Set 0) [macro]
 
   syntax LHS ::= "(" LHS ")" [bracket]
     | "LHS" Pattern PatternL RewriteEqnL WithExprL      // LHS lhsOriginalPattern lhsWithPattern lhsRewriteEqn lhsWithExpr
