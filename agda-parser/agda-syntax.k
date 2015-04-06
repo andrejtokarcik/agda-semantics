@@ -20,16 +20,16 @@ module AGDA-SYNTAX
   // pekne pravidla v semantike.
 
   syntax Declaration ::= "(" Declaration ")" [bracket]
-    | "TypeSig" ArgInfo AgdaName Expr
+    | "TypeSig" ArgInfo Name Expr
     | "FunClause" LHS RHS WhereClause
-    | "DataSig" Induction AgdaName LamBindingL Expr
-    | "Data" Induction AgdaName LamBindingL ExprM TypeSignatureOrInstanceBlockL
-    | "Syntax" AgdaName Notation
+    | "DataSig" Induction Name LamBindingL Expr
+    | "Data" Induction Name LamBindingL ExprM TypeSignatureOrInstanceBlockL
+    | "Syntax" Name Notation
     | "Postulate" TypeSignatureOrInstanceBlockL
     | "Module" QName Telescope DeclarationL
 
   syntax Expr ::= "(" Expr ")" [bracket]
-    | "Ident" AgdaName
+    | "Ident" Name
     | "Lam" LamBindingL Expr
     | "App" Expr ArgExpr
     | "Fun" Expr Expr
@@ -58,7 +58,7 @@ module AGDA-SYNTAX
   syntax WhereClause ::= "(" WhereClause ")" [bracket]
     | "NoWhere"
     | "AnyWhere" DeclarationL
-    | "SomeWhere" AgdaName DeclarationL
+    | "SomeWhere" Name DeclarationL
 
   syntax Induction ::= "Inductive"   // don't support "CoInductive"
 
@@ -78,7 +78,7 @@ module AGDA-SYNTAX
     | "TLet" DeclarationL Expr
   syntax BoundNameL ::= List{BoundName, ","}
   syntax BoundName ::= "(" BoundName ")" [bracket]
-    | "BName" AgdaName AgdaName FixityP
+    | "BName" Name Name FixityP
   syntax FixityP ::= "(" FixityP ")" [bracket]
     | "Fixity'" Fixity Notation
   syntax Fixity ::= "(" Fixity ")" [bracket] 
@@ -94,9 +94,9 @@ module AGDA-SYNTAX
   // ---
   // preliminaries:
 
-  syntax Variable ::= Token{[a-zA-Z][a-zA-Z0-9\_]*}  [onlyLabel]
-  syntax AgdaName ::= Variable
-  syntax QName ::= AgdaName | AgdaName"."QName
+  // TODO: accept unicode
+  syntax Name ::= Token{[a-zA-Z][a-zA-Z0-9\_]*}  [notInRules]
+  syntax QName ::= Name | Name"."QName
   // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
   syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" | QName
 
@@ -113,63 +113,7 @@ module AGDA-SYNTAX
   syntax ExprM ::= "Just" Expr | "Nothing"
 
   syntax Range ::= "@noRange"
-    | Token{([a-zA-Z0-9\/\-]+ "." "l"? "agda" ":")? [0-9]+ "," [0-9]+ "-" ([0-9]+ ",")? [0-9]+}  [notInRules]
     | "@someRange"
+    | Token{([a-zA-Z0-9\/\-]+ "." "l"? "agda" ":")? [0-9]+ "," [0-9]+ "-" ([0-9]+ ",")? [0-9]+}  [notInRules]
   syntax K ::= m(Range, K)    // generic metadata wrapper
-
-// the following set of rules doesn't work, from which follows that the problem is *not*
-// restricted to dynamic sort checks -- the 'annotated' keyword apparently has to be moved
-// from (generic) K sort to the particular sorts as in
-//    syntax Declaration ::= annotated Range Declaration
-// TODO: the change should also allow mentioning DeclarationL directly in agda.k in the rules
-// for sequentialising the input declaration lists etc.
-/*
-rule isDeclarationL(annotated _ K) => isDeclarationL(K)
-rule isDeclaration(annotated _ K) => isDeclaration(K)
-rule isExpr(annotated _ K) => isExpr(K)
-// etc.   -- generated via x.py
-*/
-
-/*
-  // WAAAT this doesn't appear to work either...
-  // metadata wrappers for every syntax sort
-  //syntax DeclarationL ::= m(MetaData, DeclarationL)
-  syntax Declaration ::= m(MetaData, Declaration)
-  syntax Expr ::= m(MetaData, Expr)
-  syntax LHS ::= m(MetaData, LHS)
-  //syntax PatternL ::= m(MetaData, PatternL)
-  syntax Pattern ::= m(MetaData, Pattern)
-  //syntax RewriteEqnL ::= m(MetaData, RewriteEqnL)
-  //syntax RewriteEqn ::= m(MetaData, RewriteEqn)
-  //syntax WithExprL ::= m(MetaData, WithExprL)
-  //syntax WithExpr ::= m(MetaData, WithExpr)
-  syntax RHS ::= m(MetaData, RHS)
-  syntax WhereClause ::= m(MetaData, WhereClause)
-  //syntax Induction ::= m(MetaData, Induction)
-  //syntax LamBindingL ::= m(MetaData, LamBindingL)
-  syntax LamBinding ::= m(MetaData, LamBinding)
-  //syntax Telescope ::= m(MetaData, Telescope)
-  //syntax Telescope ::= m(MetaData, Telescope)
-  syntax TypedBindings ::= m(MetaData, TypedBindings)
-  syntax ArgTypedBinding ::= m(MetaData, ArgTypedBinding)
-  syntax TypedBinding ::= m(MetaData, TypedBinding)
-  //syntax BoundNameL ::= m(MetaData, BoundNameL)
-  syntax BoundName ::= m(MetaData, BoundName)
-  syntax FixityP ::= m(MetaData, FixityP)
-  syntax Fixity ::= m(MetaData, Fixity)
-  //syntax Notation ::= m(MetaData, Notation)
-  //syntax GenPartL ::= m(MetaData, GenPartL)
-  //syntax QName ::= m(MetaData, QName)
-  //syntax AgdaName ::= m(MetaData, AgdaName)
-  //syntax Literal ::= m(MetaData, Literal)
-  //syntax Hiding ::= m(MetaData, Hiding)
-  //syntax Relevance ::= m(MetaData, Relevance)
-  //syntax Color ::= m(MetaData, Color)
-  //syntax ColorL ::= m(MetaData, ColorL)
-  syntax ArgInfo ::= m(MetaData, ArgInfo)
-  //syntax TypeSignatureOrInstanceBlockL ::= m(MetaData, TypeSignatureOrInstanceBlockL)
-  //syntax TypeSignatureOrInstanceBlock ::= m(MetaData, TypeSignatureOrInstanceBlock)
-  //syntax ExprM ::= m(MetaData, ExprM)
-  //syntax Range ::= m(MetaData, Range)
-*/
 endmodule
