@@ -5,15 +5,6 @@ module AGDA-SYNTAX-PRETTY
   // due to the inner metadata wrappers
   // --- which are now gone, so?
 
-  /*
-  syntax K ::= killMetaData(K) [function]
-  rule killMetaData('m(_,, K) => K)
-  rule killMetaData(KLabel:KLabel(KList:KList)) => KLabel(killMetaDataL(KList)) when KLabel =/=KLabel 'm
-  syntax KList ::= killMetaDataL(KList)
-  rule killMetaDataL(.KList) => .KList
-  rule killMetaDataL(K:K,,KList:KList) => killMetaData(K),,killMetaDataL(KList)
-  */
-
   // getting rid of those 'constructors'
   // --- call this 'syntax sort flattening' or something
   syntax ArgInfo ::= Hiding Relevance ColorL | Hiding Relevance
@@ -71,6 +62,7 @@ module AGDA-SYNTAX-PRETTY
   // re TypeSig's AInf: ``Axioms and functions can be irrelevant. (Hiding should be NotHidden)''
   // --- we admit only NotHidden Relevant ATM
 
+  syntax Pattern ::= Expr    // FIXME?
   syntax LHS ::= Pattern
   rule LHS P .PatternL .RewriteEqnL .WithExprL => P [macro]
 

@@ -11,11 +11,25 @@ module AGDA-SEMANTICS
   rule Syntax _ _ => .
   rule Postulate Sigs => Sigs
 
-  rule <k> N : E => . ...</k>
-       <tenv>... . => N |-> E ...</tenv>   // TODO: this should go into <sig /> (was called <data /> in kast-parser version)
-  rule <k> L = R => . ...</k>     // both L and R should be preprocessed via strictness (type-checked)
+  context _ : (HOLE => whnfType(HOLE))  //[result(TypedType)]
+  rule <k> N : te(E, Set _) => . ...</k>
+       <tenv>... . => N |-> E ...</tenv>
+
+  /*
+  syntax Map ::= loadTelescope(Map, Expr) [function]
+  rule loadTelescope(Sigma, (X : T) -> E) => (X |-> T) loadTelescope(Sigma, E)
+  rule loadTelescope(Sigma, _) => Sigma [owise]
+
+  rule <k> (. => bound!) ~> L = _ ~> (. => sig(Sigma)) </k>
+       <sig> Sigma => loadTelescope(Sigma, Sigma(leftMost(L))) </sig>
+  context bound! ~> HOLE = _
+  context bound! ~> _ = HOLE
+  */
+  context HOLE = _
+  context _ = HOLE
+  rule <k> te(L, Tl) = te(R, Tr) => Tl == Tr ~> solve ...</k>
        <fenv>... . => L |-> R ...</fenv>   // << ako kluc chcem mat len fun name, kvoli partial application
-                                         // ale asi by slo vymysliet, zeby som si vytvaral fresh funkcie
+                                         // ALTERNATIVA: ale asi by slo vymysliet, zeby som si vytvaral fresh funkcie
                                          // co by len lambda abstrakciou zaobalili tu pattern matching funkciu
                                          // (typu map = \a -> \b -> map a b spolu s pattern-matching-based definiciami mapu)
                                          // vyhol by som sa takto tomu fun() konstruktu

@@ -18,7 +18,9 @@ module AGDA
   rule m(R:Range, K) => m(<range> R </range>, K)  [macro]
   rule <k> m(M, K) => K ~> m(M') ...</k>
        <metadata> M' => M </metadata>   [structural]
-  rule <k> _:KResult ~> m(M') => . ...</k>
+  //rule <k> _:KResult ~> m(M') => . ...</k>
+  //     <metadata> _ => M' </metadata>   [structural]
+  rule <k> m(M') => . ...</k>
        <metadata> _ => M' </metadata>   [structural]
 
   configuration <T>
@@ -26,6 +28,8 @@ module AGDA
                   <tenv> .Map </tenv>
                   <fenv> .Map </fenv>
                   <mgu> .Mgu </mgu>
+                  <sig> .Map </sig>
+                  <metavars> .Map </metavars>
                   <metadata>
                     <range> .K </range>
                   </metadata>

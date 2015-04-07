@@ -4,7 +4,8 @@ module AGDA-SYNTAX
 
   // TODO: get rid of Color as done for Range...
   // TODO: convert all of those into functions (i.e. klabels without underscores)
-  // and then mark everything as [onlyLabel] -> we should refer to -pretty.k terms exclusively
+  // and then mark everything as 'onlyLabel' -> we should refer to -pretty.k terms exclusively
+  // TODO: replace 'onlyLabel' with 'notInRules', 'notInGround', and 'notInPrograms'.
 
   // output z `agda` je teraz dvakrat zabaleny zoznam (neviem preco)
   syntax Program ::= List{DeclarationL, ","}
