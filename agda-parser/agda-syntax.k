@@ -6,14 +6,11 @@ module AGDA-SYNTAX
 
   syntax Declaration ::= "(" Declaration ")" [bracket]
     | TypeSignature
-    | LHS "=" RHS    //WhereClause
-    //| "DataSig" Induction Name LamBindingL Expr
-    //| "Data" Induction Name LamBindingL ExprM TypeSignatureOrInstanceBlockL
-    | "syntax" Name "..."
-    | "postulate" Declarations
-    | "module" Name Telescope "where" Declarations
+    | LHS "=" RHS                                    [klabel('FunClause)]
+    | "postulate" Declaration                        [klabel('Postulate)]
+    | "module" Name Telescope "where" Declarations   [klabel('Module)]
   syntax Declarations ::= //"(" Declarations ")" [bracket]
-                       List{Declaration, ";"}
+                       List{Declaration, ""}
 
   syntax Expr ::= "(" Expr ")" [bracket]
     | Variable
@@ -21,42 +18,35 @@ module AGDA-SYNTAX
     | Lambda
     | Pi
     | Expr Expr    [left]
-    | "Set"  [notInRules]
-    | "Set"Int
-  rule 'Set(.KList) => Set0 [macro]
+    | "Set"  [klabel('Set), notInRules]
+    | "Set" Int  [klabel('Set_)]
+  rule 'Set(.KList) => Set 0 [macro]
 
-  syntax Variable ::= //"(" Variable ")" [bracket]
-                    "(" "Var" String ")"
-  syntax Variables ::= List{Variable, ""}
-  syntax Name ::= //"(" Name ")" [bracket]
-                "(" "Name" String ")"
-  //syntax QName ::= Name | Name"."QName  // FIXME
+  syntax Identifier ::= Token{[a-zA-Z0-9\_]+}  [notInRules, notInGround]
+  syntax Variable ::= Identifier               [klabel('Var)]
+  syntax Name ::= Identifier                   [klabel('Name)]
   // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
   syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" //| QName
 
-  syntax TypeSignature ::= //"(" TypeSignature ")" [bracket]
-                         Name ":" Expr
-  syntax TypeSignatures ::= //"(" TypeSignatures ")" [bracket]
-                          List{TypeSignature, ";"}
+  syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
+  //syntax TypeSignatures ::= List{TypeSignature, ";"}
 
-  syntax Lambda ::= "\\" Bindings "->" Expr
+  syntax Lambda ::= "\\" Binding "->" Expr   [klabel('Lam)]
                   //| "\\" "(" Variable ":" Expr ")" "->" Expr [notInPrograms, binder(1 -> 3)]
   // TODO: macro
-  syntax Pi ::= Bindings "->" Expr
+  syntax Pi ::= Binding "->" Expr   [klabel('Pi)]
               //| "(" Variable ":" Expr ")" "->" Expr [notInPrograms, binder(1 -> 3)]
   // TODO: macro
 
-  syntax TypedBinding ::= //"(" TypedBinding ")" [bracket]
-                        "(" Variables ":" Expr ")"
-  syntax Telescope ::= List{TypedBinding, ""}
-  syntax Binding ::= Variables //[bracket]
+  syntax Binding ::= Variable
                    | TypedBinding
-  syntax Bindings ::= List{Binding, ""}
+  syntax TypedBinding ::= "(" Variable ":" Expr ")"  [klabel('TBind)]
+  syntax Telescope ::= List{TypedBinding, ""}
 
   syntax Pattern ::= "(" Pattern ")" [bracket]
     | Variable
     | Name
-    | Name Pattern  [left]
+    | Name Pattern  [klabel('AppP), left]
   syntax LHS ::= Name
                | LHS Pattern  [left]
   syntax RHS ::= Expr

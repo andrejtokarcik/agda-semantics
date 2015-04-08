@@ -1,7 +1,7 @@
-require "agda-syntax-pretty.k"
+require "agda-syntax.k"//-pretty.k"
 
 module AGDA-SEMANTICS-COMMON
-  imports AGDA-SYNTAX-PRETTY
+  imports AGDA-SYNTAX//-PRETTY
 
   syntax KResult ::= TypedExpr
 

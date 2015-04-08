@@ -1,9 +1,9 @@
-require "agda-syntax-pretty.k"
+//require "agda-syntax-pretty.k"
 require "agda-semantics-common.k"
 require "agda-semantics-typesystem.k"
 
 module AGDA-SEMANTICS
-  imports AGDA-SYNTAX-PRETTY
+  //imports AGDA-SYNTAX-PRETTY
   imports AGDA-SEMANTICS-COMMON
   imports AGDA-SEMANTICS-TYPESYSTEM
 
