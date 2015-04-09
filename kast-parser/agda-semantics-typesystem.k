@@ -136,5 +136,4 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule eqns((eqn([E:Expr],,E':Expr) => eqn(E,,E')),,_)   [anywhere]
   rule eqns((eqn(E:Expr,,[E':Expr]) => eqn(E,,E')),,_)   [anywhere]
   */
-
 endmodule

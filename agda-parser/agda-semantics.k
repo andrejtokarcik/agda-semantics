@@ -30,6 +30,7 @@ module AGDA-SEMANTICS
   */
   context HOLE = _
   context _ = HOLE
+  syntax KItem ::= "muh"
   rule <k> t(L, Tl) = t(R, Tr) => Tl == Tr ~> unify ...</k>
        <fenv>... . => L |-> R ...</fenv>   // << ako kluc chcem mat len fun name, kvoli partial application
                                          // ALTERNATIVA: ale asi by slo vymysliet, zeby som si vytvaral fresh funkcie

@@ -28,9 +28,9 @@ module AGDA-SYNTAX
                   | Lam(LamBindings, Expr)           [klabel('Lam)]
 
   syntax Telescope ::= coerceTelescope(LamBindings)  [function, notInPrograms]
-  rule coerceTelescope(X:Variable Bnds:LamBindings) => (X : $metavar) coerceTelescope(Bnds)
-  rule coerceTelescope(Bnd:TypedBinding Bnds:LamBindings) => Bnd coerceTelescope(Bnds)
-  rule coerceTelescope(.LamBindings) => .Telescope
+  rule coerceTelescope(X:Variable Bnds:LamBindings) => (X : $metavar) coerceTelescope(Bnds)  [structural]
+  rule coerceTelescope(Bnd:TypedBinding Bnds:LamBindings) => Bnd coerceTelescope(Bnds)  [structural]
+  rule coerceTelescope(.LamBindings) => .Telescope   [structural]
 
   rule Lam(Bnds:LamBindings => coerceTelescope(Bnds), _)    when isTelescope(Bnds) =/=K true       [macro]
   rule Lam((X:Variable : T:Expr) Bnds:LamBindings, E:Expr) => \ (X : T) -> Lam(Bnds, E)  [macro]
@@ -45,7 +45,7 @@ module AGDA-SYNTAX
     | "Set"        [klabel('Set), notInRules]
     | "Set" Int    [klabel('SetN)]
     | "$metavar"      [klabel('Underscore)]     // '_' is reserved for K rules
-  rule 'Set(.KList) => Set 0  [macro]
+  rule 'Set(.KList) => Set0  [macro]
 
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
 

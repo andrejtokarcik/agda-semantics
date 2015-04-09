@@ -37,4 +37,9 @@ module AGDA-SEMANTICS-METAVARIABLES
   rule removeMetas(.Set) => .Set   [structural]
   rule removeMetas(SetItem(_:MetaVariable) S:Set => S)  [structural]
   rule removeMetas(SetItem(E:Expr) S:Set => S) (. => SetItem(E))  [owise, structural]
+
+  // Metavariables should be always substituted *for*, not vice versa.
+  // The LHS of eqn() below gets replaced with the RHS -- swap the sides
+  // when necessary.
+  rule eqns((eqn(E:Expr,,H:MetaVariable) => eqn(H,,E)),,_)   [structural, anywhere]
 endmodule

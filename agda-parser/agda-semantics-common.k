@@ -125,6 +125,7 @@ module AGDA-SEMANTICS-COMMON
 
   syntax KItem ::= "unify"
   rule <k> unify => . ...</k>
+       <sig> Sigma => applyMgu(Theta, Sigma) </sig>
        <tenv> Gamma => applyMgu(Theta, Gamma) </tenv>
        <fenv> Rho => applyMgu(Theta, Rho) </fenv>
        <metavars> Meta => applyMgu(Theta, Meta) </metavars>
