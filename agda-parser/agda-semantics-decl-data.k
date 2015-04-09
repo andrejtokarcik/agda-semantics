@@ -6,7 +6,7 @@ module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SEMANTICS-COMMON
 
   // TODO: need to check whether params are well-typed and (not necessarily?) whether prependParams(Ps, T) yields a type as well
-  context data _ _ : (HOLE => unifyUniverse(HOLE)) where _   [result(SetTypedExpr)]
+  context data _ _ : (HOLE => coerceSetType(HOLE)) where _   [result(SetTypedExpr)]
   rule <k> data N:Name Ps:Telescope : t(T:Expr, Set I) where Cs:TypeSignatures => T constructorOf Set (I -Int 1) ~> true? ~> processCons(applyParams(Ps, N), prependParams(Ps, Cs)) ...</k>
        <sig> Sigma (. => N |-> prependParams(Ps, T)) </sig>
     when notBool (N in keys(Sigma)) andBool /* FIXME? --> */ I >=Int 1
@@ -15,7 +15,7 @@ module AGDA-SEMANTICS-DECL-DATA
   rule processCons(D:Expr, .TypeSignatures) => . [structural]
   rule processCons(D:Expr, (C:Name : T:Expr) Cs:TypeSignatures) => processCon(D, C, T) ~> processCons(D, Cs)
 
-  syntax KItem ::= processCon(Expr, Name, Expr)  [strict(3(context('unifyUniverse)))]
+  syntax KItem ::= processCon(Expr, Name, Expr)  [strict(3(context('coerceSetType)))]
   rule <k> processCon(D:Expr, C:Name, t(T:Expr, Set _)) => T constructorOf D ~> true? ...</k>
        <sig> Sigma (. => C |-> T) </sig>
     when notBool (C in keys(Sigma))

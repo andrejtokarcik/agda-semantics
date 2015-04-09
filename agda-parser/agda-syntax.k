@@ -1,19 +1,20 @@
 module AGDA-SYNTAX
   // TODO: agda-syntax-utils.k    -- presunut tam aj makra?
-  syntax Telescope ::= coerceTelescope(LamBindings)  [function, notInPrograms]
-  rule coerceTelescope(X:Variable Bs:LamBindings) => (X : $metavar) coerceTelescope(Bs)  [structural]
-  rule coerceTelescope(B:TypedBinding Bs:LamBindings) => B coerceTelescope(Bs)  [structural]
-  rule coerceTelescope(.LamBindings) => .Telescope   [structural]
+  syntax Telescope ::= castTelescope(LamBindings)  [function, notInPrograms]
+  rule castTelescope(X:Variable Bs:LamBindings) => (X : $metavar) castTelescope(Bs)  [structural]
+  rule castTelescope(B:TypedBinding Bs:LamBindings) => B castTelescope(Bs)  [structural]
+  rule castTelescope(.LamBindings) => .Telescope   [structural]
 
 
   // perhaps I don't have to include ranges at all? is it good for anything
   // besides error reporting?
 
   //syntax Identifier ::= Token{[a-zA-Z0-9\_]+}        [notInRules]
+  syntax Identifier ::= String
   // NOTE: The sort Variable is used in unification/pattern-matching.
-  syntax Variable ::= Var(String)                [klabel('Var)]
+  syntax Variable ::= Var(Identifier)                [klabel('Var)]
   syntax Variables ::= List{Variable, ""}
-  syntax Name ::= Name(String)                   [klabel('Name)]
+  syntax Name ::= Name(Identifier)                   [klabel('Name)]
   // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
   syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" //| QName
 
@@ -37,7 +38,7 @@ module AGDA-SYNTAX
   syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3)]
                   | Lam(LamBindings, Expr)           [klabel('Lam)]
 
-  rule Lam(Bs:LamBindings => coerceTelescope(Bs), _)    when isTelescope(Bs) =/=K true       [macro]
+  rule Lam(Bs:LamBindings => castTelescope(Bs), _)    when isTelescope(Bs) =/=K true       [macro]
   rule Lam((X:Variable : T:Expr) Bs:Telescope, E:Expr) => \ (X : T) -> Lam(Bs, E)  [macro]
   rule Lam(.LamBindings, E:Expr) => E                                            [macro]
 
@@ -66,7 +67,7 @@ module AGDA-SYNTAX
 
   syntax DataDeclaration ::= Data(Name, LamBindings, Expr, TypeSignatures)  [klabel('Data)]
                            | "data" Name Telescope ":" Expr "where" TypeSignatures
-  rule Data(_, Ps:LamBindings => coerceTelescope(Ps), _, _)
+  rule Data(_, Ps:LamBindings => castTelescope(Ps), _, _)
     when isTelescope(Ps) =/=K true  [macro]
   rule Data(N, Ps:Telescope, T, Cons) => data N Ps : T where Cons  [macro]
 

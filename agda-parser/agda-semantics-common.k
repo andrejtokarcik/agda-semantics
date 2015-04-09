@@ -30,10 +30,14 @@ module AGDA-SEMANTICS-COMMON
   rule <k> _:TenvRestore ~> (sig(Sigma) => .) ...</k>
        <sig> _ => Sigma </sig>
 
+  syntax KItem ::= "chich"
   syntax FenvRestore
   rule isFenvRestore(_:NfTypedExpr) => true
   syntax KItem ::= fenv(Map)
-  context (HOLE:TypedExpr => nfType(HOLE)) ~> fenv(_)
+  // XXX: must use 'isTypedExpr(HOLE)' instead of 'HOLE:TypedExpr'
+  // due to the possible K BUG described below  (the latter doesn't
+  // generate the dynamic sort check as intended).
+  context (HOLE => nfType(HOLE)) ~> fenv(_) when isTypedExpr(HOLE)  [result(NfTypedExpr)]
   rule <k> _:FenvRestore ~> (fenv(Rho) => .) ...</k>
        <fenv> _ => Rho </fenv>
 
@@ -131,22 +135,36 @@ module AGDA-SEMANTICS-COMMON
        <mgu> Theta => .Mgu </mgu>
     when isMguError(Theta) =/=K true
 
-  syntax KItem ::= unify(Expr)         //[strict(all(context('whnf)))]
+  /*
+  syntax KItem ::= unify(K)         [context(result(Unified))]   //[strict(all(context('whnf)))]
+  syntax Unified ::= unified(K)
+  rule <k> (. => unify) ~> unify(K => unified(unify(Theta, K))) ...</k>
+       <mgu> Theta </mgu>
+    when getKLabel(K) =/=KLabel 'unified
+  */
+
+  syntax KItem ::= unify(Expr)
   rule <k> unify(E:Expr) => unify ~> applyMgu(Theta, E) ...</k>
        <mgu> Theta </mgu>
 
-  syntax KItem ::= unifyType(TypedExpr)     //[strict(all(context('whnfType)))]
-  rule <k> unifyType(t(E, T:Expr)) => unify(T) ~> unifyType(t(E, HOLE)) ...</k>
-       <mgu> Theta:Mgu </mgu>
-    when Theta =/=K .Mgu
-  rule <k> T:Expr ~> unifyType(t(E, HOLE)) => t(E, T) ...</k>
-       <mgu> Theta:Mgu </mgu>
-    when Theta ==K .Mgu
+  syntax KItem ::= unifyType(TypedExpr)     //[context(result(Unified))]
+  rule <k> unifyType(t(E, T)) => unify ~> t(E, applyMgu(Theta, T)) ...</k>
+       <mgu> Theta </mgu>
 
-  syntax KItem ::= unifyUniverse(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
-  rule unifyUniverse(t(E, T:Expr)) => T == Set I ~> unify(T) ~> unifyUniverse(t(E, HOLE))
+  /*
+  context unifyType(t(_, HOLE => unify(HOLE)))   [result(Unified)]
+  rule unifyType(t(E, unified(T)) => unified(t(E, T)))
+  */
+
+  syntax KItem ::= coerceSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
+  rule coerceSetType(t(E, T)) => T == Set I ~> unifyType(t(E, T)) ~> coerceSetType(HOLE)  //[heat]
     when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
-  rule Set I ~> unifyUniverse(t(E, HOLE)) => unifyUniverse(t(E, Set I))
+  rule Te:SetTypedExpr ~> coerceSetType(HOLE) => coerceSetType(Te)
+  /*
+  rule coerceSetType(t(E, T:Expr)) => T == Set I ~> unifyType(t(E, T)) ~> coerceSetType(HOLE)
+    when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
+  rule Set I ~> coerceSetType(t(E, HOLE)) => coerceSetType(t(E, Set I))
+  */
 
 
 
@@ -189,18 +207,18 @@ module AGDA-SEMANTICS-COMMON
        <fenv> Rho </fenv>
 
   syntax KItem ::= whnf(K)  [strict(all(context('eval))), context(result(Whnf))]
-  context whnf(HOLE:Val => evalWhnf(HOLE)) [result(ValWhnf)]
-  context whnf(HOLE:ValWhnf => deval(HOLE)) [result(Whnf)]
+  context whnf(HOLE => evalWhnf(HOLE))  when isVal(HOLE)      [result(ValWhnf)]
+  context whnf(HOLE => deval(HOLE))     when isValWhnf(HOLE)  [result(Whnf)]
 
   syntax KItem ::= whnfType(K) [strict, context(result(WhnfTypedExpr))]
-  context whnfType(t(_, HOLE:Expr => whnf(HOLE)))  [result(Whnf)]
+  context whnfType(t(_, HOLE::Expr => whnf(HOLE)))  [result(Whnf)]
 
   syntax KItem ::= nf(K)  [strict(all(context('eval))), context(result(Nf))]
-  context nf(HOLE:Val => evalNf(HOLE)) [result(ValNf)]
-  context nf(HOLE:ValNf => deval(HOLE)) [result(Nf)]
+  context nf(HOLE => evalNf(HOLE))    when isVal(HOLE)      [result(ValNf)]
+  context nf(HOLE => deval(HOLE))     when isValNf(HOLE)    [result(Nf)]
 
   syntax KItem ::= nfType(K) [strict, context(result(NfTypedExpr))]
-  context nfType(t(_, (HOLE:Expr => nf(HOLE))))  [result(Nf)]
+  context nfType(t(_, (HOLE::Expr => nf(HOLE))))  [result(Nf)]
 
 
 
@@ -222,7 +240,7 @@ module AGDA-SEMANTICS-COMMON
   context evalWhnf((HOLE:Expr => nft ~> isExpr(HOLE) ~> evalWhnf(HOLE)) _)
       when isExpr(HOLE)    [result(ValWhnf)]  // << 'when' clause necessary due to the bug mentioned above
   */
-  context evalWhnf((HOLE:Val => evalWhnf(HOLE)) _)   [result(ValWhnf)]
+  context evalWhnf((HOLE::Val => evalWhnf(HOLE)) _)   [result(ValWhnf)]
 
   rule <k> evalWhnf((\ (X : _) -> E:Expr)@Rho V:Val => E@(Rho[V/X])) ~> (. => fenv(Rho')) ...</k>
        <fenv> Rho' </fenv>
@@ -235,8 +253,8 @@ module AGDA-SEMANTICS-COMMON
 
 
   syntax KItem ::= evalNf(Val)     [strict(all(context('evalWhnf))), context(result(ValNf))]
-  context evalNf((HOLE:Val => evalNf(HOLE)) _:Val)  [result(Nf)]
-  context evalNf(_:Val (HOLE:Val => evalNf(HOLE)))  [result(Nf)]
+  context evalNf((HOLE::Val => evalNf(HOLE)) _)  [result(Nf)]
+  context evalNf(_::Val (HOLE => evalNf(HOLE)))  [result(Nf)]
   // TODO !!!!!!
   /*
   context evalNf((_ : (HOLE:Val => evalNf(HOLE))) -> _)  [result(Nf)]

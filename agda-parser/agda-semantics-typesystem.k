@@ -21,7 +21,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   // co sa checkuje v isSetTypedExpr, ale mna zaujima, ci sa to da *zunifikovat s nejakym univerzom
   //  ---- FIXED
 
-  context /*envs! ~>*/ (_ : (HOLE => unifyUniverse(HOLE))) -> _   [result(SetTypedExpr)]
+  context /*envs! ~>*/ (_ : (HOLE => coerceSetType(HOLE))) -> _   [result(SetTypedExpr)]
   /*
   rule <k> (. => envs!) ~>
            (_ : _) -> _ ~>
@@ -34,7 +34,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> Gamma => Gamma[T1/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
     when fresh(I1:Int)
-  context bound! ~> (_ : _) -> (HOLE => unifyUniverse(HOLE))    [result(SetTypedExpr)]
+  context bound! ~> (_ : _) -> (HOLE => coerceSetType(HOLE))    [result(SetTypedExpr)]
   rule <k> (bound! => .) ~>
            ((X : t(T1, Set I1)) -> t(T2, Set I2)
             => freeVariablesM(T2) <=Set keys(Rho) ~> true? ~>
@@ -42,7 +42,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <fenv> Rho </fenv>
     // vid FIXME v -metavariables.k k freeVariablesM()
 
-  context /*envs! ~>*/ \ (_ : (HOLE => unifyUniverse(HOLE))) -> _   [result(SetTypedExpr)]
+  context /*envs! ~>*/ \ (_ : (HOLE => coerceSetType(HOLE))) -> _   [result(SetTypedExpr)]
   /*
   rule <k> (. => envs!) ~>
            \ (_ : _) -> _ ~>
@@ -62,8 +62,8 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <fenv> Rho </fenv>
 
   // XXX: tieto contexty prehodit do -syntax.k ako strictness atributy?
-  context (HOLE:Expr => whnfType(HOLE)) _:Expr   [result(WhnfTypedExpr)]
-  context _:Expr HOLE:Expr
+  context (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
+  context _::Expr HOLE
   rule <k> t(E1, T1) t(E2, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
@@ -93,9 +93,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
   /*
   syntax KItem ::= "solve"
   rule <k> solve => noMguError ~> true? ...</k>
-       <tenv> Gamma => applyMgu(Theta, Gamma) </tenv>
-       <fenv> Rho => applyMgu(Theta, Rho) </fenv>
-       <metavars> Meta => applyMgu(Theta, Meta) </metavars>
+       <tenv> Gamma => unify(Theta, Gamma) </tenv>
+       <fenv> Rho => unify(Theta, Rho) </fenv>
+       <metavars> Meta => unify(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
   */
 
