@@ -3,7 +3,7 @@ require "agda-semantics-common.k"
 module AGDA-SEMANTICS-METAVARIABLES
   imports AGDA-SEMANTICS-COMMON
 
-  rule <k> $hole => E ...</k>
+  rule <k> $metavar => E ...</k>
        <tenv>... . => E |-> T ...</tenv>
        <metavars>... . => E |-> t(E, T) ...</metavars>
     when fresh(E:Expr) andBool fresh(T:Expr)
@@ -12,9 +12,9 @@ module AGDA-SEMANTICS-METAVARIABLES
   syntax MetaVariable
   //rule isMetaVariable(#symName(_)) => true
   rule isMetaVariable(#symExpr(_)) => true
-  syntax Variable ::= MetaVariable
+  //syntax Variable ::= MetaVariable
   // presupposed that Nf < Whnf < Expr holds
-  //syntax Nf ::= MetaVariable
+  syntax Nf ::= MetaVariable
 
   /*
   rule <k> E:MetaVariable => t(E, T) ...</k>

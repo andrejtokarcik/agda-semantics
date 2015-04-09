@@ -60,15 +60,7 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  /*
-  // this causes LOTS of ambiguities
-  syntax TypedExpr ::= "(" TypedExpr ")" [bracket]
-                     | Expr ":" Expr  [klabel('te)]      // ~ expr : type    // XXX: kedze dvojbodka je aj na type signature, tak sa tie anotacie mozu chaoticky zanorovat...
-  */
   syntax TypedExpr ::= t(Expr, Expr)
-  //syntax TypedExpr ::= PrettyBinding
-  //syntax priorities 'bound > 'te
-  //syntax priorities 'te > 'tsig
   syntax Expr ::= TypedExpr
 
 
@@ -137,12 +129,14 @@ module AGDA-SEMANTICS-COMMON
        <fenv> Rho => applyMgu(Theta, Rho) </fenv>
        <metavars> Meta => applyMgu(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
+    when isMguError(Theta) =/=K true
 
   syntax KItem ::= unify(Expr)         //[strict(all(context('whnf)))]
-  rule unify(E:Expr) => applyMgu(Theta, E) ~> unify
+  rule <k> unify(E:Expr) => unify ~> applyMgu(Theta, E) ...</k>
+       <mgu> Theta </mgu>
 
-  syntax KItem ::= unifyType(Expr)     //[strict(all(context('whnfType)))]
-  rule <k> unifyType(t(E, T)) => unify(T) ~> unifyType(t(E, HOLE)) ...</k>
+  syntax KItem ::= unifyType(TypedExpr)     //[strict(all(context('whnfType)))]
+  rule <k> unifyType(t(E, T:Expr)) => unify(T) ~> unifyType(t(E, HOLE)) ...</k>
        <mgu> Theta:Mgu </mgu>
     when Theta =/=K .Mgu
   rule <k> T:Expr ~> unifyType(t(E, HOLE)) => t(E, T) ...</k>
@@ -150,7 +144,7 @@ module AGDA-SEMANTICS-COMMON
     when Theta ==K .Mgu
 
   syntax KItem ::= unifyUniverse(Expr)  [strict(all(context('whnfType))), context(result(TypedType))]
-  rule unifyUniverse(t(E, T)) => T == Set I ~> unify(T) ~> unifyUniverse(t(E, HOLE))
+  rule unifyUniverse(t(E, T:Expr)) => T == Set I ~> unify(T) ~> unifyUniverse(t(E, HOLE))
     when isTypedType(t(E, T)) =/=K true andBool fresh(I:Int)
   rule Set I ~> unifyUniverse(t(E, HOLE)) => unifyUniverse(t(E, Set I))
 
