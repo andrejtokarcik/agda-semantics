@@ -5,8 +5,6 @@ module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SYNTAX
   imports AGDA-SEMANTICS-NORMAL
 
-  syntax KItem ::= "Hihi"
-
   // TODO: need to check whether params are well-typed and (not necessarily?) whether prependParams(Ps, T) yields a type as well
   rule <k> data N:Name Ps:Params : (T:Expr, Set I:Int) where Cs:Constrs => T constructorOf Set (I -Int 1) ~> true? ~> processConstrs(applyParams(Ps, N), prependParams(Ps, Cs)) ...</k>
        <data> Data (. => N |-> prependParams(Ps, T)) </data>

@@ -39,6 +39,8 @@ module AGDA-SEMANTICS-COMMON
 
   syntax KItem ::= "true?"
   rule true ~> true? => .
+  // TODO: error handling/reporting like:
+  //  rule E ~> true? => error(E) when E =/=K true
 
   syntax Expr ::= leftmost(Expr)  [function]
   rule leftmost(E _ => E)
@@ -96,14 +98,14 @@ module AGDA-SEMANTICS-COMMON
   syntax Expr ::= Whnf
 
   syntax NfTypedExpr
-  rule isNfTypedExpr(t(_:Expr, _:Nf)) => true
+  rule isNfTypedExpr(t(_, _:Nf)) => true
   syntax WhnfTypedExpr ::= NfTypedExpr
-  rule isWhnfTypedExpr(t(_:Expr, _:Whnf)) => true
+  rule isWhnfTypedExpr(t(_, _:Whnf)) => true
   syntax TypedExpr ::= WhnfTypedExpr | NfTypedExpr
 
   syntax TypedType
   //rule isTypedType(t(_:Expr, _:MetaVariable)) => true   // XXX hack
-  rule isTypedType(t(_:Expr, Set _)) => true
+  rule isTypedType(t(_, Set _)) => true
   syntax NfTypedExpr ::= TypedType
 
 

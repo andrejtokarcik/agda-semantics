@@ -1,8 +1,8 @@
 module AGDA-SYNTAX
   // TODO: agda-syntax-utils.k    -- presunut tam aj makra?
   syntax Telescope ::= coerceTelescope(LamBindings)  [function, notInPrograms]
-  rule coerceTelescope(X:Variable Bnds:LamBindings) => (X : $metavar) coerceTelescope(Bnds)  [structural]
-  rule coerceTelescope(Bnd:TypedBinding Bnds:LamBindings) => Bnd coerceTelescope(Bnds)  [structural]
+  rule coerceTelescope(X:Variable Bs:LamBindings) => (X : $metavar) coerceTelescope(Bs)  [structural]
+  rule coerceTelescope(B:TypedBinding Bs:LamBindings) => B coerceTelescope(Bs)  [structural]
   rule coerceTelescope(.LamBindings) => .Telescope   [structural]
 
 
@@ -17,13 +17,11 @@ module AGDA-SYNTAX
   // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
   syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" //| QName
 
-  syntax KLabel ::= "'TBind" [arity(2)]
-
   syntax TypedBinding ::= "(" Variable ":" Expr ")"
-                        //| TBind(Variables, Expr)     [klabel('TBind)]
+                        | TBind(Variables, Expr)     [klabel('TBind)]
   syntax Telescope ::= List{TypedBinding, ""}
-  rule 'TBind(X:Variable Xs:Variables,, E:Expr) Tel:Telescope => (X : E) ('TBind(Xs,, E) Tel)  [macro]
-  rule 'TBind(.Variables,, E:Expr) Tel:Telescope => Tel                            [macro]
+  rule TBind(X:Variable Xs:Variables, E:Expr) Tel:Telescope => (X : E) (TBind(Xs, E) Tel)  [macro]
+  rule TBind(.Variables, E:Expr) Tel:Telescope => Tel                            [macro]
 
   // TODO: 'Fun
   syntax Pi ::= "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3)]
@@ -39,8 +37,8 @@ module AGDA-SYNTAX
   syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3)]
                   | Lam(LamBindings, Expr)           [klabel('Lam)]
 
-  rule Lam(Bnds:LamBindings => coerceTelescope(Bnds), _)    when isTelescope(Bnds) =/=K true       [macro]
-  rule Lam((X:Variable : T:Expr) Bnds:Telescope, E:Expr) => \ (X : T) -> Lam(Bnds, E)  [macro]
+  rule Lam(Bs:LamBindings => coerceTelescope(Bs), _)    when isTelescope(Bs) =/=K true       [macro]
+  rule Lam((X:Variable : T:Expr) Bs:Telescope, E:Expr) => \ (X : T) -> Lam(Bs, E)  [macro]
   rule Lam(.LamBindings, E:Expr) => E                                            [macro]
 
   syntax Expr ::= "(" Expr ")" [bracket]
@@ -68,9 +66,9 @@ module AGDA-SYNTAX
 
   syntax DataDeclaration ::= Data(Name, LamBindings, Expr, TypeSignatures)  [klabel('Data)]
                            | "data" Name Telescope ":" Expr "where" TypeSignatures
-  rule Data(_, Params:LamBindings => coerceTelescope(Params), _, _)
-    when isTelescope(Params) =/=K true  [macro]
-  rule Data(N, Params:Telescope, T, Cons) => data N Params : T where Cons  [macro]
+  rule Data(_, Ps:LamBindings => coerceTelescope(Ps), _, _)
+    when isTelescope(Ps) =/=K true  [macro]
+  rule Data(N, Ps:Telescope, T, Cons) => data N Ps : T where Cons  [macro]
 
   syntax Declaration ::= "(" Declaration ")" [bracket]
     | TypeSignature
