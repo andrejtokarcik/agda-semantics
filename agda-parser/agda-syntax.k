@@ -1,25 +1,37 @@
 module AGDA-SYNTAX
+  // TODO: agda-syntax-utils.k    -- presunut tam aj makra?
+  syntax Telescope ::= coerceTelescope(LamBindings)  [function, notInPrograms]
+  rule coerceTelescope(X:Variable Bnds:LamBindings) => (X : $metavar) coerceTelescope(Bnds)  [structural]
+  rule coerceTelescope(Bnd:TypedBinding Bnds:LamBindings) => Bnd coerceTelescope(Bnds)  [structural]
+  rule coerceTelescope(.LamBindings) => .Telescope   [structural]
+
+
   // perhaps I don't have to include ranges at all? is it good for anything
   // besides error reporting?
 
   //syntax Identifier ::= Token{[a-zA-Z0-9\_]+}        [notInRules]
+  // NOTE: The sort Variable is used in unification/pattern-matching.
   syntax Variable ::= Var(String)                [klabel('Var)]
   syntax Variables ::= List{Variable, ""}
   syntax Name ::= Name(String)                   [klabel('Name)]
   // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
   syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" //| QName
 
+  syntax KLabel ::= "'TBind" [arity(2)]
+
   syntax TypedBinding ::= "(" Variable ":" Expr ")"
-                        | TBind(Variables, Expr)     [klabel('TBind)]
+                        //| TBind(Variables, Expr)     [klabel('TBind)]
   syntax Telescope ::= List{TypedBinding, ""}
-  rule TBind(X:Variable Xs:Variables, E:Expr) Tel:Telescope => (X : E) (TBind(Xs, E) Tel)  [macro]
-  rule TBind(.Variables, E:Expr) Tel:Telescope => Tel                            [macro]
+  rule 'TBind(X:Variable Xs:Variables,, E:Expr) Tel:Telescope => (X : E) ('TBind(Xs,, E) Tel)  [macro]
+  rule 'TBind(.Variables,, E:Expr) Tel:Telescope => Tel                            [macro]
 
   // TODO: 'Fun
   syntax Pi ::= "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3)]
               | Pi(Telescope, Expr)                  [klabel('Pi)]
-  rule Pi((X:Variable : T:Expr) Tel:Telescope, E:Expr) => (X : T) -> Pi(Tel, E)  [macro]
-  rule Pi(.Telescope, E:Expr) => E                                               [macro]
+              | Fun(Expr, Expr)                      [klabel('Fun)]
+  rule Pi((X:Variable : T1:Expr) Tel:Telescope, T2:Expr) => (X : T1) -> Pi(Tel, T2)  [macro]
+  rule Pi(.Telescope, T:Expr) => T                                                   [macro]
+  rule Fun(T1:Expr, T2:Expr) => (X : T1) -> T2  when fresh(X:Variable)               [macro]
 
   syntax LamBinding ::= Variable | TypedBinding
   syntax LamBindings ::= List{LamBinding, ""}
@@ -27,13 +39,8 @@ module AGDA-SYNTAX
   syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3)]
                   | Lam(LamBindings, Expr)           [klabel('Lam)]
 
-  syntax Telescope ::= coerceTelescope(LamBindings)  [function, notInPrograms]
-  rule coerceTelescope(X:Variable Bnds:LamBindings) => (X : $metavar) coerceTelescope(Bnds)  [structural]
-  rule coerceTelescope(Bnd:TypedBinding Bnds:LamBindings) => Bnd coerceTelescope(Bnds)  [structural]
-  rule coerceTelescope(.LamBindings) => .Telescope   [structural]
-
   rule Lam(Bnds:LamBindings => coerceTelescope(Bnds), _)    when isTelescope(Bnds) =/=K true       [macro]
-  rule Lam((X:Variable : T:Expr) Bnds:LamBindings, E:Expr) => \ (X : T) -> Lam(Bnds, E)  [macro]
+  rule Lam((X:Variable : T:Expr) Bnds:Telescope, E:Expr) => \ (X : T) -> Lam(Bnds, E)  [macro]
   rule Lam(.LamBindings, E:Expr) => E                                            [macro]
 
   syntax Expr ::= "(" Expr ")" [bracket]
@@ -41,13 +48,14 @@ module AGDA-SYNTAX
     | Name
     | Pi
     | Lambda
-    | Expr Expr    [left]
+    | Expr Expr    [left, klabel('App)]
     | "Set"        [klabel('Set), notInRules]
     | "Set" Int    [klabel('SetN)]
     | "$metavar"      [klabel('Underscore)]     // '_' is reserved for K rules
-  rule 'Set(.KList) => Set0  [macro]
+  rule 'Set(.KList) => Set 0  [macro]
 
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
+  syntax TypeSignatures ::= List{TypeSignature, ""}
 
   syntax Pattern ::= "(" Pattern ")" [bracket]
     | Variable
@@ -58,11 +66,18 @@ module AGDA-SYNTAX
   syntax RHS ::= Expr
   syntax FunClause ::= LHS "=" RHS                   [klabel('FunClause)]
 
+  syntax DataDeclaration ::= Data(Name, LamBindings, Expr, TypeSignatures)  [klabel('Data)]
+                           | "data" Name Telescope ":" Expr "where" TypeSignatures
+  rule Data(_, Params:LamBindings => coerceTelescope(Params), _, _)
+    when isTelescope(Params) =/=K true  [macro]
+  rule Data(N, Params:Telescope, T, Cons) => data N Params : T where Cons  [macro]
+
   syntax Declaration ::= "(" Declaration ")" [bracket]
     | TypeSignature
     | FunClause
-    | "postulate" Declaration                        [klabel('Postulate)]
-    | "module" Name Telescope "where" Declarations   [klabel('Module)]
+    | DataDeclaration
+    | "postulate" TypeSignatures                     [klabel('Postulate)]
+    | "module" /*Q*/Name Telescope "where" Declarations   [klabel('Module)]
   syntax Declarations ::= List{Declaration, ""}
 
   syntax Program ::= Declarations

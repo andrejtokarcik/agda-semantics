@@ -48,15 +48,6 @@ module AGDA-SEMANTICS-COMMON
   syntax KItem ::= "envs!"
   syntax KItem ::= "bound!"
 
-  syntax Bool ::= matches(K, K)  [function]
-  rule matches(Set I1 => I1, Set I2 => I2)
-  rule matches(K1, K2) => true
-    when K1 ==K K2 orBool
-         isVariable(K1) orBool
-         isVariable(K2)
-    [owise]
-
-
 
 
 
@@ -73,9 +64,11 @@ module AGDA-SEMANTICS-COMMON
                 | "(" Name ":" Expr ")" "->" Expr        [binder(2 -> 4)]
                 | "\\" "(" Name ":" Expr ")" "->" Expr   [binder(2 -> 4)]
                 */
-  syntax WhNeut ::= Variable     // considered neutral only if cannot be evaluted
+  syntax WhNeut /*::= Variable     // considered neutral only if cannot be evaluted
                   | Name
                   | WhNeut Expr [left]
+                  */
+  rule isWhNeut(_:WhNeut _:Expr) => true
   rule isWhnf(Set _) => true
   rule isWhnf((_ : _) -> _) => true
   rule isWhnf(\ (_ : _) -> _) => true
@@ -87,9 +80,13 @@ module AGDA-SEMANTICS-COMMON
                 | "(" Name ":" Nf ")" "->" Nf        [binder(2 -> 4)]
                 | "\\" "(" Name ":" Nf ")" "->" Nf   [binder(2 -> 4)]
                 */
-  syntax Neut ::= Variable       // considered neutral only if cannot be evaluated
+  syntax Neut /*::= Variable       // considered neutral only if cannot be evaluated
                 | Name
                 | Neut Nf [left]
+                */
+  rule isNeut(_:Variable) => true
+  rule isNeut(_:Name) => true
+  rule isNeut(_:Neut _:Nf) => true
   rule isNf(Set _) => true
   rule isNf((_ : _:Nf) -> _:Nf) => true
   rule isNf(\ (_ : _:Nf) -> _:Nf) => true
