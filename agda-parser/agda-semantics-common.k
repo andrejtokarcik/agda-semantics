@@ -1,7 +1,10 @@
 require "agda-syntax.k"//-pretty.k"
 
+require "modules/unification.k"
+
 module AGDA-SEMANTICS-COMMON
   imports AGDA-SYNTAX//-PRETTY
+  imports UNIFICATION
 
   syntax KResult ::= TypedExpr
 
@@ -18,20 +21,20 @@ module AGDA-SEMANTICS-COMMON
   //    i.e. it will be superfluous only for the var bound just now
   */
 
-  syntax TEnvRestore
-  rule isTEnvRestore(_:TypedExpr) => true
+  syntax TenvRestore
+  rule isTenvRestore(_:TypedExpr) => true
   syntax KItem ::= tenv(Map)
-  rule <k> _:TEnvRestore ~> (tenv(Gamma) => .) ...</k>
+  rule <k> _:TenvRestore ~> (tenv(Gamma) => .) ...</k>
        <tenv> _ => Gamma </tenv>
   syntax KItem ::= sig(Map)
-  rule <k> _:TEnvRestore ~> (sig(Sigma) => .) ...</k>
+  rule <k> _:TenvRestore ~> (sig(Sigma) => .) ...</k>
        <sig> _ => Sigma </sig>
 
-  syntax FEnvRestore
-  rule isFEnvRestore(_:NfTypedExpr) => true
+  syntax FenvRestore
+  rule isFenvRestore(_:NfTypedExpr) => true
   syntax KItem ::= fenv(Map)
   context (HOLE:TypedExpr => nfType(HOLE)) ~> fenv(_)
-  rule <k> _:FEnvRestore ~> (fenv(Rho) => .) ...</k>
+  rule <k> _:FenvRestore ~> (fenv(Rho) => .) ...</k>
        <fenv> _ => Rho </fenv>
 
   syntax KItem ::= "true?"
@@ -42,7 +45,7 @@ module AGDA-SEMANTICS-COMMON
   rule leftmost(E) => E [owise]
 
   // for the binders' semantics
-  syntax KItem ::= "envStored!"
+  syntax KItem ::= "envs!"
   syntax KItem ::= "bound!"
 
   syntax Bool ::= matches(K, K)  [function]
@@ -62,9 +65,9 @@ module AGDA-SEMANTICS-COMMON
   syntax TypedExpr ::= "(" TypedExpr ")" [bracket]
                      | Expr ":" Expr  [klabel('te)]      // ~ expr : type    // XXX: kedze dvojbodka je aj na type signature, tak sa tie anotacie mozu chaoticky zanorovat...
   */
-  syntax TypedExpr ::= te(Expr, Expr)
+  syntax TypedExpr ::= t(Expr, Expr)
   //syntax TypedExpr ::= PrettyBinding
-  //syntax priorities 'bnd > 'te
+  //syntax priorities 'bound > 'te
   //syntax priorities 'te > 'tsig
   syntax Expr ::= TypedExpr
 
@@ -78,7 +81,8 @@ module AGDA-SEMANTICS-COMMON
                 | "(" Name ":" Expr ")" "->" Expr        [binder(2 -> 4)]
                 | "\\" "(" Name ":" Expr ")" "->" Expr   [binder(2 -> 4)]
                 */
-  syntax WhNeut ::= Name     // considered neutral only if cannot be evaluted
+  syntax WhNeut ::= Variable     // considered neutral only if cannot be evaluted
+                  | Name
                   | WhNeut Expr [left]
   rule isWhnf(Set _) => true
   rule isWhnf((_ : _) -> _) => true
@@ -91,7 +95,8 @@ module AGDA-SEMANTICS-COMMON
                 | "(" Name ":" Nf ")" "->" Nf        [binder(2 -> 4)]
                 | "\\" "(" Name ":" Nf ")" "->" Nf   [binder(2 -> 4)]
                 */
-  syntax Neut ::= Name       // considered neutral only if cannot be evaluated
+  syntax Neut ::= Variable       // considered neutral only if cannot be evaluated
+                | Name
                 | Neut Nf [left]
   rule isNf(Set _) => true
   rule isNf((_ : _:Nf) -> _:Nf) => true
@@ -102,16 +107,53 @@ module AGDA-SEMANTICS-COMMON
   syntax Expr ::= Whnf
 
   syntax NfTypedExpr
-  rule isNfTypedExpr(te(_:Expr, _:Nf)) => true
+  rule isNfTypedExpr(t(_:Expr, _:Nf)) => true
   syntax WhnfTypedExpr ::= NfTypedExpr
-  rule isWhnfTypedExpr(te(_:Expr, _:Whnf)) => true
+  rule isWhnfTypedExpr(t(_:Expr, _:Whnf)) => true
   syntax TypedExpr ::= WhnfTypedExpr | NfTypedExpr
 
-  /*
   syntax TypedType
-  rule isTypedType(te(_:Expr, _:MetaVariable)) => true   // XXX hack
-  rule isTypedType(te(_:Expr, Set _)) => true
+  //rule isTypedType(t(_:Expr, _:MetaVariable)) => true   // XXX hack
+  rule isTypedType(t(_:Expr, Set _)) => true
   syntax NfTypedExpr ::= TypedType
+
+
+  /*
+  syntax KItem ::= Expr "==" Expr
+             | Mgu "&&" Expr "==" Expr
+  rule T1 == T2 => .Mgu && T1 == T2   [macro]
+  rule Theta:Mgu && T1 == T2 => updateMgu(Theta, T1, T2)  [macro]
+  */
+
+  syntax KItem ::= Expr "==" Expr
+  rule <k> T == T' => . ...</k>
+       <mgu> Theta => updateMgu(Theta, T, T') </mgu>
+
+  syntax KItem ::= unify(Expr)
+  rule <k> unify(E) => applyMgu(Theta, E) ...</k>
+       <tenv> Gamma => applyMgu(Theta, Gamma) </tenv>
+       <fenv> Rho => applyMgu(Theta, Rho) </fenv>
+       <metavars> Meta => applyMgu(Theta, Meta) </metavars>
+       <mgu> Theta => .Mgu </mgu>
+
+  syntax KItem ::= unifyType(TypedExpr)
+  rule <k> unifyType(t(E, T)) => unify(T) ~> unifyType(t(E, HOLE)) ...</k>
+       <mgu> Theta:Mgu </mgu>
+    when Theta =/=K .Mgu
+  rule <k> T:Expr ~> unifyType(t(E, HOLE)) => t(E, T) ...</k>
+       <mgu> Theta:Mgu </mgu>
+    when Theta ==K .Mgu
+
+  syntax KItem ::= unifyUniverse(K)  [strict(all(context('whnfType))), context(result(TypedType))]
+  rule unifyUniverse(t(E, T)) => T == Set I ~> unify(T) ~> unifyUniverse(t(E, HOLE))
+    when isTypedType(t(E, T)) =/=K true andBool fresh(I:Int)
+  rule Set I ~> unifyUniverse(t(E, HOLE)) => unifyUniverse(t(E, Set I))
+  /*
+  rule <k> unifyUniverse(t(_:Expr, U:Expr => applyMgu(U == Set I, U))) ...</k>
+       <tenv> Gamma => applyMgu(U == Set I, Gamma) </tenv>
+       <fenv> Rho => applyMgu(U == Set I, Rho) </fenv>
+       <metavars> Meta => applyMgu(U == Set I, Meta) </metavars>
+    when fresh(I:Int)
   */
 
 
@@ -127,7 +169,7 @@ module AGDA-SEMANTICS-COMMON
   rule boundKeys((_ |-> _ => .) _) [owise, structural]
 
   // The following rules are where most of the evaluation magic happens...
-  rule X:Name@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
+  rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
   rule (Set I:Int)@_ => Set I [structural, anywhere]
   rule N:WhNeut@_ => N   [structural, anywhere]
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
@@ -148,23 +190,23 @@ module AGDA-SEMANTICS-COMMON
   syntax Val ::= ValWhnf
 
 
-  syntax K ::= eval(K)  [context(result(Val))]
+  syntax KItem ::= eval(K)  [context(result(Val))]
   rule <k> eval(E:Expr => E@Rho) ...</k>
        <fenv> Rho </fenv>
 
-  syntax K ::= whnf(K)  [strict(all(context('eval))), context(result(Whnf))]
+  syntax KItem ::= whnf(K)  [strict(all(context('eval))), context(result(Whnf))]
   context whnf(HOLE:Val => evalWhnf(HOLE)) [result(ValWhnf)]
   context whnf(HOLE:ValWhnf => deval(HOLE)) [result(Whnf)]
 
-  syntax K ::= whnfType(K) [strict, context(result(WhnfTypedExpr))]
-  context whnfType(te(_, HOLE:Expr => whnf(HOLE)))  [result(Whnf)]
+  syntax KItem ::= whnfType(K) [strict, context(result(WhnfTypedExpr))]
+  context whnfType(t(_, HOLE:Expr => whnf(HOLE)))  [result(Whnf)]
 
-  syntax K ::= nf(K)  [strict(all(context('eval))), context(result(Nf))]
+  syntax KItem ::= nf(K)  [strict(all(context('eval))), context(result(Nf))]
   context nf(HOLE:Val => evalNf(HOLE)) [result(ValNf)]
   context nf(HOLE:ValNf => deval(HOLE)) [result(Nf)]
 
-  syntax K ::= nfType(K) [strict, context(result(NfTypedExpr))]
-  context nfType(te(_, (HOLE:Expr => nf(HOLE))))  [result(Nf)]
+  syntax KItem ::= nfType(K) [strict, context(result(NfTypedExpr))]
+  context nfType(t(_, (HOLE:Expr => nf(HOLE))))  [result(Nf)]
 
 
 
@@ -174,10 +216,10 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  rule isFEnvRestore(evalWhnf(_:ValWhnf)) => true
+  rule isFenvRestore(evalWhnf(_:ValWhnf)) => true
 
 
-  syntax K ::= evalWhnf(Val)     [context(result(ValWhnf))]
+  syntax KItem ::= evalWhnf(Val)     [context(result(ValWhnf))]
   // XXX !!! HOLE:<sort> does NOT enforce dynamic checks that HOLE is of sort <sort>,
   // possibly A BUG IN K (check newer versions before reporting),
   // it might be just an indication how to _parse_ the item [as with ::]
@@ -188,7 +230,7 @@ module AGDA-SEMANTICS-COMMON
   */
   context evalWhnf((HOLE:Val => evalWhnf(HOLE)) _)   [result(ValWhnf)]
 
-  rule <k> evalWhnf((\ (_ X : _) -> E:Expr)@Rho V:Val => E@(Rho[V/X])) ~> (. => fenv(Rho')) ...</k>
+  rule <k> evalWhnf((\ (X : _) -> E:Expr)@Rho V:Val => E@(Rho[V/X])) ~> (. => fenv(Rho')) ...</k>
        <fenv> Rho' </fenv>
 
   // see the NOTE in agda-semantics.k on how to try to implement pattern matching
@@ -198,7 +240,7 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  syntax K ::= evalNf(Val)     [strict(all(context('evalWhnf))), context(result(ValNf))]
+  syntax KItem ::= evalNf(Val)     [strict(all(context('evalWhnf))), context(result(ValNf))]
   context evalNf((HOLE:Val => evalNf(HOLE)) _:Val)  [result(Nf)]
   context evalNf(_:Val (HOLE:Val => evalNf(HOLE)))  [result(Nf)]
   // TODO !!!!!!
@@ -211,7 +253,7 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  syntax K ::= deval(K) [context(result(Expr))]
+  syntax KItem ::= deval(K) [context(result(Expr))]
   rule deval(E:Expr@_ => E)
   rule deval((E1:Expr => deval(E1)) (E2:Expr => deval(E2)))
 

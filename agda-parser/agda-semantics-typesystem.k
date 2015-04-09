@@ -9,65 +9,82 @@ module AGDA-SEMANTICS-TYPESYSTEM
   imports AGDA-SEMANTICS-COMMON
   imports AGDA-SEMANTICS-METAVARIABLES
 
-  rule <k> X:Name => te(X, T) ...</k>
+  rule <k> X:Variable => t(X, T) ...</k>
        <tenv>... X |-> T ...</tenv>
 
-  rule Set I:Int => te(Set I, Set (I +Int 1))
+  rule Set I:Int => t(Set I, Set (I +Int 1))
 
-  // TODO: envStored! pre pi-abstrakciu
   // ... TypedType je zlo, lebo mna az tak nezaujima, ci je to identicke univerzu (co je to,
   // co sa checkuje v isTypedType, ale mna zaujima, ci sa to da *zunifikovat s nejakym univerzom
-  context (_ : (HOLE => whnfType(HOLE))) -> _   //[result(TypedType)]
-  rule <k> (. => bound!) ~> (X : te(T:Expr, _)) -> _ ~> (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
-       <tenv> Gamma => Gamma[T/X] </tenv>
-       <fenv> Rho => Rho[^/X] </fenv>
-  context bound! ~> (_ : _) -> (HOLE => whnfType(HOLE))        //[result(TypedType)]
-  rule <k> bound! ~> (X : te(T1:Expr, Set I1:Int)) -> te(T2:Expr, Set I2:Int)
-        => freeVariablesM(T2) <=Set keys(Rho) ~> true?
-           ~> te((X : T1) -> T2, Set maxInt(I1, I2)) ...</k>
-       <fenv> Rho </fenv>   // vid FIXME v -metavariables.k k freeVariablesM()
+  //  ---- FIXED
 
-  rule <k> (. => envStored!) ~> \ (_ : _) -> _ ~> (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
+  rule <k> (. => envs!) ~>
+           (_ : _) -> _ ~>
+           (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma </tenv>
        <fenv> Rho </fenv>
-  context envStored! ~> \ (_ : (HOLE => whnfType(HOLE))) -> _
-  rule <k> (envStored! => bound!) ~> \ (X : te(T:Expr, _)) -> _ ...</k>
+  context envs! ~> (_ : (HOLE => unifyUniverse(HOLE))) -> _   [result(TypedType)]
+  rule <k> (envs! => bound!) ~> (X : t(T1, Set _)) -> _ ...</k>
+       <tenv> Gamma => Gamma[T1/X] </tenv>
+       <fenv> Rho => Rho[^/X] </fenv>
+    when fresh(I1:Int)
+  context bound! ~> (_ : _) -> (HOLE => unifyUniverse(HOLE))    [result(TypedType)]
+  rule <k> (bound! => .) ~>
+           ((X : t(T1, Set I1)) -> t(T2, Set I2)
+            => freeVariablesM(T2) <=Set keys(Rho) ~> true? ~>
+               t((X : T1) -> T2, Set maxInt(I1, I2))) ...</k>
+       <fenv> Rho </fenv>
+    // vid FIXME v -metavariables.k k freeVariablesM()
+
+  rule <k> (. => envs!) ~>
+           \ (_ : _) -> _ ~>
+           (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
+       <tenv> Gamma </tenv>
+       <fenv> Rho </fenv>
+  context envs! ~> \ (_ : (HOLE => unifyUniverse(HOLE))) -> _   [result(TypedType)]
+  rule <k> (envs! => bound!) ~> \ (X : t(T, Set _)) -> _ ...</k>
        <tenv> Gamma => Gamma[T/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
   context bound! ~> \ (_ : _) -> HOLE
-  rule <k> bound! ~> \ (X : te(T:Expr, U:Expr)) -> te(E:Expr, T':Expr)
-        => U == Set I ~> solve
-           ~> freeVariablesM(E) <=Set keys(Rho) ~> true?
-           ~> te(\ (X : T) -> E, (X : T) -> T') ...</k>
+  rule <k> (bound! => .) ~>
+           (\ (X : t(T, Set _)) -> t(E, T')
+           => freeVariablesM(E) <=Set keys(Rho) ~> true? ~>
+              t(\ (X : T) -> E, (X : T) -> T')) ...</k>
        <fenv> Rho </fenv>
-    when fresh(I:Int)
 
-  rule <k> te(E1, T1) te(E2, T2) => T1 == (X : T) -> T' ~> T2 == T ~> solveType(te(E1 E2, T')) ~> fenv(Rho) ...</k>
+  rule <k> t(E1, T1) t(E2, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
-    when fresh(X:Name) andBool fresh(T:Expr) andBool fresh(T':Expr)
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
 
   // TODO: move the unification machinery to a separate file
   // NOTE: not every updateMgu is actually guaranteed to update the mgu;
   // e.g. if T is identical to T', <mgu /> content remains the same.
-  syntax KItem ::= Expr "==" Expr
-  rule <k> T == T' => . ...</k>
-       <mgu> Theta => updateMgu(Theta, T, T') </mgu>
 
+
+  // when a mgu gets on top of <k />, extend the mgu cell with its contents
+  // XXX may cause troubles, must test
+  /*
+  rule Theta':Mgu => extendMguCell(Theta')   [structural]
+  syntax KItem ::= extendMguCell(Mgu)
+                 | extendMguCell(Map)
+  rule extendMguCell(Theta:Mgu => Mgu2Map(Theta))
+  rule <k> extendMguCell(K1 |-> K2 Rest:Map => Rest) ...</k>
+       <mgu> Theta => updateMgu(Theta, K1, K2) </mgu>
+  */
+
+  /*
   syntax Bool ::= "noMguError"
   rule <k> noMguError => isMguError(Theta) =/=K true ...</k>
        <mgu> Theta </mgu>
+  */
 
+  /*
   syntax KItem ::= "solve"
   rule <k> solve => noMguError ~> true? ...</k>
        <tenv> Gamma => applyMgu(Theta, Gamma) </tenv>
        <fenv> Rho => applyMgu(Theta, Rho) </fenv>
        <metavars> Meta => applyMgu(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
+  */
 
-  syntax KItem ::= solveType(TypedExpr)
-  rule <k> solveType(te(E, T)) => noMguError ~> true? ~> te(E, applyMgu(Theta, T)) ...</k>
-       <tenv> Gamma => applyMgu(Theta, Gamma) </tenv>
-       <fenv> Rho => applyMgu(Theta, Rho) </fenv>
-       <metavars> Meta => applyMgu(Theta, Meta) </metavars>
-       <mgu> Theta => .Mgu </mgu>
 endmodule
