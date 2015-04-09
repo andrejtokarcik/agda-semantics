@@ -118,6 +118,8 @@ module AGDA-SEMANTICS-COMMON
   syntax NfTypedExpr ::= TypedType
 
 
+
+
   /*
   syntax KItem ::= Expr "==" Expr
              | Mgu "&&" Expr "==" Expr
@@ -129,14 +131,17 @@ module AGDA-SEMANTICS-COMMON
   rule <k> T == T' => . ...</k>
        <mgu> Theta => updateMgu(Theta, T, T') </mgu>
 
-  syntax KItem ::= unify(Expr)
-  rule <k> unify(E) => applyMgu(Theta, E) ...</k>
+  syntax KItem ::= "unify"
+  rule <k> unify => . ...</k>
        <tenv> Gamma => applyMgu(Theta, Gamma) </tenv>
        <fenv> Rho => applyMgu(Theta, Rho) </fenv>
        <metavars> Meta => applyMgu(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
 
-  syntax KItem ::= unifyType(TypedExpr)
+  syntax KItem ::= unify(Expr)         //[strict(all(context('whnf)))]
+  rule unify(E:Expr) => applyMgu(Theta, E) ~> unify
+
+  syntax KItem ::= unifyType(Expr)     //[strict(all(context('whnfType)))]
   rule <k> unifyType(t(E, T)) => unify(T) ~> unifyType(t(E, HOLE)) ...</k>
        <mgu> Theta:Mgu </mgu>
     when Theta =/=K .Mgu
@@ -144,17 +149,12 @@ module AGDA-SEMANTICS-COMMON
        <mgu> Theta:Mgu </mgu>
     when Theta ==K .Mgu
 
-  syntax KItem ::= unifyUniverse(K)  [strict(all(context('whnfType))), context(result(TypedType))]
+  syntax KItem ::= unifyUniverse(Expr)  [strict(all(context('whnfType))), context(result(TypedType))]
   rule unifyUniverse(t(E, T)) => T == Set I ~> unify(T) ~> unifyUniverse(t(E, HOLE))
     when isTypedType(t(E, T)) =/=K true andBool fresh(I:Int)
   rule Set I ~> unifyUniverse(t(E, HOLE)) => unifyUniverse(t(E, Set I))
-  /*
-  rule <k> unifyUniverse(t(_:Expr, U:Expr => applyMgu(U == Set I, U))) ...</k>
-       <tenv> Gamma => applyMgu(U == Set I, Gamma) </tenv>
-       <fenv> Rho => applyMgu(U == Set I, Rho) </fenv>
-       <metavars> Meta => applyMgu(U == Set I, Meta) </metavars>
-    when fresh(I:Int)
-  */
+
+
 
 
   syntax Val ::= "(" Val ")" [bracket]

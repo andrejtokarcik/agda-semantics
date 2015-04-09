@@ -2,45 +2,52 @@ module AGDA-SYNTAX
   // perhaps I don't have to include ranges at all? is it good for anything
   // besides error reporting?
 
-  syntax Program ::= Declarations
+  //syntax Identifier ::= Token{[a-zA-Z0-9\_]+}        [notInRules]
+  syntax Variable ::= Var(String)                [klabel('Var)]
+  syntax Variables ::= List{Variable, ""}
+  syntax Name ::= Name(String)                   [klabel('Name)]
+  // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
+  syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" //| QName
 
-  syntax FunClause ::= LHS "=" RHS                                    [klabel('FunClause)]
-  syntax Declaration ::= "(" Declaration ")" [bracket]
-    | TypeSignature
-    | FunClause
-    | "postulate" Declaration                        [klabel('Postulate)]
-    | "module" Name Telescope "where" Declarations   [klabel('Module)]
-  syntax Declarations ::= //"(" Declarations ")" [bracket]
-                       List{Declaration, ""}
+  syntax TypedBinding ::= "(" Variable ":" Expr ")"
+                        | TBind(Variables, Expr)     [klabel('TBind)]
+  syntax Telescope ::= List{TypedBinding, ""}
+  rule TBind(X:Variable Xs:Variables, E:Expr) Tel:Telescope => (X : E) (TBind(Xs, E) Tel)  [macro]
+  rule TBind(.Variables, E:Expr) Tel:Telescope => Tel                            [macro]
+
+  // TODO: 'Fun
+  syntax Pi ::= "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3)]
+              | Pi(Telescope, Expr)                  [klabel('Pi)]
+  rule Pi((X:Variable : T:Expr) Tel:Telescope, E:Expr) => (X : T) -> Pi(Tel, E)  [macro]
+  rule Pi(.Telescope, E:Expr) => E                                               [macro]
+
+  syntax LamBinding ::= Variable | TypedBinding
+  syntax LamBindings ::= List{LamBinding, ""}
+                       | Telescope
+  syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3)]
+                  | Lam(LamBindings, Expr)           [klabel('Lam)]
+
+  syntax Telescope ::= coerceTelescope(LamBindings)  [function, notInPrograms]
+  rule coerceTelescope(X:Variable Bnds:LamBindings) => (X : $hole) coerceTelescope(Bnds)
+  rule coerceTelescope(Bnd:TypedBinding Bnds:LamBindings) => Bnd coerceTelescope(Bnds)
+  rule coerceTelescope(.LamBindings) => .Telescope
+
+  rule Lam(Bnds:LamBindings => coerceTelescope(Bnds), _)    when isTelescope(Bnds) =/=K true       [macro]
+  rule Lam((X:Variable : T:Expr) Bnds:LamBindings, E:Expr) => \ (X : T) -> Lam(Bnds, E)  [macro]
+  rule Lam(.LamBindings, E:Expr) => E                                            [macro]
 
   syntax Expr ::= "(" Expr ")" [bracket]
     | Variable
     | Name
-    | Lambda
     | Pi
+    | Lambda
     | Expr Expr    [left]
-    //| "Set"        [notInRules, klabel('Set)]
-    | "Set" Int    [klabel('Set_)]
-  //rule 'Set(.KList) => Set 0 [macro]
-  //syntax Expr ::= UntypedExpr
-
-  syntax Identifier ::= Token{[a-zA-Z0-9\_]+}        [notInRules]
-  syntax Variable ::= var(Identifier)                [klabel('Var)]
-  syntax Name ::= name(Identifier)                   [klabel('Name)]
-  // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
-  syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" //| QName
+    | "Set"        [klabel('Set), notInRules]
+    | "Set" Int    [klabel('SetN)]
+    | "$hole"      [klabel('Underscore)]     // '_' is reserved for K rules
+  rule 'Set(.KList) => Set 0  [macro]
 
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
-
-  syntax Lambda ::= //K "->" Expr   [klabel('Lam)]
-                  "\\" "(" Variable ":" Expr ")" "->" Expr [binder(1 -> 3), notInPrograms, klabel('Lam)]
-  syntax Pi ::= //K "->" Expr   [notInRules, klabel('Pi)]
-              //| K "->" Exp    [notInRules, klabel('Fun)]
-              "(" Variable ":" Expr ")" "->" Expr [binder(1 -> 3), notInPrograms, klabel('Pi)]
-
-  syntax TypedBinding ::= //"(" K ":" Expr ")"  [notInRules, klabel('TBind)]
-                        "(" Variable ":" Expr ")"  [notInPrograms]
-  syntax Telescope ::= List{TypedBinding, ""}
 
   syntax Pattern ::= "(" Pattern ")" [bracket]
     | Variable
@@ -49,7 +56,16 @@ module AGDA-SYNTAX
   syntax LHS ::= Name
                | LHS Pattern  [left]
   syntax RHS ::= Expr
+  syntax FunClause ::= LHS "=" RHS                   [klabel('FunClause)]
 
+  syntax Declaration ::= "(" Declaration ")" [bracket]
+    | TypeSignature
+    | FunClause
+    | "postulate" Declaration                        [klabel('Postulate)]
+    | "module" Name Telescope "where" Declarations   [klabel('Module)]
+  syntax Declarations ::= List{Declaration, ""}
+
+  syntax Program ::= Declarations
 
 
   // metadata

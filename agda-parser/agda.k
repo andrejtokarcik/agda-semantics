@@ -8,7 +8,7 @@ module AGDA
   imports AGDA-SYNTAX
   imports AGDA-SEMANTICS
 
-  // sequentialise a {comma-separated} list anytime it gets on top
+  // sequentialise any whitespace-separated list that gets on top
   rule '__(D,, Ds) => D ~> Ds           [structural]
   rule '.List`{""`}(.KList) => .        [structural]
 

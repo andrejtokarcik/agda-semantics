@@ -12,6 +12,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule <k> X:Variable => t(X, T) ...</k>
        <tenv>... X |-> T ...</tenv>
 
+  rule <k> X:Name => t(X, T) ...</k>
+       <sig>... X |-> T ...</sig>
+
   rule Set I:Int => t(Set I, Set (I +Int 1))
 
   // ... TypedType je zlo, lebo mna az tak nezaujima, ci je to identicke univerzu (co je to,

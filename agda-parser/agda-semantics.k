@@ -12,7 +12,7 @@ module AGDA-SEMANTICS
 
   context _ : (HOLE => whnfType(HOLE))  //[result(TypedType)]
   rule <k> N : t(E, Set _) => . ...</k>
-       <tenv>... . => N |-> E ...</tenv>
+       <sig>... . => N |-> E ...</sig>
 
 
   syntax LHS ::= t(LHS, Expr)
@@ -30,8 +30,7 @@ module AGDA-SEMANTICS
   */
   context HOLE = _
   context _ = HOLE
-  /*
-  rule <k> t(L, Tl) = t(R, Tr) => Tl == Tr ~> solve ...</k>
+  rule <k> t(L, Tl) = t(R, Tr) => . ...</k> //Tl == Tr ~> unify ...</k>
        <fenv>... . => L |-> R ...</fenv>   // << ako kluc chcem mat len fun name, kvoli partial application
                                          // ALTERNATIVA: ale asi by slo vymysliet, zeby som si vytvaral fresh funkcie
                                          // co by len lambda abstrakciou zaobalili tu pattern matching funkciu
@@ -39,5 +38,4 @@ module AGDA-SEMANTICS
                                          // vyhol by som sa takto tomu fun() konstruktu
                                          // kazdopadne, <fenv /> by potom musel byt list (lebo nas zaujima poradie
                                          // fun klauzuli v orig kode) a nie map
-                                         */
 endmodule
