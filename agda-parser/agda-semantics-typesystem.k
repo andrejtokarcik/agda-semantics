@@ -17,21 +17,24 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule Set I:Int => t(Set I, Set (I +Int 1))
 
-  // ... TypedType je zlo, lebo mna az tak nezaujima, ci je to identicke univerzu (co je to,
-  // co sa checkuje v isTypedType, ale mna zaujima, ci sa to da *zunifikovat s nejakym univerzom
+  // ... SetTypedExpr je zlo, lebo mna az tak nezaujima, ci je to identicke univerzu (co je to,
+  // co sa checkuje v isSetTypedExpr, ale mna zaujima, ci sa to da *zunifikovat s nejakym univerzom
   //  ---- FIXED
 
+  context /*envs! ~>*/ (_ : (HOLE => unifyUniverse(HOLE))) -> _   [result(SetTypedExpr)]
+  /*
   rule <k> (. => envs!) ~>
            (_ : _) -> _ ~>
            (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma </tenv>
        <fenv> Rho </fenv>
-  context envs! ~> (_ : (HOLE => unifyUniverse(HOLE))) -> _   [result(TypedType)]
-  rule <k> (envs! => bound!) ~> (X : t(T1, Set _)) -> _ ...</k>
+  */
+  rule <k> (. => bound!) ~> (X : t(T1, Set _)) -> _ ~> //...</k>
+           (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma => Gamma[T1/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
     when fresh(I1:Int)
-  context bound! ~> (_ : _) -> (HOLE => unifyUniverse(HOLE))    [result(TypedType)]
+  context bound! ~> (_ : _) -> (HOLE => unifyUniverse(HOLE))    [result(SetTypedExpr)]
   rule <k> (bound! => .) ~>
            ((X : t(T1, Set I1)) -> t(T2, Set I2)
             => freeVariablesM(T2) <=Set keys(Rho) ~> true? ~>
@@ -39,13 +42,16 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <fenv> Rho </fenv>
     // vid FIXME v -metavariables.k k freeVariablesM()
 
+  context /*envs! ~>*/ \ (_ : (HOLE => unifyUniverse(HOLE))) -> _   [result(SetTypedExpr)]
+  /*
   rule <k> (. => envs!) ~>
            \ (_ : _) -> _ ~>
            (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma </tenv>
        <fenv> Rho </fenv>
-  context envs! ~> \ (_ : (HOLE => unifyUniverse(HOLE))) -> _   [result(TypedType)]
-  rule <k> (envs! => bound!) ~> \ (X : t(T, Set _)) -> _ ...</k>
+  */
+  rule <k> (. => bound!) ~> \ (X : t(T, Set _)) -> _ ~> //...</k>
+           (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma => Gamma[T/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
   context bound! ~> \ (_ : _) -> HOLE
@@ -55,6 +61,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
               t(\ (X : T) -> E, (X : T) -> T')) ...</k>
        <fenv> Rho </fenv>
 
+  // XXX: tieto contexty prehodit do -syntax.k ako strictness atributy?
+  context (HOLE:Expr => whnfType(HOLE)) _:Expr   [result(WhnfTypedExpr)]
+  context _:Expr HOLE:Expr
   rule <k> t(E1, T1) t(E2, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)

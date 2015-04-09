@@ -103,10 +103,10 @@ module AGDA-SEMANTICS-COMMON
   rule isWhnfTypedExpr(t(_, _:Whnf)) => true
   syntax TypedExpr ::= WhnfTypedExpr | NfTypedExpr
 
-  syntax TypedType
-  //rule isTypedType(t(_:Expr, _:MetaVariable)) => true   // XXX hack
-  rule isTypedType(t(_, Set _)) => true
-  syntax NfTypedExpr ::= TypedType
+  syntax SetTypedExpr
+  //rule isSetTypedExpr(t(_:Expr, _:MetaVariable)) => true   // XXX hack
+  rule isSetTypedExpr(t(_, Set _)) => true
+  syntax NfTypedExpr ::= SetTypedExpr
 
 
 
@@ -143,9 +143,9 @@ module AGDA-SEMANTICS-COMMON
        <mgu> Theta:Mgu </mgu>
     when Theta ==K .Mgu
 
-  syntax KItem ::= unifyUniverse(Expr)  [strict(all(context('whnfType))), context(result(TypedType))]
+  syntax KItem ::= unifyUniverse(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
   rule unifyUniverse(t(E, T:Expr)) => T == Set I ~> unify(T) ~> unifyUniverse(t(E, HOLE))
-    when isTypedType(t(E, T)) =/=K true andBool fresh(I:Int)
+    when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
   rule Set I ~> unifyUniverse(t(E, HOLE)) => unifyUniverse(t(E, Set I))
 
 
