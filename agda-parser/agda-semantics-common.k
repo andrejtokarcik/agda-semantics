@@ -48,13 +48,24 @@ module AGDA-SEMANTICS-COMMON
   // TODO: error handling/reporting like:
   //  rule E ~> pass? => error(E) when E =/=K true
 
-  syntax Expr ::= leftmost(Expr)  [function]
-  rule leftmost(E _ => E)
-  rule leftmost(E) => E [owise]
 
-  // for the binders' semantics
-  syntax KItem ::= "envs!"
-  syntax KItem ::= "bound!"
+  syntax Expr ::= Pattern
+  syntax LHS ::= Expr
+  /*
+  syntax TypedPattern
+  rule isTypedPattern(t(_:Pattern, _)) => true
+  //syntax TypedRHS
+  //rule isTypedRHS(t(_:RHS, _)) => true
+  syntax TypedExpr ::= TypedPattern   //| TypedRHS
+  syntax Pattern ::= TypedPattern
+  //syntax RHS ::= TypedRHS
+  */
+
+
+
+  syntax Expr ::= leftmost(Expr)  [function]
+  rule leftmost(E:Expr _ => E)
+  rule leftmost(E:Expr) => E [owise]
 
 
 
@@ -77,7 +88,7 @@ module AGDA-SEMANTICS-COMMON
                   | WhNeut Expr [left]
                   */
   rule isWhNeut(_:WhNeut _:Expr) => true
-  rule isWhnf(Set _) => true
+  rule isWhnf(Set(_)) => true
   rule isWhnf((_ : _) -> _) => true
   rule isWhnf(\ (_ : _) -> _) => true
   
@@ -95,7 +106,7 @@ module AGDA-SEMANTICS-COMMON
   rule isNeut(_:Variable) => true
   rule isNeut(_:Name) => true
   rule isNeut(_:Neut _:Nf) => true
-  rule isNf(Set _) => true
+  rule isNf(Set(_)) => true
   rule isNf((_ : _:Nf) -> _:Nf) => true
   rule isNf(\ (_ : _:Nf) -> _:Nf) => true
 
@@ -111,7 +122,7 @@ module AGDA-SEMANTICS-COMMON
 
   syntax SetTypedExpr
   //rule isSetTypedExpr(t(_:Expr, _:MetaVariable)) => true   // XXX hack
-  rule isSetTypedExpr(t(_, Set _)) => true
+  rule isSetTypedExpr(t(_, Set(_))) => true
   syntax NfTypedExpr ::= SetTypedExpr
 
 
@@ -165,7 +176,7 @@ module AGDA-SEMANTICS-COMMON
   */
 
   syntax KItem ::= coerceSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
-  rule coerceSetType(t(E, T)) => T == Set I ~> unifyType(t(E, T)) ~> coerceSetType(HOLE)  //[heat]
+  rule coerceSetType(t(E, T)) => T == Set(I) ~> unifyType(t(E, T)) ~> coerceSetType(HOLE)  //[heat]
     when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
   rule Te:SetTypedExpr ~> coerceSetType(HOLE) => coerceSetType(Te)
   /*
@@ -190,7 +201,7 @@ module AGDA-SEMANTICS-COMMON
 
   // The following rules are where most of the evaluation magic happens...
   rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
-  rule (Set I:Int)@_ => Set I [structural, anywhere]
+  rule (Set(I))@_ => Set(I) [structural, anywhere]
   rule N:WhNeut@_ => N   [structural, anywhere]
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
   // handle (E@R1)@R2 --- have to take advantage of abstract syntax here, or else K complains about E@RhoOrig's not being an Expr but a Val
@@ -203,7 +214,7 @@ module AGDA-SEMANTICS-COMMON
 
   syntax ValWhnf ::= WhNeut
                    | WhNeut Val [left]
-  rule isValWhnf(E:Whnf@Rho) => true when isName(leftmost(E)) impliesBool notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))
+  rule isValWhnf(E:Whnf@Rho) => true when isVariable(leftmost(E)) impliesBool notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))
 
 
   syntax ValWhnf ::= ValNf

@@ -15,11 +15,11 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule <k> X:Name => t(X, T) ...</k>
        <sig>... X |-> T ...</sig>
 
-  rule Set I:Int => t(Set I, Set (I +Int 1))
+  rule Set(I) => t(Set(I), Set(I +Int 1))
 
-  // ... SetTypedExpr je zlo, lebo mna az tak nezaujima, ci je to identicke univerzu (co je to,
-  // co sa checkuje v isSetTypedExpr, ale mna zaujima, ci sa to da *zunifikovat s nejakym univerzom
-  //  ---- FIXED
+  // for the binders' semantics
+  //syntax KItem ::= "envs!"
+  syntax KItem ::= "bound!"
 
   context /*envs! ~>*/ (_ : (HOLE => coerceSetType(HOLE))) -> _   [result(SetTypedExpr)]
   /*
@@ -29,16 +29,16 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> Gamma </tenv>
        <fenv> Rho </fenv>
   */
-  rule <k> (. => bound!) ~> (X : t(T1, Set _)) -> _ ~> //...</k>
+  rule <k> (. => bound!) ~> (X : t(T1, Set(_))) -> _ ~> //...</k>
            (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma => Gamma[T1/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
     when fresh(I1:Int)
   context bound! ~> (_ : _) -> (HOLE => coerceSetType(HOLE))    [result(SetTypedExpr)]
   rule <k> (bound! => .) ~>
-           ((X : t(T1, Set I1)) -> t(T2, Set I2)
+           ((X : t(T1, Set(I1))) -> t(T2, Set(I2))
             => freeVariablesM(T2) <=Set keys(Rho) ~> pass? ~>
-               t((X : T1) -> T2, Set maxInt(I1, I2))) ...</k>
+               t((X : T1) -> T2, Set(maxInt(I1, I2)))) ...</k>
        <fenv> Rho </fenv>
     // vid FIXME v -metavariables.k k freeVariablesM()
 
@@ -50,13 +50,13 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> Gamma </tenv>
        <fenv> Rho </fenv>
   */
-  rule <k> (. => bound!) ~> \ (X : t(T, Set _)) -> _ ~> //...</k>
+  rule <k> (. => bound!) ~> \ (X : t(T, Set(_))) -> _ ~> //...</k>
            (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma => Gamma[T/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
   context bound! ~> \ (_ : _) -> HOLE
   rule <k> (bound! => .) ~>
-           (\ (X : t(T, Set _)) -> t(E, T')
+           (\ (X : t(T, Set(_))) -> t(E, T')
            => freeVariablesM(E) <=Set keys(Rho) ~> pass? ~>
               t(\ (X : T) -> E, (X : T) -> T')) ...</k>
        <fenv> Rho </fenv>
@@ -64,7 +64,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   // XXX: tieto contexty prehodit do -syntax.k ako strictness atributy?
   context (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
   context _::Expr HOLE
-  rule <k> t(E1, T1) t(E2, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
+  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
 

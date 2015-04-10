@@ -9,8 +9,9 @@ module AGDA
   imports AGDA-SEMANTICS
 
   // sequentialise any whitespace-separated list that gets on top
-  rule '__(D,, Ds) => D ~> Ds           [structural]
-  rule '.List`{""`}(.KList) => .        [structural]
+  // (don't I want to deal with declaration lists *only*?)
+  rule 'Cons(D,, Ds) => D ~> Ds           [structural]
+  rule '.List`{""`}(.KList) => .          [structural]
 
   // metadata bureaucracy
   // TODO: then use #tokenToString() when printing range

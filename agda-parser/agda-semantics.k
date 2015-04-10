@@ -13,12 +13,16 @@ module AGDA-SEMANTICS
   rule postulate Sig => Sig
 
   context _ : (HOLE => whnfType(HOLE))  //[result(TypedType)]
-  rule <k> N : t(E, Set _) => . ...</k>
+  rule <k> N : t(E, Set(_)) => . ...</k>
        <sig>... . => N |-> E ...</sig>
 
 
-  syntax LHS ::= t(LHS, Expr)
-  syntax RHS ::= t(RHS, Expr)
+
+  //rule isExpr(_:LHS) => true
+  //rule isLHS(_:TypedExpr) => true
+  //syntax TypedRHS ::= t(RHS, Expr)
+  //syntax RHS ::= TypedRHS
+  //syntax TypedExpr ::= TypedLHS //| TypedRHS
 
   /*
   syntax Map ::= loadTelescope(Map, Expr) [function]
@@ -30,9 +34,41 @@ module AGDA-SEMANTICS
   context bound! ~> HOLE = _
   context bound! ~> _ = HOLE
   */
-  context HOLE = _
+
+  syntax Name ::= funName(LHS)  [function]
+  rule funName(L) => leftmost(L)
+
+  syntax KItem ::= autoVarTypes(LHS)
+  rule autoVarTypes(P1 P2) => autoVarTypes(P1) ~> autoVarTypes(P2)
+  /*
+  rule <k> autoVarTypes(X:Name) => . ...</k>
+       <sig> Sigma </tenv>
+    when X in keys(Sigma)
+  rule <k> autoVarTypes(X:Name) => . ...</k>
+       <sig> Sigma (. => X |-> T) </tenv>
+    when notBool (X in keys(Sigma)) andBool fresh(T:Expr)
+  */
+  rule autoVarTypes(_:Name) => .
+  rule <k> autoVarTypes(X:Variable) => . ...</k>
+       <tenv> Gamma </tenv>
+    when X in keys(Gamma)
+  rule <k> autoVarTypes(X:Variable) => . ...</k>
+       <tenv> Gamma (. => X |-> T) </tenv>
+    when notBool (X in keys(Gamma)) andBool fresh(T:Expr)
+
+
+  rule <k> L:LHS = R:Expr => autoVarTypes(L) ~> bound! ~> L = R ...</k>
+       <tenv> Gamma </tenv>
+       <sig> Sigma (. => funName(L) |-> T) </sig>
+    when notBool (funName(L) in keys(Sigma)) andBool fresh(T:Expr)
+  rule <k> L:LHS = R:Expr => autoVarTypes(L) ~> bound! ~> L = R ...</k>
+       <tenv> Gamma </tenv>
+       <sig> Sigma </sig>
+    when funName(L) in keys(Sigma)
+
+  /*
+  context HOLE = _     // FIXME: whnfType or something
   context _ = HOLE
-  syntax KItem ::= "muh"
   rule <k> t(L, Tl) = t(R, Tr) => Tl == Tr ~> unify ...</k>
        <fenv>... . => L |-> R ...</fenv>   // << ako kluc chcem mat len fun name, kvoli partial application
                                          // ALTERNATIVA: ale asi by slo vymysliet, zeby som si vytvaral fresh funkcie
@@ -41,4 +77,5 @@ module AGDA-SEMANTICS
                                          // vyhol by som sa takto tomu fun() konstruktu
                                          // kazdopadne, <fenv /> by potom musel byt list (lebo nas zaujima poradie
                                          // fun klauzuli v orig kode) a nie map
+  */
 endmodule

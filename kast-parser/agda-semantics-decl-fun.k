@@ -50,7 +50,7 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax FunDecl ::= LHST "=" ExprT
 
   // would be nice to create a separate task for typeVars() here
-  // well, not really context-based evaluation (defined below) of L = E _depends_ on typeVars() having been completed
+  // well, not really, context-based evaluation (defined below) of L = E _depends_ on typeVars() having been completed
 
   // this is number of args before the equality sign `=',
   // not counting possible arguments in inner lambdas

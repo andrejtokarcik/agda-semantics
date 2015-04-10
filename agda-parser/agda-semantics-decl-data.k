@@ -6,13 +6,13 @@ module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SEMANTICS-COMMON
 
   context data _ _ : (HOLE => coerceSetType(HOLE)) where _   [result(SetTypedExpr)]
-  rule data N:Name Ps:Telescope : t(T, Set I) where Cs:TypeSignatures
-    => I >=Int 1 ~> pass? ~>        // << FIXME
+  rule data N:Name Ps:Telescope : t(T, Set(_)) where Cs:TypeSignatures
+    => //I >=Int 1 ~> pass? ~>        // << FIXME   (the `-Int 1' guard below is sufficient?)
        addDataSig(N, prependParams(Ps, T)) ~>
        addConSigs(applyParams(Ps, N), prependParams(Ps, Cs))
 
   syntax KItem ::= addDataSig(Name, Expr)              [strict(2(context('coerceSetType)))]
-  rule <k> addDataSig(N, t(T, Set I)) => chich ~> T constructorOf Set (I -Int 1) ~> pass? ...</k>
+  rule <k> addDataSig(N, t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>   // << FIXME not sure if the condition is correct: what universe must the datatype fit in?
        <sig> Sigma (. => N |-> T) </sig>
     when notBool (N in keys(Sigma))
 
@@ -20,15 +20,16 @@ module AGDA-SEMANTICS-DECL-DATA
   rule addConSigs(D:Expr, .TypeSignatures) => . [structural]
   rule addConSigs(D:Expr, (C:Name : T:Expr) Cs:TypeSignatures) => addConSig(D, C, T) ~> addConSigs(D, Cs)  [structural]
 
+  // TODO: check the constructor's universe whether it fits into the datatype
   syntax KItem ::= addConSig(Expr, Name, Expr)  [strict(3(context('coerceSetType)))]
-  rule <k> addConSig(D:Expr, C:Name, t(T:Expr, Set _)) => T constructorOf D ~> pass? ...</k>
+  rule <k> addConSig(D:Expr, C:Name, t(T:Expr, Set(_))) => T constructorOf D ~> pass? ...</k>
        <sig> Sigma (. => C |-> T) </sig>
     when notBool (C in keys(Sigma))
 
   syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
   rule ((_ : _) -> T => T) constructorOf _
   rule D:Name constructorOf D => true
-  rule Set(I) constructorOf Set(J) => I == J ~> true
+  rule Set(I) constructorOf Set(I) => true
   rule (T:Expr V:Variable => T) constructorOf (D:Expr V => D)
   rule (T:Expr E:Expr => T) constructorOf _:Expr  [owise]
 
