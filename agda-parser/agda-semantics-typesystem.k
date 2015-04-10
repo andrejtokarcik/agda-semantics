@@ -37,7 +37,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   context bound! ~> (_ : _) -> (HOLE => coerceSetType(HOLE))    [result(SetTypedExpr)]
   rule <k> (bound! => .) ~>
            ((X : t(T1, Set I1)) -> t(T2, Set I2)
-            => freeVariablesM(T2) <=Set keys(Rho) ~> true? ~>
+            => freeVariablesM(T2) <=Set keys(Rho) ~> pass? ~>
                t((X : T1) -> T2, Set maxInt(I1, I2))) ...</k>
        <fenv> Rho </fenv>
     // vid FIXME v -metavariables.k k freeVariablesM()
@@ -57,7 +57,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   context bound! ~> \ (_ : _) -> HOLE
   rule <k> (bound! => .) ~>
            (\ (X : t(T, Set _)) -> t(E, T')
-           => freeVariablesM(E) <=Set keys(Rho) ~> true? ~>
+           => freeVariablesM(E) <=Set keys(Rho) ~> pass? ~>
               t(\ (X : T) -> E, (X : T) -> T')) ...</k>
        <fenv> Rho </fenv>
 
@@ -84,15 +84,10 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <mgu> Theta => updateMgu(Theta, K1, K2) </mgu>
   */
 
-  /*
-  syntax Bool ::= "noMguError"
-  rule <k> noMguError => isMguError(Theta) =/=K true ...</k>
-       <mgu> Theta </mgu>
-  */
 
   /*
   syntax KItem ::= "solve"
-  rule <k> solve => noMguError ~> true? ...</k>
+  rule <k> solve => noMguError ~> pass? ...</k>
        <tenv> Gamma => unify(Theta, Gamma) </tenv>
        <fenv> Rho => unify(Theta, Rho) </fenv>
        <metavars> Meta => unify(Theta, Meta) </metavars>

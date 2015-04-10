@@ -41,10 +41,12 @@ module AGDA-SEMANTICS-COMMON
   rule <k> _:FenvRestore ~> (fenv(Rho) => .) ...</k>
        <fenv> _ => Rho </fenv>
 
-  syntax KItem ::= "true?"
-  rule true ~> true? => .
+  syntax GuardPass
+  rule isGuardPass(true) => true
+  syntax KItem ::= "pass?"
+  rule _:GuardPass ~> pass? => .
   // TODO: error handling/reporting like:
-  //  rule E ~> true? => error(E) when E =/=K true
+  //  rule E ~> pass? => error(E) when E =/=K true
 
   syntax Expr ::= leftmost(Expr)  [function]
   rule leftmost(E _ => E)
@@ -122,9 +124,15 @@ module AGDA-SEMANTICS-COMMON
   rule Theta:Mgu && T1 == T2 => updateMgu(Theta, T1, T2)  [macro]
   */
 
-  syntax KItem ::= Expr "==" Expr
-  rule <k> T == T' => . ...</k>
-       <mgu> Theta => updateMgu(Theta, T, T') </mgu>
+  /*
+  syntax Bool ::= "noMguError"
+  rule <k> noMguError => isMguError(Theta) =/=K true ...</k>
+       <mgu> Theta </mgu>
+  */
+
+  syntax KItem ::= K "==" K
+  rule <k> K == K' => . ...</k>
+       <mgu> Theta => updateMgu(Theta, K, K') </mgu>
 
   syntax KItem ::= "unify"
   rule <k> unify => . ...</k>
@@ -143,8 +151,8 @@ module AGDA-SEMANTICS-COMMON
     when getKLabel(K) =/=KLabel 'unified
   */
 
-  syntax KItem ::= unify(Expr)
-  rule <k> unify(E:Expr) => unify ~> applyMgu(Theta, E) ...</k>
+  syntax KItem ::= unify(K)
+  rule <k> unify(K:K) => unify ~> applyMgu(Theta, K) ...</k>
        <mgu> Theta </mgu>
 
   syntax KItem ::= unifyType(TypedExpr)     //[context(result(Unified))]
@@ -228,10 +236,7 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  rule isFenvRestore(evalWhnf(_:ValWhnf)) => true
-
-
-  syntax KItem ::= evalWhnf(Val)     [context(result(ValWhnf))]
+  syntax KItem ::= evalWhnf(K)     [strict(all(context('eval))), context(result(ValWhnf))]
   // XXX !!! HOLE:<sort> does NOT enforce dynamic checks that HOLE is of sort <sort>,
   // possibly A BUG IN K (check newer versions before reporting),
   // it might be just an indication how to _parse_ the item [as with ::]
@@ -242,6 +247,8 @@ module AGDA-SEMANTICS-COMMON
   */
   context evalWhnf((HOLE::Val => evalWhnf(HOLE)) _)   [result(ValWhnf)]
 
+  // need to restore with fenv() below
+  rule isFenvRestore(evalWhnf(_:ValWhnf)) => true
   rule <k> evalWhnf((\ (X : _) -> E:Expr)@Rho V:Val => E@(Rho[V/X])) ~> (. => fenv(Rho')) ...</k>
        <fenv> Rho' </fenv>
 
@@ -252,7 +259,7 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  syntax KItem ::= evalNf(Val)     [strict(all(context('evalWhnf))), context(result(ValNf))]
+  syntax KItem ::= evalNf(K)     [strict(all(context('evalWhnf))), context(result(ValNf))]
   context evalNf((HOLE::Val => evalNf(HOLE)) _)  [result(Nf)]
   context evalNf(_::Val (HOLE => evalNf(HOLE)))  [result(Nf)]
   // TODO !!!!!!

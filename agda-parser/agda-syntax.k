@@ -48,10 +48,10 @@ module AGDA-SYNTAX
     | Pi
     | Lambda
     | Expr Expr    [left, klabel('App)]
-    | "Set"        [klabel('Set), notInRules]
-    | "Set" Int    [klabel('SetN)]
+    | "Set"        [klabel('Set)]
+    | Set(Int)     [klabel('SetN)]
     | "$metavar"      [klabel('Underscore)]     // '_' is reserved for K rules
-  rule 'Set(.KList) => Set 0  [macro]
+  rule Set => Set(0)  [macro]
 
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
   syntax TypeSignatures ::= List{TypeSignature, ""}

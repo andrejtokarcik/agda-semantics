@@ -5,25 +5,30 @@ module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SYNTAX
   imports AGDA-SEMANTICS-COMMON
 
-  // TODO: need to check whether params are well-typed and (not necessarily?) whether prependParams(Ps, T) yields a type as well
   context data _ _ : (HOLE => coerceSetType(HOLE)) where _   [result(SetTypedExpr)]
-  rule <k> data N:Name Ps:Telescope : t(T:Expr, Set I) where Cs:TypeSignatures => T constructorOf Set (I -Int 1) ~> true? ~> processCons(applyParams(Ps, N), prependParams(Ps, Cs)) ...</k>
-       <sig> Sigma (. => N |-> prependParams(Ps, T)) </sig>
-    when notBool (N in keys(Sigma)) andBool /* FIXME? --> */ I >=Int 1
+  rule data N:Name Ps:Telescope : t(T, Set I) where Cs:TypeSignatures
+    => I >=Int 1 ~> pass? ~>        // << FIXME
+       addDataSig(N, prependParams(Ps, T)) ~>
+       addConSigs(applyParams(Ps, N), prependParams(Ps, Cs))
 
-  syntax KItem ::= processCons(Expr, TypeSignatures)
-  rule processCons(D:Expr, .TypeSignatures) => . [structural]
-  rule processCons(D:Expr, (C:Name : T:Expr) Cs:TypeSignatures) => processCon(D, C, T) ~> processCons(D, Cs)
+  syntax KItem ::= addDataSig(Name, Expr)              [strict(2(context('coerceSetType)))]
+  rule <k> addDataSig(N, t(T, Set I)) => chich ~> T constructorOf Set (I -Int 1) ~> pass? ...</k>
+       <sig> Sigma (. => N |-> T) </sig>
+    when notBool (N in keys(Sigma))
 
-  syntax KItem ::= processCon(Expr, Name, Expr)  [strict(3(context('coerceSetType)))]
-  rule <k> processCon(D:Expr, C:Name, t(T:Expr, Set _)) => T constructorOf D ~> true? ...</k>
+  syntax KItem ::= addConSigs(Expr, TypeSignatures)
+  rule addConSigs(D:Expr, .TypeSignatures) => . [structural]
+  rule addConSigs(D:Expr, (C:Name : T:Expr) Cs:TypeSignatures) => addConSig(D, C, T) ~> addConSigs(D, Cs)  [structural]
+
+  syntax KItem ::= addConSig(Expr, Name, Expr)  [strict(3(context('coerceSetType)))]
+  rule <k> addConSig(D:Expr, C:Name, t(T:Expr, Set _)) => T constructorOf D ~> pass? ...</k>
        <sig> Sigma (. => C |-> T) </sig>
     when notBool (C in keys(Sigma))
 
-  syntax Bool ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
+  syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
   rule ((_ : _) -> T => T) constructorOf _
   rule D:Name constructorOf D => true
-  rule Set I constructorOf Set I => true
+  rule Set(I) constructorOf Set(J) => I == J ~> true
   rule (T:Expr V:Variable => T) constructorOf (D:Expr V => D)
   rule (T:Expr E:Expr => T) constructorOf _:Expr  [owise]
 
