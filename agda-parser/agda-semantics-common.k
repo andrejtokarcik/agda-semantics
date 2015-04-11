@@ -21,24 +21,22 @@ module AGDA-SEMANTICS-COMMON
   //    i.e. it will be superfluous only for the var bound just now
   */
 
-  syntax TenvRestore
-  rule isTenvRestore(_:TypedExpr) => true
+  syntax TEnvRestore
+  rule isTEnvRestore(_:TypedExpr) => true
   syntax KItem ::= tenv(Map)
-  rule <k> _:TenvRestore ~> (tenv(Gamma) => .) ...</k>
+  rule <k> tenv(Gamma) => . ...</k>
        <tenv> _ => Gamma </tenv>
-  syntax KItem ::= sig(Map)
-  rule <k> _:TenvRestore ~> (sig(Sigma) => .) ...</k>
-       <sig> _ => Sigma </sig>
+  rule R:TEnvRestore ~> tenv(Gamma) => tenv(Gamma) ~> R
 
   syntax KItem ::= "chich"
-  syntax FenvRestore
-  rule isFenvRestore(_:NfTypedExpr) => true
+  syntax FEnvRestore
+  rule isFEnvRestore(_:NfTypedExpr) => true
   syntax KItem ::= fenv(Map)
   // XXX: must use 'isTypedExpr(HOLE)' instead of 'HOLE:TypedExpr'
   // due to the possible K BUG described below  (the latter doesn't
   // generate the dynamic sort check as intended).
   context (HOLE => nfType(HOLE)) ~> fenv(_) when isTypedExpr(HOLE)  [result(NfTypedExpr)]
-  rule <k> _:FenvRestore ~> (fenv(Rho) => .) ...</k>
+  rule <k> _:FEnvRestore ~> (fenv(Rho) => .) ...</k>
        <fenv> _ => Rho </fenv>
 
   syntax GuardPass
@@ -48,18 +46,6 @@ module AGDA-SEMANTICS-COMMON
   // TODO: error handling/reporting like:
   //  rule E ~> pass? => error(E) when E =/=K true
 
-
-  syntax Expr ::= Pattern
-  syntax LHS ::= Expr
-  /*
-  syntax TypedPattern
-  rule isTypedPattern(t(_:Pattern, _)) => true
-  //syntax TypedRHS
-  //rule isTypedRHS(t(_:RHS, _)) => true
-  syntax TypedExpr ::= TypedPattern   //| TypedRHS
-  syntax Pattern ::= TypedPattern
-  //syntax RHS ::= TypedRHS
-  */
 
 
 
@@ -259,7 +245,7 @@ module AGDA-SEMANTICS-COMMON
   context evalWhnf((HOLE::Val => evalWhnf(HOLE)) _)   [result(ValWhnf)]
 
   // need to restore with fenv() below
-  rule isFenvRestore(evalWhnf(_:ValWhnf)) => true
+  rule isFEnvRestore(evalWhnf(_:ValWhnf)) => true
   rule <k> evalWhnf((\ (X : _) -> E:Expr)@Rho V:Val => E@(Rho[V/X])) ~> (. => fenv(Rho')) ...</k>
        <fenv> Rho' </fenv>
 

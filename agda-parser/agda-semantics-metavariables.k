@@ -42,4 +42,8 @@ module AGDA-SEMANTICS-METAVARIABLES
   // The LHS of eqn() below gets replaced with the RHS -- swap the sides
   // when necessary.
   rule eqns((eqn(E:Expr,,H:MetaVariable) => eqn(H,,E)),,_)   [structural, anywhere]
+
+  // TODO: swap accordingly when one of the metavariables is more specified than
+  // (i.e., a subsort of the other).  e.g., #symExpr(_) should be replaced with #symVariable(_),
+  // never the other way around...
 endmodule
