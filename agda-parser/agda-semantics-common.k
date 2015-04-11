@@ -1,10 +1,11 @@
+require "modules/pattern-matching.k"
+require "modules/unification.k"
 require "agda-syntax.k"//-pretty.k"
 
-require "modules/unification.k"
-
 module AGDA-SEMANTICS-COMMON
-  imports AGDA-SYNTAX//-PRETTY
+  imports PATTERN-MATCHING
   imports UNIFICATION
+  imports AGDA-SYNTAX//-PRETTY
 
   syntax KResult ::= TypedExpr
 
@@ -49,9 +50,10 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  syntax Expr ::= leftmost(Expr)  [function]
+  syntax K ::= leftmost(K)  [function]
   rule leftmost(E:Expr _ => E)
-  rule leftmost(E:Expr) => E [owise]
+  rule leftmost(V:Val _ => V)
+  rule leftmost(K) => K [owise]
 
 
 
@@ -228,10 +230,19 @@ module AGDA-SEMANTICS-COMMON
 
 
 
+  syntax Int ::= numArgs(Expr)  [function]
+  rule numArgs(E _) => numArgs(E) +Int 1
+  rule numArgs(_) => 0   [owise]
 
+  syntax FunClauses ::= FunClauses(Int, List)    // need wrapper around List
+                      //| FunClauses "@" Map
+  syntax Expr ::= FunClauses
+  rule isFunClauses(_:FunClauses@_) => true
+  //syntax /*Nf*/Neut ::= FunClauses
+  //syntax Neut ::= FunL Variable
 
-
-
+  syntax Int ::= numReqArgs(FunClauses)  [function]
+  rule numReqArgs(FunClauses(I, _)) => I
 
   syntax KItem ::= evalWhnf(K)     [strict(all(context('eval))), context(result(ValWhnf))]
   // XXX !!! HOLE:<sort> does NOT enforce dynamic checks that HOLE is of sort <sort>,
@@ -242,17 +253,21 @@ module AGDA-SEMANTICS-COMMON
   context evalWhnf((HOLE:Expr => nft ~> isExpr(HOLE) ~> evalWhnf(HOLE)) _)
       when isExpr(HOLE)    [result(ValWhnf)]  // << 'when' clause necessary due to the bug mentioned above
   */
-  context evalWhnf((HOLE::Val => evalWhnf(HOLE)) _)   [result(ValWhnf)]
+  context evalWhnf((HOLE::Val => evalWhnf(HOLE)) E)
+    when isFunClauses(leftmost(HOLE)) =/=K true andBool numArgs(HOLE E) ==Int numReqArgs(leftmost(HOLE))   [result(ValWhnf)]
 
   // need to restore with fenv() below
   rule isFEnvRestore(evalWhnf(_:ValWhnf)) => true
   rule <k> evalWhnf((\ (X : _) -> E:Expr)@Rho V:Val => E@(Rho[V/X])) ~> (. => fenv(Rho')) ...</k>
        <fenv> Rho' </fenv>
 
-  // see the NOTE in agda-semantics.k on how to try to implement pattern matching
-  //rule <k> evalWhnf(fun(Cs:List)@Fun V:Val => matchCase(Cs, V, Fun)) ~> (. => fenv(Fun')) ...</k>
-  //     <fun> Fun' </fun>
-  // TODO: add rules ^ for general P -> C:Case, not just when isExpr(C)
+  rule <k> evalWhnf(V => matchClause(leftmost(V), V)) ~> (. => fenv(Rho')) ...</k>
+       <fenv> Rho' </fenv>  when isFunClauses(leftmost(V))
+
+  // TODO: ked sa zoznam vo FunClauses zredukuje na .List (t.j. nenasli sme match) a zaroven V neobsahuje bound premenne (t.j. V je uplne konkretna) tak daj error
+  syntax Val ::= matchClause(Val, Val)  [function]
+  //rule matchClause(FunClauses(_, ListItem(L = R) _)@Rho, V) => R@(Rho[getMatching(L, V)])  when isMatching(L, V)
+  //rule matchClause(FunClauses(_, _ Cs:List => Cs)@_, _)  [owise]
 
 
 
