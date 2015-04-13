@@ -1,7 +1,7 @@
 module AGDA-SYNTAX
   // TODO: agda-syntax-utils.k    -- presunut tam aj makra?
   syntax Telescope ::= castTelescope(LamBindings)  [function, notInPrograms]
-  rule castTelescope(X:Variable Bs:LamBindings) => (X : $metavar) castTelescope(Bs)  [structural]
+  rule castTelescope(X:Variable Bs:LamBindings) => (X : #underscore) castTelescope(Bs)  [structural]
   rule castTelescope(B:TypedBinding Bs:LamBindings) => B castTelescope(Bs)  [structural]
   rule castTelescope(.LamBindings) => .Telescope   [structural]
 
@@ -60,7 +60,7 @@ module AGDA-SYNTAX
     | Pi
     | Lambda
     | App
-    | "$metavar"      [klabel('Underscore)]     // '_' is reserved for K rules
+    | "#underscore"      [klabel('Underscore)]
   syntax Exprs ::= List{Expr, ""}    [klabel('Cons), notInRules]
 
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
@@ -111,8 +111,8 @@ module AGDA-SYNTAX
 
   // metadata
   /*
-  syntax Range ::= "$noRange"
-    | "$someRange"
+  syntax Range ::= "#noRange"
+    | "#someRange"
     | Token{([a-zA-Z0-9\/\-]+ "." "l"? "agda" ":")? [0-9]+ "," [0-9]+ "-" ([0-9]+ ",")? [0-9]+}  [notInRules]
   */
   syntax Range ::= String
