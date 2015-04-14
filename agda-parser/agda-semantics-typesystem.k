@@ -14,8 +14,8 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv>... X |-> T ...</tenv>
 
   rule [infer-name]:
-       <k> X:Name => t(X, T) ...</k>
-       <sig>... X |-> T ...</sig>
+       <k> N:Name => t(N, T) ...</k>
+       <sig>... N |-> T ...</sig>
 
   rule [infer-universe]:
        Set(K) => t(Set(K), Set(K +Int 1))
@@ -24,7 +24,10 @@ module AGDA-SEMANTICS-TYPESYSTEM
   //syntax KItem ::= "envs!"
   syntax KItem ::= "bound!"
 
-  context /*envs! ~>*/ (_ : (HOLE => coerceSetType(HOLE))) -> _   [infer-pi-arg1, result(SetTypedExpr)]
+  // XXX: what about putting all the Pi-related rules into a separate module?
+  // ... as suggested in the funkons paper
+
+  context /*envs! ~>*/ (_ : (HOLE => checkSetType(HOLE))) -> _   [infer-pi-arg1, result(SetTypedExpr)]
   /*
   rule <k> (. => envs!) ~>
            (_ : _) -> _ ~>
@@ -38,17 +41,18 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> Gamma => Gamma[T1/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
     when fresh(I1:Int)
-  context bound! ~> (_ : _) -> (HOLE => coerceSetType(HOLE))    [infer-pi-arg2, result(SetTypedExpr)]
+  context bound! ~> (_ : _) -> (HOLE => checkSetType(HOLE))    [infer-pi-arg2, result(SetTypedExpr)]
   rule [infer-pi]:
        <k> (bound! => .) ~>
            ((X : t(T1, Set(I1))) -> t(T2, Set(I2))
-            => freeVariablesM(T2) <=Set keys(Rho) ~> pass? ~>
+            => //freeVariablesM(T2) <=Set keys(Rho) ~> pass? ~>    // AT commented just for latex  --- would fail with scope checking anyway, huh?
                t((X : T1) -> T2, Set(maxInt(I1, I2)))) ...</k>
        <fenv> Rho </fenv>
+    when freeVariablesM(T2) <=Set keys(Rho)
     // vid FIXME v -metavariables.k k freeVariablesM()
 
-  context [infer-lam-arg1]:
-          /*envs! ~>*/ \ (_ : (HOLE => coerceSetType(HOLE))) -> _   [result(SetTypedExpr)]
+  context //[infer-lam-arg1]:
+          /*envs! ~>*/ \ (_ : (HOLE => checkSetType(HOLE))) -> _   [result(SetTypedExpr)]
   /*
   rule <k> (. => envs!) ~>
            \ (_ : _) -> _ ~>
@@ -61,19 +65,20 @@ module AGDA-SEMANTICS-TYPESYSTEM
            (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma => Gamma[T/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
-  context [infer-lam-arg2]:
+  context //[infer-lam-arg2]:
           bound! ~> \ (_ : _) -> HOLE
   rule [infer-lam]:
        <k> (bound! => .) ~>
            (\ (X : t(T, Set(_))) -> t(E, T')
-           => freeVariablesM(E) <=Set keys(Rho) ~> pass? ~>
+           => //freeVariablesM(E) <=Set keys(Rho) ~> pass? ~>    // AT latex
               t(\ (X : T) -> E, (X : T) -> T')) ...</k>
        <fenv> Rho </fenv>
+    when freeVariablesM(E) <=Set keys(Rho)
 
   // XXX: tieto contexty prehodit do -syntax.k ako strictness atributy?
-  context [infer-app-arg1]:
+  context //[infer-app-arg1]:
           (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
-  context [infer-app-arg2]:
+  context //[infer-app-arg2]:
           _::Expr HOLE
   rule [infer-app]:
        <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>

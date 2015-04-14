@@ -58,7 +58,7 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  syntax TypedExpr ::= t(Expr, Expr)    [latex({#1}\downarrow{#2})]    // XXX this would indicate a type-*inference* result
+  syntax TypedExpr ::= t(Expr, Expr)    [latex(({#1}\downarrow{#2}))]    // XXX this would indicate a type-*inference* result
   syntax Expr ::= TypedExpr
 
 
@@ -163,14 +163,14 @@ module AGDA-SEMANTICS-COMMON
   rule unifyType(t(E, unified(T)) => unified(t(E, T)))
   */
 
-  syntax KItem ::= coerceSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
-  rule coerceSetType(t(E, T)) => T == Set(I) ~> unifyType(t(E, T)) ~> coerceSetType(HOLE)  //[heat]
+  syntax KItem ::= checkSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
+  rule checkSetType(t(E, T)) => T == Set(I) ~> unifyType(t(E, T)) ~> checkSetType(HOLE)  //[heat]
     when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
-  rule Te:SetTypedExpr ~> coerceSetType(HOLE) => coerceSetType(Te)
+  rule Te:SetTypedExpr ~> checkSetType(HOLE) => checkSetType(Te)
   /*
-  rule coerceSetType(t(E, T:Expr)) => T == Set I ~> unifyType(t(E, T)) ~> coerceSetType(HOLE)
+  rule checkSetType(t(E, T:Expr)) => T == Set I ~> unifyType(t(E, T)) ~> checkSetType(HOLE)
     when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
-  rule Set I ~> coerceSetType(t(E, HOLE)) => coerceSetType(t(E, Set I))
+  rule Set I ~> checkSetType(t(E, HOLE)) => checkSetType(t(E, Set I))
   */
 
 
@@ -180,7 +180,7 @@ module AGDA-SEMANTICS-COMMON
                | Expr "@" Map   [klabel('closure)]
                | Val Val  [left]
 
-  syntax Val ::= "^"   // bound -- vraj aj historicky symbol na oznacenie prave bound premennych
+  syntax Val ::= "^"      [latex(^\wedge)]  // bound -- vraj aj historicky symbol na oznacenie prave bound premennych
 
   syntax Set ::= boundKeys(Map)  [function]
   rule boundKeys(.Map) => .Set   [structural]
@@ -189,6 +189,7 @@ module AGDA-SEMANTICS-COMMON
 
   // The following rules are where most of the evaluation magic happens...
   rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
+  // TODO!! pravidlo pre N:Name@Sig ?
   rule (Set(I))@_ => Set(I) [structural, anywhere]
   rule N:WhNeut@_ => N   [structural, anywhere]
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]

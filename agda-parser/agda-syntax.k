@@ -49,7 +49,7 @@ module AGDA-SYNTAX
   rule App(E:Expr, 'Cons(E':Expr,, Es:Exprs)) => E App(E', Es) when Es =/=K '.List`{""`}(.KList) [macro]
   rule App(E:Expr, 'Cons(E':Expr,, '.List`{""`}(.KList))) => E E'  [macro]
 
-  syntax Universe ::= Set(Int)     [klabel('SetN), latex(Set_{#1})]
+  syntax Universe ::= Set(Int)     [klabel('SetN), latex(\terminal{Set}_{#1})]
                     | "Set"        [klabel('Set), notInRules]
   rule 'Set(.KList) => Set(0)  [macro]
 
