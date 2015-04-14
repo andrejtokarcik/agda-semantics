@@ -9,19 +9,23 @@ module AGDA-SEMANTICS-TYPESYSTEM
   imports AGDA-SEMANTICS-COMMON
   imports AGDA-SEMANTICS-METAVARIABLES
 
-  rule <k> X:Variable => t(X, T) ...</k>
+  rule [infer-variable]:
+       <k> X:Variable => t(X, T) ...</k>
        <tenv>... X |-> T ...</tenv>
 
-  rule <k> X:Name => t(X, T) ...</k>
+  rule [infer-name]:
+       <k> X:Name => t(X, T) ...</k>
        <sig>... X |-> T ...</sig>
 
-  rule Set(I) => t(Set(I), Set(I +Int 1))
+  rule [infer-universe]:
+       Set(K) => t(Set(K), Set(K +Int 1))
 
   // for the binders' semantics
   //syntax KItem ::= "envs!"
   syntax KItem ::= "bound!"
 
-  context /*envs! ~>*/ (_ : (HOLE => coerceSetType(HOLE))) -> _   [result(SetTypedExpr)]
+  context [infer-pi-arg1]:
+          /*envs! ~>*/ (_ : (HOLE => coerceSetType(HOLE))) -> _   [result(SetTypedExpr)]
   /*
   rule <k> (. => envs!) ~>
            (_ : _) -> _ ~>
@@ -29,20 +33,24 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> Gamma </tenv>
        <fenv> Rho </fenv>
   */
-  rule <k> (. => bound!) ~> (X : t(T1, Set(_))) -> _ ~> //...</k>
+  rule [bind-pi]:
+       <k> (. => bound!) ~> (X : t(T1, Set(_))) -> _ ~> //...</k>
            (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma => Gamma[T1/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
     when fresh(I1:Int)
-  context bound! ~> (_ : _) -> (HOLE => coerceSetType(HOLE))    [result(SetTypedExpr)]
-  rule <k> (bound! => .) ~>
+  context [infer-pi-arg2]:
+          bound! ~> (_ : _) -> (HOLE => coerceSetType(HOLE))    [result(SetTypedExpr)]
+  rule [infer-pi]:
+       <k> (bound! => .) ~>
            ((X : t(T1, Set(I1))) -> t(T2, Set(I2))
             => freeVariablesM(T2) <=Set keys(Rho) ~> pass? ~>
                t((X : T1) -> T2, Set(maxInt(I1, I2)))) ...</k>
        <fenv> Rho </fenv>
     // vid FIXME v -metavariables.k k freeVariablesM()
 
-  context /*envs! ~>*/ \ (_ : (HOLE => coerceSetType(HOLE))) -> _   [result(SetTypedExpr)]
+  context [infer-lam-arg1]:
+          /*envs! ~>*/ \ (_ : (HOLE => coerceSetType(HOLE))) -> _   [result(SetTypedExpr)]
   /*
   rule <k> (. => envs!) ~>
            \ (_ : _) -> _ ~>
@@ -50,21 +58,27 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> Gamma </tenv>
        <fenv> Rho </fenv>
   */
-  rule <k> (. => bound!) ~> \ (X : t(T, Set(_))) -> _ ~> //...</k>
+  rule [bind-lam]:
+       <k> (. => bound!) ~> \ (X : t(T, Set(_))) -> _ ~> //...</k>
            (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma => Gamma[T/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
-  context bound! ~> \ (_ : _) -> HOLE
-  rule <k> (bound! => .) ~>
+  context [infer-lam-arg2]:
+          bound! ~> \ (_ : _) -> HOLE
+  rule [infer-lam]:
+       <k> (bound! => .) ~>
            (\ (X : t(T, Set(_))) -> t(E, T')
            => freeVariablesM(E) <=Set keys(Rho) ~> pass? ~>
               t(\ (X : T) -> E, (X : T) -> T')) ...</k>
        <fenv> Rho </fenv>
 
   // XXX: tieto contexty prehodit do -syntax.k ako strictness atributy?
-  context (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
-  context _::Expr HOLE
-  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
+  context [infer-app-arg1]:
+          (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
+  context [infer-app-arg2]:
+          _::Expr HOLE
+  rule [infer-app]:
+       <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
 

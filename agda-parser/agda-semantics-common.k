@@ -58,7 +58,7 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  syntax TypedExpr ::= t(Expr, Expr)
+  syntax TypedExpr ::= t(Expr, Expr)    [latex({#1}\downarrow{#2})]    // XXX this would indicate a type-*inference* result
   syntax Expr ::= TypedExpr
 
 
@@ -248,7 +248,11 @@ module AGDA-SEMANTICS-COMMON
   // XXX !!! HOLE:<sort> does NOT enforce dynamic checks that HOLE is of sort <sort>,
   // possibly A BUG IN K (check newer versions before reporting),
   // it might be just an indication how to _parse_ the item [as with ::]
+  // GRosu at k-user maillist: ``any variable sorting except to K
+  // may yield a runtime sort membership checking'' -- notice the 'may'
+  // there -- perhaps it isn't guaranteed as I thought
   // TODO: create a test for this!
+
   /*
   context evalWhnf((HOLE:Expr => nft ~> isExpr(HOLE) ~> evalWhnf(HOLE)) _)
       when isExpr(HOLE)    [result(ValWhnf)]  // << 'when' clause necessary due to the bug mentioned above

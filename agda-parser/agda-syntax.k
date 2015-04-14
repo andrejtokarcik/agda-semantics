@@ -25,7 +25,7 @@ module AGDA-SYNTAX
   rule TBind(.Variables, E:Expr) Tel:Telescope => Tel                            [macro]
 
   // TODO: 'Fun
-  syntax Pi ::= "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3)]
+  syntax Pi ::= "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(({#1}\,:\,{#2}) \rightarrow {#3})]
               | Pi(Telescope, Expr)                  [klabel('Pi)]
               | Fun(Expr, Expr)                      [klabel('Fun)]
   rule Pi((X:Variable : T1:Expr) Tel:Telescope, T2:Expr) => (X : T1) -> Pi(Tel, T2)  [macro]
@@ -35,7 +35,7 @@ module AGDA-SYNTAX
   syntax LamBinding ::= Variable | TypedBinding
   syntax LamBindings ::= List{LamBinding, ""}    [klabel('Cons)]
                        | Telescope
-  syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3)]
+  syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(\lambda ({#1}\,:\,{#2}) \rightarrow {#3})]
                   | Lam(LamBindings, Expr)           [klabel('Lam)]
 
   rule Lam(Bs:LamBindings => castTelescope(Bs), _)    when isTelescope(Bs) =/=K true       [macro]
@@ -49,7 +49,7 @@ module AGDA-SYNTAX
   rule App(E:Expr, 'Cons(E':Expr,, Es:Exprs)) => E App(E', Es) when Es =/=K '.List`{""`}(.KList) [macro]
   rule App(E:Expr, 'Cons(E':Expr,, '.List`{""`}(.KList))) => E E'  [macro]
 
-  syntax Universe ::= Set(Int)     [klabel('SetN)]
+  syntax Universe ::= Set(Int)     [klabel('SetN), latex(Set_{#1})]
                     | "Set"        [klabel('Set), notInRules]
   rule 'Set(.KList) => Set(0)  [macro]
 
