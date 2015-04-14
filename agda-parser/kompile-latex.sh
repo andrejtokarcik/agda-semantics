@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 
-kompile --backend latex -d latex agda.k -v
-cp latex/agda.tex latex/agda.tex.orig
+LATEX_DIR=~/ltx/k/
+
+kompile --backend latex -d $LATEX_DIR agda.k -v
+cp $LATEX_DIR/agda.tex $LATEX_DIR/agda.tex.orig
 echo Postprocessing...
-./latex/postprocess.py latex/agda.tex.orig >latex/agda.tex
+$LATEX_DIR/postprocess.py $LATEX_DIR/agda.tex.orig >$LATEX_DIR/agda.tex
