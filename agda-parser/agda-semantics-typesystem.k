@@ -24,8 +24,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   //syntax KItem ::= "envs!"
   syntax KItem ::= "bound!"
 
-  context [infer-pi-arg1]:
-          /*envs! ~>*/ (_ : (HOLE => coerceSetType(HOLE))) -> _   [result(SetTypedExpr)]
+  context /*envs! ~>*/ (_ : (HOLE => coerceSetType(HOLE))) -> _   [infer-pi-arg1, result(SetTypedExpr)]
   /*
   rule <k> (. => envs!) ~>
            (_ : _) -> _ ~>
@@ -39,8 +38,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> Gamma => Gamma[T1/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
     when fresh(I1:Int)
-  context [infer-pi-arg2]:
-          bound! ~> (_ : _) -> (HOLE => coerceSetType(HOLE))    [result(SetTypedExpr)]
+  context bound! ~> (_ : _) -> (HOLE => coerceSetType(HOLE))    [infer-pi-arg2, result(SetTypedExpr)]
   rule [infer-pi]:
        <k> (bound! => .) ~>
            ((X : t(T1, Set(I1))) -> t(T2, Set(I2))
