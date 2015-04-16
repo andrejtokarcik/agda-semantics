@@ -3,7 +3,7 @@ require "agda-semantics-common.k"
 module AGDA-SEMANTICS-METAVARIABLES
   imports AGDA-SEMANTICS-COMMON
 
-  rule <k> #underscore => E ...</k>
+  rule <k> %underscore => E ...</k>
        <tenv>... . => E |-> T ...</tenv>
        <metavars>... . => E |-> t(E, T) ...</metavars>
     when fresh(E:Expr) andBool fresh(T:Expr)

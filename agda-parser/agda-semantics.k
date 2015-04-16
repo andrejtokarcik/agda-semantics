@@ -14,6 +14,7 @@ module AGDA-SEMANTICS
   rule module N Tel where Decls => Decls
   rule postulate Sig => Sig
 
+  // TODO checkSetType
   context _ : (HOLE => whnfType(HOLE))  //[result(TypedType)]
   rule <k> N : t(E, Set(_)) => . ...</k>
        <sig>... . => N |-> E ...</sig>
@@ -68,7 +69,7 @@ module AGDA-SEMANTICS
   syntax Name ::= Aux(Name)
   syntax Expr ::= freshFunName(Expr)  [function]
   rule freshFunName(P P') => freshFunName(P) P'
-  rule freshFunName(_:Name) => F  when fresh(F:Variable)
+  rule freshFunName(_:Name) => F  when fresh(F:Variable)     // mozno fresh variable nahradit nejakou spesl entitou ktoru pridam do sortu Variable?
 
   syntax KItem ::= addFunClause(Name, LHS, RHS)
   rule <k> addFunClause(F, L, R) => . ...</k>
@@ -82,7 +83,7 @@ module AGDA-SEMANTICS
 
   syntax Expr ::= genLambda(Int, Expr)  [function]
   rule genLambda(0, E) => E
-  rule genLambda(I, E) => genLambda(I -Int 1, \ (X : T) -> E) X  when fresh(X:Variable) andBool fresh(T:Expr)  [owise]
+  rule genLambda(I, E) => \ (X : T) -> genLambda(I -Int 1, E X)  when fresh(X:Variable) andBool fresh(T:Expr)  [owise]
   // wouldn't untyped lambdas be actually better, I wonder...
 
   syntax KItem ::= addFunWrapper(Name, LHS)

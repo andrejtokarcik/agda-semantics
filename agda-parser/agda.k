@@ -30,7 +30,7 @@ module AGDA
                   <tenv> .Map </tenv>
                   <fenv> .Map </fenv>
                   <mgu> .Mgu </mgu>
-                  <sig> .Map </sig>
+                  <sig> .Map </sig>    // zlucit do <tenv>?
                   <metavars> .Map </metavars>
                   <metadata>
                     <range> .K </range>

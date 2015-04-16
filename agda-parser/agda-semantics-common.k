@@ -189,9 +189,9 @@ module AGDA-SEMANTICS-COMMON
 
   // The following rules are where most of the evaluation magic happens...
   rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
-  // TODO!! pravidlo pre N:Name@Sig ?
+  rule N:Name@Rho => #if N in keys(Rho) #then Rho(N)@Rho #else N #fi [structural, anywhere]
   rule (Set(I))@_ => Set(I) [structural, anywhere]
-  rule N:WhNeut@_ => N   [structural, anywhere]
+  //rule N:WhNeut@_ => N  when isVariable(N) =/=K true andBool isName(N) =/=K true [structural, anywhere]
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
   // handle (E@R1)@R2 --- have to take advantage of abstract syntax here, or else K complains about E@RhoOrig's not being an Expr but a Val
   // (the more immediate context, closer to the expression, has higher priority, its values are just extended not modified)
@@ -203,25 +203,32 @@ module AGDA-SEMANTICS-COMMON
 
   syntax ValWhnf ::= WhNeut
                    | WhNeut Val [left]
-  rule isValWhnf(E:Whnf@Rho) => true when isVariable(leftmost(E)) impliesBool notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))
+  rule isValWhnf(E:Whnf@Rho) => true when isVariable(leftmost(E)) ==K true impliesBool notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))
 
 
   syntax ValWhnf ::= ValNf
   syntax Val ::= ValWhnf
 
 
+  syntax K ::= Expr "@" "-"
   syntax KItem ::= eval(K)  [context(result(Val))]
-  rule <k> eval(E:Expr => E@Rho) ...</k>
+  rule eval(E:Expr => E@-)
+  rule <k> eval(E:Expr@- => E@Rho) ...</k>
        <fenv> Rho </fenv>
 
-  syntax KItem ::= whnf(K)  [strict(all(context('eval))), context(result(Whnf))]
+  syntax KItem ::= "wr" KLabel
+  syntax KItem ::= whnf(K)  [context(result(Whnf))]
+  context whnf(HOLE => eval(HOLE))
+    when isVal(HOLE) =/=K true andBool isWhnf(HOLE) =/=K true [result(Val)]
   context whnf(HOLE => evalWhnf(HOLE))  when isVal(HOLE)      [result(ValWhnf)]
   context whnf(HOLE => deval(HOLE))     when isValWhnf(HOLE)  [result(Whnf)]
 
   syntax KItem ::= whnfType(K) [strict, context(result(WhnfTypedExpr))]
   context whnfType(t(_, HOLE::Expr => whnf(HOLE)))  [result(Whnf)]
 
-  syntax KItem ::= nf(K)  [strict(all(context('eval))), context(result(Nf))]
+  syntax KItem ::= nf(K)  [context(result(Nf))]
+  context nf(HOLE => eval(HOLE))
+    when isVal(HOLE) =/=K true andBool isNf(HOLE) =/=K true [result(Val)]
   context nf(HOLE => evalNf(HOLE))    when isVal(HOLE)      [result(ValNf)]
   context nf(HOLE => deval(HOLE))     when isValNf(HOLE)    [result(Nf)]
 
@@ -259,9 +266,9 @@ module AGDA-SEMANTICS-COMMON
       when isExpr(HOLE)    [result(ValWhnf)]  // << 'when' clause necessary due to the bug mentioned above
   */
   context evalWhnf((HOLE::Val => evalWhnf(HOLE)) E)
-    when isFunClauses(leftmost(HOLE)) =/=K true andBool numArgs(HOLE E) ==Int numReqArgs(leftmost(HOLE))   [result(ValWhnf)]
+    when isFunClauses(leftmost(HOLE)) =/=K true orElseBool numArgs(HOLE) +Int 1 >Int numReqArgs(leftmost(HOLE))   [result(ValWhnf)]
+    // ^ orElseBool necessary instead of impliesBool because numReqArgs is defined only for FunClauses
 
-  // need to restore with fenv() below
   rule isFEnvRestore(evalWhnf(_:ValWhnf)) => true
   rule <k> evalWhnf((\ (X : _) -> E:Expr)@Rho V:Val => E@(Rho[V/X])) ~> (. => fenv(Rho')) ...</k>
        <fenv> Rho' </fenv>
@@ -271,14 +278,14 @@ module AGDA-SEMANTICS-COMMON
 
   // TODO: ked sa zoznam vo FunClauses zredukuje na .List (t.j. nenasli sme match) a zaroven V neobsahuje bound premenne (t.j. V je uplne konkretna) tak daj error
   syntax Val ::= matchClause(Val, Val)  [function]
-  //rule matchClause(FunClauses(_, ListItem(L = R) _)@Rho, V) => R@(Rho[getMatching(L, V)])  when isMatching(L, V)
-  //rule matchClause(FunClauses(_, _ Cs:List => Cs)@_, _)  [owise]
+  rule matchClause(FunClauses(_, ListItem(L = R) _)@Rho, V) => R@(Rho[getMatching(L, V)])  when isMatching(L, V)
+  rule matchClause(FunClauses(_, _ Cs:List => Cs)@_, _)  [owise]
 
 
 
   syntax KItem ::= evalNf(K)     [strict(all(context('evalWhnf))), context(result(ValNf))]
-  context evalNf((HOLE::Val => evalNf(HOLE)) _)  [result(Nf)]
-  context evalNf(_::Val (HOLE => evalNf(HOLE)))  [result(Nf)]
+  context evalNf((HOLE::Val => evalNf(HOLE)) _)  [result(ValNf)]
+  context evalNf(_::Val (HOLE => evalNf(HOLE)))  [result(ValNf)]
   // TODO !!!!!!
   /*
   context evalNf((_ : (HOLE:Val => evalNf(HOLE))) -> _)  [result(Nf)]
@@ -290,7 +297,8 @@ module AGDA-SEMANTICS-COMMON
 
 
   syntax KItem ::= deval(K) [context(result(Expr))]
-  rule deval(E:Expr@_ => E)
-  rule deval((E1:Expr => deval(E1)) (E2:Expr => deval(E2)))
+  context deval((HOLE::Val => deval(HOLE)) _)  [result(Expr)]
+  context deval(E::Expr (HOLE => deval(HOLE))) [result(Expr)]
+  rule deval(E:Expr@_ => E)  // wr getKLabel(E) ~> isWhnf(E) ~> isExpr(E) ~> E)
 
 endmodule
