@@ -8,8 +8,8 @@ module AGDA-SEMANTICS-DECL-DATA
   context data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
   rule data N:Name Ps:Telescope : t(T, Set(_)) where Cs:TypeSignatures
     => //I >=Int 1 ~> pass? ~>        // << FIXME   (the `-Int 1' guard below is sufficient?)
-       addDataSig(N, prependParams(Ps, T)) ~>
-       addConSigs(applyParams(Ps, N), prependParams(Ps, Cs))
+       addDataSig(N, Pi(Ps, T)) ~>
+       addConSigs(applyParams(Ps, N), prependParams(Ps, Cs))      // TODO: replace prependParams with: turn Ps into a hidden-args telescope and use the Pi trick as in addDataSig
 
   syntax KItem ::= addDataSig(Name, Expr)              [strict(2(context('checkSetType)))]
   rule <k> addDataSig(N, t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>   // << FIXME not sure if the condition is correct: what universe must the datatype fit in?
@@ -28,6 +28,7 @@ module AGDA-SEMANTICS-DECL-DATA
 
   syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
   rule ((_ : _) -> T => T) constructorOf _
+  rule ({_ : _} -> T => T) constructorOf _
   rule D:Name constructorOf D => true
   rule Set(I) constructorOf Set(I) => true
   rule (T:Expr V:Variable => T) constructorOf (D:Expr V => D)
@@ -35,7 +36,7 @@ module AGDA-SEMANTICS-DECL-DATA
 
   syntax Expr ::= prependParams(Telescope, Expr) [function]
   rule prependParams(.Telescope, T:Expr) => T
-  rule prependParams((X:Variable : Tp:Expr) Ps:Telescope, T:Expr) => (X : Tp) -> prependParams(Ps, T)
+  rule prependParams((X:Variable : Tp:Expr) Ps:Telescope, T:Expr) => {X : Tp} -> prependParams(Ps, T)
 
   syntax TypeSignatures ::= prependParams(Telescope, TypeSignatures) [function]
   rule prependParams(Ps:Telescope, .TypeSignatures) => .TypeSignatures

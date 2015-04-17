@@ -14,15 +14,16 @@ module AGDA-SEMANTICS
   rule module N Tel where Decls => Decls
   rule postulate Sig => Sig
 
-  // TODO checkSetType
-  context _ : (HOLE => whnfType(HOLE))  //[result(TypedType)]
+  // TODO: do I wanna E below also in whnf? and also when adding a constructor/datatype..?
+  context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
   rule <k> N : t(E, Set(_)) => . ...</k>
        <sig>... . => N |-> E ...</sig>
 
 
 
-  syntax Expr ::= Pattern
-  syntax LHS ::= Expr
+  //syntax Expr ::= Pattern
+  //syntax LHS ::= Expr
+
   /*
   syntax TypedPattern
   rule isTypedPattern(t(_:Pattern, _)) => true
@@ -42,10 +43,12 @@ module AGDA-SEMANTICS
   syntax Name ::= funName(LHS)  [function]
   rule funName(L) => leftmost(L)
 
-  syntax KItem ::= autoVarTypes(LHS)
-  rule autoVarTypes(P1 P2) => autoVarTypes(P1) ~> autoVarTypes(P2)
-  rule autoVarTypes(_:Name) => .
-  rule <k> autoVarTypes(X:Variable) => . ...</k>
+  syntax KItem ::= autotype(LHS)
+  rule autotype(P1 P2) => autotype(P1) ~> autotype(P2)
+  rule autotype({E} => E)
+  rule autotype(_:Name) => .
+  rule autotype(%underscore) => .
+  rule <k> autotype(X:Variable) => . ...</k>
        <tenv> Gamma => Gamma[T/X] </tenv>
        //<fenv> Rho => Rho[^/X] </fenv>        // it would be nice to do this, but if it isn't necessary,
                                                // then it's more convenient not to because the current fenv-restoring
@@ -53,17 +56,17 @@ module AGDA-SEMANTICS
                                                // declared function clause
     when /*notBool (X in keys(Gamma)) andBool*/ fresh(T:Expr)
 
-  rule <k> L = R => autoVarTypes(L) ~> bound! ~> L = R ~> tenv(Gamma) ...</k>
+  rule <k> L = R => autotype(L) ~> bound! ~> L = R ~> tenv(Gamma) ...</k>
        <tenv> Gamma </tenv>
        <sig> Sigma (. => funName(L) |-> T) </sig>
     when notBool (funName(L) in keys(Sigma)) andBool fresh(T:Expr)    // occurs when missing type sig
-  rule <k> L = R => autoVarTypes(L) ~> bound! ~> L = R ~> tenv(Gamma) ...</k>
+  rule <k> L = R => autotype(L) ~> bound! ~> L = R ~> tenv(Gamma) ...</k>
        <tenv> Gamma </tenv>
        <sig> Sigma </sig>
     when funName(L) in keys(Sigma)
 
-  context bound! ~> HOLE = _     // TODO? whnfType or something
-  context bound! ~> _ = HOLE
+  context bound! ~> (HOLE => whnfType(HOLE)) = _   [result(WhnfTypedExpr)]
+  context bound! ~> _ = (HOLE => whnfType(HOLE))   [result(WhnfTypedExpr)]
 
 
   syntax Name ::= Aux(Name)

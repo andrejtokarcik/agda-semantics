@@ -13,22 +13,35 @@ module AGDA-SYNTAX
   syntax Identifier ::= String
   // NOTE: The sort Variable is used in unification/pattern-matching.
   syntax Variable ::= Var(Identifier)                [klabel('Var)]
-  syntax Variables ::= List{Variable, ""}    [klabel('Cons)]
+  syntax Variables ::= List{Variable, ""}            [klabel('Cons)]
   syntax Name ::= Name(Identifier)                   [klabel('Name)]
   // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
   syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" //| QName
 
+  syntax Relevance ::= "Relevant"
+  syntax Hiding ::= "Hidden" | "NotHidden"
   syntax TypedBinding ::= "(" Variable ":" Expr ")"
-                        | TBind(Variables, Expr)     [klabel('TBind)]
+                        | "{" Variable ":" Expr "}"
+                        | TBind(Relevance, Hiding, Variables, Expr)     [klabel('TBind)]
   syntax Telescope ::= List{TypedBinding, ""}    [klabel('Cons)]
-  rule TBind(X:Variable Xs:Variables, E:Expr) Tel:Telescope => (X : E) (TBind(Xs, E) Tel)  [macro]
-  rule TBind(.Variables, E:Expr) Tel:Telescope => Tel                            [macro]
+  rule TBind(Relevant, NotHidden, X:Variable Xs:Variables, E:Expr) Tel:Telescope
+       => (X : E) (TBind(Relevant, NotHidden, Xs, E) Tel)  [macro]
+  rule TBind(Relevant, Hidden, X:Variable Xs:Variables, E:Expr) Tel:Telescope
+       => {X : E} (TBind(Relevant, Hidden, Xs, E) Tel)     [macro]
+  rule TBind(_:Relevance, _:Hiding, .Variables, E:Expr) Tel:Telescope => Tel         [macro]
 
-  // TODO: 'Fun
+  // these binders get really repetitive.  do I need them after all? pattern matching doesn't take them
+  // into account anyway (or does it?).  the only occassion when it appears to be of use is when
+  // calling freeVariables() which I could, however, implement on my own.
+  // syntax Pi ::= TypedBinding -> Expr    would be quite ideal
+  // (so that I can latter have rules with `_ -> _` on LHS instead of both `(_ : _) -> _` and `{_ : _} -> _`)
+  // TODO: gotta test all those binding gotchas anyway.
   syntax Pi ::= "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(({#1}\,:\,{#2}) \rightarrow {#3})]
+              | "{" Variable ":" Expr "}" "->" Expr  [binder(1 -> 3), latex({\{#1}\,:\,{#2}\} \rightarrow {#3})]
               | Pi(Telescope, Expr)                  [klabel('Pi)]
               | Fun(Expr, Expr)                      [klabel('Fun)]
   rule Pi((X:Variable : T1:Expr) Tel:Telescope, T2:Expr) => (X : T1) -> Pi(Tel, T2)  [macro]
+  rule Pi({X:Variable : T1:Expr} Tel:Telescope, T2:Expr) => {X : T1} -> Pi(Tel, T2)  [macro]
   rule Pi(.Telescope, T:Expr) => T                                                   [macro]
   rule Fun(T1:Expr, T2:Expr) => (X : T1) -> T2  when fresh(X:Variable)               [macro]
 
@@ -36,39 +49,60 @@ module AGDA-SYNTAX
   syntax LamBindings ::= List{LamBinding, ""}    [klabel('Cons)]
                        | Telescope
   syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(\lambda ({#1}\,:\,{#2}) \rightarrow {#3})]
+                  | "\\" "{" Variable ":" Expr "}" "->" Expr  [binder(1 -> 3), latex(\lambda \{{#1}\,:\,{#2}\} \rightarrow {#3})]
                   | Lam(LamBindings, Expr)           [klabel('Lam)]
 
   rule Lam(Bs:LamBindings => castTelescope(Bs), _)    when isTelescope(Bs) =/=K true       [macro]
   rule Lam((X:Variable : T:Expr) Bs:Telescope, E:Expr) => \ (X : T) -> Lam(Bs, E)  [macro]
-  rule Lam(.LamBindings, E:Expr) => E                                            [macro]
+  rule Lam({X:Variable : T:Expr} Bs:Telescope, E:Expr) => \ {X : T} -> Lam(Bs, E)  [macro]
+  rule Lam(.LamBindings, E:Expr) => E                                              [macro]
 
-  syntax App ::= Expr Expr  [left]
-               | App(Expr, Exprs)    [klabel('App)]
-               | OpApp(Expr, Exprs)  [klabel('OpApp)]
-  rule OpApp(E:Expr, Es:Exprs) => App(E, Es) [macro]
-  rule App(E:Expr, 'Cons(E':Expr,, Es:Exprs)) => E App(E', Es) when Es =/=K '.List`{""`}(.KList) [macro]
-  rule App(E:Expr, 'Cons(E':Expr,, '.List`{""`}(.KList))) => E E'  [macro]
+  syntax Arg ::= Expr
+               | Arg(Hiding, Expr)  [klabel('Arg)]
+  rule Arg(NotHidden, E:Expr) => E  [macro]
+  rule Arg(Hidden, E:Expr) => {E}   [macro]
+  syntax Args ::= List{Arg, ""}     [klabel('Cons), notInRules]
+  syntax App ::= Arg Arg            [left]
+               | App(Arg, Args)     [klabel('App)]
+               | OpApp(Arg, Args)   [klabel('OpApp)]
+  rule OpApp(A:Arg, As:Args) => App(A, As) [macro]
+  rule App(A:Arg, 'Cons(A':Arg,, As:Args)) => A App(A', As) when As =/=K '.List`{""`}(.KList) [macro]
+  rule App(A:Arg, 'Cons(A':Arg,, '.List`{""`}(.KList))) => A A'  [macro]
 
   syntax Universe ::= Set(Int)     [klabel('SetN), latex(\terminal{Set}_{#1})]
                     | "Set"        [klabel('Set), notInRules]
   rule 'Set(.KList) => Set(0)  [macro]
 
+  syntax Underscore ::= "%underscore"      [klabel('Underscore)]
   syntax Expr ::= "(" Expr ")" [bracket]
+    | "{" Expr "}"
     | Variable
     | Name
     | Universe
     | Pi
     | Lambda
     | App
-    | "%underscore"      [klabel('Underscore)]
+    | Underscore
   syntax Exprs ::= List{Expr, ""}    [klabel('Cons), notInRules]
 
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
   syntax TypeSignatures ::= List{TypeSignature, ""}    [klabel('Cons)]
 
   syntax Pattern ::= "(" Pattern ")" [bracket]
+    | Arg
+    | App
+  syntax Patterns ::= List{Pattern, ""}    [klabel('Cons), notInRules]
+  syntax App ::= AppP(Arg, Arg)     [klabel('AppP)]
+               | OpAppP(Arg, Args)  [klabel('OpAppP)]
+  rule AppP(A:Arg, A':Arg) => App(A, A') [macro]
+  rule OpAppP(A:Arg, As:Args) => OpApp(A, As) [macro]
+
+  /*
+  syntax Pattern ::= "(" Pattern ")" [bracket]
+    | "{" Pattern "}"
     | Variable
     | Name
+    | Underscore
     | AppP
   syntax AppP ::= Pattern Pattern [left, notInRules]
     | AppP(Pattern, Pattern)     [klabel('AppP)]
@@ -81,6 +115,7 @@ module AGDA-SYNTAX
   //rule OpAppP(P:Pattern, 'Cons(P':Pattern,, '.List`{""`}(.KList))) => P P'    [macro]
   rule OpAppP(P:Pattern, 'Cons(P':Pattern,, Ps:Patterns)) => OpAppP('__(P,, P'), Ps)   [macro]
   rule OpAppP(P:Pattern, '.List`{""`}(.KList)) => P   [macro]
+  */
 
   /*
   syntax LHS ::= Name

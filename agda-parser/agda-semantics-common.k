@@ -37,6 +37,11 @@ module AGDA-SEMANTICS-COMMON
   // due to the possible K BUG described below  (the latter doesn't
   // generate the dynamic sort check as intended).
   context (HOLE => nfType(HOLE)) ~> fenv(_) when isTypedExpr(HOLE)  [result(NfTypedExpr)]
+  // why do I need to use nfType here actually, isn't whnf enough...?
+  // no, because of pattern matching -- an arg of a pattern-matching function must be evaluated
+  // but this should be done by whnf as well, I guess, given there is the right number of arguments
+  // --- potom by som tu nemusel robit ziaden spesl eval a nechal to proste na tie whnfType volania,
+  // co sa urobia v buducnosti pri inych konstruktoch, ak bude treba
   rule <k> _:FEnvRestore ~> (fenv(Rho) => .) ...</k>
        <fenv> _ => Rho </fenv>
 
@@ -78,6 +83,7 @@ module AGDA-SEMANTICS-COMMON
   rule isWhNeut(_:WhNeut _:Expr) => true
   rule isWhnf(Set(_)) => true
   rule isWhnf((_ : _) -> _) => true
+  rule isWhnf({_ : _} -> _) => true     // AT FIXME hack - generalise
   rule isWhnf(\ (_ : _) -> _) => true
   
   syntax Nf ::= "(" Nf ")" [bracket]

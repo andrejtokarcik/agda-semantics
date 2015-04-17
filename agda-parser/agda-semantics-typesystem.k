@@ -20,12 +20,38 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule [infer-universe]:
        Set(K) => t(Set(K), Set(K +Int 1))
 
+  // implicit args
+  context {HOLE}
+  rule {t(E, T)} => t({E}, {T})
+
   // for the binders' semantics
   //syntax KItem ::= "envs!"
   syntax KItem ::= "bound!"
 
   // XXX: what about putting all the Pi-related rules into a separate module?
   // ... as suggested in the funkons paper
+
+
+  // just duplicted rules for pis with implicit/hidden args
+  context /*envs! ~>*/ {_ : (HOLE => checkSetType(HOLE))} -> _   [result(SetTypedExpr)]
+  rule
+       <k> (. => bound!) ~> {X : t(T1, Set(_))} -> _ ~> //...</k>
+           (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
+       <tenv> Gamma => Gamma[T1/X] </tenv>
+       <fenv> Rho => Rho[^/X] </fenv>
+    when fresh(I1:Int)
+  context bound! ~> {_ : _} -> (HOLE => checkSetType(HOLE))    [result(SetTypedExpr)]
+  rule
+       <k> (bound! => .) ~>
+           ({X : t(T1, Set(I1))} -> t(T2, Set(I2))
+            => //freeVariablesM(T2) <=Set keys(Rho) ~> pass? ~>    // AT commented just for latex  --- would fail with scope checking anyway, huh?
+               t({X : T1} -> T2, Set(maxInt(I1, I2)))) ...</k>
+       <fenv> Rho </fenv>
+    when freeVariablesM(T2) <=Set keys(Rho)
+
+
+
+
 
   context /*envs! ~>*/ (_ : (HOLE => checkSetType(HOLE))) -> _   [infer-pi-arg1, result(SetTypedExpr)]
   /*
@@ -60,14 +86,14 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> Gamma </tenv>
        <fenv> Rho </fenv>
   */
-  rule [bind-lam]:
+  rule [bind-lambda]:
        <k> (. => bound!) ~> \ (X : t(T, Set(_))) -> _ ~> //...</k>
            (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
        <tenv> Gamma => Gamma[T/X] </tenv>
        <fenv> Rho => Rho[^/X] </fenv>
   context //[infer-lam-arg2]:
           bound! ~> \ (_ : _) -> HOLE
-  rule [infer-lam]:
+  rule [infer-lambda]:
        <k> (bound! => .) ~>
            (\ (X : t(T, Set(_))) -> t(E, T')
            => //freeVariablesM(E) <=Set keys(Rho) ~> pass? ~>    // AT latex
@@ -80,10 +106,28 @@ module AGDA-SEMANTICS-TYPESYSTEM
           (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
   context //[infer-app-arg2]:
           _::Expr HOLE
+  //rule [infer-app-implicit]:
+  //     (t(E1, {X : T1} -> T1') => t(E1, {X : T1} -> T1') {X}) t(E2, T2)
+  rule [infer-app-implicit]:
+       <k> t(E1:Expr, {X : T} -> T') t(E2:Expr, {T2}) => T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
+       <fenv> Rho => Rho[E2/X] </fenv>
+
   rule [infer-app]:
        <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
+
+
+  /*
+  syntax Bool ::= cond(Expr, Expr)  [function]
+  rule cond(\(Var("x") : _) -> _, _) => true
+  rule
+       <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
+       <fenv> Rho => Rho[E2/X] </fenv>
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
+  */
+
+
 
   // TODO: move the unification machinery to a separate file
   // NOTE: not every updateMgu is actually guaranteed to update the mgu;
