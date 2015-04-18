@@ -15,9 +15,11 @@ module AGDA-SEMANTICS
   rule postulate Sig => Sig
 
   // TODO: do I wanna E below also in whnf? and also when adding a constructor/datatype..?
+  // --- doing it, necessary for ImplArg.agda; extend to datatypes, too, then?
   context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
   rule <k> N : t(E, Set(_)) => . ...</k>
-       <sig>... . => N |-> E ...</sig>
+       <sig>... . => N |-> E@Rho ...</sig>
+       <fenv> Rho </fenv>
 
 
 

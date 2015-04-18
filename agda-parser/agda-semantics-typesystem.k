@@ -121,14 +121,13 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule [infer-app]:
        <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
-    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
-
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) //andBool cond(E1, E2) =/=K true
 
   /*
   syntax Bool ::= cond(Expr, Expr)  [function]
-  rule cond(\(Var("x") : _) -> _, _) => true
+  rule cond(Name("cons"), _) => true
   rule
-       <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
+       <k> t(E1:Expr, T1) t(E2:Expr, T2) => chich ~> T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
   */

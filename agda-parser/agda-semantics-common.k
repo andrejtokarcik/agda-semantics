@@ -223,7 +223,6 @@ module AGDA-SEMANTICS-COMMON
   rule <k> eval(E:Expr@- => E@Rho) ...</k>
        <fenv> Rho </fenv>
 
-  syntax KItem ::= "wr" KLabel
   syntax KItem ::= whnf(K)  [context(result(Whnf))]
   context whnf(HOLE => eval(HOLE))
     when isVal(HOLE) =/=K true andBool isWhnf(HOLE) =/=K true [result(Val)]
@@ -233,6 +232,7 @@ module AGDA-SEMANTICS-COMMON
   syntax KItem ::= whnfType(K) [strict, context(result(WhnfTypedExpr))]
   context whnfType(t(_, HOLE::Expr => whnf(HOLE)))  [result(Whnf)]
 
+  // see commend at l. ~40, I shouldn't need Nf
   syntax KItem ::= nf(K)  [context(result(Nf))]
   context nf(HOLE => eval(HOLE))
     when isVal(HOLE) =/=K true andBool isNf(HOLE) =/=K true [result(Val)]
