@@ -106,11 +106,17 @@ module AGDA-SEMANTICS-TYPESYSTEM
           (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
   context //[infer-app-arg2]:
           _::Expr HOLE
-  //rule [infer-app-implicit]:
-  //     (t(E1, {X : T1} -> T1') => t(E1, {X : T1} -> T1') {X}) t(E2, T2)
   rule [infer-app-implicit]:
        <k> t(E1:Expr, {X : T} -> T') t(E2:Expr, {T2}) => T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
+
+  // TODO move to a separate file also with the insertion from agda-semantics(-common where was it?).k
+  // insert an implicit metavariable in front of an explicit arg in application
+  // NOTE forgetting the already inferred type... does it matter that much?
+  rule [insert-implicit1]:
+       t(E1, {_ : _} -> _) t(E2, _) => (E1 {%underscore}) E2  when isImplicit(E2) =/=K true
+  rule [insert-implicit2]:
+       t(E1, _) t(E2, {_ : _} -> _) => E1 (E2 {%underscore})  when isImplicit(E2) =/=K true
 
   rule [infer-app]:
        <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>

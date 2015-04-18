@@ -80,8 +80,9 @@ module AGDA-SEMANTICS
               (. => Aux(F) |-> FunClauses(numArgs(L), ListItem(freshFunName(L) = R))@Rho) </fenv>   // Aux(F) maps to the list of pattern-matching clauses
     when notBool (F in keys(Rho))
   rule <k> addFunClause(F, L, R) => . ...</k>
-       <fenv> Rho (Aux(F) |-> FunClauses(I, _ (. => ListItem(freshFunName(L) = R)))@Rho) </fenv>
-    when F in keys(Rho) andBool numArgs(L) ==Int I
+       <fenv>... Aux(F) |-> FunClauses(I, _ (. => ListItem(freshFunName(L) = R)))@_ ...</fenv>
+    when numArgs(L) ==Int I
+    // already matching on Aux(F), don't have to check for presence in keys
 
 
   syntax Expr ::= genLambda(Int, Expr)  [function]
@@ -94,7 +95,13 @@ module AGDA-SEMANTICS
        <fenv> Rho
               (. => F |-> genLambda(numArgs(L), Aux(F))@Rho) </fenv>   // forcing the evaluation of a pattern-matching function to have a sufficient no. of args
     when notBool (F in keys(Rho))
+  rule <k> addFunWrapper(F, L) => . ...</k>
+       <fenv> Rho' (F |-> _@(Rho => Rho')) </fenv>
+    // already matching on F, don't have to check for presence in keys
 
+  // insert implicit metavariables at the end
+  rule bound! ~> (t(L, {_ : _} -> _) => L {%underscore}) = _
+  rule bound! ~> _ = (t(R, {_ : _} -> _) => R {%underscore})
 
   rule <k> (bound! => .) ~>
            (t(L, Tl) = t(R, Tr)

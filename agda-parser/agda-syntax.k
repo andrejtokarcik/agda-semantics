@@ -62,20 +62,22 @@ module AGDA-SYNTAX
   rule Arg(NotHidden, E:Expr) => E  [macro]
   rule Arg(Hidden, E:Expr) => {E}   [macro]
   syntax Args ::= List{Arg, ""}     [klabel('Cons), notInRules]
-  syntax App ::= Arg Arg            [left]
+  syntax App ::= "(" App ")"        [bracket]
+               | Arg Arg            [left]
                | App(Arg, Args)     [klabel('App)]
                | OpApp(Arg, Args)   [klabel('OpApp)]
   rule OpApp(A:Arg, As:Args) => App(A, As) [macro]
-  rule App(A:Arg, 'Cons(A':Arg,, As:Args)) => A App(A', As) when As =/=K '.List`{""`}(.KList) [macro]
-  rule App(A:Arg, 'Cons(A':Arg,, '.List`{""`}(.KList))) => A A'  [macro]
+  rule App(A:Arg, 'Cons(A':Arg,, As:Args)) => App(A A', As) [macro] //when As =/=K '.List`{""`}(.KList) [macro]
+  rule App(A:Arg, '.List`{""`}(.KList)) => A  [macro]
+  //rule App(A:Arg, 'Cons(A':Arg,, '.List`{""`}(.KList))) => A A'  [macro]
 
   syntax Universe ::= Set(Int)     [klabel('SetN), latex(\terminal{Set}_{#1})]
                     | "Set"        [klabel('Set), notInRules]
   rule 'Set(.KList) => Set(0)  [macro]
 
   syntax Underscore ::= "%underscore"      [klabel('Underscore)]
+  syntax Implicit ::= "{" Expr "}"
   syntax Expr ::= "(" Expr ")" [bracket]
-    | "{" Expr "}"
     | Variable
     | Name
     | Universe
@@ -83,6 +85,7 @@ module AGDA-SYNTAX
     | Lambda
     | App
     | Underscore
+    | Implicit
   syntax Exprs ::= List{Expr, ""}    [klabel('Cons), notInRules]
 
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
@@ -94,7 +97,7 @@ module AGDA-SYNTAX
   syntax Patterns ::= List{Pattern, ""}    [klabel('Cons), notInRules]
   syntax App ::= AppP(Arg, Arg)     [klabel('AppP)]
                | OpAppP(Arg, Args)  [klabel('OpAppP)]
-  rule AppP(A:Arg, A':Arg) => App(A, A') [macro]
+  rule AppP(A:Arg, A':Arg) => App(A, A')  [macro]  //'Cons(A':Arg,, '.List`{""`}(.KList))) [macro]
   rule OpAppP(A:Arg, As:Args) => OpApp(A, As) [macro]
 
   /*

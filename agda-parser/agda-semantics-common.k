@@ -31,13 +31,14 @@ module AGDA-SEMANTICS-COMMON
 
   syntax KItem ::= "chich"
   syntax FEnvRestore
-  rule isFEnvRestore(_:NfTypedExpr) => true
+  //rule isFEnvRestore(_:NfTypedExpr) => true
+  rule isFEnvRestore(_:TypedExpr) => true
   syntax KItem ::= fenv(Map)
   // XXX: must use 'isTypedExpr(HOLE)' instead of 'HOLE:TypedExpr'
   // due to the possible K BUG described below  (the latter doesn't
   // generate the dynamic sort check as intended).
-  context (HOLE => nfType(HOLE)) ~> fenv(_) when isTypedExpr(HOLE)  [result(NfTypedExpr)]
-  // why do I need to use nfType here actually, isn't whnf enough...?
+  //context (HOLE => nfType(HOLE)) ~> fenv(_) when isTypedExpr(HOLE)  [result(NfTypedExpr)]
+  // XXX: why do I need to use nfType here actually, isn't whnf enough...?
   // no, because of pattern matching -- an arg of a pattern-matching function must be evaluated
   // but this should be done by whnf as well, I guess, given there is the right number of arguments
   // --- potom by som tu nemusel robit ziaden spesl eval a nechal to proste na tie whnfType volania,
