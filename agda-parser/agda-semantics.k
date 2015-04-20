@@ -17,9 +17,10 @@ module AGDA-SEMANTICS
   // TODO: do I wanna E below also in whnf? and also when adding a constructor/datatype..?
   // --- doing it, necessary for ImplArg.agda; extend to datatypes, too, then?
   context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
-  rule <k> N : t(E, Set(_)) => . ...</k>
-       <sig>... . => N |-> E@Rho ...</sig>
+  rule <k> N : t(E, Set(_)@_) => . ...</k>
+       <sig> Sigma (. => N |-> E@Rho) </sig>
        <fenv> Rho </fenv>
+    when notBool (N in keys(Sigma))
 
 
 
@@ -51,24 +52,32 @@ module AGDA-SEMANTICS
   rule autotype(_:Name) => .
   rule autotype(%underscore) => .
   rule <k> autotype(X:Variable) => . ...</k>
-       <tenv> Gamma => Gamma[T/X] </tenv>
+       <tenv> Gamma => Gamma[T@Rho/X] </tenv>
+       <fenv> Rho </fenv>
        //<fenv> Rho => Rho[^/X] </fenv>        // it would be nice to do this, but if it isn't necessary,
                                                // then it's more convenient not to because the current fenv-restoring
                                                // mechanism cannot be directed to restore everything except the just
                                                // declared function clause
     when /*notBool (X in keys(Gamma)) andBool*/ fresh(T:Expr)
 
+  /*
   rule <k> L = R => autotype(L) ~> bound! ~> L = R ~> tenv(Gamma) ...</k>
        <tenv> Gamma </tenv>
        <sig> Sigma (. => funName(L) |-> T) </sig>
-    when notBool (funName(L) in keys(Sigma)) andBool fresh(T:Expr)    // occurs when missing type sig
+    when notBool (funName(L) in keys(Sigma)) andBool fresh(T:Expr)    // occurs when missing type sig  --- an underscore-sig is generated for missing type sigs
+  */
   rule <k> L = R => autotype(L) ~> bound! ~> L = R ~> tenv(Gamma) ...</k>
        <tenv> Gamma </tenv>
        <sig> Sigma </sig>
     when funName(L) in keys(Sigma)
 
-  context bound! ~> (HOLE => whnfType(HOLE)) = _   [result(WhnfTypedExpr)]
-  context bound! ~> _ = (HOLE => whnfType(HOLE))   [result(WhnfTypedExpr)]
+  syntax Bool ::= cond(K) [function]
+  rule cond(K) => leftmost(K) ==K Name("_::_")
+  // `_:WhnfTypedExpr' enforces seqstrict
+  context bound! ~> _:WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond(HOLE)   [result(WhnfTypedExpr)]
+  context bound! ~> _:WhnfTypedExpr = (HOLE => chich ~> whnfType(HOLE)) when notBool cond(HOLE)  [result(WhnfTypedExpr)]
+
+  context bound! ~> (HOLE => whnfType(HOLE)) = _  [result(WhnfTypedExpr)]
 
 
   syntax Name ::= Aux(Name)
@@ -87,6 +96,9 @@ module AGDA-SEMANTICS
     // already matching on Aux(F), don't have to check for presence in keys
 
 
+  rule FunClauses(0, ListItem(_ = R)) => R   [structural, anywhere]
+  rule <fenv>... (N |-> V) ((Aux(N) |-> V') => .) ...</fenv> when V ==K V'  [structural]
+
   syntax Expr ::= genLambda(Int, Expr)  [function]
   rule genLambda(0, E) => E
   rule genLambda(I, E) => \ (X : T) -> genLambda(I -Int 1, E X)  when fresh(X:Variable) andBool fresh(T:Expr)  [owise]
@@ -98,17 +110,17 @@ module AGDA-SEMANTICS
               (. => F |-> genLambda(numArgs(L), Aux(F))@Rho) </fenv>   // forcing the evaluation of a pattern-matching function to have a sufficient no. of args
     when notBool (F in keys(Rho))
   rule <k> addFunWrapper(F, L) => . ...</k>
-       <fenv> Rho' (F |-> _@(Rho => Rho')) </fenv>
+       <fenv> Rho (F |-> _@(_ => Rho)) </fenv>
     // already matching on F, don't have to check for presence in keys
 
   // insert implicit metavariables at the end
-  rule bound! ~> (t(L, {_ : _} -> _) => L {%underscore}) = _
-  rule bound! ~> _ = (t(R, {_ : _} -> _) => R {%underscore})
+  rule bound! ~> (t(L, ({_ : _} -> _)@_) => L {%underscore}) = _
+  rule bound! ~> _ = (t(R, ({_ : _} -> _)@_) => R {%underscore})
 
   rule <k> (bound! => .) ~>
            (t(L, Tl) = t(R, Tr)
             => //notBool (funName(L) in keys(Rho)) ~> true? ~>                    // verify that F isn't already defined
                //freeVariablesM(E) <=Set freeVariablesM(L) keys(Fun) ~> true? ~>    // that the body of F doesn't contain undefined functions (check TEnv instead b/c of mutual recursion)
-               Tl == Tr ~> unify ~>
-               addFunClause(funName(L), L, R) ~> addFunWrapper(funName(L), L)) ...</k>
+               deval(Tl) == deval(Tr) ~> unify ~>
+               addFunClause(funName(L), L, R) ~> addFunWrapper(funName(L), L) ~> chich) ...</k>
 endmodule

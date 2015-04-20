@@ -64,7 +64,7 @@ module AGDA-SEMANTICS-COMMON
 
 
 
-  syntax TypedExpr ::= t(Expr, Expr)    [latex(({#1}\downarrow{#2}))]    // XXX this would indicate a type-*inference* result
+  syntax TypedExpr ::= t(Expr, Val)    [latex(({#1}\downarrow{#2}))]    // XXX this would indicate a type-*inference* result
   syntax Expr ::= TypedExpr
 
 
@@ -82,7 +82,7 @@ module AGDA-SEMANTICS-COMMON
                   | WhNeut Expr [left]
                   */
   rule isWhNeut(_:WhNeut _:Expr) => true
-  rule isWhnf(Set(_)) => true
+  //rule isWhnf(Set(_)) => true
   rule isWhnf((_ : _) -> _) => true
   rule isWhnf({_ : _} -> _) => true     // AT FIXME hack - generalise
   rule isWhnf(\ (_ : _) -> _) => true
@@ -109,16 +109,16 @@ module AGDA-SEMANTICS-COMMON
   syntax Whnf ::= Nf
   syntax Expr ::= Whnf
 
-  syntax NfTypedExpr
-  rule isNfTypedExpr(t(_, _:Nf)) => true
-  syntax WhnfTypedExpr ::= NfTypedExpr
-  rule isWhnfTypedExpr(t(_, _:Whnf)) => true
-  syntax TypedExpr ::= WhnfTypedExpr | NfTypedExpr
+  //syntax NfTypedExpr
+  //rule isNfTypedExpr(t(_, _:Nf)) => true
+  syntax WhnfTypedExpr //::= NfTypedExpr
+  rule isWhnfTypedExpr(t(_, _:ValWhnf)) => true
+  syntax TypedExpr ::= WhnfTypedExpr //| NfTypedExpr
 
   syntax SetTypedExpr
   //rule isSetTypedExpr(t(_:Expr, _:MetaVariable)) => true   // XXX hack
-  rule isSetTypedExpr(t(_, Set(_))) => true
-  syntax NfTypedExpr ::= SetTypedExpr
+  rule isSetTypedExpr(t(_, Set(_)@_)) => true
+  syntax /*Nf*/WhnfTypedExpr ::= SetTypedExpr
 
 
 
@@ -136,7 +136,11 @@ module AGDA-SEMANTICS-COMMON
        <mgu> Theta </mgu>
   */
 
-  syntax KItem ::= K "==" K
+  syntax KItem ::= K "==" K   //[strict(all(context('deval)))]
+  /*
+  rule <k> V:Val == V':Val => . ...</k>
+       <mgu> Theta => updateMgu(Theta, deval(V), deval(V')) </mgu>
+  */
   rule <k> K == K' => . ...</k>
        <mgu> Theta => updateMgu(Theta, K, K') </mgu>
 
@@ -170,9 +174,10 @@ module AGDA-SEMANTICS-COMMON
   rule unifyType(t(E, unified(T)) => unified(t(E, T)))
   */
 
+  // TODO: rename to checkSetTyped or checkUniverseTyped or checkTypeIsUniverse  (remember consistency with SetTypedExpr sort)
   syntax KItem ::= checkSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
-  rule checkSetType(t(E, T)) => T == Set(I) ~> unifyType(t(E, T)) ~> checkSetType(HOLE)  //[heat]
-    when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
+  rule checkSetType(t(E, T@_)) => T == Set(I) ~> unifyType(t(E, T@.Map)) ~> checkSetType(HOLE)  //[heat]
+    when isUniverse(T) =/=K true andBool fresh(I:Int)
   rule Te:SetTypedExpr ~> checkSetType(HOLE) => checkSetType(Te)
   /*
   rule checkSetType(t(E, T:Expr)) => T == Set I ~> unifyType(t(E, T)) ~> checkSetType(HOLE)
@@ -194,26 +199,47 @@ module AGDA-SEMANTICS-COMMON
   rule boundKeys((E |-> ^ => .) _) (. => SetItem(E)) [structural]
   rule boundKeys((_ |-> _ => .) _) [owise, structural]
 
+  syntax KList ::= unnecessaryKeys(Expr, Map)   [function]
+  rule unnecessaryKeys(_, .Map) => .KList    [structural]
+  rule unnecessaryKeys(_, (N:Name |-> _ => .) _),,(.KList => N) [structural]
+  //rule unnecessaryKeys(E, (X:Variable |-> _ => .) _),,(.KList => X) when notBool X in freeVariables(E)  [structural]
+  rule unnecessaryKeys(_, (_ |-> _ => .) _)  [owise, structural]
+
   // The following rules are where most of the evaluation magic happens...
-  rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
-  rule N:Name@Rho => #if N in keys(Rho) #then Rho(N)@Rho #else N #fi [structural, anywhere]
-  rule (Set(I))@_ => Set(I) [structural, anywhere]
+
+  //rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
+  rule X:Variable@Rho => Rho(X)@Rho  when X in keys(Rho) andBool Rho(X) =/=K ^  [structural, anywhere]
+  //rule N:Name@Rho => #if N in keys(Rho) #then Rho(N)@Rho #else N #fi [structural, anywhere]
+  rule N:Name@Rho => Rho(N)@Rho  when N in keys(Rho)   [structural, anywhere]
+
+  //rule (Set(I))@_ => Set(I) [structural, anywhere]
   //rule N:WhNeut@_ => N  when isVariable(N) =/=K true andBool isName(N) =/=K true [structural, anywhere]
+
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
+
+  rule E@(Rho => Rho[undef/unnecessaryKeys(E, Rho)]) when isMetaVariable(E) =/=K true andBool unnecessaryKeys(E, Rho) =/=KList .KList  [structural, anywhere]
+
   // handle (E@R1)@R2 --- have to take advantage of abstract syntax here, or else K complains about E@RhoOrig's not being an Expr but a Val
   // (the more immediate context, closer to the expression, has higher priority, its values are just extended not modified)
   rule 'closure(E:Expr@RhoOrig,, Map2KLabel(RhoNew:Map)(.KList)) => E@(RhoNew[RhoOrig]) [structural, anywhere]
 
+  /*
   syntax ValNf ::= Neut
                  | Neut ValNf [left]
   rule isValNf(E:Nf@Rho) => true when isEmptySet(intersectSet(freeVariables(E), keys(Rho) -Set boundKeys(Rho)))
+  */
 
-  syntax ValWhnf ::= WhNeut
+  syntax ValWhnf /*::= WhNeut
                    | WhNeut Val [left]
-  rule isValWhnf(E:Whnf@Rho) => true when isVariable(leftmost(E)) ==K true impliesBool notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))
+                   //| Universe
+                   //| Set(Int)
+  */
+  //rule isValWhnf(Set(_)) => true
+  //rule isValWhnf(E:Whnf@Rho) => true when isVariable(leftmost(E)) ==K true impliesBool notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))
+  rule isValWhnf(V) => true when isWhnf(deval(V))
 
 
-  syntax ValWhnf ::= ValNf
+  //syntax ValWhnf ::= ValNf
   syntax Val ::= ValWhnf
 
 
@@ -223,16 +249,20 @@ module AGDA-SEMANTICS-COMMON
   rule <k> eval(E:Expr@- => E@Rho) ...</k>
        <fenv> Rho </fenv>
 
-  syntax KItem ::= whnf(K)  [context(result(Whnf))]
+  syntax KItem ::= whnf(Val)  [context(result(ValWhnf))]
+  context whnf(HOLE => evalWhnf(HOLE))  [result(ValWhnf)]
+  /*
   context whnf(HOLE => eval(HOLE))
     when isVal(HOLE) =/=K true andBool isWhnf(HOLE) =/=K true [result(Val)]
   context whnf(HOLE => evalWhnf(HOLE))  when isVal(HOLE)      [result(ValWhnf)]
   context whnf(HOLE => deval(HOLE))     when isValWhnf(HOLE)  [result(Whnf)]
+  */
 
   syntax KItem ::= whnfType(K) [strict, context(result(WhnfTypedExpr))]
-  context whnfType(t(_, HOLE::Expr => whnf(HOLE)))  [result(Whnf)]
+  context whnfType(t(_, HOLE => whnf(HOLE)))  [result(ValWhnf)]
 
   // see commend at l. ~40, I shouldn't need Nf
+  /*
   syntax KItem ::= nf(K)  [context(result(Nf))]
   context nf(HOLE => eval(HOLE))
     when isVal(HOLE) =/=K true andBool isNf(HOLE) =/=K true [result(Val)]
@@ -241,7 +271,7 @@ module AGDA-SEMANTICS-COMMON
 
   syntax KItem ::= nfType(K) [strict, context(result(NfTypedExpr))]
   context nfType(t(_, (HOLE::Expr => nf(HOLE))))  [result(Nf)]
-
+  */
 
 
 
@@ -290,6 +320,7 @@ module AGDA-SEMANTICS-COMMON
 
 
 
+  /*
   syntax KItem ::= evalNf(K)     [strict(all(context('evalWhnf))), context(result(ValNf))]
   context evalNf((HOLE::Val => evalNf(HOLE)) _)  [result(ValNf)]
   context evalNf(_::Val (HOLE => evalNf(HOLE)))  [result(ValNf)]
@@ -302,10 +333,15 @@ module AGDA-SEMANTICS-COMMON
   */
 
 
-
+  /*
   syntax KItem ::= deval(K) [context(result(Expr))]
   context deval((HOLE::Val => deval(HOLE)) _)  [result(Expr)]
   context deval(E::Expr (HOLE => deval(HOLE))) [result(Expr)]
   rule deval(E:Expr@_ => E)  // wr getKLabel(E) ~> isWhnf(E) ~> isExpr(E) ~> E)
+  */
 
+  syntax Expr ::= deval(Val)  [function]
+  rule deval(V1 V2) => deval(V1) deval(V2)
+  rule deval(E@_) => E
+  rule deval(E) => E  [owise]
 endmodule
