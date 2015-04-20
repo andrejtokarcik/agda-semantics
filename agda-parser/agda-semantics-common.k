@@ -12,7 +12,7 @@ module AGDA-SEMANTICS-COMMON
   /*
   // TODO: if we defined ValNf, we could reduce needEval() to a check
   // of belonging to the syntactic sort ValNf
-  syntax Bool ::= needEval(K, Map)  [fenvction]
+  syntax Bool ::= needEval(K, Map)  [function]
   rule needEval((_, T:Expr) => T, _)
   rule needEval(E:Expr, _) => true when isNf(E) =/=K true
   // do *not* want freeVariablesM here
@@ -94,11 +94,12 @@ module AGDA-SEMANTICS-COMMON
                 | "(" Name ":" Nf ")" "->" Nf        [binder(2 -> 4)]
                 | "\\" "(" Name ":" Nf ")" "->" Nf   [binder(2 -> 4)]
                 */
-  syntax Neut /*::= Variable       // considered neutral only if cannot be evaluated
+  syntax Neut //::= Neut(Name)
+  /*::= Variable       // considered neutral only if cannot be evaluated
                 | Name
                 | Neut Nf [left]
                 */
-  rule isNeut(_:Variable) => true
+  //rule isNeut(_:Variable) => true   // AT HACK?
   rule isNeut(_:Name) => true
   rule isNeut(_:Neut _:Nf) => true
   rule isNf(Set(_)) => true
@@ -188,37 +189,93 @@ module AGDA-SEMANTICS-COMMON
                | Val Val  [left]
 
   syntax Val ::= "^"      [latex(^\wedge)]  // bound -- vraj aj historicky symbol na oznacenie prave bound premennych
+  // ^ imo nie je nutne ale nie som si isty...
+
+
+  /*
+  syntax Map ::= Map "[" K "/" Set "]"  [function]
+  rule M[K/(S SetItem(X))] => M[K/X][K/S]  [structural]
+  rule M[K/.Set] => M  [structural]
+  */
+  // NOTE: use instead of freeVariables & co.
+  /*
+  syntax Bool ::= needsEval(Expr, Map)   [function]
+  rule needsEval(X:Variable, Rho) => Rho(X) ==K ^
+  rule needsEval(N:Name, Rho) => N in keys(Rho)
+  //rule needsEval(Set(_), _) => false
+  rule needsEval(E1:Expr E2:Expr, Rho) => needsEval(E1, Rho) orBool needsEval(E2, Rho)
+  */
+  /*
+  rule needsEval((X : _) -> E => E, Rho (. => X |-> ^))
+  rule needsEval({X : _} -> E => E, Rho (. => X |-> ^))
+  rule needsEval(\ (X : _) -> E => E, Rho (. => X |-> ^))
+  rule needsEval(\ {X : _} -> E => E, Rho (. => X |-> ^))
+  */
+  /*
+  rule needsEval(L = R => R, Rho => Rho[^/freeVariables(L)])
+  rule needsEval(FunClauses(I, ListItem(L = R) Cs), Rho) => needsEval(L = R, Rho) orBool needsEval(FunClauses(I, Cs), Rho)
+  rule needsEval(FunClauses(_, .List), _) => false
+  */
 
   syntax Set ::= boundKeys(Map)  [function]
   rule boundKeys(.Map) => .Set   [structural]
   rule boundKeys((E |-> ^ => .) _) (. => SetItem(E)) [structural]
   rule boundKeys((_ |-> _ => .) _) [owise, structural]
 
+  /*
+  syntax Map ::= sanitise(Expr, Map)  [function]
+  rule sanitise(, Rho) => 
+  */
+
   // The following rules are where most of the evaluation magic happens...
-  rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
+  rule X:Variable@Rho => #if X in keys(Rho) -Set boundKeys(Rho) #then Rho(X)@Rho #else X #fi  [structural, anywhere]
+
+  //rule Neut(E)@_ => Neut(E)  [structural, anywhere]
   rule N:Name@Rho => #if N in keys(Rho) #then Rho(N)@Rho #else N #fi [structural, anywhere]
+
+  //rule X:Variable@Rho => Rho(X)@Rho  when needsEval(X, Rho)   [structural, anywhere]
+  //rule N:Name@Rho => Rho(N)@Rho  when needsEval(N, Rho)     [structural, anywhere]
+
   rule (Set(I))@_ => Set(I) [structural, anywhere]
-  //rule N:WhNeut@_ => N  when isVariable(N) =/=K true andBool isName(N) =/=K true [structural, anywhere]
-  rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
+  //rule E:WhNeut@Rho => E when notBool needsEval(E, Rho)  [structural, anywhere]
+  //rule E:WhNeut@_ => E  when isVariable(leftmost(E)) =/=K true andBool isName(leftmost(E)) =/=K true [structural, anywhere]
+  rule E:WhNeut@Rho => E when notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))   [structural, anywhere]
+
+
+  rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho  [structural, anywhere]
+  //rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho  when needsEval(E1 E2, Rho) [structural, anywhere]    // nestaci E1@Rho E2 -- dat @Rho len na prvy expr?
+                                                                                                      // NIE lebo tym prave stracam tie data o argumentoch vo WhNeut
+
+  //rule E:Expr@Rho => E  when isValWhnf(E@Rho) [structural, anywhere]
+  //rule E:Expr@Rho => E when isEmptySet(intersectSet(freeVariables(E), keys(Rho) -Set boundKeys(Rho)))  [structural, anywhere]
+  //rule E:Expr@(Rho => sanitise(E, Rho)) when isLambda(E) orBool   [structural, anywhere]
+
   // handle (E@R1)@R2 --- have to take advantage of abstract syntax here, or else K complains about E@RhoOrig's not being an Expr but a Val
-  // (the more immediate context, closer to the expression, has higher priority, its values are just extended not modified)
+  // (the more immediate context, closer to the expression, has higher priority, its values are just extended not modified)  --- DOES THIS HOLD?
   rule 'closure(E:Expr@RhoOrig,, Map2KLabel(RhoNew:Map)(.KList)) => E@(RhoNew[RhoOrig]) [structural, anywhere]
 
   syntax ValNf ::= Neut
                  | Neut ValNf [left]
-  rule isValNf(E:Nf@Rho) => true when isEmptySet(intersectSet(freeVariables(E), keys(Rho) -Set boundKeys(Rho)))
+  //rule isValNf(E:Nf@Rho) => true when isEmptySet(intersectSet(freeVariables(E), keys(Rho) -Set boundKeys(Rho)))
 
   syntax ValWhnf ::= WhNeut
                    | WhNeut Val [left]
-  rule isValWhnf(E:Whnf@Rho) => true when isVariable(leftmost(E)) ==K true impliesBool notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))
+  rule isValWhnf(E:Whnf@Rho) => true when /*isVariable(leftmost(E)) ==K true impliesBool*/ notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))
+                                          // ^ ten predpoklad by mal checkovat aj isName(leftmost(E))
+  //rule isValWhnf(E:WhNeut) => true when /*isVariable(leftmost(E)) ==K true impliesBool*/ notBool (leftmost(E) in keys(Rho) -Set boundKeys(Rho))
+                                          // ^ ten predpoklad by mal checkovat aj isName(leftmost(E))
 
 
   syntax ValWhnf ::= ValNf
   syntax Val ::= ValWhnf
 
 
+  syntax Bool ::= needsEval(Expr)
+  rule <k> needsEval(E) => leftmost(E) in keys(Rho) -Set boundKeys(Rho) ...</k>
+       <fenv> Rho </fenv>
+
   syntax K ::= Expr "@" "-"
-  syntax KItem ::= eval(K)  [context(result(Val))]
+  syntax KItem ::= eval(K)  [context(result('needsEval))]
   rule eval(E:Expr => E@-)
   rule <k> eval(E:Expr@- => E@Rho) ...</k>
        <fenv> Rho </fenv>
@@ -229,10 +286,10 @@ module AGDA-SEMANTICS-COMMON
   context whnf(HOLE => evalWhnf(HOLE))  when isVal(HOLE)      [result(ValWhnf)]
   context whnf(HOLE => deval(HOLE))     when isValWhnf(HOLE)  [result(Whnf)]
 
-  syntax KItem ::= whnfType(K) [strict, context(result(WhnfTypedExpr))]
+  syntax KItem ::= whnfType(Expr) [strict, context(result(WhnfTypedExpr))]
   context whnfType(t(_, HOLE::Expr => whnf(HOLE)))  [result(Whnf)]
 
-  // see commend at l. ~40, I shouldn't need Nf
+  // see comment at l. ~40, I shouldn't need Nf
   syntax KItem ::= nf(K)  [context(result(Nf))]
   context nf(HOLE => eval(HOLE))
     when isVal(HOLE) =/=K true andBool isNf(HOLE) =/=K true [result(Val)]
@@ -307,5 +364,5 @@ module AGDA-SEMANTICS-COMMON
   context deval((HOLE::Val => deval(HOLE)) _)  [result(Expr)]
   context deval(E::Expr (HOLE => deval(HOLE))) [result(Expr)]
   rule deval(E:Expr@_ => E)  // wr getKLabel(E) ~> isWhnf(E) ~> isExpr(E) ~> E)
-
+  //rule deval(Neut(E) => E)
 endmodule

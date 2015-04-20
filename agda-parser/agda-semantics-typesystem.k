@@ -47,7 +47,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
             => //freeVariablesM(T2) <=Set keys(Rho) ~> pass? ~>    // AT commented just for latex  --- would fail with scope checking anyway, huh?
                t({X : T1} -> T2, Set(maxInt(I1, I2)))) ...</k>
        <fenv> Rho </fenv>
-    when freeVariablesM(T2) <=Set keys(Rho)
+    //when freeVariablesM(T2) <=Set keys(Rho)
 
 
 
@@ -74,7 +74,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
             => //freeVariablesM(T2) <=Set keys(Rho) ~> pass? ~>    // AT commented just for latex  --- would fail with scope checking anyway, huh?
                t((X : T1) -> T2, Set(maxInt(I1, I2)))) ...</k>
        <fenv> Rho </fenv>
-    when freeVariablesM(T2) <=Set keys(Rho)
+    //when freeVariablesM(T2) <=Set keys(Rho)
     // vid FIXME v -metavariables.k k freeVariablesM()
 
   context //[infer-lam-arg1]:
@@ -99,13 +99,15 @@ module AGDA-SEMANTICS-TYPESYSTEM
            => //freeVariablesM(E) <=Set keys(Rho) ~> pass? ~>    // AT latex
               t(\ (X : T) -> E, (X : T) -> T')) ...</k>
        <fenv> Rho </fenv>
-    when freeVariablesM(E) <=Set keys(Rho)
+    //when freeVariablesM(E) <=Set keys(Rho)
 
   // XXX: tieto contexty prehodit do -syntax.k ako strictness atributy?
   context //[infer-app-arg1]:
           (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
+  context (HOLE::Expr => chich ~> whnfType(HOLE)) _  when HOLE ==K Name("nil2")  [result(WhnfTypedExpr)]
   context //[infer-app-arg2]:
           _::Expr HOLE
+
   rule [infer-app-implicit]:
        <k> t(E1:Expr, {X : T} -> T') t(E2:Expr, {T2}) => T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
@@ -121,16 +123,15 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule [infer-app]:
        <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
-    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) //andBool cond(E1, E2) =/=K true
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
 
-  /*
+
   syntax Bool ::= cond(Expr, Expr)  [function]
-  rule cond(Name("cons"), _) => true
+  rule cond(Name("nil2"), _) => true
   rule
        <k> t(E1:Expr, T1) t(E2:Expr, T2) => chich ~> T1 == (X : T) -> T' ~> T2 == T ~> unifyType(t(E1 E2, T')) ~> fenv(Rho) ...</k>
        <fenv> Rho => Rho[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
-  */
 
 
 

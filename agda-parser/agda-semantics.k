@@ -17,9 +17,18 @@ module AGDA-SEMANTICS
   // TODO: do I wanna E below also in whnf? and also when adding a constructor/datatype..?
   // --- doing it, necessary for ImplArg.agda; extend to datatypes, too, then?
   context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
+  syntax KItem ::= m(Map)
   rule <k> N : t(E, Set(_)) => . ...</k>
+       <sig>... . => N |-> E ...</sig>
+       <fenv> Rho </fenv>
+    //when N =/=K Name("cons")
+  /*
+  rule <k> N : t(E, Set(_)) => needsEval(E, Rho) ...</k>
        <sig>... . => N |-> E@Rho ...</sig>
        <fenv> Rho </fenv>
+    when N ==K Name("cons")
+  */
+
 
 
 
@@ -68,14 +77,18 @@ module AGDA-SEMANTICS
     when funName(L) in keys(Sigma)
 
   context bound! ~> (HOLE => whnfType(HOLE)) = _   [result(WhnfTypedExpr)]
-  context bound! ~> _ = (HOLE => whnfType(HOLE))   [result(WhnfTypedExpr)]
+  //context bound! ~> HOLE = _
+  //rule bound! ~> (X => whnfType(X) ~> HOLE) = _  when isWhnfTypedExpr(X) =/=K true
+  //rule bound! ~> (whnfType(X) ~> HOLE => X) = _  when isWhnfTypedExpr(X) =/=K true
+  context bound! ~> _ = (HOLE => chich ~> whnfType(HOLE))   [result(WhnfTypedExpr)]
 
 
   syntax Name ::= Aux(Name)
   syntax Expr ::= freshFunName(Expr)  [function]
   rule freshFunName(P P') => freshFunName(P) P'
-  rule freshFunName(_:Name) => F  when fresh(F:Variable)     // mozno fresh variable nahradit nejakou spesl entitou ktoru pridam do sortu Variable?
+  rule freshFunName(Name(S)) => F  when fresh(F:Variable)     // mozno fresh variable nahradit nejakou spesl entitou ktoru pridam do sortu Variable?
 
+  // NOTE: the Aux-name is redundant when the function has no arguments (LHS contains only the fun name)
   syntax KItem ::= addFunClause(Name, LHS, RHS)
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fenv> Rho

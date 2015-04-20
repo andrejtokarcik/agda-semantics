@@ -25,6 +25,7 @@ module AGDA
   rule <k> m(M') => . ...</k>
        <metadata> _ => M' </metadata>   [structural]
 
+  // rename: <ctx> <env>
   configuration <T>
                   <k> $PGM:Program </k>
                   <tenv> .Map </tenv>

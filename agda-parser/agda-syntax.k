@@ -20,8 +20,8 @@ module AGDA-SYNTAX
 
   syntax Relevance ::= "Relevant"
   syntax Hiding ::= "Hidden" | "NotHidden"
-  syntax TypedBinding ::= "(" Variable ":" Expr ")"
-                        | "{" Variable ":" Expr "}"
+  syntax TypedBinding ::= "(" Variable ":" Expr ")"    [latex(({#1}\,:\,{#2}))]
+                        | "{" Variable ":" Expr "}"    [latex(\{{#1}\,:\,{#2}\})]
                         | TBind(Relevance, Hiding, Variables, Expr)     [klabel('TBind)]
   syntax Telescope ::= List{TypedBinding, ""}    [klabel('Cons)]
   rule TBind(Relevant, NotHidden, X:Variable Xs:Variables, E:Expr) Tel:Telescope
@@ -36,8 +36,9 @@ module AGDA-SYNTAX
   // syntax Pi ::= TypedBinding -> Expr    would be quite ideal
   // (so that I can latter have rules with `_ -> _` on LHS instead of both `(_ : _) -> _` and `{_ : _} -> _`)
   // TODO: gotta test all those binding gotchas anyway.
-  syntax Pi ::= "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(({#1}\,:\,{#2}) \rightarrow {#3})]
-              | "{" Variable ":" Expr "}" "->" Expr  [binder(1 -> 3), latex({\{#1}\,:\,{#2}\} \rightarrow {#3})]
+  //syntax Pi ::= "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(({#1}\,:\,{#2}) \rightarrow {#3})]
+  //            | "{" Variable ":" Expr "}" "->" Expr  [binder(1 -> 3), latex({\{#1}\,:\,{#2}\} \rightarrow {#3})]
+  syntax Pi ::= TypedBinding "->" Expr   [latex({#1} \rightarrow {#2})]
               | Pi(Telescope, Expr)                  [klabel('Pi)]
               | Fun(Expr, Expr)                      [klabel('Fun)]
   rule Pi((X:Variable : T1:Expr) Tel:Telescope, T2:Expr) => (X : T1) -> Pi(Tel, T2)  [macro]
@@ -48,8 +49,9 @@ module AGDA-SYNTAX
   syntax LamBinding ::= Variable | TypedBinding
   syntax LamBindings ::= List{LamBinding, ""}    [klabel('Cons)]
                        | Telescope
-  syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(\lambda ({#1}\,:\,{#2}) \rightarrow {#3})]
-                  | "\\" "{" Variable ":" Expr "}" "->" Expr  [binder(1 -> 3), latex(\lambda \{{#1}\,:\,{#2}\} \rightarrow {#3})]
+  //syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(\lambda ({#1}\,:\,{#2}) \rightarrow {#3})]
+  //                | "\\" "{" Variable ":" Expr "}" "->" Expr  [binder(1 -> 3), latex(\lambda \{{#1}\,:\,{#2}\} \rightarrow {#3})]
+  syntax Lambda ::= "\\" TypedBinding "->" Expr   [latex({#1} \rightarrow {#2})]
                   | Lam(LamBindings, Expr)           [klabel('Lam)]
 
   rule Lam(Bs:LamBindings => castTelescope(Bs), _)    when isTelescope(Bs) =/=K true       [macro]

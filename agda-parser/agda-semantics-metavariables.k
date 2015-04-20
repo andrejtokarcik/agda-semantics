@@ -29,14 +29,14 @@ module AGDA-SEMANTICS-METAVARIABLES
        <tenv>... E |-> T ...</tenv>
   */
 
-  // FIXME: teraz vobec nevyuzivam Variable, takze si mozno budem musiet zadefinovat
-  // aj sam vlastne freeVariables(), aby to fungovalo spravne
+  /*
   syntax Set ::= freeVariablesM(K)    [function]   // free vars without metas
   rule freeVariablesM(K) => removeMetas(freeVariables(K))  [structural]
   syntax Set ::= removeMetas(Set)  [function]
   rule removeMetas(.Set) => .Set   [structural]
   rule removeMetas(SetItem(_:MetaVariable) S:Set => S)  [structural]
   rule removeMetas(SetItem(E:Expr) S:Set => S) (. => SetItem(E))  [owise, structural]
+  */
 
   // Metavariables should be always substituted *for*, not vice versa.
   // The LHS of eqn() below gets replaced with the RHS -- swap the sides
