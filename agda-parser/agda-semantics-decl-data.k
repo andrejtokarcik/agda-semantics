@@ -26,7 +26,7 @@ module AGDA-SEMANTICS-DECL-DATA
        <sig> Sigma (. => C |-> T) </sig>
     when notBool (C in keys(Sigma))
 
-  syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
+  syntax KItem ::= Expr "constructorOf" Expr          //[strict(all(context('whnf)))]
   rule ((_ : _) -> T => T) constructorOf _
   rule ({_ : _} -> T => T) constructorOf _
   rule D:Name constructorOf D => true

@@ -80,7 +80,7 @@ module AGDA-SEMANTICS
   //context bound! ~> HOLE = _
   //rule bound! ~> (X => whnfType(X) ~> HOLE) = _  when isWhnfTypedExpr(X) =/=K true
   //rule bound! ~> (whnfType(X) ~> HOLE => X) = _  when isWhnfTypedExpr(X) =/=K true
-  context bound! ~> _ = (HOLE => chich ~> whnfType(HOLE))   [result(WhnfTypedExpr)]
+  context bound! ~> _ = (HOLE => whnfType(HOLE))   [result(WhnfTypedExpr)]
 
 
   syntax Name ::= Aux(Name)
