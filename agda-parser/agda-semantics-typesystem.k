@@ -25,6 +25,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule <k> {t(E, T)} => t({E}, {deval(T)}@Rho) ...</k>
        <fenv> Rho </fenv>
 
+
   // for the binders' semantics
   syntax KItem ::= "bound!"
 
@@ -58,7 +59,6 @@ module AGDA-SEMANTICS-TYPESYSTEM
             => t({X : T1} -> T2, Set(maxInt(I1, I2)))) ...</k>
 
 
-
   context \ (_ : (HOLE => checkSetType(HOLE))) -> _   [result(SetTypedExpr)]
   rule [bind-lambda]:
        <k> (. => bound!) ~> \ (X : t(T, Set(_))) -> _ ~>
@@ -86,15 +86,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <fenv> Rho </fenv>      // neviem ci dobre priradujem Rho.  celkovo je lambda problematicka, ofic. by som ju mal len checkovat, nie inferovat.
 
 
-
-
   context (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
   context _::WhnfTypedExpr HOLE
-  rule [infer-app-implicit]:
-       <k> t(E1, ({X : T} -> T')@Rho) t({E2}, {T2}@_) => T2 == deval(T@Rho) ~> unifyType(t(E1 {E2}, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
-       <fenv> Rho' => Rho'[E2/X] </fenv>
 
-  // TODO move to a separate file also with the insertion from agda-semantics(-common, or where was it?).k
   // insert an implicit metavariable in front of an explicit arg in application
   // NOTE forgetting the already inferred type... does it matter that much?
   // XXX this should be somehow related to convertibility of types
@@ -103,7 +97,11 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule [insert-implicit2]:
        t(E1, _) t(E2, ({_ : _} -> _)@_) => E1 (E2 {%underscore})  when isImplicit(E2) =/=K true
 
-  rule [infer-app]:
+  rule [infer-app-implicit]:
+       <k> t(E1, ({X : T} -> T')@Rho) t({E2}, {T2}@_) => T2 == deval(T@Rho) ~> unifyType(t(E1 {E2}, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
+       <fenv> Rho' => Rho'[E2/X] </fenv>
+
+  rule [infer-app-explicit]:
        <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> deval(T2) == deval(T@Rho) ~> unifyType(t(E1 E2, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
        <fenv> Rho' => Rho'[E2/X] </fenv>
     when isImplicit(deval(T2)) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) //andBool cond(E1, E2) =/=K true
