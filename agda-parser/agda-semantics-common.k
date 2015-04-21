@@ -98,7 +98,7 @@ module AGDA-SEMANTICS-COMMON
                 | Name
                 | Neut Nf [left]
                 */
-  rule isNeut(_:Variable) => true
+  //rule isNeut(_:Variable) => true
   rule isNeut(_:Name) => true
   rule isNeut(_:Neut _:Nf) => true
   rule isNf(Set(_)) => true
@@ -117,7 +117,7 @@ module AGDA-SEMANTICS-COMMON
 
   syntax SetTypedExpr
   //rule isSetTypedExpr(t(_:Expr, _:MetaVariable)) => true   // XXX hack
-  rule isSetTypedExpr(t(_, Set(_)@_)) => true
+  rule isSetTypedExpr(t(_, Set(_))) => true
   syntax /*Nf*/WhnfTypedExpr ::= SetTypedExpr
 
 
@@ -136,6 +136,12 @@ module AGDA-SEMANTICS-COMMON
        <mgu> Theta </mgu>
   */
 
+  syntax Map ::= updateClosures(Map, Map)  [function]
+  rule updateClosures(_, .Map) => .Map
+  rule updateClosures(Rho, (K |-> E@Rho' => .) _) (.Map => K |-> E@(Rho'[Rho]))
+  rule updateClosures(Rho, (K |-> t(E, T@Rho') => .) _) (.Map => K |-> t(E, T@(Rho'[Rho])))
+  rule updateClosures(_, (K |-> V => .) _) (.Map => K |-> V)  [owise]
+
   syntax KItem ::= K "==" K   //[strict(all(context('deval)))]
   /*
   rule <k> V:Val == V':Val => . ...</k>
@@ -147,9 +153,9 @@ module AGDA-SEMANTICS-COMMON
   syntax KItem ::= "unify"
   rule <k> unify => . ...</k>
        <sig> Sigma => applyMgu(Theta, Sigma) </sig>
-       <tenv> Gamma => applyMgu(Theta, Gamma) </tenv>
-       <fenv> Rho => applyMgu(Theta, Rho) </fenv>
-       <metavars> Meta => applyMgu(Theta, Meta) </metavars>
+       <tenv> Gamma => updateClosures(applyMgu(Theta, Rho), applyMgu(Theta, Gamma)) </tenv>
+       <fenv> Rho => updateClosures(applyMgu(Theta, Rho), applyMgu(Theta, Rho)) </fenv>
+       <metavars> Meta => updateClosures(applyMgu(Theta, Rho), applyMgu(Theta, Meta)) </metavars>
        <mgu> Theta => .Mgu </mgu>
     when isMguError(Theta) =/=K true
 
@@ -176,7 +182,7 @@ module AGDA-SEMANTICS-COMMON
 
   // TODO: rename to checkSetTyped or checkUniverseTyped or checkTypeIsUniverse  (remember consistency with SetTypedExpr sort)
   syntax KItem ::= checkSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
-  rule checkSetType(t(E, T@_)) => T == Set(I) ~> unifyType(t(E, T@.Map)) ~> checkSetType(HOLE)  //[heat]
+  rule checkSetType(t(E, T)) => deval(T) == Set(I) ~> unifyType(t(E, T)) ~> checkSetType(HOLE)  //[heat]
     when isUniverse(T) =/=K true andBool fresh(I:Int)
   rule Te:SetTypedExpr ~> checkSetType(HOLE) => checkSetType(Te)
   /*
@@ -202,7 +208,7 @@ module AGDA-SEMANTICS-COMMON
   syntax KList ::= unnecessaryKeys(Expr, Map)   [function]
   rule unnecessaryKeys(_, .Map) => .KList    [structural]
   rule unnecessaryKeys(_, (N:Name |-> _ => .) _),,(.KList => N) [structural]
-  //rule unnecessaryKeys(E, (X:Variable |-> _ => .) _),,(.KList => X) when notBool X in freeVariables(E)  [structural]
+  rule unnecessaryKeys(E, (X:Variable |-> _ => .) _),,(.KList => X) when notBool X in freeVariables(E)  [structural]
   rule unnecessaryKeys(_, (_ |-> _ => .) _)  [owise, structural]
 
   // The following rules are where most of the evaluation magic happens...
@@ -212,12 +218,13 @@ module AGDA-SEMANTICS-COMMON
   //rule N:Name@Rho => #if N in keys(Rho) #then Rho(N)@Rho #else N #fi [structural, anywhere]
   rule N:Name@Rho => Rho(N)@Rho  when N in keys(Rho)   [structural, anywhere]
 
-  //rule (Set(I))@_ => Set(I) [structural, anywhere]
+  rule Set(I)@_ => Set(I) [structural, anywhere]
   //rule N:WhNeut@_ => N  when isVariable(N) =/=K true andBool isName(N) =/=K true [structural, anywhere]
 
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
 
-  rule E@(Rho => Rho[undef/unnecessaryKeys(E, Rho)]) when isMetaVariable(E) =/=K true andBool unnecessaryKeys(E, Rho) =/=KList .KList  [structural, anywhere]
+  rule E@(Rho => Rho[undef/unnecessaryKeys(E, Rho)]) when unnecessaryKeys(E, Rho) =/=KList .KList  [structural, anywhere]
+  //rule E@.Map => E  [structural, anywhere]
 
   // handle (E@R1)@R2 --- have to take advantage of abstract syntax here, or else K complains about E@RhoOrig's not being an Expr but a Val
   // (the more immediate context, closer to the expression, has higher priority, its values are just extended not modified)
@@ -229,7 +236,8 @@ module AGDA-SEMANTICS-COMMON
   rule isValNf(E:Nf@Rho) => true when isEmptySet(intersectSet(freeVariables(E), keys(Rho) -Set boundKeys(Rho)))
   */
 
-  syntax ValWhnf /*::= WhNeut
+  syntax ValWhnf ::= Universe   // so that it can be parsed in rules
+               /*::= WhNeut
                    | WhNeut Val [left]
                    //| Universe
                    //| Set(Int)

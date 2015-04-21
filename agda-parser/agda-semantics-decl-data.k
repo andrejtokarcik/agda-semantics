@@ -6,13 +6,13 @@ module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SEMANTICS-COMMON
 
   context data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
-  rule data N:Name Ps:Telescope : t(T, Set(_)@_) where Cs:TypeSignatures
+  rule data N:Name Ps:Telescope : t(T, Set(_)) where Cs:TypeSignatures
     => //I >=Int 1 ~> pass? ~>        // << FIXME   (the `-Int 1' guard below is sufficient?)
        addDataSig(N, Pi(Ps, T)) ~>
        addConSigs(applyParams(Ps, N), prependParams(Ps, Cs))      // TODO: replace prependParams with: turn Ps into a hidden-args telescope and use the Pi trick as in addDataSig
 
   syntax KItem ::= addDataSig(Name, Expr)              [strict(2(context('checkSetType)))]
-  rule <k> addDataSig(N, t(T, Set(I)@_)) => T constructorOf Set(I -Int 1) ~> pass? ...</k>   // << FIXME not sure if the condition is correct: what universe must the datatype fit in?
+  rule <k> addDataSig(N, t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>   // << FIXME not sure if the condition is correct: what universe must the datatype fit in?
        <sig> Sigma (. => N |-> T@Rho) </sig>
        <fenv> Rho </fenv>
     when notBool (N in keys(Sigma))
@@ -23,7 +23,7 @@ module AGDA-SEMANTICS-DECL-DATA
 
   // TODO: check the constructor's universe whether it fits into the datatype
   syntax KItem ::= addConSig(Expr, Name, Expr)  [strict(3(context('checkSetType)))]
-  rule <k> addConSig(D:Expr, C:Name, t(T:Expr, Set(_)@_)) => T constructorOf D ~> pass? ...</k>
+  rule <k> addConSig(D:Expr, C:Name, t(T:Expr, Set(_))) => T constructorOf D ~> pass? ...</k>
        <sig> Sigma (. => C |-> T@Rho) </sig>
        <fenv> Rho </fenv>
     when notBool (C in keys(Sigma))

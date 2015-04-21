@@ -17,7 +17,7 @@ module AGDA-SEMANTICS
   // TODO: do I wanna E below also in whnf? and also when adding a constructor/datatype..?
   // --- doing it, necessary for ImplArg.agda; extend to datatypes, too, then?
   context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
-  rule <k> N : t(E, Set(_)@_) => . ...</k>
+  rule <k> N : t(E, Set(_)) => . ...</k>
        <sig> Sigma (. => N |-> E@Rho) </sig>
        <fenv> Rho </fenv>
     when notBool (N in keys(Sigma))
@@ -52,9 +52,9 @@ module AGDA-SEMANTICS
   rule autotype(_:Name) => .
   rule autotype(%underscore) => .
   rule <k> autotype(X:Variable) => . ...</k>
-       <tenv> Gamma => Gamma[T@Rho/X] </tenv>
+       <tenv> Gamma => Gamma[T@(Rho[^/X])/X] </tenv>
        <fenv> Rho </fenv>
-       //<fenv> Rho => Rho[^/X] </fenv>        // it would be nice to do this, but if it isn't necessary,
+       //<fenv> Rho => Rho[^/X] </fenv>          // it would be nice to do this, but if it isn't necessary,
                                                // then it's more convenient not to because the current fenv-restoring
                                                // mechanism cannot be directed to restore everything except the just
                                                // declared function clause
@@ -71,14 +71,13 @@ module AGDA-SEMANTICS
        <sig> Sigma </sig>
     when funName(L) in keys(Sigma)
 
+  context bound! ~> (HOLE => whnfType(HOLE)) = _  [result(WhnfTypedExpr)]
+
   syntax Bool ::= cond(K) [function]
   rule cond(K) => leftmost(K) ==K Name("_::_")
   // `_:WhnfTypedExpr' enforces seqstrict
-  context bound! ~> _:WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond(HOLE)   [result(WhnfTypedExpr)]
-  context bound! ~> _:WhnfTypedExpr = (HOLE => chich ~> whnfType(HOLE)) when notBool cond(HOLE)  [result(WhnfTypedExpr)]
-
-  context bound! ~> (HOLE => whnfType(HOLE)) = _  [result(WhnfTypedExpr)]
-
+  context bound! ~> _::WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond(HOLE)   [result(WhnfTypedExpr)]
+  context bound! ~> _::WhnfTypedExpr = (HOLE => chich ~> whnfType(HOLE)) when notBool cond(HOLE)  [result(WhnfTypedExpr)]
 
   syntax Name ::= Aux(Name)
   syntax Expr ::= freshFunName(Expr)  [function]
