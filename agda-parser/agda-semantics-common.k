@@ -221,6 +221,9 @@ module AGDA-SEMANTICS-COMMON
   rule Set(I)@_ => Set(I) [structural, anywhere]
   //rule N:WhNeut@_ => N  when isVariable(N) =/=K true andBool isName(N) =/=K true [structural, anywhere]
 
+  // this would require Expr ::= Val
+  //rule ((_ : (E => E@Rho)) -> _)@Rho  [structural, anywhere]
+
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
 
   rule E@(Rho => Rho[undef/unnecessaryKeys(E, Rho)]) when unnecessaryKeys(E, Rho) =/=KList .KList  [structural, anywhere]

@@ -52,13 +52,16 @@ module AGDA-SEMANTICS
   rule autotype(_:Name) => .
   rule autotype(%underscore) => .
   rule <k> autotype(X:Variable) => . ...</k>
+       <tenv> Gamma </tenv>
+    when X in keys(Gamma)
+  rule <k> autotype(X:Variable) => . ...</k>
        <tenv> Gamma => Gamma[T@(Rho[^/X])/X] </tenv>
        <fenv> Rho </fenv>
        //<fenv> Rho => Rho[^/X] </fenv>          // it would be nice to do this, but if it isn't necessary,
                                                // then it's more convenient not to because the current fenv-restoring
                                                // mechanism cannot be directed to restore everything except the just
                                                // declared function clause
-    when /*notBool (X in keys(Gamma)) andBool*/ fresh(T:Expr)
+    when notBool (X in keys(Gamma)) andBool fresh(T:Expr)
 
   /*
   rule <k> L = R => autotype(L) ~> bound! ~> L = R ~> tenv(Gamma) ...</k>
@@ -68,8 +71,12 @@ module AGDA-SEMANTICS
   */
   rule <k> L = R => autotype(L) ~> bound! ~> L = R ~> tenv(Gamma) ...</k>
        <tenv> Gamma </tenv>
-       <sig> Sigma </sig>
-    when funName(L) in keys(Sigma)
+       <funtenv> GammaF </funtenv>
+    when notBool (funName(L) in keys(GammaF))
+  rule <k> L = R => autotype(L) ~> bound! ~> L = R ~> tenv(Gamma) ...</k>
+       <tenv> Gamma => unM(GammaF(funName(L))) </tenv>
+       <funtenv> GammaF </funtenv>
+    when funName(L) in keys(GammaF)
 
   context bound! ~> (HOLE => whnfType(HOLE)) = _  [result(WhnfTypedExpr)]
 
@@ -77,7 +84,7 @@ module AGDA-SEMANTICS
   rule cond(K) => leftmost(K) ==K Name("_::_")
   // `_:WhnfTypedExpr' enforces seqstrict
   context bound! ~> _::WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond(HOLE)   [result(WhnfTypedExpr)]
-  context bound! ~> _::WhnfTypedExpr = (HOLE => chich ~> whnfType(HOLE)) when notBool cond(HOLE)  [result(WhnfTypedExpr)]
+  context bound! ~> _::WhnfTypedExpr = (HOLE => whnfType(HOLE)) when notBool cond(HOLE)  [result(WhnfTypedExpr)]
 
   syntax Name ::= Aux(Name)
   syntax Expr ::= freshFunName(Expr)  [function]
@@ -121,5 +128,14 @@ module AGDA-SEMANTICS
             => //notBool (funName(L) in keys(Rho)) ~> true? ~>                    // verify that F isn't already defined
                //freeVariablesM(E) <=Set freeVariablesM(L) keys(Fun) ~> true? ~>    // that the body of F doesn't contain undefined functions (check TEnv instead b/c of mutual recursion)
                deval(Tl) == deval(Tr) ~> unify ~>
-               addFunClause(funName(L), L, R) ~> addFunWrapper(funName(L), L) ~> chich) ...</k>
+               addFunClause(funName(L), L, R) ~> addFunWrapper(funName(L), L)) ...</k>
+       <tenv> Gamma </tenv>
+       <funtenv> GammaF => GammaF[m(Gamma)/funName(L)] </funtenv>
+
+
+
+  // auxiliary
+  syntax K ::= m(Map)
+  syntax Map ::= unM(K)  [function]
+  rule unM(m(M)) => M  [structural]
 endmodule

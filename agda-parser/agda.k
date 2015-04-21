@@ -35,5 +35,6 @@ module AGDA
                   <metadata>
                     <range> .K </range>
                   </metadata>
+                  <funtenv> .Map </funtenv>
                 </T>
 endmodule

@@ -108,7 +108,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   context //[infer-app-arg2]:
           _::TypedExpr HOLE
   rule [infer-app-implicit]:
-       <k> t(E1, ({X : T} -> T')@Rho) t({E2}, {T2}@_) => T2 == T ~> unifyType(t(E1 {E2}, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
+       <k> t(E1, ({X : T} -> T')@Rho) t({E2}, {T2}@_) => T2 == deval(T@Rho) ~> unifyType(t(E1 {E2}, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
        <fenv> Rho' => Rho'[E2/X] </fenv>
 
   // TODO move to a separate file also with the insertion from agda-semantics(-common where was it?).k
@@ -120,7 +120,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
        t(E1, _) t(E2, ({_ : _} -> _)@_) => E1 (E2 {%underscore})  when isImplicit(E2) =/=K true
 
   rule [infer-app]:
-       <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> deval(T2) == T ~> unifyType(t(E1 E2, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
+       <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> deval(T2) == deval(T@Rho) ~> unifyType(t(E1 E2, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
        <fenv> Rho' => Rho'[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
 
@@ -135,7 +135,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   syntax Bool ::= cond(Expr, Expr)  [function]
   rule cond(_, Var("f")) => true
   rule //[infer-app]:
-       <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) =>  T1 == (X : T) -> T' ~> deval(T2) == T ~> unifyType(t(E1 E2, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
+       <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> deval(T2) == T ~> unifyType(t(E1 E2, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
        <fenv> Rho' => Rho'[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
 
