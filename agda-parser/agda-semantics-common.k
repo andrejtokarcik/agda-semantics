@@ -86,6 +86,7 @@ module AGDA-SEMANTICS-COMMON
   rule isWhnf((_ : _) -> _) => true
   rule isWhnf({_ : _} -> _) => true     // AT FIXME hack - generalise
   rule isWhnf(\ (_ : _) -> _) => true
+  rule isWhnf(\ {_ : _} -> _) => true
   
   syntax Nf ::= "(" Nf ")" [bracket]
                 | Neut
@@ -98,7 +99,7 @@ module AGDA-SEMANTICS-COMMON
                 | Name
                 | Neut Nf [left]
                 */
-  //rule isNeut(_:Variable) => true
+  rule isNeut(_:Variable) => true
   rule isNeut(_:Name) => true
   rule isNeut(_:Neut _:Nf) => true
   rule isNf(Set(_)) => true
@@ -136,10 +137,18 @@ module AGDA-SEMANTICS-COMMON
        <mgu> Theta </mgu>
   */
 
+  syntax Val ::= updateClosure(Val, Map)  [function]
+  rule updateClosure(V1 V2, Rho) => updateClosure(V1, Rho) updateClosure(V2, Rho)
+  rule updateClosure(E@Rho', Rho) => E@(Rho'[Rho])
+  rule updateClosure(E, Rho) => E@Rho  [owise]
+
+  // TODO: remove if unnecessary keys are not removed
   syntax Map ::= updateClosures(Map, Map)  [function]
   rule updateClosures(_, .Map) => .Map
-  rule updateClosures(Rho, (K |-> E@Rho' => .) _) (.Map => K |-> E@(Rho'[Rho]))
-  rule updateClosures(Rho, (K |-> t(E, T@Rho') => .) _) (.Map => K |-> t(E, T@(Rho'[Rho])))
+  //rule updateClosures(Rho, (K |-> E@Rho' => .) _) (.Map => K |-> E@(Rho'[Rho]))
+  //rule updateClosures(Rho, (K |-> t(E, T@Rho') => .) _) (.Map => K |-> t(E, T@(Rho'[Rho])))
+  rule updateClosures(Rho, (K |-> V => .) _) (.Map => K |-> updateClosure(V, Rho))
+  rule updateClosures(Rho, (K |-> t(E, T) => .) _) (.Map => K |-> t(E, updateClosure(T, Rho)))
   rule updateClosures(_, (K |-> V => .) _) (.Map => K |-> V)  [owise]
 
   syntax KItem ::= K "==" K   //[strict(all(context('deval)))]
@@ -195,7 +204,8 @@ module AGDA-SEMANTICS-COMMON
 
 
   syntax Val ::= "(" Val ")" [bracket]
-               | Expr "@" Map   [klabel('closure)]
+               | Expr "@" Map   //[klabel('closure)]
+               //| Val "@" Map
                | Val Val  [left]
 
   syntax Val ::= "^"      [latex(^\wedge)]  // bound -- vraj aj historicky symbol na oznacenie prave bound premennych
@@ -214,24 +224,27 @@ module AGDA-SEMANTICS-COMMON
   // The following rules are where most of the evaluation magic happens...
 
   //rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
-  rule X:Variable@Rho => Rho(X)@Rho  when X in keys(Rho) andBool Rho(X) =/=K ^  [structural, anywhere]
+  // FIXME
+  rule X:Variable@(_ X |-> V) => V /*updateClosure(V, X |-> V)*/  when deval(V) =/=K ^ /*X in keys(Rho) andBool Rho(X) =/=K ^*/  [structural, anywhere]
   //rule N:Name@Rho => #if N in keys(Rho) #then Rho(N)@Rho #else N #fi [structural, anywhere]
-  rule N:Name@Rho => Rho(N)@Rho  when N in keys(Rho)   [structural, anywhere]
+  rule N:Name@(_ N |-> V) => V /*updateClosure(V, N |-> V)*/  /*when N in keys(Rho)*/   [structural, anywhere]
 
   rule Set(I)@_ => Set(I) [structural, anywhere]
   //rule N:WhNeut@_ => N  when isVariable(N) =/=K true andBool isName(N) =/=K true [structural, anywhere]
 
   // this would require Expr ::= Val
-  //rule ((_ : (E => E@Rho)) -> _)@Rho  [structural, anywhere]
+  //rule ((_ : (E => E@Rho)) -> _)@Rho  when isVal(E) =/=K true  [structural, anywhere]
 
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
 
+  // NOTE: enormous amounts of data when not using unnecessaryKeys
   rule E@(Rho => Rho[undef/unnecessaryKeys(E, Rho)]) when unnecessaryKeys(E, Rho) =/=KList .KList  [structural, anywhere]
   //rule E@.Map => E  [structural, anywhere]
 
   // handle (E@R1)@R2 --- have to take advantage of abstract syntax here, or else K complains about E@RhoOrig's not being an Expr but a Val
   // (the more immediate context, closer to the expression, has higher priority, its values are just extended not modified)
-  rule 'closure(E:Expr@RhoOrig,, Map2KLabel(RhoNew:Map)(.KList)) => E@(RhoNew[RhoOrig]) [structural, anywhere]
+  //rule 'closure(E:Expr@RhoOrig,, Map2KLabel(RhoNew:Map)(.KList)) => E@(RhoNew[RhoOrig]) [structural, anywhere]
+  //rule (E:Expr@RhoOrig)@RhoNew => E@(RhoNew[RhoOrig])  [macro]
 
   /*
   syntax ValNf ::= Neut
@@ -317,17 +330,40 @@ module AGDA-SEMANTICS-COMMON
     when isFunClauses(leftmost(HOLE)) =/=K true orElseBool numArgs(HOLE) +Int 1 >Int numReqArgs(leftmost(HOLE))   [result(ValWhnf)]
     // ^ orElseBool necessary instead of impliesBool because numReqArgs is defined only for FunClauses
 
-  rule isFEnvRestore(evalWhnf(_:ValWhnf)) => true
-  rule <k> evalWhnf((\ (X : _) -> E:Expr)@Rho V:Val => E@(Rho[V/X])) ~> (. => fenv(Rho')) ...</k>
-       <fenv> Rho' </fenv>
+  syntax Bool ::= cond(Expr, Map)  [function]
+  rule cond(E, Rho) => E ==K deval(Name("nil")@Rho)
 
-  rule <k> evalWhnf(V => matchClause(leftmost(V), V)) ~> (. => fenv(Rho')) ...</k>
-       <fenv> Rho' </fenv>  when isFunClauses(leftmost(V))
+  rule isFEnvRestore(evalWhnf(_:ValWhnf)) => true
+  rule <k> evalWhnf((\ (X : _) -> E:Expr)@Rho' V:Val => E@(Rho'[Rho[V/X]])) ~> (. => fenv(Rho)) ...</k>
+       <fenv> Rho </fenv>
+    when isImplicit(deval(V)) =/=K true andBool cond(deval(V), Rho) =/=K true
+
+  rule <k> evalWhnf((\ (X : _) -> E:Expr)@Rho' V:Val => /*chich ~>*/ E@(Rho'[Rho[V/X]])) ~> (. => fenv(Rho)) ...</k>
+       <fenv> Rho => Rho[V/X] </fenv>
+    when isImplicit(deval(V)) =/=K true andBool cond(deval(V), Rho) ==K true
+
+
+  rule <k> evalWhnf((\ {X : _} -> E1:Expr)@Rho1 {E2}@Rho2 => E1@(Rho1[Rho[E2@Rho2/X]])) ~> (. => fenv(Rho)) ...</k>
+       <fenv> Rho => Rho[E2@Rho2/X] </fenv>
+
+  // comment this, should not ever happen, the metas get inserted in -typesystem
+  rule <k> evalWhnf((\ {X : T} -> E)@Rho' V => ((\ {X : T} -> E)@Rho' {%underscore}@Rho) V) ...</k>
+       <fenv> Rho </fenv>
+    when isImplicit(deval(V)) =/=K true
+
+  rule <k> evalWhnf(V => matchClause(leftmost(V), deval(V), gatherClosures(V))) ~> (. => fenv(Rho)) ...</k>
+       <fenv> Rho </fenv>  when isFunClauses(leftmost(V))
+
+  syntax Map ::= gatherClosures(Val)  [function]
+  rule gatherClosures(V1 V2) => gatherClosures(V1) gatherClosures(V2)
+  rule gatherClosures(E@Rho) => Rho
+  rule gatherClosures(E) => .Map  [owise]
 
   // TODO: ked sa zoznam vo FunClauses zredukuje na .List (t.j. nenasli sme match) a zaroven V neobsahuje bound premenne (t.j. V je uplne konkretna) tak daj error
-  syntax Val ::= matchClause(Val, Val)  [function]
-  rule matchClause(FunClauses(_, ListItem(L = R) _)@Rho, V) => R@(Rho[getMatching(L, V)])  when isMatching(L, V)
-  rule matchClause(FunClauses(_, _ Cs:List => Cs)@_, _)  [owise]
+  syntax Val ::= matchClause(Val, Expr, Map)  [function]
+  rule matchClause(FunClauses(_, .List)@_, _, _) => Name("(T)ERROR")
+  rule matchClause(FunClauses(_, ListItem(L = R) _)@Rho, E, Rho') => R@(Rho[Rho'[getMatching(L, E)]])  when isMatching(L, E)
+  rule matchClause(FunClauses(_, _ Cs:List => Cs)@_, _, _)  [owise]
 
 
 

@@ -78,6 +78,24 @@ module AGDA-SEMANTICS-TYPESYSTEM
     //when freeVariablesM(T2) <=Set keys(Rho)
     // vid FIXME v -metavariables.k k freeVariablesM()
 
+
+
+  context \ {_ : (HOLE => checkSetType(HOLE))} -> _   [result(SetTypedExpr)]
+  rule [bind-lambda]:
+       <k> (. => bound!) ~> \ {X : t(T, Set(_))} -> _ ~> //...</k>
+           (. => tenv(Gamma) ~> fenv(Rho)) ...</k>
+       <tenv> Gamma => Gamma[T@(Rho[^/X])/X] </tenv>
+       <fenv> Rho => Rho[^/X] </fenv>
+  context //[infer-lam-arg2]:
+          bound! ~> \ {_ : _} -> HOLE
+  rule [infer-lambda]:
+       <k> (bound! => .) ~>
+           (\ {X : t(T, Set(_))} -> t(E, T')
+            => t(\ {X : T} -> E, ((X : T) -> deval(T'))@Rho)) ...</k>
+       <fenv> Rho </fenv>      // neviem ci dobre priradujem Rho.  celkovo je lambda problematicka, ofic. by som ju mal len checkovat, nie inferovat.
+
+
+
   context //[infer-lam-arg1]:
           /*envs! ~>*/ \ (_ : (HOLE => checkSetType(HOLE))) -> _   [result(SetTypedExpr)]
   /*
@@ -111,9 +129,10 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <k> t(E1, ({X : T} -> T')@Rho) t({E2}, {T2}@_) => T2 == deval(T@Rho) ~> unifyType(t(E1 {E2}, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
        <fenv> Rho' => Rho'[E2/X] </fenv>
 
-  // TODO move to a separate file also with the insertion from agda-semantics(-common where was it?).k
+  // TODO move to a separate file also with the insertion from agda-semantics(-common, or where was it?).k
   // insert an implicit metavariable in front of an explicit arg in application
   // NOTE forgetting the already inferred type... does it matter that much?
+  // XXX this should be somehow related to convertibility of types
   rule [insert-implicit1]:
        t(E1, ({_ : _} -> _)@_) t(E2, _) => (E1 {%underscore}) E2  when isImplicit(E2) =/=K true
   rule [insert-implicit2]:
@@ -122,7 +141,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule [infer-app]:
        <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> deval(T2) == deval(T@Rho) ~> unifyType(t(E1 E2, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
        <fenv> Rho' => Rho'[E2/X] </fenv>
-    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
+    when isImplicit(deval(T2)) =/=K true /*!*/ andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
 
   /*
   rule //[infer-app]:    // when the type of the function being applied isn't a closure directly

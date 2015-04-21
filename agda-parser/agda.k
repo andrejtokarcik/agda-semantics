@@ -25,8 +25,12 @@ module AGDA
   rule <k> m(M') => . ...</k>
        <metadata> _ => M' </metadata>   [structural]
 
+  syntax KItem ::= "test"
+  rule <k> test => whnf((Name("map") Name("tt") (Name("_::_") {Set(1)} Set(0) (Name("nil") {Set(1)})))@Rho) ...</k> //Name("tt") Name("nil")) ...</k>
+       <fenv> Rho </fenv>
+
   configuration <T>
-                  <k> $PGM:Program </k>
+                  <k> $PGM:Program /*~> test*/ </k>
                   <tenv> .Map </tenv>
                   <fenv> .Map </fenv>
                   <mgu> .Mgu </mgu>

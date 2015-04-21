@@ -103,17 +103,34 @@ module AGDA-SEMANTICS
 
 
   rule FunClauses(0, ListItem(_ = R)) => R   [structural, anywhere]
-  rule <fenv>... (N |-> V) ((Aux(N) |-> V') => .) ...</fenv> when V ==K V'  [structural]
+  rule <fenv>... (F |-> V) ((Aux(F) |-> V') => .) ...</fenv> when V ==K V'  [structural]
 
-  syntax Expr ::= genLambda(Int, Expr)  [function]
-  rule genLambda(0, E) => E
-  rule genLambda(I, E) => \ (X : T) -> genLambda(I -Int 1, E X)  when fresh(X:Variable) andBool fresh(T:Expr)  [owise]
+  syntax Expr ::= genLambda(List, Expr)  [function]
+  rule genLambda(ListItem({_}) L, E) => \ {X : T} -> genLambda(L, E {X})  when fresh(X:Variable) andBool fresh(T:Expr)
+  rule genLambda(ListItem(A) L, E) => \ (X : T) -> genLambda(L, E X)      when isImplicit(A) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr)
+  rule genLambda(_, E) => E  [owise]
   // wouldn't untyped lambdas be actually better, I wonder...
+
+  syntax List ::= argsList(Expr)  [function]
+  rule argsList(E E') => argsList(E) ListItem(E')
+  rule argsList(_) => .List [owise]
+
+  /*
+  syntax Telescope ::= genLamTel(LHS)    [function]
+  // potreboval som dat genLamTel(L) pred ten #if...
+  rule genLamTel(L A) => #if isImplicit(A) ==K true #then {X : T} #else (X : T) #fi genLamTel(L)
+    when fresh (X:Variable) andBool fresh(T:Expr)
+  rule genLamTel(_) => .Telescope  [owise]
+  syntax Expr ::= genLamBody(Telescope, Expr)  [function]
+  rule genLamBody((X : _) Tel, E) => genLamBody(Tel, E)  X
+  rule genLamBody({X : _} Tel, E) => genLamBody(Tel, E) {X}
+  rule genLamBody(.Telescope, E) => E  [owise]
+  */
 
   syntax KItem ::= addFunWrapper(Name, LHS)
   rule <k> addFunWrapper(F, L) => . ...</k>
        <fenv> Rho
-              (. => F |-> genLambda(numArgs(L), Aux(F))@Rho) </fenv>   // forcing the evaluation of a pattern-matching function to have a sufficient no. of args
+              (. => F |-> genLambda(argsList(L), Aux(F))@Rho) </fenv>   // forcing the evaluation of a pattern-matching function to have a sufficient no. of args
     when notBool (F in keys(Rho))
   rule <k> addFunWrapper(F, L) => . ...</k>
        <fenv> Rho (F |-> _@(_ => Rho)) </fenv>
