@@ -67,9 +67,8 @@ module AGDA-SYNTAX
                | App(Arg, Args)     [klabel('App)]
                | OpApp(Arg, Args)   [klabel('OpApp)]
   rule OpApp(A:Arg, As:Args) => App(A, As) [macro]
-  rule App(A:Arg, 'Cons(A':Arg,, As:Args)) => App(A A', As) [macro] //when As =/=K '.List`{""`}(.KList) [macro]
+  rule App(A:Arg, 'Cons(A':Arg,, As:Args)) => App(A A', As) [macro]
   rule App(A:Arg, '.List`{""`}(.KList)) => A  [macro]
-  //rule App(A:Arg, 'Cons(A':Arg,, '.List`{""`}(.KList))) => A A'  [macro]
 
   syntax Universe ::= Set(Int)     [klabel('SetN), latex(\terminal{Set}_{#1})]
                     | "Set"        [klabel('Set), notInRules]
@@ -100,33 +99,7 @@ module AGDA-SYNTAX
   rule AppP(A:Arg, A':Arg) => App(A, A')  [macro]  //'Cons(A':Arg,, '.List`{""`}(.KList))) [macro]
   rule OpAppP(A:Arg, As:Args) => OpApp(A, As) [macro]
 
-  /*
-  syntax Pattern ::= "(" Pattern ")" [bracket]
-    | "{" Pattern "}"
-    | Variable
-    | Name
-    | Underscore
-    | AppP
-  syntax AppP ::= Pattern Pattern [left, notInRules]
-    | AppP(Pattern, Pattern)     [klabel('AppP)]
-    | OpAppP(Pattern, Patterns)  [klabel('OpAppP)]
-  //syntax Expr ::= Pattern
-  syntax Patterns ::= List{Pattern, ""}    [klabel('Cons), notInRules]
-
-  rule AppP(P:Pattern, P':Pattern) => '__(P,, P')  [macro]
-  //rule OpAppP(P:Pattern, 'Cons(P':Pattern,, Ps:Patterns)) => P OpAppP(P', Ps)  [macro]
-  //rule OpAppP(P:Pattern, 'Cons(P':Pattern,, '.List`{""`}(.KList))) => P P'    [macro]
-  rule OpAppP(P:Pattern, 'Cons(P':Pattern,, Ps:Patterns)) => OpAppP('__(P,, P'), Ps)   [macro]
-  rule OpAppP(P:Pattern, '.List`{""`}(.KList)) => P   [macro]
-  */
-
-  /*
-  syntax LHS ::= Name
-               | LHS Pattern  [left]
-  */
   syntax LHS ::= Pattern
-  //rule isLHS(_:Name) => true
-  //rule isLHS(_:LHS _:Pattern) => true
   syntax RHS ::= Expr
   syntax FunClause ::= LHS "=" RHS                   [binder, klabel('FunClause)]
 

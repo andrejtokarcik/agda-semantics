@@ -14,19 +14,18 @@ module AGDA
   rule '.List`{""`}(.KList) => .          [structural]
 
   // metadata bureaucracy
-  // TODO: then use #tokenToString() when printing range
-  syntax K ::= m(MetadataCellFragment, K)
-             | m(MetadataCellFragment)
-  rule [R:Range] K => m(<range> R </range>, K)  [macro]
-  rule <k> m(M, K) => K ~> m(M') ...</k>
+  syntax K ::= md(MetadataCellFragment, K)
+             | md(MetadataCellFragment)
+  rule [R:Range] K => md(<range> R </range>, K)  [macro]
+  rule <k> md(M, K) => K ~> md(M') ...</k>
        <metadata> M' => M </metadata>   [structural]
-  //rule <k> _:KResult ~> m(M') => . ...</k>
+  //rule <k> _:KResult ~> md(M') => . ...</k>
   //     <metadata> _ => M' </metadata>   [structural]
-  rule <k> m(M') => . ...</k>
+  rule <k> md(M') => . ...</k>
        <metadata> _ => M' </metadata>   [structural]
 
   syntax KItem ::= "test"
-  rule <k> test => whnf((Name("map") Name("tt") (Name("_::_") {Set(1)} Set(0) (Name("nil") {Set(1)})))@Rho) ...</k> //Name("tt") Name("nil")) ...</k>
+  rule <k> test => whnf((Name("map") Name("tt") (Name("_::_") {Set(1)} Set(0) (Name("nil") {Set(1)})))@Rho) ...</k>
        <fenv> Rho </fenv>
 
   configuration <T>
@@ -39,6 +38,6 @@ module AGDA
                   <metadata>
                     <range> .K </range>
                   </metadata>
-                  <funtenv> .Map </funtenv>
+                  <funtenvs> .Map </funtenvs>
                 </T>
 endmodule
