@@ -1,0 +1,34 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <metadata>
+        <range>
+            .K
+        </range>
+    </metadata>
+    <sig>
+        Fun ( Name ( "t" ) ) |-> ( #symVariable(3) : Set ( 0 ) ) -> Set ( 0 )
+    </sig>
+    <funtenvs>
+        Fun ( Name ( "t" ) ) |-> m ( Var ( "x" ) |-> Set ( 0 ) )
+    </funtenvs>
+    <metavars>
+        .Map
+    </metavars>
+    <fenv>
+        Fun ( Name ( "t" ) ) |-> \ ( #symVariable(7) : #symExpr(8) ) -> (Aux (
+           Fun ( Name ( "t" ) ) ) #symVariable(7))
+        Aux ( Fun ( Name ( "t" ) ) ) |-> FunClauses ( 1 , ListItem((
+          #symVariable(6) Var ( "x" )) = Var ( "x" )) )
+    </fenv>
+    <ncat>
+        Name ( "t" ) |-> Fun ( Name ( "t" ) )
+    </ncat>
+    <tenv>
+        .Map
+    </tenv>
+</T>

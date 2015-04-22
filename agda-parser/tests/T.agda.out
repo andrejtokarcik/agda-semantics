@@ -1,0 +1,39 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <metadata>
+        <range>
+            .K
+        </range>
+    </metadata>
+    <sig>
+        Fun ( Name ( "e" ) ) |-> Set ( 0 )
+        Fun ( Name ( "p" ) ) |-> ( #symVariable(2) : Set ( 0 ) ) -> Set ( 0 )
+        Fun ( Name ( "x" ) ) |-> Set ( 0 )
+        Fun ( Name ( "y" ) ) |-> Set ( 0 )
+    </sig>
+    <funtenvs>
+        Fun ( Name ( "e" ) ) |-> m ( .Map )
+    </funtenvs>
+    <metavars>
+        .Map
+    </metavars>
+    <fenv>
+        Fun ( Name ( "e" ) ) |-> Aux ( Fun ( Name ( "e" ) ) )
+        Aux ( Fun ( Name ( "e" ) ) ) |-> (Fun ( Name ( "p" ) ) Fun ( Name ( 
+          "y" ) ))
+    </fenv>
+    <ncat>
+        Name ( "e" ) |-> Fun ( Name ( "e" ) )
+        Name ( "p" ) |-> Fun ( Name ( "p" ) )
+        Name ( "x" ) |-> Fun ( Name ( "x" ) )
+        Name ( "y" ) |-> Fun ( Name ( "y" ) )
+    </ncat>
+    <tenv>
+        .Map
+    </tenv>
+</T>

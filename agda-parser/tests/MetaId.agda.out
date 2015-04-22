@@ -1,0 +1,43 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <metadata>
+        <range>
+            .K
+        </range>
+    </metadata>
+    <sig>
+        Fun ( Name ( "expr" ) ) |-> Data ( Name ( "Nat" ) )
+        Data ( Name ( "Nat" ) ) |-> Set ( 0 )
+        Con ( Name ( "suc" ) ) |-> ( #symVariable(1) : Data ( Name ( "Nat" ) )
+           ) -> Data ( Name ( "Nat" ) )
+        Con ( Name ( "zero" ) ) |-> Data ( Name ( "Nat" ) )
+    </sig>
+    <funtenvs>
+        Fun ( Name ( "expr" ) ) |-> m ( #symExpr(2) |-> Set ( #symInt(4) ) 
+          #symExpr(5) |-> Set ( 0 ) )
+    </funtenvs>
+    <metavars>
+        #symExpr(2) |-> t ( Data ( Name ( "Nat" ) ) , Set ( #symInt(4) ) )
+        #symExpr(5) |-> t ( #symExpr(5) , Set ( 0 ) )
+    </metavars>
+    <fenv>
+        Fun ( Name ( "expr" ) ) |-> Aux ( Fun ( Name ( "expr" ) ) )
+        Aux ( Fun ( Name ( "expr" ) ) ) |-> ((\ ( Var ( "a" ) : Set ( 0 ) ) ->
+           \ ( Var ( "x" ) : Var ( "a" ) ) -> Var ( "x" ) #symExpr(5)) Con ( 
+          Name ( "zero" ) ))
+    </fenv>
+    <ncat>
+        Name ( "Nat" ) |-> Data ( Name ( "Nat" ) )
+        Name ( "expr" ) |-> Fun ( Name ( "expr" ) )
+        Name ( "suc" ) |-> Con ( Name ( "suc" ) )
+        Name ( "zero" ) |-> Con ( Name ( "zero" ) )
+    </ncat>
+    <tenv>
+        #symExpr(2) |-> Set ( #symInt(4) )
+    </tenv>
+</T>
