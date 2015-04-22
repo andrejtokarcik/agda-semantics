@@ -23,13 +23,13 @@
     </funtenvs>
     <metavars>
         #symExpr(2) |-> t ( Data ( Name ( "Nat" ) ) , Set ( #symInt(4) ) )
-        #symExpr(5) |-> t ( #symExpr(5) , Set ( 0 ) )
+        #symExpr(5) |-> t ( Data ( Name ( "Nat" ) ) , Set ( 0 ) )
     </metavars>
     <fenv>
         Fun ( Name ( "expr" ) ) |-> Aux ( Fun ( Name ( "expr" ) ) )
-        Aux ( Fun ( Name ( "expr" ) ) ) |-> ((\ ( Var ( "a" ) : Set ( 0 ) ) ->
-           \ ( Var ( "x" ) : Var ( "a" ) ) -> Var ( "x" ) #symExpr(5)) Con ( 
-          Name ( "zero" ) ))
+        Aux ( Fun ( Name ( "expr" ) ) ) |-> ((\ ( #symVariable(7) : Set ( 0 ) 
+          ) -> \ ( #symVariable(10) : #symVariable(7) ) -> #symVariable(10) 
+          Data ( Name ( "Nat" ) )) Con ( Name ( "zero" ) ))
     </fenv>
     <ncat>
         Name ( "Nat" ) |-> Data ( Name ( "Nat" ) )
