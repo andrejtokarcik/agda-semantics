@@ -23,8 +23,12 @@ module AGDA-SEMANTICS-DECL-FUN
        <funtenvs> GammaF </funtenvs>
     when funName(L) in keys(GammaF)
 
+  syntax Bool ::= cond2(Expr)  [function]
+  rule cond2(t(Fun(Name("f")), _)) => true
+
   context autotyped! ~> (HOLE => whnfType(HOLE)) = _  [result(WhnfTypedExpr)]
-  context autotyped! ~> _::WhnfTypedExpr = (HOLE => whnfType(HOLE))    [result(WhnfTypedExpr)]
+  context autotyped! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond2(L) =/=K true   [result(WhnfTypedExpr)]
+  context autotyped! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE) ~> chich) when cond2(L) ==K true   [result(WhnfTypedExpr)]
 
   // insert implicit metavariables at the end of the {left,right}-hand side of function clauses
   rule autotyped! ~> (t(L, ({_ : _} -> _)) => L {%underscore}) = _

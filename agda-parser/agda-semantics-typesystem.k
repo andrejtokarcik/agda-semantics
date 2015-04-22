@@ -86,8 +86,6 @@ module AGDA-SEMANTICS-TYPESYSTEM
   context _::WhnfTypedExpr HOLE
 
   // insert an implicit metavariable in front of an explicit arg in application
-  // NOTE forgetting the already inferred type... does it matter that much?
-  // XXX this should be somehow related to convertibility of types
   rule [insert-implicit1]:
        t(E1, ({_ : _} -> _)) t(E2, _) => (E1 {%underscore}) E2  when isImplicit(E2) =/=K true
   rule [insert-implicit2]:
@@ -101,7 +99,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
     when isImplicit(T2) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
 
   syntax Bool ::= cond(Expr, Expr)  [function]
-  rule cond(_, Name("zero")) => true
-  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => chich ~> T1 == (X : T) -> T' ~> T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> chich ...</k>
+  rule cond(Fun(Name("f")), _) => true
+  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> chich ~> T2 == T ~> chich ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> chich ...</k>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
 endmodule
