@@ -1,8 +1,6 @@
-require "agda-syntax.k"
 require "agda-semantics-common.k"
 
 module AGDA-SEMANTICS-DECL-DATA
-  imports AGDA-SYNTAX
   imports AGDA-SEMANTICS-COMMON
 
   context data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
@@ -33,8 +31,8 @@ module AGDA-SEMANTICS-DECL-DATA
   rule ({_ : _} -> T => T) constructorOf _
   rule D:Name constructorOf D => true
   rule Set(I) constructorOf Set(I) => true
-  rule (T:Expr V:Variable => T) constructorOf (D:Expr V => D)
-  rule (T:Expr E:Expr => T) constructorOf _:Expr  [owise]
+  rule (T:Expr _:Variable => T) constructorOf (D:Expr _:Variable => D)
+  rule (T:Expr _:Expr => T) constructorOf _:Expr  [owise]
 
   syntax Expr ::= prependParams(Telescope, Expr) [function]
   rule prependParams(.Telescope, T:Expr) => T

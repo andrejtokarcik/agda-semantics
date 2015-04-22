@@ -1,13 +1,9 @@
-require "agda-syntax.k"
 require "agda-semantics-common.k"
 require "agda-semantics-unification.k"
-require "agda-semantics-metavariables.k"
 
 module AGDA-SEMANTICS-TYPESYSTEM
-  imports AGDA-SYNTAX
   imports AGDA-SEMANTICS-COMMON
   imports AGDA-SEMANTICS-UNIFICATION
-  imports AGDA-SEMANTICS-METAVARIABLES
 
   // TODO pomaz <k>...</k> tam kde nie je treba
 
@@ -22,6 +18,12 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule [infer-universe]:
        Set(I) => t(Set(I), Set(I +Int 1))
+
+  rule [infer-meta]:
+       <k> %underscore => E ...</k>
+       <tenv>... . => E |-> T ...</tenv>
+       <metavars>... . => E |-> t(E, T) ...</metavars>
+    when fresh(E:Expr) andBool fresh(T:Expr)
 
   // implicit args
   context {HOLE}

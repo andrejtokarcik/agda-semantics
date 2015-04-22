@@ -29,7 +29,7 @@ module AGDA
 
   configuration <T>
                   <k> $PGM:Program /*~> test*/ </k>
-                  <tenv> .Map </tenv>   // <ctx>
+                  <tenv> .Map </tenv>   // <ctx>    --- contains only metas' types after completion
                   <fenv> .Map </fenv>   // <fun> alebo <env> alebo <fenv>
                   <mgu> .Mgu </mgu>
                   <sig> .Map </sig>

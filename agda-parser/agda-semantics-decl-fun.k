@@ -1,9 +1,7 @@
 require "agda-semantics-common.k"
-require "agda-semantics-metavariables.k"
 
 module AGDA-SEMANTICS-DECL-FUN
   imports AGDA-SEMANTICS-COMMON
-  imports AGDA-SEMANTICS-METAVARIABLES
 
   context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
   rule <k> N : t(E, Set(_)) => . ...</k>
