@@ -98,19 +98,17 @@ module AGDA-SEMANTICS-TYPESYSTEM
        t(E1, _) t(E2, ({_ : _} -> _)@_) => E1 (E2 {%underscore})  when isImplicit(E2) =/=K true
 
   rule [infer-app-implicit]:
-       <k> t(E1, ({X : T} -> T')@Rho) t({E2}, {T2}@_) => T2 == deval(T@Rho) ~> unifyType(t(E1 {E2}, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
+       <k> t(E1, ({X : T} -> T')@Rho) t({E2}, {T2}@_) => T2 == deval(T@Rho) ~> unifyType(E1 {E2}, T', Rho[Rho'[E2/X]]) ~> fenv(Rho') ...</k>
        <fenv> Rho' => Rho'[E2/X] </fenv>
 
   rule [infer-app-explicit]:
-       <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> deval(T2) == deval(T@Rho) ~> unifyType(t(E1 E2, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
+       <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> deval(T2) == deval(T@Rho) ~> unifyType(E1 E2, T', Rho[Rho'[E2/X]]) ~> fenv(Rho') ...</k>
        <fenv> Rho' => Rho'[E2/X] </fenv>
-    when isImplicit(deval(T2)) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) //andBool cond(E1, E2) =/=K true
+    when isImplicit(deval(T2)) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
 
-  /*
   syntax Bool ::= cond(Expr, Expr)  [function]
-  rule cond(_, Var("f")) => true
-  rule <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> deval(T2) == T ~> unifyType(t(E1 E2, T'@(Rho[Rho'[E2/X]]))) ~> fenv(Rho') ...</k>
+  rule cond(_, Name("zero")) => true
+  rule <k> t(E1:Expr, T1@Rho) t(E2:Expr, T2) => chich ~> T1 == (X : T) -> T' ~> deval(T2) == T ~> unifyType(E1 E2, T', Rho[Rho'[E2/X]]) ~> fenv(Rho') ~> chich ...</k>
        <fenv> Rho' => Rho'[E2/X] </fenv>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
-  */
 endmodule

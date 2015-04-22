@@ -35,7 +35,7 @@ module AGDA-SEMANTICS-COMMON
   /** The following rules are where most of the evaluation magic happens... */
 
   //rule X:Variable@Rho => #if X in keys(Rho) andBool Rho(X) =/=K ^ #then Rho(X)@Rho #else X #fi  [structural, anywhere]
-  // FIXME
+  // FIXME!!
   rule X:Variable@(_ X |-> V) => V /*updateClosure(V, X |-> V)*/  when deval(V) =/=K ^ /*X in keys(Rho) andBool Rho(X) =/=K ^*/  [structural, anywhere]
   //rule N:Name@Rho => #if N in keys(Rho) #then Rho(N)@Rho #else N #fi [structural, anywhere]
   rule N:Name@(_ N |-> V) => V /*updateClosure(V, N |-> V)*/  /*when N in keys(Rho)*/   [structural, anywhere]
@@ -49,7 +49,8 @@ module AGDA-SEMANTICS-COMMON
   rule (E1:Expr E2:Expr)@Rho => E1@Rho E2@Rho [structural, anywhere]
 
   // NOTE: enormous amounts of data when not using unnecessaryKeys
-  rule E@(Rho => Rho[undef/unnecessaryKeys(E, Rho)]) when unnecessaryKeys(E, Rho) =/=KList .KList  [structural, anywhere]
+  rule E@(Rho => Rho[undef/unnecessaryKeys(E, Rho)])
+    when isSymbolicExpr(E) =/=K true andBool unnecessaryKeys(E, Rho) =/=KList .KList  [structural, anywhere]
   //rule E@.Map => E  [structural, anywhere]
 
 
@@ -79,7 +80,7 @@ module AGDA-SEMANTICS-COMMON
   rule leftmost(K) => K [owise]
 
   syntax KItem ::= checkSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
-  rule checkSetType(t(E, T)) => deval(T) == Set(I) ~> unifyType(t(E, T)) ~> checkSetType(HOLE)
+  rule checkSetType(t(E, T)) => deval(T) == Set(I) ~> unifyType(E, T, .Map) ~> checkSetType(HOLE)
     when isUniverse(T) =/=K true andBool fresh(I:Int)
   rule Te:SetTypedExpr ~> checkSetType(HOLE) => checkSetType(Te)
 endmodule

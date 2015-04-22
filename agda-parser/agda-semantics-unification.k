@@ -24,12 +24,13 @@ module AGDA-SEMANTICS-UNIFICATION
   rule <k> unify(E:Expr) => unify ~> applyMgu(Theta, E) ...</k>
        <mgu> Theta </mgu>
 
-  syntax KItem ::= unifyType(TypedExpr)
-  rule <k> unifyType(t(E, T)) => unify ~> t(E, applyMgu(Theta, T)) ...</k>
+  syntax KItem ::= unifyType(Expr, Expr, Map)
+  rule <k> unifyType(E, T, Rho) => unify ~> t(E, applyMgu(Theta, T)@Rho) ...</k>
        <mgu> Theta </mgu>
 
 
 
+  // these functions exist only because unnecessary keys get removed in -common
   syntax Val ::= updateClosure(Val, Map)  [function]
   rule updateClosure(V1 V2, Rho) => updateClosure(V1, Rho) updateClosure(V2, Rho)
   rule updateClosure(E@Rho', Rho) => E@(Rho'[Rho])

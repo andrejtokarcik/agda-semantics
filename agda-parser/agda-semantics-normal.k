@@ -39,12 +39,12 @@ module AGDA-SEMANTICS-NORMAL
     when isFunClauses(leftmost(HOLE)) =/=K true orElseBool numArgs(HOLE) +Int 1 >Int numReqArgs(leftmost(HOLE))   [result(ValWhnf)]
 
   rule isFEnvRestore(whnf(_:ValWhnf)) => true
-  rule <k> whnf((\ (X : _) -> E:Expr)@Rho' V:Val => E@(Rho'[Rho[V/X]])) ~> (. => fenv(Rho)) ...</k>
-       <fenv> Rho </fenv>
+  rule <k> whnf((\ (X : _) -> E:Expr)@Rho V:Val => E@(Rho[Rho'[V/X]])) ~> (. => fenv(Rho')) ...</k>
+       <fenv> Rho' => Rho'[V/X] </fenv>
     when isImplicit(deval(V)) =/=K true
 
-  rule <k> whnf((\ {X : _} -> E1:Expr)@Rho1 {E2}@Rho2 => E1@(Rho1[Rho[E2@Rho2/X]])) ~> (. => fenv(Rho)) ...</k>
-       <fenv> Rho => Rho[E2@Rho2/X] </fenv>
+  rule <k> whnf((\ {X : _} -> E1:Expr)@Rho1 {E2}@Rho2 => E1@(Rho1[Rho'[E2@Rho2/X]])) ~> (. => fenv(Rho')) ...</k>
+       <fenv> Rho' => Rho'[E2@Rho2/X] </fenv>
 
   /*
   rule <k> whnf((\ {X : T} -> E)@Rho' V => ((\ {X : T} -> E)@Rho' {%underscore}@Rho) V) ...</k>
