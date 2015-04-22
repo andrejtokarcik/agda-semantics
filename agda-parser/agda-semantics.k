@@ -11,13 +11,6 @@ module AGDA-SEMANTICS
 
   syntax KResult ::= TypedExpr
 
-
   rule module N Tel where Decls => Decls
   rule postulate Sig => Sig
-
-  context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
-  rule <k> N : t(E, Set(_)) => . ...</k>
-       <sig> Sigma (. => N |-> E@Rho) </sig>
-       <fenv> Rho </fenv>
-    when notBool (N in keys(Sigma))
 endmodule

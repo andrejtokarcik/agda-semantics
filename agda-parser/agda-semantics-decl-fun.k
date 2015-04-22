@@ -5,6 +5,13 @@ module AGDA-SEMANTICS-DECL-FUN
   imports AGDA-SEMANTICS-COMMON
   imports AGDA-SEMANTICS-METAVARIABLES
 
+  context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
+  rule <k> N : t(E, Set(_)) => . ...</k>
+       <ncat> NCat (. => N |-> Fun(N)) </ncat>
+       <sig> Sigma (. => Fun(N) |-> E) </sig>
+    when notBool (N in keys(NCat))
+
+
   syntax KItem ::= "autotyped!"
 
   rule <k> L = R => autotype(L) ~> autotyped! ~> L = R ~> tenv(Gamma) ...</k>
@@ -20,14 +27,12 @@ module AGDA-SEMANTICS-DECL-FUN
   context autotyped! ~> _::WhnfTypedExpr = (HOLE => whnfType(HOLE))    [result(WhnfTypedExpr)]
 
   // insert implicit metavariables at the end of the {left,right}-hand side of function clauses
-  rule autotyped! ~> (t(L, ({_ : _} -> _)@_) => L {%underscore}) = _
-  rule autotyped! ~> _ = (t(R, ({_ : _} -> _)@_) => R {%underscore})
+  rule autotyped! ~> (t(L, ({_ : _} -> _)) => L {%underscore}) = _
+  rule autotyped! ~> _ = (t(R, ({_ : _} -> _)) => R {%underscore})
 
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
-            => //notBool (funName(L) in keys(Rho)) ~> true? ~>                    // verify that F isn't already defined
-               //freeVariablesM(E) <=Set freeVariablesM(L) keys(Fun) ~> true? ~>    // that the body of F doesn't contain undefined functions (check TEnv instead b/c of mutual recursion)
-               deval(Tl) == deval(Tr) ~> unify ~>
+            => Tl == Tr ~> unify ~>
                addFunClause(funName(L), L, R) ~> addFunWrapper(funName(L), L)) ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>
@@ -45,12 +50,7 @@ module AGDA-SEMANTICS-DECL-FUN
        <tenv> Gamma </tenv>
     when X in keys(Gamma)
   rule <k> autotype(X:Variable) => . ...</k>
-       <tenv> Gamma => Gamma[T@(Rho[^/X])/X] </tenv>
-       <fenv> Rho </fenv>
-       //<fenv> Rho => Rho[^/X] </fenv>          // it would be nice to do this, but if it isn't necessary,
-                                                 // then it's more convenient not to because the current fenv-restoring
-                                                 // mechanism cannot be directed to restore everything except the just
-                                                 // declared function clause
+       <tenv> Gamma => Gamma[T/X] </tenv>
     when notBool (X in keys(Gamma)) andBool fresh(T:Expr)
 
   syntax Name ::= Aux(Name)
@@ -61,10 +61,10 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax KItem ::= addFunClause(Name, LHS, RHS)
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fenv> Rho
-              (. => Aux(F) |-> FunClauses(numArgs(L), ListItem(freshFunName(L) = R))@Rho) </fenv>   // Aux(F) maps to the list of pattern-matching clauses
+              (. => Aux(F) |-> FunClauses(numArgs(L), ListItem(freshFunName(L) = R))) </fenv>   // Aux(F) maps to the list of pattern-matching clauses
     when notBool (F in keys(Rho))
   rule <k> addFunClause(F, L, R) => . ...</k>
-       <fenv>... Aux(F) |-> FunClauses(I, _ (. => ListItem(freshFunName(L) = R)))@_ ...</fenv>
+       <fenv>... Aux(F) |-> FunClauses(I, _ (. => ListItem(freshFunName(L) = R))) ...</fenv>
     when numArgs(L) ==Int I
     // ... already matching on Aux(F), don't have to check for its presence in keys
 
@@ -84,11 +84,9 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax KItem ::= addFunWrapper(Name, LHS)
   rule <k> addFunWrapper(F, L) => . ...</k>
        <fenv> Rho
-              (. => F |-> genLambda(argsList(L), Aux(F))@Rho) </fenv>   // forcing the evaluation of a pattern-matching function to have a sufficient no. of args
+              (. => F |-> genLambda(argsList(L), Aux(F))) </fenv>   // forcing the evaluation of a pattern-matching function to have a sufficient no. of args
     when notBool (F in keys(Rho))
-  rule <k> addFunWrapper(F, L) => . ...</k>
-       <fenv> Rho (F |-> _@(_ => Rho)) </fenv>
-    // ... already matching on F, don't have to check for its presence in keys
+  rule <k> addFunWrapper(F, L) => . ...</k>  <fenv> Rho </fenv>  when F in keys(Rho)
 
 
   syntax K ::= m(Map)

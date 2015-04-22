@@ -4,9 +4,8 @@ module AGDA-SEMANTICS-METAVARIABLES
   imports AGDA-SEMANTICS-COMMON
 
   rule <k> %underscore => E ...</k>
-       <tenv>... . => E |-> T@Rho ...</tenv>
-       <metavars>... . => E |-> t(E, T@Rho) ...</metavars>
-       <fenv> Rho </fenv>
+       <tenv>... . => E |-> T ...</tenv>
+       <metavars>... . => E |-> t(E, T) ...</metavars>
     when fresh(E:Expr) andBool fresh(T:Expr)   // hack with .Map
 
 
@@ -22,12 +21,11 @@ module AGDA-SEMANTICS-METAVARIABLES
   rule removeMetas(SetItem(E:Expr) S:Set => S) (. => SetItem(E))  [owise, structural]
 
   // Metavariables should be always substituted *for*, not vice versa.
-  // The LHS of eqn() below gets replaced with the RHS -- swap the sides
+  // The LHS of eqn() below gets replaced with the RHS: swapping the sides
   // when necessary.
-  rule eqns((eqn(E:Expr,,H:MetaVariable) => eqn(H,,E)),,_)
-    when isMetaVariable(E) =/=K true  [structural, anywhere]
-
-  // TODO: swap accordingly when one of the metavariables is more specified than
-  // (i.e., a subsort of the other).  e.g., #symExpr(_) should be replaced with #symVariable(_),
-  // never the other way around...
+  rule eqns((eqn(E:Expr,,#symExpr(I)) => eqn(#symExpr(I),,E)),,_)
+    when getKLabel(E) =/=KLabel #symExpr  [structural, anywhere]
+  rule eqns((eqn(X:Variable,,#symVariable(I)) => eqn(#symVariable(I),,X)),,_)
+    when getKLabel(X) =/=KLabel #symVariable  [structural, anywhere]
+  rule eqns((eqn(#symExpr(I),,#symVariable(J)) => eqn(#symVariable(J),,#symExpr(I))),,_)  [structural, anywhere]
 endmodule

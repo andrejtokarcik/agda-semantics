@@ -25,19 +25,19 @@ module AGDA
        <metadata> _ => M' </metadata>   [structural]
 
   syntax KItem ::= "test"
-  rule <k> test => whnf((Name("map") Name("tt") (Name("_::_") {Set(1)} Set(0) (Name("nil") {Set(1)})))@Rho) ...</k>
-       <fenv> Rho </fenv>
+  rule <k> test => whnf(Name("map") Name("tt") (Name("_::_") {Set(1)} Set(0) (Name("nil") {Set(1)}))) ...</k>
 
   configuration <T>
                   <k> $PGM:Program /*~> test*/ </k>
-                  <tenv> .Map </tenv>
-                  <fenv> .Map </fenv>
+                  <tenv> .Map </tenv>   // <ctx>
+                  <fenv> .Map </fenv>   // <fun> alebo <env> alebo <fenv>
                   <mgu> .Mgu </mgu>
-                  <sig> .Map </sig>    // zlucit do <tenv>?
-                  <metavars> .Map </metavars>
-                  <metadata>
+                  <sig> .Map </sig>
+                  <ncat> .Map </ncat>
+                  <metavars> .Map </metavars>   // <meta>
+                  <metadata>                    // <md>
                     <range> .K </range>
                   </metadata>
-                  <funtenvs> .Map </funtenvs>
+                  <funtenvs> .Map </funtenvs>   // <fctx>  (mozno spravit <fun> <env>..</env> <ctx>..</ctx> </fun> ?)
                 </T>
 endmodule
