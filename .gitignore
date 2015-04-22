@@ -8,3 +8,5 @@
 *-kompiled
 *.log
 latex
+*.agdai
+out
