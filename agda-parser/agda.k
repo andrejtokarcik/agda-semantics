@@ -34,8 +34,8 @@ module AGDA
                   <mgu> .Mgu </mgu>
                   <sig> .Map </sig>
                   <ncat> .Map </ncat>
-                  <metavars> .Map </metavars>   // <meta>
-                  <metadata>                    // <md>
+                  <metavars> .Map </metavars>   // <meta>   --- mozno uplne zmazat?
+                  <metadata>                    // <md> [?]
                     <range> .K </range>
                   </metadata>
                   <funtenvs> .Map </funtenvs>   // <fctx>  (mozno spravit <fun> <env>..</env> <ctx>..</ctx> </fun> ?)

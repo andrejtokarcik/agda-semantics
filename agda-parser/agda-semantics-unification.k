@@ -23,6 +23,4 @@ module AGDA-SEMANTICS-UNIFICATION
   syntax KItem ::= unify(Expr)
   rule <k> unify(E:Expr) => unify ~> applyMgu(Theta, E) ...</k>
        <mgu> Theta </mgu>
-  rule <k> t(E, unify(T:Expr)) => unify ~> t(E, applyMgu(Theta, T)) ...</k>
-       <mgu> Theta </mgu>
 endmodule

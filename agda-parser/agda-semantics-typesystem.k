@@ -94,14 +94,14 @@ module AGDA-SEMANTICS-TYPESYSTEM
        t(E1, _) t(E2, ({_ : _} -> _)) => E1 (E2 {%underscore})  when isImplicit(E2) =/=K true
 
   rule [infer-app-implicit]:
-       <k> t(E1, ({X : T} -> T')) t({E2}, {T2}) => T2 == T ~> t(E1 {E2}, unify(T')) ~> tsubst(X |-> E2) ...</k>
+       <k> t(E1, ({X : T} -> T')) t({E2}, {T2}) => T2 == T ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> E2) ...</k>
 
   rule [infer-app-explicit]:
-       <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> t(E1 E2, unify(T')) ~> tsubst(X |-> E2) ...</k>
+       <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ...</k>
     when isImplicit(T2) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
 
   syntax Bool ::= cond(Expr, Expr)  [function]
   rule cond(_, Name("zero")) => true
-  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => chich ~> T1 == (X : T) -> T' ~> T2 == T ~> t(E1 E2, unify(T')) ~> tsubst(X |-> E2) ~> chich ...</k>
+  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => chich ~> T1 == (X : T) -> T' ~> T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> chich ...</k>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
 endmodule

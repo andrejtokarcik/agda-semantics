@@ -27,11 +27,9 @@ module AGDA-SEMANTICS-COMMON
   rule isGuardPass(true) => true
   syntax KItem ::= "pass?"
   rule _:GuardPass ~> pass? => .
-  // TODO: error handling/reporting like:
-  //  rule E ~> pass? => error(E) when E =/=K true
 
   syntax KItem ::= checkSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
-  rule checkSetType(t(E, T)) => T == Set(I) ~> t(E, unify(T)) ~> checkSetType(HOLE)
+  rule checkSetType(t(E, T)) => T == Set(I) ~> unify(t(E, T)) ~> checkSetType(HOLE)
     when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
   rule Te:SetTypedExpr ~> checkSetType(HOLE) => checkSetType(Te)
 
@@ -40,5 +38,5 @@ module AGDA-SEMANTICS-COMMON
   rule leftmost(E) => E   [owise, structural]
 
   syntax KItem ::= tsubst(Map)
-  rule t(E, T) ~> tsubst(M) => t(E, T[M])  [structural]
+  rule t(E, T:Expr) ~> tsubst(M) => t(E, T[M])  [structural]
 endmodule

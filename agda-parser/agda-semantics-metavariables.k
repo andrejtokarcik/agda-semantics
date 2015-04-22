@@ -24,8 +24,8 @@ module AGDA-SEMANTICS-METAVARIABLES
   // The LHS of eqn() below gets replaced with the RHS: swapping the sides
   // when necessary.
   rule eqns((eqn(E:Expr,,#symExpr(I)) => eqn(#symExpr(I),,E)),,_)
-    when getKLabel(E) =/=KLabel #symExpr  [structural, anywhere]
-  rule eqns((eqn(X:Variable,,#symVariable(I)) => eqn(#symVariable(I),,X)),,_)
-    when getKLabel(X) =/=KLabel #symVariable  [structural, anywhere]
-  rule eqns((eqn(#symExpr(I),,#symVariable(J)) => eqn(#symVariable(J),,#symExpr(I))),,_)  [structural, anywhere]
+    when getKLabel(E) =/=KLabel #symExpr /* <=> isMetaVariable(E) =/=K true*/  [structural, anywhere]
+  //rule eqns((eqn(X:Variable,,#symVariable(I)) => eqn(#symVariable(I),,X)),,_)
+  //  when getKLabel(X) =/=KLabel #symVariable  [structural, anywhere]
+  //rule eqns((eqn(#symExpr(I),,#symVariable(J)) => eqn(#symVariable(J),,#symExpr(I))),,_)  [structural, anywhere]
 endmodule
