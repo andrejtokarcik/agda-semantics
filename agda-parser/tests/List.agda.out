@@ -31,10 +31,6 @@
            |-> Set ( 0 ) #symExpr(90) |-> Set ( 0 ) #symExpr(90) |-> Set ( 0 )
            #symExpr(92) |-> Set ( 0 ) #symExpr(92) |-> Set ( 0 ) #symExpr(92)
            |-> Set ( 0 ) )
-        Fun ( "nil2" ) |-> m ( #symExpr(16) |-> Set ( #symInt(18) ) #symExpr(
-          25) |-> Set ( 0 ) #symExpr(27) |-> Set ( 0 ) )
-        Fun ( "tt" ) |-> m ( #symExpr(16) |-> Set ( #symInt(18) ) #symExpr(29)
-           |-> Set ( 1 ) )
     </funtenvs>
     <metavars>
         #symExpr(16) |-> t ( Set ( 1 ) , Set ( #symInt(18) ) )

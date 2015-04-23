@@ -22,15 +22,6 @@
         Data ( "True" ) |-> l ( ListItem(Con ( "tt" )) )
     </con>
     <funtenvs>
-        Fun ( "_==_" ) |-> m ( Var ( "m" ) |-> Data ( "Nat" ) Var ( "n" ) |-> 
-          Data ( "Nat" ) )
-        Fun ( "even" ) |-> m ( .Map )
-        Fun ( "id" ) |-> m ( Var ( "A" ) |-> Set ( 0 ) Var ( "x" ) |-> Var ( 
-          "A" ) )
-        Fun ( "odd" ) |-> m ( Var ( "n" ) |-> Data ( "Nat" ) )
-        Fun ( "one" ) |-> m ( .Map )
-        Fun ( "plus" ) |-> m ( Var ( "m" ) |-> Data ( "Nat" ) Var ( "n" ) |-> 
-          Data ( "Nat" ) )
         Fun ( "thmPlusZero" ) |-> m ( Var ( "n" ) |-> Data ( "Nat" ) )
     </funtenvs>
     <metavars>

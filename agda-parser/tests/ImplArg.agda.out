@@ -20,7 +20,6 @@
           ) )
     </con>
     <funtenvs>
-        Fun ( "Cons" ) |-> m ( #symExpr(26) |-> Set ( #symInt(28) ) )
         Fun ( "cons" ) |-> m ( Var ( "a" ) |-> #symExpr(60) #symExpr(26) |-> 
           Set ( #symInt(28) ) #symExpr(45) |-> Set ( 0 ) #symExpr(48) |-> Set 
           ( 0 ) #symExpr(51) |-> Set ( 0 ) #symExpr(53) |-> Data ( "Nat" ) 

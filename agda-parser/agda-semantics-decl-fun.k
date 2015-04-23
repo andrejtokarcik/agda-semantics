@@ -20,7 +20,7 @@ module AGDA-SEMANTICS-DECL-FUN
 
   rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> L = R ~> restoreTEnv ...</k>
        <tenv> Gamma </tenv>
-       <funtenvs> GammaF </funtenvs>
+       <funtenvs> GammaF => .Map </funtenvs>    // => .Map to unclutter the cache
     when notBool (funName(L) in keys(GammaF))
   rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> L = R ~> restoreTEnv ...</k>
        <tenv> Gamma => unm(GammaF(funName(L))) </tenv>
@@ -45,8 +45,6 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax Bool ::= condz(LHS, RHS) [function]
   //rule condz(L, R) => true
   //  when leftmost(L) ==K Fun("vec") andBool leftmost(R) ==K Con("pair")
-
-  // TODO: clean funtenvs  (after clauses for the previous function has finished)
 
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)

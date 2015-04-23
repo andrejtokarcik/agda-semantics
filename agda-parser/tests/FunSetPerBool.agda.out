@@ -19,23 +19,10 @@
         Data ( "T" ) |-> l ( ListItem(Con ( "E" )) )
     </con>
     <funtenvs>
-        Fun ( "f" ) |-> m ( #symExpr(8) |-> Set ( #symInt(10) ) )
-        Fun ( "f2" ) |-> m ( #symExpr(8) |-> Set ( #symInt(10) ) #symExpr(14)
-           |-> Set ( #symInt(16) ) #symExpr(20) |-> Set ( #symInt(22) ) )
-        Fun ( "g" ) |-> m ( #symExpr(8) |-> Set ( #symInt(10) ) #symExpr(14)
-           |-> Set ( #symInt(16) ) )
-        Fun ( "h" ) |-> m ( #symExpr(8) |-> Set ( #symInt(10) ) #symExpr(14)
-           |-> Set ( #symInt(16) ) #symExpr(20) |-> Set ( #symInt(22) ) 
-          #symExpr(26) |-> Set ( #symInt(28) ) )
-        Fun ( "i" ) |-> m ( #symExpr(8) |-> Set ( #symInt(10) ) #symExpr(14)
-           |-> Set ( #symInt(16) ) #symExpr(20) |-> Set ( #symInt(22) ) 
-          #symExpr(26) |-> Set ( #symInt(28) ) #symExpr(35) |-> Set ( #symInt(
-          37) ) )
         Fun ( "j" ) |-> m ( #symExpr(8) |-> Set ( #symInt(10) ) #symExpr(14)
            |-> Set ( #symInt(16) ) #symExpr(20) |-> Set ( #symInt(22) ) 
           #symExpr(26) |-> Set ( #symInt(28) ) #symExpr(35) |-> Set ( #symInt(
           37) ) )
-        Fun ( "s" ) |-> m ( .Map )
     </funtenvs>
     <metavars>
         #symExpr(8) |-> t ( ( Var ( "x" ) : Data ( "Bool" ) ) -> Data ( "Bool"
