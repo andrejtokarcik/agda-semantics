@@ -11,18 +11,21 @@
         </range>
     </metadata>
     <sig>
-        Fun ( Name ( "f" ) ) |-> ( #symVariable(22) : Data ( Name ( "Bool" ) )
-           ) -> (Fun ( Name ( "s" ) ) Con ( Name ( "True" ) ))
-        Fun ( Name ( "f2" ) ) |-> ( #symVariable(53) : Data ( Name ( "Bool" ) 
-          ) ) -> ( #symVariable(39) : (Fun ( Name ( "s" ) ) #symVariable(53)) 
-          ) -> (Fun ( Name ( "s" ) ) #symVariable(53))
+        Fun ( Name ( "f" ) ) |-> ( Var ( "x" ) : (Fun ( Name ( "s" ) ) Con ( 
+          Name ( "True" ) )) ) -> (Fun ( Name ( "s" ) ) Con ( Name ( "True" ) 
+          ))
+        Fun ( Name ( "f2" ) ) |-> ( Var ( "x" ) : Data ( Name ( "Bool" ) ) ) 
+          -> ( Var ( "y" ) : (Fun ( Name ( "s" ) ) Var ( "x" )) ) -> (Fun ( 
+          Name ( "s" ) ) Var ( "x" ))
         Fun ( Name ( "g" ) ) |-> Data ( Name ( "Bool" ) )
         Fun ( Name ( "h" ) ) |-> Data ( Name ( "T" ) )
-        Fun ( Name ( "i" ) ) |-> ( #symVariable(39) : Data ( Name ( "Bool" ) )
-           ) -> (Fun ( Name ( "s" ) ) Con ( Name ( "True" ) ))
-        Fun ( Name ( "j" ) ) |-> ( #symVariable(39) : Data ( Name ( "T" ) ) ) 
-          -> (Fun ( Name ( "s" ) ) Con ( Name ( "False" ) ))
-        Fun ( Name ( "s" ) ) |-> ( #symVariable(29) : Data ( Name ( "Bool" ) )
+        Fun ( Name ( "i" ) ) |-> ( Var ( "y" ) : (Fun ( Name ( "s" ) ) Con ( 
+          Name ( "True" ) )) ) -> (Fun ( Name ( "s" ) ) Con ( Name ( "True" ) 
+          ))
+        Fun ( Name ( "j" ) ) |-> ( Var ( "y" ) : (Fun ( Name ( "s" ) ) Con ( 
+          Name ( "False" ) )) ) -> (Fun ( Name ( "s" ) ) Con ( Name ( "False" 
+          ) ))
+        Fun ( Name ( "s" ) ) |-> ( #symVariable(46) : Data ( Name ( "Bool" ) )
            ) -> Set ( 0 )
         Data ( Name ( "Bool" ) ) |-> Set ( 0 )
         Data ( Name ( "T" ) ) |-> Set ( 0 )
@@ -31,40 +34,37 @@
         Con ( Name ( "True" ) ) |-> Data ( Name ( "Bool" ) )
     </sig>
     <funtenvs>
-        Fun ( Name ( "f" ) ) |-> m ( #symExpr(12) |-> Set ( #symInt(14) ) )
-        Fun ( Name ( "f2" ) ) |-> m ( #symExpr(12) |-> Set ( #symInt(14) ) 
-          #symExpr(19) |-> Set ( #symInt(21) ) #symExpr(26) |-> Set ( #symInt(
-          28) ) )
-        Fun ( Name ( "g" ) ) |-> m ( #symExpr(12) |-> Set ( #symInt(14) ) 
-          #symExpr(19) |-> Set ( #symInt(21) ) )
-        Fun ( Name ( "h" ) ) |-> m ( #symExpr(12) |-> Set ( #symInt(14) ) 
-          #symExpr(19) |-> Set ( #symInt(21) ) #symExpr(26) |-> Set ( #symInt(
-          28) ) #symExpr(33) |-> Set ( #symInt(35) ) )
-        Fun ( Name ( "i" ) ) |-> m ( #symExpr(12) |-> Set ( #symInt(14) ) 
-          #symExpr(19) |-> Set ( #symInt(21) ) #symExpr(26) |-> Set ( #symInt(
-          28) ) #symExpr(33) |-> Set ( #symInt(35) ) #symExpr(43) |-> Set ( 
-          #symInt(45) ) )
-        Fun ( Name ( "j" ) ) |-> m ( #symExpr(12) |-> Set ( #symInt(14) ) 
-          #symExpr(19) |-> Set ( #symInt(21) ) #symExpr(26) |-> Set ( #symInt(
-          28) ) #symExpr(33) |-> Set ( #symInt(35) ) #symExpr(43) |-> Set ( 
-          #symInt(45) ) #symExpr(50) |-> Set ( #symInt(52) ) )
+        Fun ( Name ( "f" ) ) |-> m ( #symExpr(10) |-> Set ( #symInt(12) ) )
+        Fun ( Name ( "f2" ) ) |-> m ( #symExpr(10) |-> Set ( #symInt(12) ) 
+          #symExpr(16) |-> Set ( #symInt(18) ) #symExpr(22) |-> Set ( #symInt(
+          24) ) )
+        Fun ( Name ( "g" ) ) |-> m ( #symExpr(10) |-> Set ( #symInt(12) ) 
+          #symExpr(16) |-> Set ( #symInt(18) ) )
+        Fun ( Name ( "h" ) ) |-> m ( #symExpr(10) |-> Set ( #symInt(12) ) 
+          #symExpr(16) |-> Set ( #symInt(18) ) #symExpr(22) |-> Set ( #symInt(
+          24) ) #symExpr(28) |-> Set ( #symInt(30) ) )
+        Fun ( Name ( "i" ) ) |-> m ( #symExpr(10) |-> Set ( #symInt(12) ) 
+          #symExpr(16) |-> Set ( #symInt(18) ) #symExpr(22) |-> Set ( #symInt(
+          24) ) #symExpr(28) |-> Set ( #symInt(30) ) #symExpr(37) |-> Set ( 
+          #symInt(39) ) )
+        Fun ( Name ( "j" ) ) |-> m ( #symExpr(10) |-> Set ( #symInt(12) ) 
+          #symExpr(16) |-> Set ( #symInt(18) ) #symExpr(22) |-> Set ( #symInt(
+          24) ) #symExpr(28) |-> Set ( #symInt(30) ) #symExpr(37) |-> Set ( 
+          #symInt(39) ) )
         Fun ( Name ( "s" ) ) |-> m ( .Map )
     </funtenvs>
     <metavars>
-        #symExpr(12) |-> t ( ( #symVariable(22) : Data ( Name ( "Bool" ) ) ) 
-          -> (Fun ( Name ( "s" ) ) Con ( Name ( "True" ) )) , Set ( #symInt(14
-          ) ) )
-        #symExpr(19) |-> t ( Data ( Name ( "Bool" ) ) , Set ( #symInt(21) ) )
-        #symExpr(26) |-> t ( ( #symVariable(53) : Data ( Name ( "Bool" ) ) ) 
-          -> ( #symVariable(39) : (Fun ( Name ( "s" ) ) #symVariable(53)) ) ->
-           (Fun ( Name ( "s" ) ) #symVariable(53)) , Set ( #symInt(28) ) )
-        #symExpr(33) |-> t ( Data ( Name ( "T" ) ) , Set ( #symInt(35) ) )
-        #symExpr(43) |-> t ( ( #symVariable(39) : Data ( Name ( "Bool" ) ) ) 
-          -> (Fun ( Name ( "s" ) ) Con ( Name ( "True" ) )) , Set ( #symInt(45
-          ) ) )
-        #symExpr(50) |-> t ( ( #symVariable(39) : Data ( Name ( "T" ) ) ) -> (
-          Fun ( Name ( "s" ) ) Con ( Name ( "False" ) )) , Set ( #symInt(52) )
-           )
+        #symExpr(10) |-> t ( ( Var ( "x" ) : (Fun ( Name ( "s" ) ) Con ( Name 
+          ( "True" ) )) ) -> (Fun ( Name ( "s" ) ) Con ( Name ( "True" ) )) , 
+          Set ( #symInt(12) ) )
+        #symExpr(16) |-> t ( Data ( Name ( "Bool" ) ) , Set ( #symInt(18) ) )
+        #symExpr(22) |-> t ( ( Var ( "x" ) : Data ( Name ( "Bool" ) ) ) -> ( 
+          Var ( "y" ) : (Fun ( Name ( "s" ) ) Var ( "x" )) ) -> (Fun ( Name ( 
+          "s" ) ) Var ( "x" )) , Set ( #symInt(24) ) )
+        #symExpr(28) |-> t ( Data ( Name ( "T" ) ) , Set ( #symInt(30) ) )
+        #symExpr(37) |-> t ( ( Var ( "y" ) : (Fun ( Name ( "s" ) ) Con ( Name 
+          ( "True" ) )) ) -> (Fun ( Name ( "s" ) ) Con ( Name ( "True" ) )) , 
+          Set ( #symInt(39) ) )
     </metavars>
     <fenv>
         Fun ( Name ( "f" ) ) |-> Aux ( Fun ( Name ( "f" ) ) )
@@ -73,13 +73,13 @@
         Fun ( Name ( "h" ) ) |-> Aux ( Fun ( Name ( "h" ) ) )
         Fun ( Name ( "i" ) ) |-> Aux ( Fun ( Name ( "i" ) ) )
         Fun ( Name ( "j" ) ) |-> Aux ( Fun ( Name ( "j" ) ) )
-        Fun ( Name ( "s" ) ) |-> \ ( #symVariable(6) : #symExpr(7) ) -> (Aux (
-           Fun ( Name ( "s" ) ) ) #symVariable(6))
-        Aux ( Fun ( Name ( "f" ) ) ) |-> \ ( #symVariable(22) : (Fun ( Name ( 
-          "s" ) ) Con ( Name ( "True" ) )) ) -> #symVariable(22)
-        Aux ( Fun ( Name ( "f2" ) ) ) |-> \ ( #symVariable(53) : Data ( Name (
-           "Bool" ) ) ) -> \ ( #symVariable(39) : (Fun ( Name ( "s" ) ) 
-          #symVariable(53)) ) -> #symVariable(39)
+        Fun ( Name ( "s" ) ) |-> \ ( #symVariable(5) : #symExpr(6) ) -> (Aux (
+           Fun ( Name ( "s" ) ) ) #symVariable(5))
+        Aux ( Fun ( Name ( "f" ) ) ) |-> \ ( Var ( "x" ) : (Fun ( Name ( "s" )
+           ) Con ( Name ( "True" ) )) ) -> Var ( "x" )
+        Aux ( Fun ( Name ( "f2" ) ) ) |-> \ ( Var ( "x" ) : Data ( Name ( 
+          "Bool" ) ) ) -> \ ( Var ( "y" ) : (Fun ( Name ( "s" ) ) Var ( "x" ))
+           ) -> Var ( "y" )
         Aux ( Fun ( Name ( "g" ) ) ) |-> (Fun ( Name ( "f" ) ) Con ( Name ( 
           "True" ) ))
         Aux ( Fun ( Name ( "h" ) ) ) |-> ((Fun ( Name ( "f2" ) ) Con ( Name ( 
@@ -88,10 +88,9 @@
           "True" ) ))
         Aux ( Fun ( Name ( "j" ) ) ) |-> (Fun ( Name ( "f2" ) ) Con ( Name ( 
           "False" ) ))
-        Aux ( Fun ( Name ( "s" ) ) ) |-> FunClauses ( 1 , ListItem((
-          #symVariable(5) Con ( Name ( "True" ) )) = Data ( Name ( "Bool" ) ))
-           ListItem((#symVariable(11) Con ( Name ( "False" ) )) = Data ( Name 
-          ( "T" ) )) )
+        Aux ( Fun ( Name ( "s" ) ) ) |-> FunClauses ( 1 , ListItem((%fun Con (
+           Name ( "True" ) )) = Data ( Name ( "Bool" ) )) ListItem((%fun Con (
+           Name ( "False" ) )) = Data ( Name ( "T" ) )) )
     </fenv>
     <ncat>
         Name ( "Bool" ) |-> Data ( Name ( "Bool" ) )
@@ -108,11 +107,10 @@
         Name ( "s" ) |-> Fun ( Name ( "s" ) )
     </ncat>
     <tenv>
-        #symExpr(12) |-> Set ( #symInt(14) )
-        #symExpr(19) |-> Set ( #symInt(21) )
-        #symExpr(26) |-> Set ( #symInt(28) )
-        #symExpr(33) |-> Set ( #symInt(35) )
-        #symExpr(43) |-> Set ( #symInt(45) )
-        #symExpr(50) |-> Set ( #symInt(52) )
+        #symExpr(10) |-> Set ( #symInt(12) )
+        #symExpr(16) |-> Set ( #symInt(18) )
+        #symExpr(22) |-> Set ( #symInt(24) )
+        #symExpr(28) |-> Set ( #symInt(30) )
+        #symExpr(37) |-> Set ( #symInt(39) )
     </tenv>
 </T>

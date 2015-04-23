@@ -20,10 +20,10 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( Name ( "t" ) ) |-> \ ( #symVariable(7) : #symExpr(8) ) -> (Aux (
-           Fun ( Name ( "t" ) ) ) #symVariable(7))
-        Aux ( Fun ( Name ( "t" ) ) ) |-> FunClauses ( 1 , ListItem((
-          #symVariable(6) Var ( "x" )) = Var ( "x" )) )
+        Fun ( Name ( "t" ) ) |-> \ ( #symVariable(6) : #symExpr(7) ) -> (Aux (
+           Fun ( Name ( "t" ) ) ) #symVariable(6))
+        Aux ( Fun ( Name ( "t" ) ) ) |-> FunClauses ( 1 , ListItem((%fun Var (
+           "x" )) = Var ( "x" )) )
     </fenv>
     <ncat>
         Name ( "t" ) |-> Fun ( Name ( "t" ) )

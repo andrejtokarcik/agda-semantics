@@ -12,82 +12,79 @@
     </metadata>
     <sig>
         Fun ( Name ( "map" ) ) |-> { Var ( "a" ) : Set ( 0 ) } -> { Var ( "b" 
-          ) : Set ( 0 ) } -> ( #symVariable(109) : ( #symVariable(99) : Var ( 
-          "a" ) ) -> Var ( "b" ) ) -> ( #symVariable(112) : (Data ( Name ( 
+          ) : Set ( 0 ) } -> ( #symVariable(106) : ( #symVariable(96) : Var ( 
+          "a" ) ) -> Var ( "b" ) ) -> ( #symVariable(109) : (Data ( Name ( 
           "List" ) ) Var ( "a" )) ) -> (Data ( Name ( "List" ) ) Var ( "b" ))
-        Fun ( Name ( "nil2" ) ) |-> (\ ( #symVariable(22) : Set ( 1 ) ) -> 
-          #symVariable(22) { Var ( "a" ) : Set ( 0 ) } -> (Data ( Name ( 
-          "List" ) ) Var ( "a" )))
-        Fun ( Name ( "tt" ) ) |-> ( #symVariable(34) : Set ( 1 ) ) -> Set ( 2 
+        Fun ( Name ( "nil2" ) ) |-> (\ ( Var ( "x" ) : Set ( 1 ) ) -> Var ( 
+          "x" ) { Var ( "a" ) : Set ( 0 ) } -> (Data ( Name ( "List" ) ) Var (
+           "a" )))
+        Fun ( Name ( "tt" ) ) |-> ( #symVariable(33) : Set ( 1 ) ) -> Set ( 2 
           )
-        Data ( Name ( "List" ) ) |-> ( #symVariable(43) : Set ( 0 ) ) -> Set (
-           0 )
+        Data ( Name ( "List" ) ) |-> ( Var ( "a" ) : Set ( 0 ) ) -> Set ( 0 )
         Con ( Name ( "_::_" ) ) |-> { Var ( "a" ) : Set ( 0 ) } -> ( 
-          #symVariable(102) : Var ( "a" ) ) -> ( #symVariable(115) : (Data ( 
+          #symVariable(99) : Var ( "a" ) ) -> ( #symVariable(112) : (Data ( 
           Name ( "List" ) ) Var ( "a" )) ) -> (Data ( Name ( "List" ) ) Var ( 
           "a" ))
         Con ( Name ( "nil" ) ) |-> { Var ( "a" ) : Set ( 0 ) } -> (Data ( Name
-           ( "List" ) ) #symVariable(43))
+           ( "List" ) ) Var ( "a" ))
     </sig>
     <funtenvs>
-        Fun ( Name ( "map" ) ) |-> m ( Var ( "f" ) |-> ( #symVariable(99) : 
-          #symExpr(105) ) -> #symExpr(103) Var ( "x" ) |-> #symExpr(105) Var (
-           "xs" ) |-> (Data ( Name ( "List" ) ) #symExpr(105)) #symExpr(16)
-           |-> Set ( #symInt(18) ) #symExpr(76) |-> Set ( 0 ) #symExpr(76)
-           |-> Set ( 0 ) #symExpr(78) |-> Set ( 0 ) #symExpr(83) |-> Set ( 0 )
-           #symExpr(86) |-> Set ( 0 ) #symExpr(95) |-> Set ( 0 ) #symExpr(95)
-           |-> Set ( 0 ) #symExpr(96) |-> Set ( 0 ) #symExpr(97) |-> Set ( 0 )
-           #symExpr(100) |-> Set ( 0 ) #symExpr(100) |-> Set ( 0 ) #symExpr(
-          101) |-> Set ( 0 ) #symExpr(103) |-> Set ( 0 ) #symExpr(103) |-> Set
-           ( 0 ) #symExpr(103) |-> Set ( 0 ) #symExpr(103) |-> Set ( 0 ) 
-          #symExpr(103) |-> Set ( 0 ) #symExpr(105) |-> Set ( 0 ) #symExpr(105
-          ) |-> Set ( 0 ) #symExpr(105) |-> Set ( 0 ) #symExpr(107) |-> Set ( 
-          0 ) #symExpr(107) |-> Set ( 0 ) #symExpr(107) |-> Set ( 0 ) )
+        Fun ( Name ( "map" ) ) |-> m ( Var ( "f" ) |-> ( #symVariable(96) : 
+          #symExpr(102) ) -> #symExpr(100) Var ( "x" ) |-> #symExpr(102) Var (
+           "xs" ) |-> (Data ( Name ( "List" ) ) #symExpr(102)) #symExpr(16)
+           |-> Set ( #symInt(18) ) #symExpr(73) |-> Set ( 0 ) #symExpr(73)
+           |-> Set ( 0 ) #symExpr(75) |-> Set ( 0 ) #symExpr(80) |-> Set ( 0 )
+           #symExpr(83) |-> Set ( 0 ) #symExpr(92) |-> Set ( 0 ) #symExpr(92)
+           |-> Set ( 0 ) #symExpr(93) |-> Set ( 0 ) #symExpr(94) |-> Set ( 0 )
+           #symExpr(97) |-> Set ( 0 ) #symExpr(97) |-> Set ( 0 ) #symExpr(98)
+           |-> Set ( 0 ) #symExpr(100) |-> Set ( 0 ) #symExpr(100) |-> Set ( 0
+           ) #symExpr(100) |-> Set ( 0 ) #symExpr(100) |-> Set ( 0 ) #symExpr(
+          100) |-> Set ( 0 ) #symExpr(102) |-> Set ( 0 ) #symExpr(102) |-> Set
+           ( 0 ) #symExpr(102) |-> Set ( 0 ) #symExpr(104) |-> Set ( 0 ) 
+          #symExpr(104) |-> Set ( 0 ) #symExpr(104) |-> Set ( 0 ) )
         Fun ( Name ( "nil2" ) ) |-> m ( #symExpr(16) |-> Set ( #symInt(18) ) 
           #symExpr(25) |-> Set ( 0 ) #symExpr(27) |-> Set ( 0 ) )
         Fun ( Name ( "tt" ) ) |-> m ( #symExpr(16) |-> Set ( #symInt(18) ) 
-          #symExpr(32) |-> Set ( 1 ) )
+          #symExpr(31) |-> Set ( 1 ) )
     </funtenvs>
     <metavars>
         #symExpr(16) |-> t ( Set ( 1 ) , Set ( #symInt(18) ) )
-        #symExpr(25) |-> t ( #symVariable(43) , Set ( 0 ) )
+        #symExpr(25) |-> t ( #symExpr(27) , Set ( 0 ) )
         #symExpr(27) |-> t ( #symExpr(27) , Set ( 0 ) )
-        #symExpr(32) |-> t ( #symExpr(32) , Set ( 1 ) )
-        #symExpr(47) |-> t ( #symVariable(43) , Set ( 0 ) )
-        #symExpr(49) |-> t ( #symVariable(43) , Set ( 0 ) )
-        #symExpr(57) |-> t ( #symExpr(57) , Set ( 0 ) )
-        #symExpr(62) |-> t ( #symExpr(62) , Set ( 0 ) )
-        #symExpr(76) |-> t ( #symExpr(105) , Set ( 0 ) )
-        #symExpr(78) |-> t ( #symExpr(103) , Set ( 0 ) )
-        #symExpr(83) |-> t ( #symExpr(105) , Set ( 0 ) )
-        #symExpr(97) |-> t ( #symExpr(103) , Set ( 0 ) )
-        #symExpr(105) |-> t ( #symExpr(105) , Set ( 0 ) )
-        #symExpr(107) |-> t ( #symExpr(103) , Set ( 0 ) )
+        #symExpr(31) |-> t ( #symExpr(31) , Set ( 1 ) )
+        #symExpr(45) |-> t ( #symExpr(45) , Set ( 0 ) )
+        #symExpr(47) |-> t ( #symExpr(60) , Set ( 0 ) )
+        #symExpr(55) |-> t ( #symExpr(45) , Set ( 0 ) )
+        #symExpr(60) |-> t ( #symExpr(60) , Set ( 0 ) )
+        #symExpr(73) |-> t ( #symExpr(102) , Set ( 0 ) )
+        #symExpr(75) |-> t ( #symExpr(100) , Set ( 0 ) )
+        #symExpr(80) |-> t ( #symExpr(102) , Set ( 0 ) )
+        #symExpr(94) |-> t ( #symExpr(100) , Set ( 0 ) )
+        #symExpr(102) |-> t ( #symExpr(102) , Set ( 0 ) )
+        #symExpr(104) |-> t ( #symExpr(100) , Set ( 0 ) )
     </metavars>
     <fenv>
-        Fun ( Name ( "map" ) ) |-> \ { #symVariable(65) : #symExpr(66) } -> \ 
-          { #symVariable(67) : #symExpr(68) } -> \ ( #symVariable(69) : 
-          #symExpr(70) ) -> \ ( #symVariable(71) : #symExpr(72) ) -> ((((Aux (
-           Fun ( Name ( "map" ) ) ) { #symVariable(65) }) { #symVariable(67) }
-          ) #symVariable(69)) #symVariable(71))
-        Fun ( Name ( "nil2" ) ) |-> \ { #symVariable(30) : #symExpr(31) } -> (
-          Aux ( Fun ( Name ( "nil2" ) ) ) { #symVariable(30) })
-        Fun ( Name ( "tt" ) ) |-> \ ( #symVariable(38) : #symExpr(39) ) -> (
-          Aux ( Fun ( Name ( "tt" ) ) ) #symVariable(38))
-        Aux ( Fun ( Name ( "map" ) ) ) |-> FunClauses ( 4 , ListItem(((((
-          #symVariable(64) { #symVariable(43) }) { #symExpr(49) }) Var ( "f" )
-          ) (Con ( Name ( "nil" ) ) { #symExpr(57) })) = (Con ( Name ( "nil" )
-           ) { #symExpr(62) })) ListItem(((((#symVariable(118) { #symExpr(76) 
-          }) { #symExpr(78) }) Var ( "f" )) (((Con ( Name ( "_::_" ) ) { 
-          #symExpr(76) }) Var ( "x" )) Var ( "xs" ))) = (((Con ( Name ( "_::_"
-           ) ) { #symExpr(103) }) (Var ( "f" ) Var ( "x" ))) ((((Fun ( Name ( 
-          "map" ) ) { #symExpr(105) }) { #symExpr(103) }) Var ( "f" )) Var ( 
-          "xs" )))) )
-        Aux ( Fun ( Name ( "nil2" ) ) ) |-> FunClauses ( 1 , ListItem((
-          #symVariable(29) { #symExpr(25) }) = (Con ( Name ( "nil" ) ) { 
-          #symExpr(27) })) )
-        Aux ( Fun ( Name ( "tt" ) ) ) |-> FunClauses ( 1 , ListItem((
-          #symVariable(37) #symExpr(32)) = Set ( 1 )) )
+        Fun ( Name ( "map" ) ) |-> \ { #symVariable(62) : #symExpr(63) } -> \ 
+          { #symVariable(64) : #symExpr(65) } -> \ ( #symVariable(66) : 
+          #symExpr(67) ) -> \ ( #symVariable(68) : #symExpr(69) ) -> ((((Aux (
+           Fun ( Name ( "map" ) ) ) { #symVariable(62) }) { #symVariable(64) }
+          ) #symVariable(66)) #symVariable(68))
+        Fun ( Name ( "nil2" ) ) |-> \ { #symVariable(29) : #symExpr(30) } -> (
+          Aux ( Fun ( Name ( "nil2" ) ) ) { #symVariable(29) })
+        Fun ( Name ( "tt" ) ) |-> \ ( #symVariable(36) : #symExpr(37) ) -> (
+          Aux ( Fun ( Name ( "tt" ) ) ) #symVariable(36))
+        Aux ( Fun ( Name ( "map" ) ) ) |-> FunClauses ( 4 , ListItem(((((%fun 
+          { #symExpr(45) }) { #symExpr(47) }) Var ( "f" )) (Con ( Name ( "nil"
+           ) ) { #symExpr(45) })) = (Con ( Name ( "nil" ) ) { #symExpr(60) }))
+           ListItem(((((%fun { #symExpr(73) }) { #symExpr(75) }) Var ( "f" )) 
+          (((Con ( Name ( "_::_" ) ) { #symExpr(73) }) Var ( "x" )) Var ( "xs"
+           ))) = (((Con ( Name ( "_::_" ) ) { #symExpr(100) }) (Var ( "f" ) 
+          Var ( "x" ))) ((((Fun ( Name ( "map" ) ) { #symExpr(102) }) { 
+          #symExpr(100) }) Var ( "f" )) Var ( "xs" )))) )
+        Aux ( Fun ( Name ( "nil2" ) ) ) |-> FunClauses ( 1 , ListItem((%fun { 
+          #symExpr(25) }) = (Con ( Name ( "nil" ) ) { #symExpr(27) })) )
+        Aux ( Fun ( Name ( "tt" ) ) ) |-> FunClauses ( 1 , ListItem((%fun 
+          #symExpr(31)) = Set ( 1 )) )
     </fenv>
     <ncat>
         Name ( "List" ) |-> Data ( Name ( "List" ) )
