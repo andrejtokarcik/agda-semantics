@@ -1,0 +1,132 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <metadata>
+        <range>
+            .K
+        </range>
+    </metadata>
+    <sig>
+        Fun ( Name ( "N" ) ) |-> Set ( 0 )
+        Fun ( Name ( "_==_" ) ) |-> ( #symVariable(146) : Data ( Name ( "Nat" 
+          ) ) ) -> ( #symVariable(149) : Data ( Name ( "Nat" ) ) ) -> Set ( 0 
+          )
+        Fun ( Name ( "even" ) ) |-> ( #symVariable(66) : Data ( Name ( "Nat" )
+           ) ) -> Data ( Name ( "Bool" ) )
+        Fun ( Name ( "id" ) ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( 
+          #symVariable(87) : Var ( "A" ) ) -> Var ( "A" )
+        Fun ( Name ( "odd" ) ) |-> ( #symVariable(66) : Data ( Name ( "Nat" ) 
+          ) ) -> Data ( Name ( "Bool" ) )
+        Fun ( Name ( "one" ) ) |-> Data ( Name ( "Nat" ) )
+        Fun ( Name ( "plus" ) ) |-> ( #symVariable(140) : Data ( Name ( "Nat" 
+          ) ) ) -> ( #symVariable(153) : Data ( Name ( "Nat" ) ) ) -> Data ( 
+          Name ( "Nat" ) )
+        Fun ( Name ( "s" ) ) |-> ( #symVariable(1) : Fun ( Name ( "N" ) ) ) ->
+           Fun ( Name ( "N" ) )
+        Fun ( Name ( "thmPlusZero" ) ) |-> ( Var ( "n" ) : Data ( Name ( "Nat"
+           ) ) ) -> ((Fun ( Name ( "_==_" ) ) ((Fun ( Name ( "plus" ) ) Var ( 
+          "n" )) Con ( Name ( "zero" ) ))) Var ( "n" ))
+        Fun ( Name ( "z" ) ) |-> Fun ( Name ( "N" ) )
+        Data ( Name ( "Bool" ) ) |-> Set ( 0 )
+        Data ( Name ( "False" ) ) |-> Set ( 0 )
+        Data ( Name ( "Nat" ) ) |-> Set ( 0 )
+        Data ( Name ( "True" ) ) |-> Set ( 0 )
+        Con ( Name ( "false" ) ) |-> Data ( Name ( "Bool" ) )
+        Con ( Name ( "suc" ) ) |-> ( #symVariable(153) : Data ( Name ( "Nat" )
+           ) ) -> Data ( Name ( "Nat" ) )
+        Con ( Name ( "true" ) ) |-> Data ( Name ( "Bool" ) )
+        Con ( Name ( "tt" ) ) |-> Data ( Name ( "True" ) )
+        Con ( Name ( "zero" ) ) |-> Data ( Name ( "Nat" ) )
+    </sig>
+    <funtenvs>
+        Fun ( Name ( "_==_" ) ) |-> m ( Var ( "m" ) |-> Data ( Name ( "Nat" ) 
+          ) Var ( "n" ) |-> Data ( Name ( "Nat" ) ) )
+        Fun ( Name ( "even" ) ) |-> m ( Var ( "n" ) |-> Data ( Name ( "Nat" ) 
+          ) )
+        Fun ( Name ( "id" ) ) |-> m ( Var ( "A" ) |-> Set ( 0 ) Var ( "x" )
+           |-> Var ( "A" ) )
+        Fun ( Name ( "odd" ) ) |-> m ( Var ( "n" ) |-> Data ( Name ( "Nat" ) )
+           )
+        Fun ( Name ( "one" ) ) |-> m ( .Map )
+        Fun ( Name ( "plus" ) ) |-> m ( Var ( "m" ) |-> Data ( Name ( "Nat" ) 
+          ) Var ( "n" ) |-> Data ( Name ( "Nat" ) ) )
+        Fun ( Name ( "thmPlusZero" ) ) |-> m ( Var ( "n" ) |-> Data ( Name ( 
+          "Nat" ) ) )
+    </funtenvs>
+    <metavars>
+        .Map
+    </metavars>
+    <fenv>
+        Fun ( Name ( "_==_" ) ) |-> \ ( #symVariable(96) : #symExpr(97) ) -> \
+           ( #symVariable(98) : #symExpr(99) ) -> ((Aux ( Fun ( Name ( "_==_" 
+          ) ) ) #symVariable(96)) #symVariable(98))
+        Fun ( Name ( "even" ) ) |-> \ ( #symVariable(42) : #symExpr(43) ) -> (
+          Aux ( Fun ( Name ( "even" ) ) ) #symVariable(42))
+        Fun ( Name ( "id" ) ) |-> \ ( #symVariable(77) : #symExpr(78) ) -> \ (
+           #symVariable(79) : #symExpr(80) ) -> ((Aux ( Fun ( Name ( "id" ) ) 
+          ) #symVariable(77)) #symVariable(79))
+        Fun ( Name ( "odd" ) ) |-> \ ( #symVariable(57) : #symExpr(58) ) -> (
+          Aux ( Fun ( Name ( "odd" ) ) ) #symVariable(57))
+        Fun ( Name ( "one" ) ) |-> Aux ( Fun ( Name ( "one" ) ) )
+        Fun ( Name ( "plus" ) ) |-> \ ( #symVariable(15) : #symExpr(16) ) -> \
+           ( #symVariable(17) : #symExpr(18) ) -> ((Aux ( Fun ( Name ( "plus" 
+          ) ) ) #symVariable(15)) #symVariable(17))
+        Fun ( Name ( "thmPlusZero" ) ) |-> \ ( #symVariable(162) : #symExpr(
+          163) ) -> (Aux ( Fun ( Name ( "thmPlusZero" ) ) ) #symVariable(162))
+        Aux ( Fun ( Name ( "_==_" ) ) ) |-> FunClauses ( 2 , ListItem(((%fun 
+          Con ( Name ( "zero" ) )) Con ( Name ( "zero" ) )) = Data ( Name ( 
+          "True" ) )) ListItem(((%fun Con ( Name ( "zero" ) )) (Con ( Name ( 
+          "suc" ) ) Var ( "m" ))) = Data ( Name ( "False" ) )) ListItem(((%fun
+           (Con ( Name ( "suc" ) ) Var ( "n" ))) Con ( Name ( "zero" ) )) = 
+          Data ( Name ( "False" ) )) ListItem(((%fun (Con ( Name ( "suc" ) ) 
+          Var ( "n" ))) (Con ( Name ( "suc" ) ) Var ( "m" ))) = ((Fun ( Name (
+           "_==_" ) ) Var ( "n" )) Var ( "m" ))) )
+        Aux ( Fun ( Name ( "even" ) ) ) |-> FunClauses ( 1 , ListItem((%fun 
+          Con ( Name ( "zero" ) )) = Con ( Name ( "true" ) )) ListItem((%fun (
+          Con ( Name ( "suc" ) ) Var ( "n" ))) = (Fun ( Name ( "odd" ) ) Var (
+           "n" ))) )
+        Aux ( Fun ( Name ( "id" ) ) ) |-> FunClauses ( 2 , ListItem(((%fun Var
+           ( "A" )) Var ( "x" )) = Var ( "x" )) )
+        Aux ( Fun ( Name ( "odd" ) ) ) |-> FunClauses ( 1 , ListItem((%fun Con
+           ( Name ( "zero" ) )) = Con ( Name ( "false" ) )) ListItem((%fun (
+          Con ( Name ( "suc" ) ) Var ( "n" ))) = (Fun ( Name ( "even" ) ) Var 
+          ( "n" ))) )
+        Aux ( Fun ( Name ( "one" ) ) ) |-> ((Fun ( Name ( "id" ) ) Data ( Name
+           ( "Nat" ) )) (Con ( Name ( "suc" ) ) Con ( Name ( "zero" ) )))
+        Aux ( Fun ( Name ( "plus" ) ) ) |-> FunClauses ( 2 , ListItem(((%fun 
+          Con ( Name ( "zero" ) )) Var ( "m" )) = Var ( "m" )) ListItem(((%fun
+           (Con ( Name ( "suc" ) ) Var ( "n" ))) Var ( "m" )) = (Con ( Name ( 
+          "suc" ) ) ((Fun ( Name ( "plus" ) ) Var ( "n" )) Var ( "m" )))) )
+        Aux ( Fun ( Name ( "thmPlusZero" ) ) ) |-> FunClauses ( 1 , ListItem((
+          %fun (Con ( Name ( "suc" ) ) Var ( "n" ))) = (Fun ( Name ( 
+          "thmPlusZero" ) ) Var ( "n" ))) )
+    </fenv>
+    <ncat>
+        Name ( "Bool" ) |-> Data ( Name ( "Bool" ) )
+        Name ( "False" ) |-> Data ( Name ( "False" ) )
+        Name ( "N" ) |-> Fun ( Name ( "N" ) )
+        Name ( "Nat" ) |-> Data ( Name ( "Nat" ) )
+        Name ( "True" ) |-> Data ( Name ( "True" ) )
+        Name ( "_==_" ) |-> Fun ( Name ( "_==_" ) )
+        Name ( "even" ) |-> Fun ( Name ( "even" ) )
+        Name ( "false" ) |-> Con ( Name ( "false" ) )
+        Name ( "id" ) |-> Fun ( Name ( "id" ) )
+        Name ( "odd" ) |-> Fun ( Name ( "odd" ) )
+        Name ( "one" ) |-> Fun ( Name ( "one" ) )
+        Name ( "plus" ) |-> Fun ( Name ( "plus" ) )
+        Name ( "s" ) |-> Fun ( Name ( "s" ) )
+        Name ( "suc" ) |-> Con ( Name ( "suc" ) )
+        Name ( "thmPlusZero" ) |-> Fun ( Name ( "thmPlusZero" ) )
+        Name ( "true" ) |-> Con ( Name ( "true" ) )
+        Name ( "tt" ) |-> Con ( Name ( "tt" ) )
+        Name ( "z" ) |-> Fun ( Name ( "z" ) )
+        Name ( "zero" ) |-> Con ( Name ( "zero" ) )
+    </ncat>
+    <tenv>
+        .Map
+    </tenv>
+</T>

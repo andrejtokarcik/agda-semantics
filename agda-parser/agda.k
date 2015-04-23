@@ -25,10 +25,13 @@ module AGDA
        <metadata> _ => M' </metadata>   [structural]
 
   syntax KItem ::= "test"
-  rule <k> test => whnf(Name("map") Name("tt") (Name("_::_") {Set(1)} Set(0) (Name("nil") {Set(1)}))) ...</k>
+  //rule <k> test => whnf(Name("map") Name("tt") (Name("_::_") {Set(1)} Set(0) (Name("nil") {Set(1)}))) ...</k>
+  rule test => whnf(
+                 Name("thmPlusZero") (Name ("suc") (Name("suc") Name("zero")))
+               )
 
   configuration <T>
-                  <k> $PGM:Program /*~> test*/ </k>
+                  <k> $PGM:Program </k>   //~> test </k>
                   <tenv> .Map </tenv>   // <ctx>    --- contains only metas' types after completion
                   <fenv> .Map </fenv>   // <fun> alebo <env> alebo <fenv>
                   <mgu> .Mgu </mgu>
