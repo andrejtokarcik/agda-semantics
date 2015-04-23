@@ -11,62 +11,59 @@
         </range>
     </metadata>
     <sig>
-        Fun ( Name ( "Cons" ) ) |-> Set ( 1 )
-        Fun ( Name ( "cons" ) ) |-> Fun ( Name ( "Cons" ) )
-        Data ( Name ( "Nat" ) ) |-> Set ( 0 )
-        Data ( Name ( "Vec" ) ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( 
-          #symVariable(41) : Data ( Name ( "Nat" ) ) ) -> Set ( 0 )
-        Con ( Name ( "suc" ) ) |-> ( #symVariable(38) : Data ( Name ( "Nat" ) 
-          ) ) -> Data ( Name ( "Nat" ) )
-        Con ( Name ( "vcons" ) ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( 
-          "n" ) : Data ( Name ( "Nat" ) ) } -> ( #symVariable(59) : Var ( "A" 
-          ) ) -> ( #symVariable(3) : ((Data ( Name ( "Vec" ) ) Var ( "A" )) 
-          Var ( "n" )) ) -> ((Data ( Name ( "Vec" ) ) Var ( "A" )) (Con ( Name
-           ( "suc" ) ) Var ( "n" )))
-        Con ( Name ( "vnil" ) ) |-> { Var ( "A" ) : Set ( 0 ) } -> ((Data ( 
-          Name ( "Vec" ) ) Var ( "A" )) Con ( Name ( "zero" ) ))
-        Con ( Name ( "zero" ) ) |-> Data ( Name ( "Nat" ) )
+        Fun ( "Cons" ) |-> Set ( 1 )
+        Fun ( "cons" ) |-> Fun ( "Cons" )
+        Data ( "Nat" ) |-> Set ( 0 )
+        Data ( "Vec" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(41) :
+           Data ( "Nat" ) ) -> Set ( 0 )
+        Con ( "suc" ) |-> ( #symVariable(38) : Data ( "Nat" ) ) -> Data ( 
+          "Nat" )
+        Con ( "vcons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "n" ) : 
+          Data ( "Nat" ) } -> ( #symVariable(59) : Var ( "A" ) ) -> ( 
+          #symVariable(3) : ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((
+          Data ( "Vec" ) Var ( "A" )) (Con ( "suc" ) Var ( "n" )))
+        Con ( "vnil" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ((Data ( "Vec" ) Var
+           ( "A" )) Con ( "zero" ))
+        Con ( "zero" ) |-> Data ( "Nat" )
     </sig>
     <funtenvs>
-        Fun ( Name ( "Cons" ) ) |-> m ( #symExpr(26) |-> Set ( #symInt(28) ) )
-        Fun ( Name ( "cons" ) ) |-> m ( Var ( "a" ) |-> #symExpr(60) #symExpr(
-          26) |-> Set ( #symInt(28) ) #symExpr(45) |-> Set ( 0 ) #symExpr(48)
-           |-> Set ( 0 ) #symExpr(51) |-> Set ( 0 ) #symExpr(53) |-> Data ( 
-          Name ( "Nat" ) ) #symExpr(55) |-> Set ( 0 ) #symExpr(57) |-> Data ( 
-          Name ( "Nat" ) ) #symExpr(60) |-> Set ( 0 ) #symExpr(60) |-> Set ( 0
-           ) )
+        Fun ( "Cons" ) |-> m ( #symExpr(26) |-> Set ( #symInt(28) ) )
+        Fun ( "cons" ) |-> m ( Var ( "a" ) |-> #symExpr(60) #symExpr(26) |-> 
+          Set ( #symInt(28) ) #symExpr(45) |-> Set ( 0 ) #symExpr(48) |-> Set 
+          ( 0 ) #symExpr(51) |-> Set ( 0 ) #symExpr(53) |-> Data ( "Nat" ) 
+          #symExpr(55) |-> Set ( 0 ) #symExpr(57) |-> Data ( "Nat" ) #symExpr(
+          60) |-> Set ( 0 ) #symExpr(60) |-> Set ( 0 ) )
     </funtenvs>
     <metavars>
         #symExpr(26) |-> t ( Set ( 1 ) , Set ( #symInt(28) ) )
         #symExpr(45) |-> t ( #symExpr(60) , Set ( 0 ) )
-        #symExpr(53) |-> t ( #symExpr(57) , Data ( Name ( "Nat" ) ) )
+        #symExpr(53) |-> t ( #symExpr(57) , Data ( "Nat" ) )
         #symExpr(55) |-> t ( #symExpr(60) , Set ( 0 ) )
-        #symExpr(57) |-> t ( #symExpr(57) , Data ( Name ( "Nat" ) ) )
+        #symExpr(57) |-> t ( #symExpr(57) , Data ( "Nat" ) )
     </metavars>
     <fenv>
-        Fun ( Name ( "Cons" ) ) |-> Aux ( Fun ( Name ( "Cons" ) ) )
-        Fun ( Name ( "cons" ) ) |-> \ { #symVariable(62) : #symExpr(63) } -> \
-           ( #symVariable(64) : #symExpr(65) ) -> \ { #symVariable(66) : 
-          #symExpr(67) } -> (((Aux ( Fun ( Name ( "cons" ) ) ) { #symVariable(
-          62) }) #symVariable(64)) { #symVariable(66) })
-        Aux ( Fun ( Name ( "Cons" ) ) ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( 
-          Var ( "a" ) : Var ( "A" ) ) -> { Var ( "n" ) : Data ( Name ( "Nat" )
-           ) } -> ( #symVariable(3) : ((Data ( Name ( "Vec" ) ) Var ( "A" )) 
-          Var ( "n" )) ) -> ((Data ( Name ( "Vec" ) ) Var ( "A" )) (Con ( Name
-           ( "suc" ) ) Var ( "n" )))
-        Aux ( Fun ( Name ( "cons" ) ) ) |-> FunClauses ( 3 , ListItem((((%fun 
-          { #symExpr(51) }) Var ( "a" )) { #symExpr(53) }) = (((Con ( Name ( 
-          "vcons" ) ) { #symExpr(60) }) { #symExpr(57) }) Var ( "a" ))) )
+        Fun ( "Cons" ) |-> Aux ( Fun ( "Cons" ) )
+        Fun ( "cons" ) |-> \ { #symVariable(62) : #symExpr(63) } -> \ ( 
+          #symVariable(64) : #symExpr(65) ) -> \ { #symVariable(66) : #symExpr
+          (67) } -> (((Aux ( Fun ( "cons" ) ) { #symVariable(62) }) 
+          #symVariable(64)) { #symVariable(66) })
+        Aux ( Fun ( "Cons" ) ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "a" 
+          ) : Var ( "A" ) ) -> { Var ( "n" ) : Data ( "Nat" ) } -> ( 
+          #symVariable(3) : ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((
+          Data ( "Vec" ) Var ( "A" )) (Con ( "suc" ) Var ( "n" )))
+        Aux ( Fun ( "cons" ) ) |-> FunClauses ( 3 , ListItem((((%fun { 
+          #symExpr(51) }) Var ( "a" )) { #symExpr(53) }) = (((Con ( "vcons" ) 
+          { #symExpr(60) }) { #symExpr(57) }) Var ( "a" ))) )
     </fenv>
     <ncat>
-        Name ( "Cons" ) |-> Fun ( Name ( "Cons" ) )
-        Name ( "Nat" ) |-> Data ( Name ( "Nat" ) )
-        Name ( "Vec" ) |-> Data ( Name ( "Vec" ) )
-        Name ( "cons" ) |-> Fun ( Name ( "cons" ) )
-        Name ( "suc" ) |-> Con ( Name ( "suc" ) )
-        Name ( "vcons" ) |-> Con ( Name ( "vcons" ) )
-        Name ( "vnil" ) |-> Con ( Name ( "vnil" ) )
-        Name ( "zero" ) |-> Con ( Name ( "zero" ) )
+        Name ( "Cons" ) |-> Fun ( "Cons" )
+        Name ( "Nat" ) |-> Data ( "Nat" )
+        Name ( "Vec" ) |-> Data ( "Vec" )
+        Name ( "cons" ) |-> Fun ( "cons" )
+        Name ( "suc" ) |-> Con ( "suc" )
+        Name ( "vcons" ) |-> Con ( "vcons" )
+        Name ( "vnil" ) |-> Con ( "vnil" )
+        Name ( "zero" ) |-> Con ( "zero" )
     </ncat>
     <tenv>
         #symExpr(26) |-> Set ( #symInt(28) )

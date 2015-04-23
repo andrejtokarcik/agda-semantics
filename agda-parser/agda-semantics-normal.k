@@ -33,7 +33,7 @@ module AGDA-SEMANTICS-NORMAL
   syntax WhnfTypedExpr ::= SetTypedExpr
 
   syntax Bool ::= cond8(Expr)  [function]
-  rule cond8(Fun(Name("thmPlusZero")) _) => true
+  rule cond8(Fun("thmPlusZero") _) => true
 
   syntax KItem ::= whnfType(Expr)  [strict, context(result(WhnfTypedExpr))]
   context whnfType(t(E, HOLE => whnf(HOLE))) when cond8(E) [result(Whnf)]
@@ -53,7 +53,7 @@ module AGDA-SEMANTICS-NORMAL
 
   // (Fun ( Name ( "thmPlusZero" ) ) Con ( Name ( "zero" ) )) , ((Fun ( Name ( "_==_" ) ) ((Fun ( Name ( "plus" ) ) Con ( Name ( "zero" ) ) ) Con ( Name ( "zero" ) ))) Con ( Name ( "zero" ) ))
   syntax Bool ::= cond3(Expr)  [function]
-  rule cond3(Aux(Fun(Name("_==_")))) => true
+  rule cond3(Aux(Fun("_==_"))) => true
   //rule whnf(E => chich ~> E) when cond3(E)
 
   rule <k> whnf(N => Nc) ...</k>  <ncat>... N |-> Nc ...</ncat>
@@ -75,7 +75,7 @@ module AGDA-SEMANTICS-NORMAL
     when isFunClauses(leftmost(E)) /*andThenBool lengthList(args(E)) <Int numReqArgs(leftmost(E))*/ andThenBool notBool matches(leftmost(E), E HOLE)   [result(Whnf)]
 
   syntax Bool ::= condd(Expr)  [function]
-  rule condd(_ E) => E =/=K Con(Name("zero"))
+  rule condd(_ E) => E =/=K Con("zero")
 
   // TODO: musim vediet konkretizovat argumenty pre pattern-matching funkcie.
   // proste to rozvetvit podla konstruktorov a ocheckovat ze to plati pre vsetky moznosti...

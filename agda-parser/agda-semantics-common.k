@@ -9,11 +9,10 @@ module AGDA-SEMANTICS-COMMON
 
   syntax KItem ::= "chich"
 
-  syntax TypedExpr ::= t(Expr, Expr)    [latex(({#1}\downarrow{#2}))]    // XXX this would indicate a type-*inference* result
+  syntax TypedExpr ::= t(Expr, Expr)    [latex(({#1}\downarrow{#2}))]    // the down arrow would indicate a type-*inference* result
   syntax Expr ::= TypedExpr
 
-  // TODO: wrap Identifier directly instead of Name
-  syntax Name ::= Data(Name) | Con(Name) | Fun(Name)
+  syntax Name ::= Data(Identifier) | Con(Identifier) | Fun(Identifier)
 
   syntax TEnvRestore
   rule isTEnvRestore(_:KResult) => true

@@ -11,28 +11,27 @@
         </range>
     </metadata>
     <sig>
-        Fun ( Name ( "one" ) ) |-> Data ( Name ( "Nat" ) )
-        Data ( Name ( "Nat" ) ) |-> Set ( 0 )
-        Con ( Name ( "suc" ) ) |-> ( #symVariable(2) : Data ( Name ( "Nat" ) )
-           ) -> Data ( Name ( "Nat" ) )
-        Con ( Name ( "zero" ) ) |-> Data ( Name ( "Nat" ) )
+        Fun ( "one" ) |-> Data ( "Nat" )
+        Data ( "Nat" ) |-> Set ( 0 )
+        Con ( "suc" ) |-> ( #symVariable(2) : Data ( "Nat" ) ) -> Data ( "Nat"
+           )
+        Con ( "zero" ) |-> Data ( "Nat" )
     </sig>
     <funtenvs>
-        Fun ( Name ( "one" ) ) |-> m ( .Map )
+        Fun ( "one" ) |-> m ( .Map )
     </funtenvs>
     <metavars>
         .Map
     </metavars>
     <fenv>
-        Fun ( Name ( "one" ) ) |-> Aux ( Fun ( Name ( "one" ) ) )
-        Aux ( Fun ( Name ( "one" ) ) ) |-> (Con ( Name ( "suc" ) ) Con ( Name 
-          ( "zero" ) ))
+        Fun ( "one" ) |-> Aux ( Fun ( "one" ) )
+        Aux ( Fun ( "one" ) ) |-> (Con ( "suc" ) Con ( "zero" ))
     </fenv>
     <ncat>
-        Name ( "Nat" ) |-> Data ( Name ( "Nat" ) )
-        Name ( "one" ) |-> Fun ( Name ( "one" ) )
-        Name ( "suc" ) |-> Con ( Name ( "suc" ) )
-        Name ( "zero" ) |-> Con ( Name ( "zero" ) )
+        Name ( "Nat" ) |-> Data ( "Nat" )
+        Name ( "one" ) |-> Fun ( "one" )
+        Name ( "suc" ) |-> Con ( "suc" )
+        Name ( "zero" ) |-> Con ( "zero" )
     </ncat>
     <tenv>
         .Map

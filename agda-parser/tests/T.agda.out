@@ -11,27 +11,26 @@
         </range>
     </metadata>
     <sig>
-        Fun ( Name ( "e" ) ) |-> Set ( 0 )
-        Fun ( Name ( "p" ) ) |-> ( #symVariable(2) : Set ( 0 ) ) -> Set ( 0 )
-        Fun ( Name ( "x" ) ) |-> Set ( 0 )
-        Fun ( Name ( "y" ) ) |-> Set ( 0 )
+        Fun ( "e" ) |-> Set ( 0 )
+        Fun ( "p" ) |-> ( #symVariable(2) : Set ( 0 ) ) -> Set ( 0 )
+        Fun ( "x" ) |-> Set ( 0 )
+        Fun ( "y" ) |-> Set ( 0 )
     </sig>
     <funtenvs>
-        Fun ( Name ( "e" ) ) |-> m ( .Map )
+        Fun ( "e" ) |-> m ( .Map )
     </funtenvs>
     <metavars>
         .Map
     </metavars>
     <fenv>
-        Fun ( Name ( "e" ) ) |-> Aux ( Fun ( Name ( "e" ) ) )
-        Aux ( Fun ( Name ( "e" ) ) ) |-> (Fun ( Name ( "p" ) ) Fun ( Name ( 
-          "y" ) ))
+        Fun ( "e" ) |-> Aux ( Fun ( "e" ) )
+        Aux ( Fun ( "e" ) ) |-> (Fun ( "p" ) Fun ( "y" ))
     </fenv>
     <ncat>
-        Name ( "e" ) |-> Fun ( Name ( "e" ) )
-        Name ( "p" ) |-> Fun ( Name ( "p" ) )
-        Name ( "x" ) |-> Fun ( Name ( "x" ) )
-        Name ( "y" ) |-> Fun ( Name ( "y" ) )
+        Name ( "e" ) |-> Fun ( "e" )
+        Name ( "p" ) |-> Fun ( "p" )
+        Name ( "x" ) |-> Fun ( "x" )
+        Name ( "y" ) |-> Fun ( "y" )
     </ncat>
     <tenv>
         .Map

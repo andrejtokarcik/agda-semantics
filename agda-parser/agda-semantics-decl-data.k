@@ -10,10 +10,10 @@ module AGDA-SEMANTICS-DECL-DATA
        addConSigs(applyParams(Ps, N), prependParams(Ps, Cs))      // TODO: replace prependParams with: turn Ps into a hidden-args telescope and use the Pi trick as in addDataSig
 
   syntax KItem ::= addDataSig(Name, Expr)              [strict(2(context('checkSetType)))]
-  rule <k> addDataSig(N, t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>   // << FIXME not sure if the condition is correct: what universe must the datatype fit in?
-       <ncat> NCat (. => N |-> Data(N)) </ncat>
-       <sig> Sigma (. => Data(N) |-> T) </sig>
-    when notBool (N in keys(NCat))
+  rule <k> addDataSig(Name(D), t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>   // FIXME not sure if the condition is correct: what universe must the datatype fit in?
+       <ncat> NCat (. => Name(D) |-> Data(D)) </ncat>
+       <sig> Sigma (. => Data(D) |-> T) </sig>
+    when notBool (Name(D) in keys(NCat))     // this may be already guaranteed by the external parser
 
   syntax KItem ::= addConSigs(Expr, TypeSignatures)
   rule addConSigs(D:Expr, .TypeSignatures) => . [structural]
@@ -21,10 +21,10 @@ module AGDA-SEMANTICS-DECL-DATA
 
   syntax KItem ::= addConSig(Expr, Name, Expr)  [strict(3(context('checkSetType)))]
   // TODO: check the constructor's universe whether it fits into the datatype
-  rule <k> addConSig(D:Expr, C:Name, t(T:Expr, Set(_))) => T constructorOf D ~> pass? ...</k>
-       <ncat> NCat (. => C |-> Con(C)) </ncat>
+  rule <k> addConSig(D:Expr, Name(C), t(T:Expr, Set(_))) => T constructorOf D ~> pass? ...</k>
+       <ncat> NCat (. => Name(C) |-> Con(C)) </ncat>
        <sig> Sigma (. => Con(C) |-> T) </sig>
-    when notBool (C in keys(NCat))
+    when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the external parser
 
   syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
   rule ((_ : _) -> T => T) constructorOf _

@@ -118,7 +118,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
     when isImplicit(T2) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
 
   syntax Bool ::= cond(Expr, Expr)  [function]
-  rule cond(Fun(Name("thmPlusZero")), _) => true
+  rule cond(Fun("thmPlusZero"), _) => true
   rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == whnf(T) ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf /*~> chich*/ ...</k>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
 endmodule

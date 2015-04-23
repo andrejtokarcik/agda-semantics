@@ -3,6 +3,19 @@ require "agda-semantics-common.k"
 module AGDA-SEMANTICS-DECL-FUN
   imports AGDA-SEMANTICS-COMMON
 
+  syntax Bool ::= cond5(Expr)  [function]
+  rule cond5(Name("i")) => true
+
+  context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
+  rule <k> Name(F) : t(E, Set(_)) => . ...</k>
+       <ncat> NCat (. => Name(F) |-> Fun(F)) </ncat>
+       <sig> Sigma (. => Fun(F) |-> E) </sig>
+    when notBool (Name(F) in keys(NCat)) andBool cond5(Name(F)) ==K true
+  rule <k> Name(F) : t(E, Set(_)) => . ...</k>
+       <ncat> NCat (. => Name(F) |-> Fun(F)) </ncat>
+       <sig> Sigma (. => Fun(F) |-> E) </sig>
+    when notBool (Name(F) in keys(NCat)) andBool cond5(Name(F)) =/=K true
+
   syntax KItem ::= "autotyped!"
 
   rule <k> L = R => autotype(L) ~> autotyped! ~> L = R ~> tenv(Gamma) ...</k>
@@ -16,8 +29,8 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax Bool ::= cond2(Expr)  [function]
   rule cond2(Name("thmPlusZero") _) => true
-  rule cond2(t(Fun(Name("thmPlusZero")) _, _)) => true
-  rule cond2(t(Fun(Name("i")), _)) => true
+  rule cond2(t(Fun("thmPlusZero") _, _)) => true
+  rule cond2(t(Fun("i"), _)) => true
 
   context autotyped! ~> (HOLE => whnfType(HOLE)) = _  when cond2(HOLE) =/=K true [result(WhnfTypedExpr)]
   context autotyped! ~> (HOLE => whnfType(HOLE)) = _  when cond2(HOLE) ==K true [result(WhnfTypedExpr)]

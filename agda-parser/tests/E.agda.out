@@ -11,22 +11,22 @@
         </range>
     </metadata>
     <sig>
-        Fun ( Name ( "t" ) ) |-> ( #symVariable(3) : Set ( 0 ) ) -> Set ( 0 )
+        Fun ( "t" ) |-> ( #symVariable(3) : Set ( 0 ) ) -> Set ( 0 )
     </sig>
     <funtenvs>
-        Fun ( Name ( "t" ) ) |-> m ( Var ( "x" ) |-> Set ( 0 ) )
+        Fun ( "t" ) |-> m ( Var ( "x" ) |-> Set ( 0 ) )
     </funtenvs>
     <metavars>
         .Map
     </metavars>
     <fenv>
-        Fun ( Name ( "t" ) ) |-> \ ( #symVariable(6) : #symExpr(7) ) -> (Aux (
-           Fun ( Name ( "t" ) ) ) #symVariable(6))
-        Aux ( Fun ( Name ( "t" ) ) ) |-> FunClauses ( 1 , ListItem((%fun Var (
-           "x" )) = Var ( "x" )) )
+        Fun ( "t" ) |-> \ ( #symVariable(6) : #symExpr(7) ) -> (Aux ( Fun ( 
+          "t" ) ) #symVariable(6))
+        Aux ( Fun ( "t" ) ) |-> FunClauses ( 1 , ListItem((%fun Var ( "x" )) =
+           Var ( "x" )) )
     </fenv>
     <ncat>
-        Name ( "t" ) |-> Fun ( Name ( "t" ) )
+        Name ( "t" ) |-> Fun ( "t" )
     </ncat>
     <tenv>
         .Map
