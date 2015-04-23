@@ -42,13 +42,13 @@ module AGDA-SEMANTICS-TYPESYSTEM
   context (X : (HOLE => checkSetType(HOLE))) -> _   when cond4(X) =/=K true  [infer-pi-arg1, result(SetTypedExpr)]
   context (X : (HOLE => checkSetType(HOLE))) -> _ when cond4(X) ==K true  [result(SetTypedExpr)]
   rule [bind-pi]:
-       <k> (. => bound!) ~> (X : t(T1, Set(_))) -> _ ~>
-           (. => tenv(Gamma)) ...</k>
+       <k> (. => saveTEnv(Gamma) ~> bound!) ~> (X : t(T1, Set(_))) -> _ ~>
+           (. => restoreTEnv) ...</k>
        <tenv> Gamma => Gamma[T1/X] </tenv>
     when fresh(I1:Int) andBool cond4(X) ==K true
   rule [bind-pi]:
-       <k> (. => bound!) ~> (X : t(T1, Set(_))) -> _ ~>
-           (. => tenv(Gamma)) ...</k>
+       <k> (. => saveTEnv(Gamma) ~> bound!) ~> (X : t(T1, Set(_))) -> _ ~>
+           (. => restoreTEnv) ...</k>
        <tenv> Gamma => Gamma[T1/X] </tenv>
     when fresh(I1:Int) andBool cond4(X) =/=K true
 
@@ -67,8 +67,8 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   context {_ : (HOLE => checkSetType(HOLE))} -> _   [result(SetTypedExpr)]
   rule
-       <k> (. => bound!) ~> {X : t(T1, Set(_))} -> _ ~>
-           (. => tenv(Gamma)) ...</k>
+       <k> (. => saveTEnv(Gamma) ~> bound!) ~> {X : t(T1, Set(_))} -> _ ~>
+           (. => restoreTEnv) ...</k>
        <tenv> Gamma => Gamma[T1/X] </tenv>
     when fresh(I1:Int)
   context bound! ~> {_ : _} -> (HOLE => checkSetType(HOLE))    [result(SetTypedExpr)]
@@ -80,8 +80,8 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   context \ (_ : (HOLE => checkSetType(HOLE))) -> _  [result(SetTypedExpr)]
   rule [bind-lambda]:
-       <k> (. => bound!) ~> \ (X : t(T, Set(_))) -> _ ~>
-           (. => tenv(Gamma)) ...</k>
+       <k> (. => saveTEnv(Gamma) ~> bound!) ~> \ (X : t(T, Set(_))) -> _ ~>
+           (. => restoreTEnv) ...</k>
        <tenv> Gamma => Gamma[T/X] </tenv>
   context bound! ~> \ (_ : _) -> HOLE
   rule [infer-lambda]:
@@ -91,8 +91,8 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   context \ {_ : (HOLE => checkSetType(HOLE))} -> _   [result(SetTypedExpr)]
   rule [bind-lambda]:
-       <k> (. => bound!) ~> \ {X : t(T, Set(_))} -> _ ~>
-           (. => tenv(Gamma)) ...</k>
+       <k> (. => saveTEnv(Gamma) ~> bound!) ~> \ {X : t(T, Set(_))} -> _ ~>
+           (. => restoreTEnv) ...</k>
        <tenv> Gamma => Gamma[T/X] </tenv>
   context bound! ~> \ {_ : _} -> HOLE
   rule [infer-lambda]:
@@ -102,23 +102,24 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
 
   context (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
-  context _::WhnfTypedExpr HOLE
+  context _::WhnfTypedExpr HOLE   //(HOLE::Expr => whnfType(HOLE))   [result(WhnfTypedExpr)]
 
-  // insert an implicit metavariable in front of an explicit arg in application
+  // insert an implicit metavariable in front of an explicit arg when needed
   rule [insert-implicit1]:
        t(E1, ({_ : _} -> _)) t(E2, _) => (E1 {%underscore}) E2  when isImplicit(E2) =/=K true
   rule [insert-implicit2]:
        t(E1, _) t(E2, ({_ : _} -> _)) => E1 (E2 {%underscore})  when isImplicit(E2) =/=K true
 
   rule [infer-app-implicit]:
-       <k> t(E1, ({X : T} -> T')) t({E2}, {T2}) => T2 == whnf(T) ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> E2) ~> unifyConf ...</k>
+       t(E1, ({X : T} -> T')) t({E2}, {T2}) => T2 == T ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> E2) ~> unifyConf
 
   rule [infer-app-explicit]:
-       <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == whnf(T) ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf ...</k>
+       <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf ...</k>
     when isImplicit(T2) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
 
   syntax Bool ::= cond(Expr, Expr)  [function]
-  rule cond(Fun("thmPlusZero"), _) => true
-  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == whnf(T) ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf /*~> chich*/ ...</k>
+  //rule cond(E, Var("fs")) => true  when leftmost(E) ==K Fun("vapp")
+  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => chich ~> T1 == (X : T) -> T' ~> chich ~> T2 == T ~> chich ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf /*~> chich*/ ...</k>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
+
 endmodule

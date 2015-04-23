@@ -16,10 +16,19 @@ module AGDA-SEMANTICS-COMMON
 
   syntax TEnvRestore
   rule isTEnvRestore(_:KResult) => true
+  /*
   syntax KItem ::= tenv(Map)
   rule R:TEnvRestore ~> tenv(Gamma) => tenv(Gamma) ~> R  [structural]
   rule <k> tenv(Gamma) => . ...</k>
        <tenv> _ => Gamma </tenv>
+  */
+  syntax KItem ::= saveTEnv(Map) | "restoreTEnv"
+  rule <k> saveTEnv(Gamma) => . ...</k>
+       <tenvRestore> L => ListItem(m(Gamma)) L </tenvRestore>
+  rule R:TEnvRestore ~> restoreTEnv => restoreTEnv ~> R  [structural]
+  rule <k> restoreTEnv => . ...</k>
+       <tenv> _ => Gamma </tenv>
+       <tenvRestore> ListItem(m(Gamma)) L => L </tenvRestore>
 
   syntax KItem ::= "pass?" | error(String)
   syntax GuardPass
@@ -47,4 +56,12 @@ module AGDA-SEMANTICS-COMMON
   syntax KItem ::= tsubst(Map)
   rule <k> t(E, T) ~> tsubst(M) => t(E, T[applyMguKeys(Theta, M)]) ...</k>
        <mgu> Theta </mgu> [structural]
+
+  // wrappers for containers (not of sort K)
+  syntax K ::= l(List)
+  syntax List ::= unl(K) [function]
+  rule unl(l(L)) => L  [structural]
+  syntax K ::= m(Map)
+  syntax Map ::= unm(K)  [function]
+  rule unm(m(M)) => M  [structural]
 endmodule

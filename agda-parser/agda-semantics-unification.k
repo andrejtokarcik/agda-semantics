@@ -8,20 +8,24 @@ module AGDA-SEMANTICS-UNIFICATION
   // Not every updateMgu is actually guaranteed to update the mgu;
   // e.g. if T is identical to T', <mgu /> content remains the same.
 
-  syntax KItem ::= Expr "==" Expr
-  // hack for infer-app-* rules in -typesystem
-  rule <k> E == whnf(E') => whnf(applyMgu(Theta, E')) ~> E == HOLE ...</k>
+  syntax KItem ::= Expr "==" Expr | Expr "#==" Expr
+  rule E == E' => nf(E) #== nf(E')
+  rule <k> nf(E) #== E' => nf(applyMgu(Theta, E)) ~> HOLE #== E' ...</k>
        <mgu> Theta </mgu>
-  rule whnf(E') ~> E == HOLE => E == E'  when isWhnf(E')
-  rule <k> E == E' => . ...</k>
+  rule nf(E) ~> HOLE #== E' => E #== E'  when isNf(E)
+  rule <k> E #== nf(E') => nf(applyMgu(Theta, E')) ~> E #== HOLE ...</k>
+       <mgu> Theta </mgu>
+  rule nf(E') ~> E #== HOLE => E #== E'  when isNf(E')
+  rule <k> E #== E' => . ...</k>
        <mgu> Theta => updateMgu(Theta, E, E') </mgu>
-    when getKLabel(E') =/=KLabel 'whnf
+    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf
 
   syntax KItem ::= "unifyConf"
   rule R:KResult ~> unifyConf => unifyConf ~> R  [structural]
   rule <k> unifyConf => . ...</k>
        <sig> Sigma => applyMgu(Theta, Sigma) </sig>
        <tenv> Gamma => applyMguKeys(Theta, Gamma) </tenv>
+       <tenvRestore> TEnvR => applyMguKeysL(Theta, TEnvR) </tenvRestore>
        <fenv> Rho => applyMgu(Theta, Rho) </fenv>
        <metavars> Meta => applyMgu(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
@@ -37,11 +41,15 @@ module AGDA-SEMANTICS-UNIFICATION
   // it holds that Variable ::= MetaVariable  (i.e., #symExpr's are also Variable)
   */
 
+  syntax List ::= applyMguKeysL(Mgu, List)   [function]
+  rule applyMguKeysL(Theta, .List) => .List
+  rule applyMguKeysL(Theta, _ (ListItem(m(TEnv)) => .List)) (.List => ListItem(m(applyMguKeys(Theta, TEnv))))
+
   syntax Map ::= applyMguKeys(Mgu, Map)  [function]
   rule applyMguKeys(_, .Map) => .Map
-  rule applyMguKeys(Theta, (K |-> V => .Map) _) (.Map => (K |-> applyMgu(Theta, V)) (applyMgu(Theta, K) |-> applyMgu(Theta, V)))
+  rule applyMguKeys(Theta, _ (K |-> V => .Map)) (.Map => (K |-> applyMgu(Theta, V)) (applyMgu(Theta, K) |-> applyMgu(Theta, V)))
     when isVariable(K) andThenBool isVariable(applyMgu(Theta, K)) andThenBool applyMgu(Theta, K) =/=K K
-  rule applyMguKeys(Theta, (K |-> V => .Map) _) (.Map => K |-> applyMgu(Theta, V))  [owise]
+  rule applyMguKeys(Theta, _ (K |-> V => .Map)) (.Map => K |-> applyMgu(Theta, V))  [owise]
 
   // The LHS of eqn() below gets replaced with the RHS: swapping the sides
   // when necessary.

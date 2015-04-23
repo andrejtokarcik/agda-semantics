@@ -38,6 +38,7 @@ module AGDA
                   <sig> .Map </sig>
                   <con> .Map </con>
                   <ncat> .Map </ncat>
+                  <tenvRestore> .List </tenvRestore>   // <ctxstack>
                   <metavars> .Map </metavars>   // <meta>   --- mozno uplne zmazat?
                   <metadata>                    // <md> [?]
                     <range> .K </range>

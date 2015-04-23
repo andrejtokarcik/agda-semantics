@@ -11,12 +11,11 @@ module AGDA-SEMANTICS-DECL-DATA
        <ncat> NCat (. => Name(N) |-> Data(N)) </ncat>
     when notBool (Name(N) in keys(NCat))     // this may be already guaranteed by the external parser
 
-  syntax K ::= c(List)
   syntax KItem ::= addDataSig(Name, Expr, Expr)              [strict(3(context('checkSetType)))]
   // FIXME not sure if the condition is correct: what universe must the datatype fit in?
   rule <k> addDataSig(D, DPs, t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>
        <sig> Sigma (. => D |-> T) </sig>
-       <con>... . => DPs |-> c(.List) ...</con>
+       <con>... . => DPs |-> l(.List) ...</con>
 
   syntax KItem ::= addConSigs(Expr, Telescope, TypeSignatures)
   rule addConSigs(DPs, Ps, .TypeSignatures) => .    [structural]
@@ -27,7 +26,7 @@ module AGDA-SEMANTICS-DECL-DATA
   rule <k> addConSig(DPs, Name(C), t(T:Expr, Set(_))) => T constructorOf DPs ~> pass? ...</k>
        <ncat> NCat (. => Name(C) |-> Con(C)) </ncat>
        <sig> Sigma (. => Con(C) |-> T) </sig>
-       <con>... DPs |-> c(_ (. => ListItem(Con(C)))) ...</con>
+       <con>... DPs |-> l(_ (. => ListItem(Con(C)))) ...</con>
     when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the external parser
 
   syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
@@ -40,8 +39,8 @@ module AGDA-SEMANTICS-DECL-DATA
 
   syntax Telescope ::= makeHidden(Telescope)  [function]
   rule makeHidden(.Telescope) => .Telescope
-  rule makeHidden((X : T) Tel) => {X : T} Tel
-  rule makeHidden({X : T} Tel) => {X : T} Tel
+  rule makeHidden((X : T) Tel) => {X : T} makeHidden(Tel)
+  rule makeHidden({X : T} Tel) => {X : T} makeHidden(Tel)
 
   /*
   syntax Expr ::= applyParams(Expr, Telescope) [function]

@@ -54,8 +54,8 @@ plus (suc n) m = suc (plus n m)
 odd : Nat -> Bool
 
 even : Nat -> Bool
-even zero    = true
 even (suc n) = odd n
+even zero    = true
 
 odd zero    = false
 odd (suc n) = even n

@@ -18,12 +18,12 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax KItem ::= "autotyped!"
 
-  rule <k> L = R => autotype(L) ~> autotyped! ~> L = R ~> tenv(Gamma) ...</k>
+  rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> L = R ~> restoreTEnv ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> GammaF </funtenvs>
     when notBool (funName(L) in keys(GammaF))
-  rule <k> L = R => autotype(L) ~> autotyped! ~> L = R ~> tenv(Gamma) ...</k>
-       <tenv> Gamma => unwrap(GammaF(funName(L))) </tenv>
+  rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> L = R ~> restoreTEnv ...</k>
+       <tenv> Gamma => unm(GammaF(funName(L))) </tenv>
        <funtenvs> GammaF </funtenvs>
     when funName(L) in keys(GammaF)
 
@@ -42,20 +42,26 @@ module AGDA-SEMANTICS-DECL-FUN
   rule autotyped! ~> (t(L, ({_ : _} -> _)) => L {%underscore}) = _
   rule autotyped! ~> _ = (t(R, ({_ : _} -> _)) => R {%underscore})
 
+  syntax Bool ::= condz(LHS, RHS) [function]
+  //rule condz(L, R) => true
+  //  when leftmost(L) ==K Fun("vec") andBool leftmost(R) ==K Con("pair")
+
+  // TODO: clean funtenvs  (after clauses for the previous function has finished)
+
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
             => Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>
-    when cond2(t(L, Tl)) =/=K true
+    when condz(L, R) =/=K true
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
-            => Tl == Tr ~> unifyConf ~>
+            => chich ~> Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>
-    when cond2(t(L, Tl)) ==K true
+    when condz(L, R) ==K true
 
 
   syntax KItem ::= autotype(LHS)
@@ -87,8 +93,4 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax Variable ::= "%fun"
   syntax Expr ::= freshFunName(LHS)  [function]
   rule freshFunName(L) => replaceLeftmost(L, %fun)
-
-  syntax K ::= m(Map)
-  syntax Map ::= unwrap(K)  [function]
-  rule unwrap(m(M)) => M  [structural]
 endmodule
