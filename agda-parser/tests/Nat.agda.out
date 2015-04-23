@@ -10,13 +10,10 @@
             .K
         </range>
     </metadata>
-    <sig>
-        Fun ( "one" ) |-> Data ( "Nat" )
-        Data ( "Nat" ) |-> Set ( 0 )
-        Con ( "suc" ) |-> ( #symVariable(2) : Data ( "Nat" ) ) -> Data ( "Nat"
-           )
-        Con ( "zero" ) |-> Data ( "Nat" )
-    </sig>
+    <con>
+        Data ( "Nat" ) |-> c ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
+          ) )
+    </con>
     <funtenvs>
         Fun ( "one" ) |-> m ( .Map )
     </funtenvs>
@@ -24,16 +21,22 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( "one" ) |-> Aux ( Fun ( "one" ) )
-        Aux ( Fun ( "one" ) ) |-> (Con ( "suc" ) Con ( "zero" ))
+        Fun ( "one" ) |-> (Con ( "suc" ) Con ( "zero" ))
     </fenv>
+    <tenv>
+        .Map
+    </tenv>
+    <sig>
+        Fun ( "one" ) |-> Data ( "Nat" )
+        Data ( "Nat" ) |-> Set ( 0 )
+        Con ( "suc" ) |-> ( #symVariable(2) : Data ( "Nat" ) ) -> Data ( "Nat"
+           )
+        Con ( "zero" ) |-> Data ( "Nat" )
+    </sig>
     <ncat>
         Name ( "Nat" ) |-> Data ( "Nat" )
         Name ( "one" ) |-> Fun ( "one" )
         Name ( "suc" ) |-> Con ( "suc" )
         Name ( "zero" ) |-> Con ( "zero" )
     </ncat>
-    <tenv>
-        .Map
-    </tenv>
 </T>

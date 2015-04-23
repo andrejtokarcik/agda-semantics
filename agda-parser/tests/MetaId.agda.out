@@ -10,13 +10,10 @@
             .K
         </range>
     </metadata>
-    <sig>
-        Fun ( "expr" ) |-> Data ( "Nat" )
-        Data ( "Nat" ) |-> Set ( 0 )
-        Con ( "suc" ) |-> ( #symVariable(1) : Data ( "Nat" ) ) -> Data ( "Nat"
-           )
-        Con ( "zero" ) |-> Data ( "Nat" )
-    </sig>
+    <con>
+        Data ( "Nat" ) |-> c ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
+          ) )
+    </con>
     <funtenvs>
         Fun ( "expr" ) |-> m ( #symExpr(2) |-> Set ( #symInt(4) ) #symExpr(5)
            |-> Set ( 0 ) )
@@ -26,18 +23,23 @@
         #symExpr(5) |-> t ( Data ( "Nat" ) , Set ( 0 ) )
     </metavars>
     <fenv>
-        Fun ( "expr" ) |-> Aux ( Fun ( "expr" ) )
-        Aux ( Fun ( "expr" ) ) |-> ((\ ( Var ( "a" ) : Set ( 0 ) ) -> \ ( Var 
-          ( "x" ) : Var ( "a" ) ) -> Var ( "x" ) Data ( "Nat" )) Con ( "zero" 
-          ))
+        Fun ( "expr" ) |-> ((\ ( Var ( "a" ) : Set ( 0 ) ) -> \ ( Var ( "x" ) 
+          : Var ( "a" ) ) -> Var ( "x" ) Data ( "Nat" )) Con ( "zero" ))
     </fenv>
+    <tenv>
+        #symExpr(2) |-> Set ( #symInt(4) )
+    </tenv>
+    <sig>
+        Fun ( "expr" ) |-> Data ( "Nat" )
+        Data ( "Nat" ) |-> Set ( 0 )
+        Con ( "suc" ) |-> ( #symVariable(1) : Data ( "Nat" ) ) -> Data ( "Nat"
+           )
+        Con ( "zero" ) |-> Data ( "Nat" )
+    </sig>
     <ncat>
         Name ( "Nat" ) |-> Data ( "Nat" )
         Name ( "expr" ) |-> Fun ( "expr" )
         Name ( "suc" ) |-> Con ( "suc" )
         Name ( "zero" ) |-> Con ( "zero" )
     </ncat>
-    <tenv>
-        #symExpr(2) |-> Set ( #symInt(4) )
-    </tenv>
 </T>

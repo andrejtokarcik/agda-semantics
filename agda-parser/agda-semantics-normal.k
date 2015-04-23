@@ -53,7 +53,7 @@ module AGDA-SEMANTICS-NORMAL
 
   // (Fun ( Name ( "thmPlusZero" ) ) Con ( Name ( "zero" ) )) , ((Fun ( Name ( "_==_" ) ) ((Fun ( Name ( "plus" ) ) Con ( Name ( "zero" ) ) ) Con ( Name ( "zero" ) ))) Con ( Name ( "zero" ) ))
   syntax Bool ::= cond3(Expr)  [function]
-  rule cond3(Aux(Fun("_==_"))) => true
+  //rule cond3(Aux(Fun("_==_"))) => true
   //rule whnf(E => chich ~> E) when cond3(E)
 
   rule <k> whnf(N => Nc) ...</k>  <ncat>... N |-> Nc ...</ncat>

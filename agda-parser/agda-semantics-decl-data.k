@@ -5,9 +5,9 @@ module AGDA-SEMANTICS-DECL-DATA
 
   context data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
   rule <k> data Name(N) Ps : t(T, Set(_)) where Cons
-    => //I >=Int 1 ~> pass? ~>        // << FIXME   (the `-Int 1' guard below is sufficient?)
-       addDataSig(Data(N), App(Data(N), Ps), Pi(Ps, T)) ~>
-       addConSigs(App(Data(N), Ps), Ps, Cons) ...</k>
+           => //I >=Int 1 ~> pass? ~>        // << FIXME   (the `-Int 1' guard below is sufficient?)
+              addDataSig(Data(N), App(Data(N), Ps), Pi(Ps, T)) ~>
+              addConSigs(App(Data(N), Ps), Ps, Cons) ...</k>
        <ncat> NCat (. => Name(N) |-> Data(N)) </ncat>
     when notBool (Name(N) in keys(NCat))     // this may be already guaranteed by the external parser
 

@@ -10,9 +10,9 @@
             .K
         </range>
     </metadata>
-    <sig>
-        Fun ( "t" ) |-> ( #symVariable(3) : Set ( 0 ) ) -> Set ( 0 )
-    </sig>
+    <con>
+        .Map
+    </con>
     <funtenvs>
         Fun ( "t" ) |-> m ( Var ( "x" ) |-> Set ( 0 ) )
     </funtenvs>
@@ -20,15 +20,16 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( "t" ) |-> \ ( #symVariable(6) : #symExpr(7) ) -> (Aux ( Fun ( 
-          "t" ) ) #symVariable(6))
-        Aux ( Fun ( "t" ) ) |-> FunClauses ( 1 , ListItem((%fun Var ( "x" )) =
-           Var ( "x" )) )
+        Fun ( "t" ) |-> FunClauses ( 1 , ListItem((%fun Var ( "x" )) = Var ( 
+          "x" )) )
     </fenv>
-    <ncat>
-        Name ( "t" ) |-> Fun ( "t" )
-    </ncat>
     <tenv>
         .Map
     </tenv>
+    <sig>
+        Fun ( "t" ) |-> ( #symVariable(3) : Set ( 0 ) ) -> Set ( 0 )
+    </sig>
+    <ncat>
+        Name ( "t" ) |-> Fun ( "t" )
+    </ncat>
 </T>

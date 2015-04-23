@@ -45,14 +45,14 @@ module AGDA-SEMANTICS-DECL-FUN
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
             => Tl == Tr ~> unifyConf ~>
-               addFunClause(funName(L), L, R) ~> addFunWrapper(funName(L), L)) ...</k>
+               addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>
     when cond2(t(L, Tl)) =/=K true
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
             => Tl == Tr ~> unifyConf ~>
-               addFunClause(funName(L), L, R) ~> addFunWrapper(funName(L), L)) ...</k>
+               addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>
     when cond2(t(L, Tl)) ==K true
@@ -70,31 +70,16 @@ module AGDA-SEMANTICS-DECL-FUN
        <tenv> Gamma => Gamma[T/X] </tenv>
     when notBool (X in keys(Gamma)) andBool fresh(T:Expr)
 
-  syntax Name ::= Aux(Name)
   syntax KItem ::= addFunClause(Name, LHS, RHS)
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fenv> Rho
-              (. => Aux(F) |-> FunClauses(lengthList(args(L)), ListItem(freshFunName(L) = R))) </fenv>
+              (. => F |-> FunClauses(lengthList(args(L)), ListItem(freshFunName(L) = R))) </fenv>
     when notBool (F in keys(Rho))
   rule <k> addFunClause(F, L, R) => . ...</k>
-       <fenv>... Aux(F) |-> FunClauses(I, _ (. => ListItem(freshFunName(L) = R))) ...</fenv>
+       <fenv>... F |-> FunClauses(I, _ (. => ListItem(freshFunName(L) = R))) ...</fenv>
     when lengthList(args(L)) ==Int I
 
   rule FunClauses(0, ListItem(_ = R)) => R   [structural, anywhere]
-
-  syntax Expr ::= genLambda(List, Expr)  [function]
-  rule genLambda(ListItem({_}) L, E) => \ {X : T} -> genLambda(L, E {X})  when fresh(X:Variable) andBool fresh(T:Expr)
-  rule genLambda(ListItem(A) L, E) => \ (X : T) -> genLambda(L, E X)      when isImplicit(A) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr)
-  rule genLambda(_, E) => E  [owise]
-
-  // the purpose of the wrapper is to get the implicit arguments automatically inserted before the actual pattern matching
-  // --- well, those should be inserted according to the type, not according to the lambdas so it should be possible to remove this
-  syntax KItem ::= addFunWrapper(Name, LHS)
-  rule <k> addFunWrapper(F, L) => . ...</k>
-       <fenv> Rho
-              (. => F |-> genLambda(args(L), Aux(F))) </fenv>
-    when notBool (F in keys(Rho))
-  rule <k> addFunWrapper(F, L) => . ...</k>  <fenv> Rho </fenv>  when F in keys(Rho)
 
   syntax Name ::= funName(LHS)  [function]
   rule funName(L) => leftmost(L)

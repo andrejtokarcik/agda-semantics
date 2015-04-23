@@ -10,10 +10,9 @@
             .K
         </range>
     </metadata>
-    <sig>
-        Fun ( "id" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(7) : 
-          Var ( "A" ) ) -> Var ( "A" )
-    </sig>
+    <con>
+        .Map
+    </con>
     <funtenvs>
         Fun ( "id" ) |-> m ( Var ( "A" ) |-> Set ( 0 ) Var ( "x" ) |-> Var ( 
           "A" ) )
@@ -22,16 +21,17 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( "id" ) |-> \ ( #symVariable(10) : #symExpr(11) ) -> \ ( 
-          #symVariable(12) : #symExpr(13) ) -> ((Aux ( Fun ( "id" ) ) 
-          #symVariable(10)) #symVariable(12))
-        Aux ( Fun ( "id" ) ) |-> FunClauses ( 2 , ListItem(((%fun Var ( "A" ))
-           Var ( "x" )) = Var ( "x" )) )
+        Fun ( "id" ) |-> FunClauses ( 2 , ListItem(((%fun Var ( "A" )) Var ( 
+          "x" )) = Var ( "x" )) )
     </fenv>
-    <ncat>
-        Name ( "id" ) |-> Fun ( "id" )
-    </ncat>
     <tenv>
         .Map
     </tenv>
+    <sig>
+        Fun ( "id" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(7) : 
+          Var ( "A" ) ) -> Var ( "A" )
+    </sig>
+    <ncat>
+        Name ( "id" ) |-> Fun ( "id" )
+    </ncat>
 </T>
