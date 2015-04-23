@@ -36,17 +36,34 @@ module AGDA-SEMANTICS-TYPESYSTEM
   // XXX: what about putting all the Pi-related rules into a separate module?
   // ... as suggested in the funkons paper
 
-  context (_ : (HOLE => checkSetType(HOLE))) -> _   [infer-pi-arg1, result(SetTypedExpr)]
+
+  syntax Bool ::= cond4(Expr)   [function]
+  rule cond4(Var("xx")) => true
+  context (X : (HOLE => checkSetType(HOLE))) -> _   when cond4(X) =/=K true  [infer-pi-arg1, result(SetTypedExpr)]
+  context (X : (HOLE => checkSetType(HOLE))) -> _ when cond4(X) ==K true  [result(SetTypedExpr)]
   rule [bind-pi]:
        <k> (. => bound!) ~> (X : t(T1, Set(_))) -> _ ~>
            (. => tenv(Gamma)) ...</k>
        <tenv> Gamma => Gamma[T1/X] </tenv>
-    when fresh(I1:Int)
+    when fresh(I1:Int) andBool cond4(X) ==K true
+  rule [bind-pi]:
+       <k> (. => bound!) ~> (X : t(T1, Set(_))) -> _ ~>
+           (. => tenv(Gamma)) ...</k>
+       <tenv> Gamma => Gamma[T1/X] </tenv>
+    when fresh(I1:Int) andBool cond4(X) =/=K true
+
   context bound! ~> (_ : _) -> (HOLE => checkSetType(HOLE))    [infer-pi-arg2, result(SetTypedExpr)]
   rule [infer-pi]:
        <k> (bound! => .) ~>
            ((X : t(T1, Set(I1))) -> t(T2, Set(I2))
             => t((X : T1) -> T2, Set(maxInt(I1, I2)))) ...</k>
+    when cond4(X) ==K true
+  rule [infer-pi]:
+       <k> (bound! => .) ~>
+           ((X : t(T1, Set(I1))) -> t(T2, Set(I2))
+            => t((X : T1) -> T2, Set(maxInt(I1, I2)))) ...</k>
+    when cond4(X) =/=K true
+
 
   context {_ : (HOLE => checkSetType(HOLE))} -> _   [result(SetTypedExpr)]
   rule
@@ -61,7 +78,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
             => t({X : T1} -> T2, Set(maxInt(I1, I2)))) ...</k>
 
 
-  context \ (_ : (HOLE => checkSetType(HOLE))) -> _   [result(SetTypedExpr)]
+  context \ (_ : (HOLE => checkSetType(HOLE))) -> _  [result(SetTypedExpr)]
   rule [bind-lambda]:
        <k> (. => bound!) ~> \ (X : t(T, Set(_))) -> _ ~>
            (. => tenv(Gamma)) ...</k>
@@ -94,14 +111,14 @@ module AGDA-SEMANTICS-TYPESYSTEM
        t(E1, _) t(E2, ({_ : _} -> _)) => E1 (E2 {%underscore})  when isImplicit(E2) =/=K true
 
   rule [infer-app-implicit]:
-       <k> t(E1, ({X : T} -> T')) t({E2}, {T2}) => T2 == T ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> E2) ...</k>
+       <k> t(E1, ({X : T} -> T')) t({E2}, {T2}) => T2 == whnf(T) ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> E2) ~> unifyConf ...</k>
 
   rule [infer-app-explicit]:
-       <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ...</k>
+       <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == whnf(T) ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf ...</k>
     when isImplicit(T2) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) =/=K true
 
   syntax Bool ::= cond(Expr, Expr)  [function]
-  rule cond(Fun(Name("f")), _) => false
-  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> chich ~> T2 == T ~> chich ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> chich ...</k>
+  rule cond(Fun(Name("thmPlusZero")), _) => true
+  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == whnf(T) ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf /*~> chich*/ ...</k>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
 endmodule

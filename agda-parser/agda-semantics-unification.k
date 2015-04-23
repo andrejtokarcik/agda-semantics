@@ -7,21 +7,28 @@ module AGDA-SEMANTICS-UNIFICATION
 
   // Not every updateMgu is actually guaranteed to update the mgu;
   // e.g. if T is identical to T', <mgu /> content remains the same.
+
   syntax KItem ::= Expr "==" Expr
+  // hack for infer-app-* rules in -typesystem
+  rule <k> E == whnf(E') => whnf(applyMgu(Theta, E')) ~> E == HOLE ...</k>
+       <mgu> Theta </mgu>
+  rule whnf(E') ~> E == HOLE => E == E'  when isWhnf(E')
   rule <k> E == E' => . ...</k>
        <mgu> Theta => updateMgu(Theta, E, E') </mgu>
+    when getKLabel(E') =/=KLabel 'whnf
 
-  syntax KItem ::= "unify"
-  rule <k> unify => . ...</k>
+  syntax KItem ::= "unifyConf"
+  rule R:KResult ~> unifyConf => unifyConf ~> R  [structural]
+  rule <k> unifyConf => . ...</k>
        <sig> Sigma => applyMgu(Theta, Sigma) </sig>
-       <tenv> Gamma => applyMguKeys(Theta, applyMgu(Theta, Gamma)) </tenv>
+       <tenv> Gamma => applyMguKeys(Theta, Gamma) </tenv>
        <fenv> Rho => applyMgu(Theta, Rho) </fenv>
        <metavars> Meta => applyMgu(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
     when isMguError(Theta) =/=K true
 
-  syntax KItem ::= unify(Expr)
-  rule <k> unify(E:Expr) => unify ~> applyMgu(Theta, E) ...</k>
+  syntax KItem ::= unify(K)
+  rule <k> unify(K:K) => applyMgu(Theta, K) ...</k>
        <mgu> Theta </mgu>
 
   /*
@@ -32,9 +39,9 @@ module AGDA-SEMANTICS-UNIFICATION
 
   syntax Map ::= applyMguKeys(Mgu, Map)  [function]
   rule applyMguKeys(_, .Map) => .Map
-  rule applyMguKeys(Theta, (K |-> V => .Map) _) (.Map => (K |-> V) (applyMgu(Theta, K) |-> V))
+  rule applyMguKeys(Theta, (K |-> V => .Map) _) (.Map => (K |-> applyMgu(Theta, V)) (applyMgu(Theta, K) |-> applyMgu(Theta, V)))
     when isVariable(K) andThenBool isVariable(applyMgu(Theta, K)) andThenBool applyMgu(Theta, K) =/=K K
-  rule applyMguKeys(_, (K |-> V => .Map) _) (.Map => K |-> V)  [owise]
+  rule applyMguKeys(Theta, (K |-> V => .Map) _) (.Map => K |-> applyMgu(Theta, V))  [owise]
 
   // The LHS of eqn() below gets replaced with the RHS: swapping the sides
   // when necessary.
@@ -44,8 +51,8 @@ module AGDA-SEMANTICS-UNIFICATION
   //rule eqns((eqn(K,,K') => .KList),,_)
   //  when isVariable(K) andBool isVariable(K')  [structural, anywhere]
 
-  //rule eqns((eqn(X:Variable,,#symVariable(I)) => eqn(#symVariable(I),,X)),,_)
-  //  when getKLabel(X) =/=KLabel #symVariable  [structural, anywhere]
+  rule eqns((eqn(X:Variable,,#symVariable(I)) => eqn(#symVariable(I),,X)),,_)
+    when getKLabel(X) =/=KLabel #symVariable  [structural, anywhere]
   //rule eqns((eqn(#symExpr(I),,#symVariable(J)) => eqn(#symVariable(J),,#symExpr(I))),,_)  [structural, anywhere]
 
 endmodule
