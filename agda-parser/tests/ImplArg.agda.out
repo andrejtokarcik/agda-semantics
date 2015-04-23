@@ -5,15 +5,18 @@
     <mgu>
         subst(.KList)
     </mgu>
+    <tenvRestore>
+        .List
+    </tenvRestore>
     <metadata>
         <range>
             .K
         </range>
     </metadata>
     <con>
-        (Data ( "Vec" ) Var ( "A" )) |-> c ( ListItem(Con ( "vnil" )) 
+        (Data ( "Vec" ) Var ( "A" )) |-> l ( ListItem(Con ( "vnil" )) 
           ListItem(Con ( "vcons" )) )
-        Data ( "Nat" ) |-> c ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
+        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
           ) )
     </con>
     <funtenvs>

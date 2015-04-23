@@ -5,13 +5,16 @@
     <mgu>
         subst(.KList)
     </mgu>
+    <tenvRestore>
+        .List
+    </tenvRestore>
     <metadata>
         <range>
             .K
         </range>
     </metadata>
     <con>
-        Data ( "Nat" ) |-> c ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
+        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
           ) )
     </con>
     <funtenvs>

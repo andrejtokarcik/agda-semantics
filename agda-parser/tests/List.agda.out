@@ -5,13 +5,16 @@
     <mgu>
         subst(.KList)
     </mgu>
+    <tenvRestore>
+        .List
+    </tenvRestore>
     <metadata>
         <range>
             .K
         </range>
     </metadata>
     <con>
-        (Data ( "List" ) Var ( "a" )) |-> c ( ListItem(Con ( "nil" )) 
+        (Data ( "List" ) Var ( "a" )) |-> l ( ListItem(Con ( "nil" )) 
           ListItem(Con ( "_::_" )) )
     </con>
     <funtenvs>

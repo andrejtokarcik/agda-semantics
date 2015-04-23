@@ -5,15 +5,18 @@
     <mgu>
         subst(.KList)
     </mgu>
+    <tenvRestore>
+        .List
+    </tenvRestore>
     <metadata>
         <range>
             .K
         </range>
     </metadata>
     <con>
-        Data ( "Bool" ) |-> c ( ListItem(Con ( "True" )) ListItem(Con ( 
+        Data ( "Bool" ) |-> l ( ListItem(Con ( "True" )) ListItem(Con ( 
           "False" )) )
-        Data ( "T" ) |-> c ( ListItem(Con ( "E" )) )
+        Data ( "T" ) |-> l ( ListItem(Con ( "E" )) )
     </con>
     <funtenvs>
         Fun ( "f" ) |-> m ( #symExpr(8) |-> Set ( #symInt(10) ) )
@@ -35,15 +38,18 @@
         Fun ( "s" ) |-> m ( .Map )
     </funtenvs>
     <metavars>
-        #symExpr(8) |-> t ( ( Var ( "x" ) : (Fun ( "s" ) Con ( "True" )) ) -> 
-          (Fun ( "s" ) Con ( "True" )) , Set ( #symInt(10) ) )
+        #symExpr(8) |-> t ( ( Var ( "x" ) : Data ( "Bool" ) ) -> Data ( "Bool"
+           ) , Set ( #symInt(10) ) )
         #symExpr(14) |-> t ( Data ( "Bool" ) , Set ( #symInt(16) ) )
         #symExpr(20) |-> t ( ( Var ( "x" ) : Data ( "Bool" ) ) -> ( Var ( "y" 
-          ) : (Fun ( "s" ) Var ( "x" )) ) -> (Fun ( "s" ) Var ( "x" )) , Set (
-           #symInt(22) ) )
+          ) : (FunClauses ( 1 , ListItem((%fun Con ( "True" )) = Data ( "Bool"
+           )) ListItem((%fun Con ( "False" )) = Data ( "T" )) ) Var ( "x" )) )
+           -> (FunClauses ( 1 , ListItem((%fun Con ( "True" )) = Data ( "Bool"
+           )) ListItem((%fun Con ( "False" )) = Data ( "T" )) ) Var ( "x" )) ,
+           Set ( #symInt(22) ) )
         #symExpr(26) |-> t ( Data ( "T" ) , Set ( #symInt(28) ) )
-        #symExpr(35) |-> t ( ( Var ( "y" ) : (Fun ( "s" ) Con ( "True" )) ) ->
-           (Fun ( "s" ) Con ( "True" )) , Set ( #symInt(37) ) )
+        #symExpr(35) |-> t ( ( Var ( "y" ) : Data ( "Bool" ) ) -> Data ( 
+          "Bool" ) , Set ( #symInt(37) ) )
     </metavars>
     <fenv>
         Fun ( "f" ) |-> \ ( Var ( "x" ) : (Fun ( "s" ) Con ( "True" )) ) -> 
@@ -65,14 +71,15 @@
         #symExpr(35) |-> Set ( #symInt(37) )
     </tenv>
     <sig>
-        Fun ( "f" ) |-> ( Var ( "x" ) : (Fun ( "s" ) Con ( "True" )) ) -> (Fun
-           ( "s" ) Con ( "True" ))
+        Fun ( "f" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
         Fun ( "f2" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> ( Var ( "y" ) : 
-          (Fun ( "s" ) Var ( "x" )) ) -> (Fun ( "s" ) Var ( "x" ))
+          (FunClauses ( 1 , ListItem((%fun Con ( "True" )) = Data ( "Bool" )) 
+          ListItem((%fun Con ( "False" )) = Data ( "T" )) ) Var ( "x" )) ) -> 
+          (FunClauses ( 1 , ListItem((%fun Con ( "True" )) = Data ( "Bool" )) 
+          ListItem((%fun Con ( "False" )) = Data ( "T" )) ) Var ( "x" ))
         Fun ( "g" ) |-> Data ( "Bool" )
         Fun ( "h" ) |-> Data ( "T" )
-        Fun ( "i" ) |-> ( Var ( "y" ) : (Fun ( "s" ) Con ( "True" )) ) -> (Fun
-           ( "s" ) Con ( "True" ))
+        Fun ( "i" ) |-> ( Var ( "y" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
         Fun ( "j" ) |-> ( Var ( "y" ) : (Fun ( "s" ) Con ( "False" )) ) -> (
           Fun ( "s" ) Con ( "False" ))
         Fun ( "s" ) |-> ( #symVariable(44) : Data ( "Bool" ) ) -> Set ( 0 )

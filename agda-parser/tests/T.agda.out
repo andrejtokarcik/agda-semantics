@@ -5,6 +5,9 @@
     <mgu>
         subst(.KList)
     </mgu>
+    <tenvRestore>
+        .List
+    </tenvRestore>
     <metadata>
         <range>
             .K
