@@ -66,8 +66,9 @@ module AGDA-SEMANTICS-NORMAL
 
   rule whnf((\ {X : _} -> E1) {E2} => E1[E2/X])
 
+  // is this insertion already performed in -typesystem?
   /*
-  rule <k> whnf((\ {X : T} -> E) V => ((\ {X : T} -> E) {%underscore}) V) ...</k>
+  rule <k> whnf((\ {X : T} -> E) V => ((\ {X : T} -> E) {%underscore}) V) ...</k>   // %underscore isn't expanded in whnf
     when isImplicit(V) =/=K true
   */
 
@@ -103,6 +104,7 @@ module AGDA-SEMANTICS-NORMAL
   rule matchClause(FunClauses(_, ListItem(L = R) _), E, _, _) => R[getMatching(L, E)]  when isMatching(L, E)
   rule matchClause(FunClauses(_, _ Cs:List => Cs), _, _, _)  [owise]
 
+  // can delete apparently
   syntax Int ::= numReqArgs(FunClauses)  [function]
   rule numReqArgs(FunClauses(I, _)) => I
 

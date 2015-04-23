@@ -4,26 +4,30 @@ module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SEMANTICS-COMMON
 
   context data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
-  rule data N:Name Ps:Telescope : t(T, Set(_)) where Cs:TypeSignatures
+  rule <k> data Name(N) Ps : t(T, Set(_)) where Cons
     => //I >=Int 1 ~> pass? ~>        // << FIXME   (the `-Int 1' guard below is sufficient?)
-       addDataSig(N, Pi(Ps, T)) ~>
-       addConSigs(applyParams(Ps, N), prependParams(Ps, Cs))      // TODO: replace prependParams with: turn Ps into a hidden-args telescope and use the Pi trick as in addDataSig
+       addDataSig(Data(N), App(Data(N), Ps), Pi(Ps, T)) ~>
+       addConSigs(App(Data(N), Ps), Ps, Cons) ...</k>
+       <ncat> NCat (. => Name(N) |-> Data(N)) </ncat>
+    when notBool (Name(N) in keys(NCat))     // this may be already guaranteed by the external parser
 
-  syntax KItem ::= addDataSig(Name, Expr)              [strict(2(context('checkSetType)))]
-  rule <k> addDataSig(Name(D), t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>   // FIXME not sure if the condition is correct: what universe must the datatype fit in?
-       <ncat> NCat (. => Name(D) |-> Data(D)) </ncat>
-       <sig> Sigma (. => Data(D) |-> T) </sig>
-    when notBool (Name(D) in keys(NCat))     // this may be already guaranteed by the external parser
+  syntax K ::= c(List)
+  syntax KItem ::= addDataSig(Name, Expr, Expr)              [strict(3(context('checkSetType)))]
+  // FIXME not sure if the condition is correct: what universe must the datatype fit in?
+  rule <k> addDataSig(D, DPs, t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>
+       <sig> Sigma (. => D |-> T) </sig>
+       <con>... . => DPs |-> c(.List) ...</con>
 
-  syntax KItem ::= addConSigs(Expr, TypeSignatures)
-  rule addConSigs(D:Expr, .TypeSignatures) => . [structural]
-  rule addConSigs(D:Expr, (C:Name : T:Expr) Cs:TypeSignatures) => addConSig(D, C, T) ~> addConSigs(D, Cs)  [structural]
+  syntax KItem ::= addConSigs(Expr, Telescope, TypeSignatures)
+  rule addConSigs(DPs, Ps, .TypeSignatures) => .    [structural]
+  rule addConSigs(DPs, Ps, (C : T) Cons) => addConSig(DPs, C, Pi(makeHidden(Ps), T)) ~> addConSigs(DPs, Ps, Cons)  [structural]
 
   syntax KItem ::= addConSig(Expr, Name, Expr)  [strict(3(context('checkSetType)))]
-  // TODO: check the constructor's universe whether it fits into the datatype
-  rule <k> addConSig(D:Expr, Name(C), t(T:Expr, Set(_))) => T constructorOf D ~> pass? ...</k>
+  // TODO: check the constructor's universe whether it fits into the datatype's
+  rule <k> addConSig(DPs, Name(C), t(T:Expr, Set(_))) => T constructorOf DPs ~> pass? ...</k>
        <ncat> NCat (. => Name(C) |-> Con(C)) </ncat>
        <sig> Sigma (. => Con(C) |-> T) </sig>
+       <con>... DPs |-> c(_ (. => ListItem(Con(C)))) ...</con>
     when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the external parser
 
   syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
@@ -34,15 +38,15 @@ module AGDA-SEMANTICS-DECL-DATA
   rule (T:Expr _:Variable => T) constructorOf (D:Expr _:Variable => D)
   rule (T:Expr _:Expr => T) constructorOf _:Expr  [owise]
 
-  syntax Expr ::= prependParams(Telescope, Expr) [function]
-  rule prependParams(.Telescope, T:Expr) => T
-  rule prependParams((X:Variable : Tp:Expr) Ps:Telescope, T:Expr) => {X : Tp} -> prependParams(Ps, T)
+  syntax Telescope ::= makeHidden(Telescope)  [function]
+  rule makeHidden(.Telescope) => .Telescope
+  rule makeHidden((X : T) Tel) => {X : T} Tel
+  rule makeHidden({X : T} Tel) => {X : T} Tel
 
-  syntax TypeSignatures ::= prependParams(Telescope, TypeSignatures) [function]
-  rule prependParams(Ps:Telescope, .TypeSignatures) => .TypeSignatures
-  rule prependParams(Ps:Telescope, (C:Name : T:Expr) Cs:TypeSignatures) => (C : prependParams(Ps, T)) prependParams(Ps, Cs)
-
-  syntax Expr ::= applyParams(Telescope, Expr) [function]
-  rule applyParams(.Telescope, E:Expr) => E
-  rule applyParams(((X:Variable : _:Expr) Ps:Telescope => Ps), (E:Expr => E X))
+  /*
+  syntax Expr ::= applyParams(Expr, Telescope) [function]
+  rule applyParams(E, .Telescope) => E
+  rule applyParams(E => E X, (X:Variable : _:Expr) Ps:Telescope => Ps)
+  // TODO: hidden bindings
+  */
 endmodule

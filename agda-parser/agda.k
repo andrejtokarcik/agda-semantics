@@ -36,6 +36,7 @@ module AGDA
                   <fenv> .Map </fenv>   // <fun> alebo <env> alebo <fenv>
                   <mgu> .Mgu </mgu>
                   <sig> .Map </sig>
+                  <con> .Map </con>
                   <ncat> .Map </ncat>
                   <metavars> .Map </metavars>   // <meta>   --- mozno uplne zmazat?
                   <metadata>                    // <md> [?]

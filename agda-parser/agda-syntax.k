@@ -6,6 +6,10 @@ module AGDA-SYNTAX
   rule castTelescope(.LamBindings) => .Telescope   [structural]
 
 
+  // nechcem operovat priamo na klabels v pripade tych pomocnych wrapperov?
+  // --- potom by som ich ale musel definovat pomocou syntax KLabel ::=  ci?
+  // --- hej, aj s aritou, a pri pouziti by som musel pridavat (.KList) k bezargovym labelom
+
   // perhaps I don't have to include ranges at all? is it good for anything
   // besides error reporting?
 
@@ -62,13 +66,17 @@ module AGDA-SYNTAX
   rule Arg(NotHidden, E:Expr) => E  [macro]
   rule Arg(Hidden, E:Expr) => {E}   [macro]
   syntax Args ::= List{Arg, ""}     [klabel('Cons), notInRules]
+                | Telescope
   syntax App ::= "(" App ")"        [bracket]
                | Arg Arg            [left]
                | App(Arg, Args)     [klabel('App)]
+               | App(Arg, Telescope) [klabel('App)]
                | OpApp(Arg, Args)   [klabel('OpApp)]
   rule OpApp(A:Arg, As:Args) => App(A, As) [macro]
-  rule App(A:Arg, 'Cons(A':Arg,, As:Args)) => App(A A', As) [macro]
   rule App(A:Arg, '.List`{""`}(.KList)) => A  [macro]
+  rule App(A:Arg, 'Cons(A':Arg,, As:Args)) => App(A A', As) [macro]
+  rule App(A:Arg, (X : _) Tel) => App(A X, Tel)  [macro]
+  rule App(A:Arg, {X : _} Tel) => App(A {X}, Tel) [macro]
 
   syntax Universe ::= Set(Int)     [klabel('SetN), latex(\terminal{Set}_{#1})]
                     | "Set"        [klabel('Set), notInRules]
@@ -90,18 +98,24 @@ module AGDA-SYNTAX
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
   syntax TypeSignatures ::= List{TypeSignature, ""}    [klabel('Cons)]
 
+
+  syntax Absurd ::= "()"            [klabel('AbsurdP)]
+  syntax Arg ::= Arg(Hiding, Absurd) [klabel('Arg)]
+  syntax App ::= AppP(Arg, Arg)     [klabel('AppP)]
+               | OpAppP(Arg, Args)  [klabel('OpAppP)]
+  rule AppP(A:Arg, A':Arg) => App(A, A')  [macro]
+  rule OpAppP(A:Arg, As:Args) => OpApp(A, As) [macro]
   syntax Pattern ::= "(" Pattern ")" [bracket]
     | Arg
     | App
   syntax Patterns ::= List{Pattern, ""}    [klabel('Cons), notInRules]
-  syntax App ::= AppP(Arg, Arg)     [klabel('AppP)]
-               | OpAppP(Arg, Args)  [klabel('OpAppP)]
-  rule AppP(A:Arg, A':Arg) => App(A, A')  [macro]  //'Cons(A':Arg,, '.List`{""`}(.KList))) [macro]
-  rule OpAppP(A:Arg, As:Args) => OpApp(A, As) [macro]
 
   syntax LHS ::= Pattern
   syntax RHS ::= Expr
+               | "AbsurdRHS"                         [klabel('AbsurdRHS)]
   syntax FunClause ::= LHS "=" RHS                   [binder, klabel('FunClause)]
+                     | LHS          [klabel('FunClause)]
+  rule L:LHS = AbsurdRHS => L       [macro]
 
   syntax DataDeclaration ::= Data(Name, LamBindings, Expr, TypeSignatures)  [klabel('Data)]
                            | "data" Name Telescope ":" Expr "where" TypeSignatures
@@ -115,7 +129,7 @@ module AGDA-SYNTAX
     | DataDeclaration
     | "postulate" TypeSignatures                     [klabel('Postulate)]
     | "module" /*Q*/Name Telescope "where" Declarations   [klabel('Module)]
-  syntax Declarations ::= List{Declaration, ""}    [klabel('Cons)]
+  syntax Declarations ::= List{Declaration, ";"}    [klabel('Cons)]
 
   syntax Program ::= Declarations
 

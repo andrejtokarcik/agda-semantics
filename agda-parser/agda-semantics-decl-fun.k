@@ -74,26 +74,25 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax KItem ::= addFunClause(Name, LHS, RHS)
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fenv> Rho
-              (. => Aux(F) |-> FunClauses(lengthList(args(L)), ListItem(freshFunName(L) = R))) </fenv>   // Aux(F) maps to the list of pattern-matching clauses
+              (. => Aux(F) |-> FunClauses(lengthList(args(L)), ListItem(freshFunName(L) = R))) </fenv>
     when notBool (F in keys(Rho))
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fenv>... Aux(F) |-> FunClauses(I, _ (. => ListItem(freshFunName(L) = R))) ...</fenv>
     when lengthList(args(L)) ==Int I
-    // ... already matching on Aux(F), don't have to check for its presence in keys
 
   rule FunClauses(0, ListItem(_ = R)) => R   [structural, anywhere]
-  //rule <fenv>... (F |-> V) ((Aux(F) |-> V') => .) ...</fenv> when V ==K V'  [structural]     // << cannot occur without @Rho
 
   syntax Expr ::= genLambda(List, Expr)  [function]
   rule genLambda(ListItem({_}) L, E) => \ {X : T} -> genLambda(L, E {X})  when fresh(X:Variable) andBool fresh(T:Expr)
   rule genLambda(ListItem(A) L, E) => \ (X : T) -> genLambda(L, E X)      when isImplicit(A) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr)
   rule genLambda(_, E) => E  [owise]
-  // wouldn't untyped lambdas be actually better, I wonder...
 
+  // the purpose of the wrapper is to get the implicit arguments automatically inserted before the actual pattern matching
+  // --- well, those should be inserted according to the type, not according to the lambdas so it should be possible to remove this
   syntax KItem ::= addFunWrapper(Name, LHS)
   rule <k> addFunWrapper(F, L) => . ...</k>
        <fenv> Rho
-              (. => F |-> genLambda(args(L), Aux(F))) </fenv>   // forcing the evaluation of a pattern-matching function to have a sufficient no. of args
+              (. => F |-> genLambda(args(L), Aux(F))) </fenv>
     when notBool (F in keys(Rho))
   rule <k> addFunWrapper(F, L) => . ...</k>  <fenv> Rho </fenv>  when F in keys(Rho)
 
