@@ -24,11 +24,18 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax KItem ::= "autotyped!"
 
-  rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> L = R ~> restoreTEnv ...</k>
+  /*
+  syntax LHS ::= freshArgs(LHS)  [function]
+  rule freshArgs(L {_}) => freshArgs(L) {%meta}
+  rule freshArgs(L A) => freshArgs(L) %meta  when isImplicit(A) =/=K true
+  rule freshArgs(L) => L  [owise]
+  */
+
+  rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> restoreTEnv ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> GammaF => .Map </funtenvs>    // => .Map to unclutter the cache
     when notBool (funName(L) in keys(GammaF))
-  rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> L = R ~> restoreTEnv ...</k>
+  rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> restoreTEnv ...</k>
        <tenv> Gamma => unm(GammaF(funName(L))) </tenv>
        <funtenvs> GammaF </funtenvs>
     when funName(L) in keys(GammaF)
@@ -51,6 +58,8 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax Bool ::= condz(LHS, RHS) [function]
   //rule condz(L, R) => true
   //  when leftmost(L) ==K Fun("vec") andBool leftmost(R) ==K Con("pair")
+  //rule condz(L, R) => true
+  //  when leftmost(L) ==K Fun("thmPlusZero") andBool leftmost(R) ==K Fun("thmPlusZero")
 
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
@@ -61,7 +70,7 @@ module AGDA-SEMANTICS-DECL-FUN
     when condz(L, R) =/=K true
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
-            => chich ~> Tl == Tr ~> unifyConf ~>
+            => nf(Tl) ~> nf(Tr) ~> Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>
@@ -80,6 +89,10 @@ module AGDA-SEMANTICS-DECL-FUN
        <tenv> Gamma => Gamma[T/X] </tenv>
     when notBool (X in keys(Gamma)) andBool fresh(T:Expr)
 
+  // TODO get rid of the Int, the information can be extracted from the ListItems
+  syntax FunClauses ::= FunClauses(Int, List)
+  syntax Expr ::= FunClauses
+
   syntax KItem ::= addFunClause(Name, LHS, RHS)
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fenv> Rho
@@ -91,10 +104,21 @@ module AGDA-SEMANTICS-DECL-FUN
 
   rule FunClauses(0, ListItem(_ = R)) => R   [structural, anywhere]
 
+  // XXX hack for typing FunClauses
+  rule <k> F:FunClauses => t(F, T) ...</k>
+       <fenv>... N |-> F ...</fenv>
+       <sig>... N |-> T ...</sig>
+
   syntax Name ::= funName(LHS)  [function]
   rule funName(L) => leftmost(L)
 
-  syntax Variable ::= "%fun"
+  syntax Name ::= "%fun"
   syntax Expr ::= freshFunName(LHS)  [function]
-  rule freshFunName(L) => replaceLeftmost(L, %fun)
+  //rule freshFunName(L) => replaceLeftmost(L, %fun)
+  //rule freshFunName(L) => L    // << toto nechces lebo ten List obshuje Fun("plus") napr. ale v reali tam uz mas nasubstituovane plusove FunClauses
+  rule freshFunName(L) => replaceLeftmost(L, F)  when fresh(F:FunClauses)
+
+  // the information can be extracted from the ListItems
+  syntax Int ::= numReqArgs(FunClauses)  [function]
+  rule numReqArgs(FunClauses(I, _)) => I
 endmodule

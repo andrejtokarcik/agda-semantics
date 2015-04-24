@@ -76,7 +76,6 @@ module AGDA-SEMANTICS-NORMAL
     //when isFunClauses(leftmost(HOLE)) =/=K true   [result(Whnf)]
     //orElseBool numArgs(HOLE) +Int 1 >Int numReqArgs(leftmost(HOLE))   [result(Whnf)]
 
-  // (Fun ( Name ( "thmPlusZero" ) ) Con ( Name ( "zero" ) )) , ((Fun ( Name ( "_==_" ) ) ((Fun ( Name ( "plus" ) ) Con ( Name ( "zero" ) ) ) Con ( Name ( "zero" ) ))) Con ( Name ( "zero" ) ))
   syntax Bool ::= cond3(Expr)  [function]
   //rule cond3(Aux(Fun("_==_"))) => true
   //rule whnf(E => chich ~> E) when cond3(E)
@@ -97,28 +96,30 @@ module AGDA-SEMANTICS-NORMAL
     when isImplicit(V) =/=K true
   */
 
+  /*
   context whnf(E (HOLE => whnf(HOLE)))
-    when isFunClauses(leftmost(E)) /*andThenBool lengthList(args(E)) <Int numReqArgs(leftmost(E))*/ andThenBool notBool matches(leftmost(E), E HOLE)   [result(Whnf)]
+    when isFunClauses(leftmost(E)) andBool lengthList(args(E HOLE)) <=Int numReqArgs(leftmost(E)) andBool notBool matches(leftmost(E), E HOLE)   [result(Whnf)]
+  */
+  context whnf(HOLE => nf(HOLE))
+    when isFunClauses(leftmost(HOLE)) andBool lengthList(args(HOLE)) <=Int numReqArgs(leftmost(HOLE))  [result(Nf)]
+
 
   syntax Bool ::= condd(Expr)  [function]
   rule condd(_ E) => E =/=K Con("zero")
 
   // TODO: odstran tie posledne dva argumenty z matchClause
-  rule whnf(E => matchClause(leftmost(E), freshFunName(E), leftmost(E), freshFunName(E)))
+  rule whnf(E => matchClause(leftmost(E), E, leftmost(E), freshFunName(E)))
     when condd(E) andThenBool isFunClauses(leftmost(E)) andThenBool matches(leftmost(E), E) //andThenBool lengthList(args(E)) ==Int numReqArgs(leftmost(E))
-  rule whnf(E => matchClause(leftmost(E), freshFunName(E), leftmost(E), freshFunName(E)))
+  rule whnf(E => matchClause(leftmost(E), E, leftmost(E), freshFunName(E)))
     when notBool condd(E) andThenBool isFunClauses(leftmost(E)) andThenBool matches(leftmost(E), E) //andThenBool lengthList(args(E)) ==Int numReqArgs(leftmost(E))
 
 
-  syntax FunClauses ::= FunClauses(Int, List)
-  syntax Expr ::= FunClauses
   // isWhnf(E:Expr) would generate a sort memebership check,
   // leading to an infinite cycle because of Expr ::= Whnf
-  rule isWhnf(E) => true
-    when isFunClauses(leftmost(E)) /*andThenBool lengthList(args(E)) <Int numReqArgs(leftmost(E))*/ andThenBool allWhnf(args(E)) andThenBool notBool matches(leftmost(E), E)
+  //rule isWhNeut(E) => true
+  //  when isFunClauses(leftmost(E)) andBool all(isWhnf, take(numReqArgs(leftmost(E)), args(E))) andBool notBool matches(leftmost(E), E)
   rule isNf(E) => true
-    when isFunClauses(leftmost(E)) andThenBool allNf(args(E)) andThenBool notBool matches(leftmost(E), E)
-
+    when isFunClauses(leftmost(E)) andBool all(isNf, args(E)) andBool notBool matches(leftmost(E), E)
 
   syntax Bool ::= matches(FunClauses, Expr)  [function]
   rule matches(FunClauses(_, .List), _) => false
@@ -129,15 +130,4 @@ module AGDA-SEMANTICS-NORMAL
   rule matchClause(FunClauses(_, .List), _, E1, E2) => E1 ~> E2 ~> error("nay matchin' cap'n")
   rule matchClause(FunClauses(_, ListItem(L = R) _), E, _, _) => R[getMatching(L, E)]  when isMatching(L, E)
   rule matchClause(FunClauses(_, _ Cs:List => Cs), _, _, _)  [owise]
-
-  // can delete apparently
-  syntax Int ::= numReqArgs(FunClauses)  [function]
-  rule numReqArgs(FunClauses(I, _)) => I
-
-  syntax Bool ::= allWhnf(List)   [function]
-  rule allWhnf(.List) => true
-  rule allWhnf(ListItem(_:Whnf) L) => true  when allWhnf(L)
-  syntax Bool ::= allNf(List)   [function]
-  rule allNf(.List) => true
-  rule allNf(ListItem(_:Nf) L) => true  when allNf(L)
 endmodule

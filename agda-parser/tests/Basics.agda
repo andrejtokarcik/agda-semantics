@@ -105,7 +105,7 @@ suc n == suc m = n == m
 thmPlusZero : (n : Nat) -> plus n zero == n   -- A function from a number n to
                                             -- P n can be seen as the
                                             -- proposition ∀ n. P n.
--- thmPlusZero  zero   = tt
+thmPlusZero  zero   = tt
 thmPlusZero (suc n) = thmPlusZero n
 
 {- In both branches the reduction makes the proof very simple. In the first

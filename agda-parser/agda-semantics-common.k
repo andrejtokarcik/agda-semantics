@@ -41,6 +41,13 @@ module AGDA-SEMANTICS-COMMON
     when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
   rule Te:SetTypedExpr ~> checkSetType(HOLE) => checkSetType(Te)
 
+  syntax KItem ::= tsubst(Map)
+  rule <k> t(E, T) ~> tsubst(M) => t(E, T[applyMguKeys(Theta, M)]) ...</k>
+       <mgu> Theta </mgu> [structural]
+
+
+  /* General auxiliary functions. */
+
   syntax K ::= leftmost(Expr)  [function]
   rule leftmost(E _ => E) [structural]
   rule leftmost(E) => E   [owise, structural]
@@ -53,11 +60,22 @@ module AGDA-SEMANTICS-COMMON
   rule args(E E') => args(E) ListItem(E')
   rule args(_) => .List [owise]
 
-  syntax KItem ::= tsubst(Map)
-  rule <k> t(E, T) ~> tsubst(M) => t(E, T[applyMguKeys(Theta, M)]) ...</k>
-       <mgu> Theta </mgu> [structural]
+  syntax Bool ::= all(KLabel, List)  [function]
+  rule all(Pred, .List) => true      [structural]
+  rule all(Pred, ListItem(K) L) => Pred(K) andBool all(Pred, L)  [structural]
+  syntax Bool ::= any(KLabel, List)  [function]
+  rule any(Pred, .List) => false     [structural]
+  rule any(Pred, ListItem(K) L) => Pred(K) orBool any(Pred, L)   [structural]
 
-  // wrappers for containers (not of sort K)
+  // if length of the given list is less than the desired number,
+  // the whole list is returned
+  syntax List ::= take(Int, List)    [function]
+  rule take(_, .List) => .List
+  rule take(0, _) => .List
+  rule (.List => ListItem(K)) take(I => I -Int 1, (ListItem(K) => .List) _)   [owise]
+
+  // wrappers for containers (that do not belong to sort K)
+  // NOTE: module K-WRAPPERS-LABELS in k-prelude.k seems to provide similar functionality
   syntax K ::= l(List)
   syntax List ::= unl(K) [function]
   rule unl(l(L)) => L  [structural]

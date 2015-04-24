@@ -2,13 +2,15 @@ require "modules/unification.k"
 require "agda-semantics-common.k"
 
 module AGDA-SEMANTICS-UNIFICATION
+  //imports AGDA-SEMANTICS-DECL-FUN  // for debug
+
   imports UNIFICATION
   imports AGDA-SEMANTICS-COMMON
 
   // Not every updateMgu is actually guaranteed to update the mgu;
   // e.g. if T is identical to T', <mgu /> content remains the same.
 
-  syntax KItem ::= Expr "==" Expr | Expr "#==" Expr
+  syntax KItem ::= Expr "==" Expr | K "#==" K
   rule E == E' => nf(E) #== nf(E')
   rule <k> nf(E) #== E' => nf(applyMgu(Theta, E)) ~> HOLE #== E' ...</k>
        <mgu> Theta </mgu>
@@ -18,7 +20,15 @@ module AGDA-SEMANTICS-UNIFICATION
   rule nf(E') ~> E #== HOLE => E #== E'  when isNf(E')
   rule <k> E #== E' => . ...</k>
        <mgu> Theta => updateMgu(Theta, E, E') </mgu>
-    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf
+    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf //andBool
+         //isMguError(updateMgu(Theta, E, E')) =/=K true
+  syntax KItem ::= "BREAK"
+  // FIXME tu Theta a updateMgu si viem zistit aj potom v resolveFunClauses, nemusim predavat ako arg
+  rule <k> E #== E' => resolveFunClauses(Theta, updateMgu(Theta, E, E'), E, E') ...</k>
+       <mgu> Theta </mgu>  //=> resolveFunClauses(Theta, updateMgu(Theta, E, E'), E, E') </mgu>
+    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
+         isMguError(updateMgu(Theta, E, E')) andBool
+         troublesomeFunClauses(updateMgu(Theta, E, E'))
 
   syntax KItem ::= "unifyConf"
   rule R:KResult ~> unifyConf => unifyConf ~> R  [structural]
@@ -34,6 +44,44 @@ module AGDA-SEMANTICS-UNIFICATION
   syntax KItem ::= unify(K)
   rule <k> unify(K:K) => applyMgu(Theta, K) ...</k>
        <mgu> Theta </mgu>
+
+  syntax Bool ::= troublesomeFunClauses(Mgu)  [function]
+  rule troublesomeFunClauses(clash(C1,,C2)) => true
+    when isFunClauses(leftmost(C1)) orElseBool isFunClauses(leftmost(C2))
+
+  syntax KItem ::= "TUSOM" Expr Expr Int LHS Map
+  syntax KItem ::= "MguXX" Mgu
+  syntax KItem ::= resolveFunClauses(Mgu, Mgu, Expr, Expr)     //[function]
+  rule resolveFunClauses(_, _, E1 => E2, E2 => E1)
+    when isFunClauses(leftmost(E1)) =/=K true andBool isFunClauses(leftmost(E2))
+  rule resolveFunClauses(_, clash((C1 => C2),,(C2 => C1)), _, _)
+    when isFunClauses(leftmost(C1)) =/=K true andBool isFunClauses(leftmost(C2))
+  rule resolveFunClauses(Theta, clash(C1,,C2), E1, E2) => /*TUSOM 
+    freshFunName(E1) freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)) numReqArgs(leftmost(E1))
+    suitableLHS(Theta, leftmost(E1), C2)
+    getMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2)) ~> */
+    MguXX updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)) ~>
+    MguXX updateMgu(updateMgu(Theta, freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2)), E1, E2) ~>
+    subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> E1 #== E2
+    //updateMgu(Theta, freshFunName(E1)[getMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))], E2)
+    when isFunClauses(leftmost(C1)) andBool isFunClauses(leftmost(E1)) andBool
+         leftmost(C1) ==K leftmost(E1) //////andBool
+         //(any(isVariable, args(E1)) orBool any(isSymbolicExpr, args(E1))) andBool
+         //matchable(C2
+         // reverted isMatching should be a sufficient test...? (normally LHS is the first argument of isMatching)
+    ////////isMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))
+    // when: updateMgu so suitableLHS neurobi MguError
+
+  syntax Expr ::= subExpr(Int, Expr)   [function]
+  rule subExpr(I, E) => E when lengthList(args(E)) <=Int I
+  rule subExpr(I, E _ => E)  [owise]
+
+  syntax LHS ::= suitableLHS(Mgu, FunClauses, Expr)  [function]
+  //rule suitableLHS(Theta, FunClauses(_, .List), _) => false
+  rule suitableLHS(Theta, FunClauses(_, ListItem(L = R) _), T) => L
+    when isMguError(updateMgu(Theta, leftmost(R), leftmost(T))) =/=K true
+  rule suitableLHS(_, FunClauses(_, (_:ListItem => .) _), _)  [owise]
+
 
   /*
   syntax MetaVariable

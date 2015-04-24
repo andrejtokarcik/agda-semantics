@@ -30,8 +30,29 @@ module AGDA
                  Name("thmPlusZero") (Name ("suc") (Name("suc") Name("zero")))
                )
 
+  // TODO: do some cleaning of funtenvs tenvRestore etc after .K is reached
+
+  syntax Expr ::= "fexpr"  [function]
+  rule fexpr => ((
+          FunClauses ( 2 , ListItem(((#symFunClauses(15) Con ( "zero" )) Var (
+           "m" )) = Var ( "m" )) ListItem(((#symFunClauses(36) (Con ( "suc" ) 
+          Var ( "n" ))) Var ( "m" )) = (Con ( "suc" ) ((Fun ( "plus" ) Var ( 
+          "n" )) Var ( "m" )))) ) Con ( "zero" )) Con ( "zero" ))
+
+  syntax Bool ::= "check" [function]
+  //rule check => isNf(fexpr)
+  rule check => matches(leftmost(fexpr), fexpr)
+  //rule check => isMatching((((Fun ( "plus" ) Con ( "zero" 
+  //        )) Var ( "m" )) = Var ( "m" )),
+
+  syntax List ::= "args" [function]
+  rule args => args((FunClauses ( 2 , ListItem(((Fun ( "plus" ) Con ( "zero" 
+          )) Var ( "m" )) = Var ( "m" )) ListItem(((Fun ( "plus" ) (Con ( 
+          "suc" ) Var ( "n" ))) Var ( "m" )) = (Con ( "suc" ) ((Fun ( "plus" )
+           Var ( "n" )) Var ( "m" )))) ) Con ( "zero" )) Con ( "zero" ))
+
   configuration <T>
-                  <k> $PGM:Program </k>   //~> test </k>
+                  <k> $PGM:Program </k>  //~> check ~> l(args) </k>   //~> test </k>
                   <tenv> .Map </tenv>   // <ctx>    --- contains only metas' types after completion
                   <fenv> .Map </fenv>   // <fun> alebo <env> alebo <fenv>
                   <mgu> .Mgu </mgu>
