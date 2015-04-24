@@ -20,7 +20,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
        Set(I) => t(Set(I), Set(I +Int 1))
 
   rule [infer-meta]:
-       <k> %underscore => E ...</k>
+       <k> %meta => E ...</k>
        <tenv>... . => E |-> T ...</tenv>
        <metavars>... . => E |-> t(E, T) ...</metavars>
     when fresh(E:Expr) andBool fresh(T:Expr)
@@ -102,13 +102,13 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
 
   context (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
-  context _::WhnfTypedExpr HOLE   //(HOLE::Expr => whnfType(HOLE))   [result(WhnfTypedExpr)]
+  context _::WhnfTypedExpr HOLE
 
   // insert an implicit metavariable in front of an explicit arg when needed
   rule [insert-implicit1]:
-       t(E1, ({_ : _} -> _)) t(E2, _) => (E1 {%underscore}) E2  when isImplicit(E2) =/=K true
+       t(E1, ({_ : _} -> _)) t(E2, _) => (E1 {%meta}) E2  when isImplicit(E2) =/=K true
   rule [insert-implicit2]:
-       t(E1, _) t(E2, ({_ : _} -> _)) => E1 (E2 {%underscore})  when isImplicit(E2) =/=K true
+       t(E1, _) t(E2, ({_ : _} -> _)) => E1 (E2 {%meta})  when isImplicit(E2) =/=K true
 
   rule [infer-app-implicit]:
        t(E1, ({X : T} -> T')) t({E2}, {T2}) => T2 == T ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> E2) ~> unifyConf

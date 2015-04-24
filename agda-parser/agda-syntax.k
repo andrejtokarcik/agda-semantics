@@ -1,7 +1,7 @@
 module AGDA-SYNTAX
   // TODO: agda-syntax-utils.k    -- presunut tam aj makra?
   syntax Telescope ::= castTelescope(LamBindings)  [function, notInPrograms]
-  rule castTelescope(X:Variable Bs:LamBindings) => (X : %underscore) castTelescope(Bs)  [structural]
+  rule castTelescope(X:Variable Bs:LamBindings) => (X : %meta) castTelescope(Bs)  [structural]
   rule castTelescope(B:TypedBinding Bs:LamBindings) => B castTelescope(Bs)  [structural]
   rule castTelescope(.LamBindings) => .Telescope   [structural]
 
@@ -70,7 +70,7 @@ module AGDA-SYNTAX
   syntax App ::= "(" App ")"        [bracket]
                | Arg Arg            [left]
                | App(Arg, Args)     [klabel('App)]
-               | App(Arg, Telescope) [klabel('App)]
+               | App(Arg, Telescope)
                | OpApp(Arg, Args)   [klabel('OpApp)]
   rule OpApp(A:Arg, As:Args) => App(A, As) [macro]
   rule App(A:Arg, '.List`{""`}(.KList)) => A  [macro]
@@ -82,7 +82,7 @@ module AGDA-SYNTAX
                     | "Set"        [klabel('Set), notInRules]
   rule 'Set(.KList) => Set(0)  [macro]
 
-  syntax Underscore ::= "%underscore"      [klabel('Underscore)]
+  syntax Meta ::= "%meta"      [klabel('Underscore)]
   syntax Implicit ::= "{" Expr "}"
   syntax Expr ::= "(" Expr ")" [bracket]
     | Variable
@@ -91,7 +91,7 @@ module AGDA-SYNTAX
     | Pi
     | Lambda
     | App
-    | Underscore
+    | Meta
     | Implicit
   syntax Exprs ::= List{Expr, ""}    [klabel('Cons), notInRules]
 
@@ -99,8 +99,10 @@ module AGDA-SYNTAX
   syntax TypeSignatures ::= List{TypeSignature, ""}    [klabel('Cons)]
 
 
-  syntax Absurd ::= "()"            [klabel('AbsurdP)]
-  syntax Arg ::= Arg(Hiding, Absurd) [klabel('Arg)]
+  syntax Absurd ::= "%absurd"            [klabel('AbsurdP)]
+  syntax Arg ::= Absurd
+               | Arg(Hiding, Absurd) [klabel('Arg)]
+  rule Arg(NotHidden, %absurd) => %absurd     [macro]
   syntax App ::= AppP(Arg, Arg)     [klabel('AppP)]
                | OpAppP(Arg, Args)  [klabel('OpAppP)]
   rule AppP(A:Arg, A':Arg) => App(A, A')  [macro]
@@ -114,7 +116,7 @@ module AGDA-SYNTAX
   syntax RHS ::= Expr
                | "AbsurdRHS"                         [klabel('AbsurdRHS)]
   syntax FunClause ::= LHS "=" RHS                   [binder, klabel('FunClause)]
-                     | LHS          [klabel('FunClause)]
+                     | LHS
   rule L:LHS = AbsurdRHS => L       [macro]
 
   syntax DataDeclaration ::= Data(Name, LamBindings, Expr, TypeSignatures)  [klabel('Data)]

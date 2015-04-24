@@ -16,6 +16,12 @@ module AGDA-SEMANTICS-DECL-FUN
        <sig> Sigma (. => Fun(F) |-> E) </sig>
     when notBool (Name(F) in keys(NCat)) andBool cond5(Name(F)) =/=K true
 
+  // for now, an absurd pattern causes its respective clause (consisting only of the LHS)
+  // to be discarded with no checks  (FIXME, we would like to update funtenvs
+  // at the very least.  we also should verify that there really are no suitable
+  // constructors.)
+  rule %absurd ~> _ => .
+
   syntax KItem ::= "autotyped!"
 
   rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> L = R ~> restoreTEnv ...</k>
@@ -39,8 +45,8 @@ module AGDA-SEMANTICS-DECL-FUN
   context autotyped! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond2(L) ==K true   [result(WhnfTypedExpr)]
 
   // insert implicit metavariables at the end of the {left,right}-hand side of function clauses
-  rule autotyped! ~> (t(L, ({_ : _} -> _)) => L {%underscore}) = _
-  rule autotyped! ~> _ = (t(R, ({_ : _} -> _)) => R {%underscore})
+  rule autotyped! ~> (t(L, ({_ : _} -> _)) => L {%meta}) = _
+  rule autotyped! ~> _ = (t(R, ({_ : _} -> _)) => R {%meta})
 
   syntax Bool ::= condz(LHS, RHS) [function]
   //rule condz(L, R) => true
@@ -66,7 +72,7 @@ module AGDA-SEMANTICS-DECL-FUN
   rule autotype(P1 P2) => autotype(P1) ~> autotype(P2)
   rule autotype({E} => E)
   rule autotype(_:Name) => .
-  rule autotype(%underscore) => .
+  rule autotype(%meta) => .
   rule <k> autotype(X:Variable) => . ...</k>
        <tenv> Gamma </tenv>
     when X in keys(Gamma)
