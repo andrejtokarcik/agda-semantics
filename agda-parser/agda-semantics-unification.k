@@ -14,15 +14,25 @@ module AGDA-SEMANTICS-UNIFICATION
   rule E == E' => nf(E) #== nf(E')
   rule <k> nf(E) #== E' => nf(applyMgu(Theta, E)) ~> HOLE #== E' ...</k>
        <mgu> Theta </mgu>
+  // TODO? dat nf(E:Nf)?
   rule nf(E) ~> HOLE #== E' => E #== E'  when isNf(E)
   rule <k> E #== nf(E') => nf(applyMgu(Theta, E')) ~> E #== HOLE ...</k>
        <mgu> Theta </mgu>
   rule nf(E') ~> E #== HOLE => E #== E'  when isNf(E')
+  rule L:LHS ~> E #== HOLE => E #== L //~> BREAKx E L
   rule <k> E #== E' => . ...</k>
        <mgu> Theta => updateMgu(Theta, E, E') </mgu>
     when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
          isMguError(updateMgu(Theta, E, E')) =/=K true
+  // FIXME tu Theta a updateMgu si viem zistit aj potom v resolveFunClauses, nemusim predavat ako arg
+  rule <k> E #== E' => resolveFunClauses(Theta, updateMgu(Theta, E, E'), ListItem(E), ListItem(E')) ...</k>
+       <mgu> Theta </mgu>  //=> resolveFunClauses(Theta, updateMgu(Theta, E, E'), E, E') </mgu>
+    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
+         isMguError(updateMgu(Theta, E, E')) andBool
+         troublesomeFunClauses(updateMgu(Theta, E, E'))
 
+
+  syntax KItem ::= "BREAKx" K K
   syntax KItem ::= K "errx#==" K
   rule <k> nf(E) errx#== E' => nf(applyMgu(Theta, E)) ~> HOLE errx#== E' ...</k>
        <mgu> Theta </mgu>
@@ -30,18 +40,17 @@ module AGDA-SEMANTICS-UNIFICATION
   rule <k> E errx#== nf(E') => nf(applyMgu(Theta, E')) ~> E errx#== HOLE ...</k>
        <mgu> Theta </mgu>
   rule nf(E') ~> E errx#== HOLE => E errx#== E'  when isNf(E')
+  rule L:LHS ~> E errx#== HOLE => E errx#== L //~> BREAKx E L
   rule <k> E errx#== E' => . ...</k>
        <mgu> Theta => updateMgu(Theta, E, E') </mgu>
-    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf //andBool
-         //isMguError(updateMgu(Theta, E, E')) =/=K true
-
-  syntax KItem ::= "BREAKx" K K
-  // FIXME tu Theta a updateMgu si viem zistit aj potom v resolveFunClauses, nemusim predavat ako arg
-  rule <k> E #== E' => resolveFunClauses(Theta, updateMgu(Theta, E, E'), ListItem(E), ListItem(E')) ...</k>
-       <mgu> Theta </mgu>  //=> resolveFunClauses(Theta, updateMgu(Theta, E, E'), E, E') </mgu>
+    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
+         isMguError(updateMgu(Theta, E, E')) =/=K true
+  rule <k> E errx#== E' => resolveFunClauses(Theta, updateMgu(Theta, E, E'), ListItem(E), ListItem(E')) ...</k>
+       <mgu> Theta </mgu>
     when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
          isMguError(updateMgu(Theta, E, E')) andBool
          troublesomeFunClauses(updateMgu(Theta, E, E'))
+
 
   syntax KItem ::= "unifyConf"
   rule R:KResult ~> unifyConf => unifyConf ~> R  [structural]
@@ -52,7 +61,6 @@ module AGDA-SEMANTICS-UNIFICATION
        <fenv> Rho => applyMgu(Theta, Rho) </fenv>
        <metavars> Meta => applyMgu(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
-    when isMguError(Theta) =/=K true
 
   syntax KItem ::= unify(K)
   rule <k> unify(K:K) => applyMgu(Theta, K) ...</k>
@@ -79,8 +87,9 @@ module AGDA-SEMANTICS-UNIFICATION
     //TUSOM subExpr(numReqArgs(leftmost(E1)), E1) suitableLHS(Theta, leftmost(E1), C2) ~>
     //MguXX updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)) ~>
     //MguXX updateMgu(updateMgu(Theta, freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2)), E1, E2) ~>
-    subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> E1 == E2 //~> chich
-    //updateMgu(Theta, freshFunName(E1)[getMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))], E2)
+    //subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> E1 == E2 //~> chich
+//////updateMgu(Theta, freshFunName(E1)[getMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))], E2)
+    renameVariablesConf(suitableLHS(Theta, leftmost(E1), C2)) ~> subExpr(numReqArgs(leftmost(E1)), E1) #== HOLE ~> nf(E1) #== nf(E2) //~> chich
     when isFunClauses(leftmost(C1)) andBool isFunClauses(leftmost(E1)) andBool
          leftmost(C1) ==K leftmost(E1) andBool leftmost(C2) ==K leftmost(E2)
          andBool condit(E2) =/=K true
@@ -98,7 +107,7 @@ module AGDA-SEMANTICS-UNIFICATION
        resolveFunClauses(Theta, clash(C1,,C2), ListItem(E1) _, ListItem(E2) _)
        => //nf(applyMgu(updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)), E1)) ~>
           //MguXX updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)) ~>
-          subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> nf(E1) errx#== nf(E2) //~> chich
+          renameVariablesConf(suitableLHS(Theta, leftmost(E1), C2)) ~> subExpr(numReqArgs(leftmost(E1)), E1) #== HOLE ~> nf(E1) errx#== nf(E2) //~> chich
     when isFunClauses(leftmost(C1)) andBool isFunClauses(leftmost(E1)) andBool
          leftmost(C1) ==K leftmost(E1) andBool leftmost(C2) ==K leftmost(E2)
          andBool
@@ -118,7 +127,7 @@ module AGDA-SEMANTICS-UNIFICATION
 
   syntax LHS ::= suitableLHS(Mgu, FunClauses, Expr)  [function]
   //rule suitableLHS(Theta, FunClauses(_, .List), _) => false
-  rule suitableLHS(Theta, FunClauses(_, ListItem(L = R) _), T) => renameVariables(L)
+  rule suitableLHS(Theta, FunClauses(_, ListItem(L = R) _), T) => L
     when isMguError(updateMgu(Theta, leftmost(R), leftmost(T))) =/=K true
   rule suitableLHS(_, FunClauses(_, (_:ListItem => .) _), _)  [owise]
 
@@ -128,6 +137,17 @@ module AGDA-SEMANTICS-UNIFICATION
   rule isMetaVariable(K) => true  when getKLabel(K) ==KLabel #symExpr
   // it holds that Variable ::= MetaVariable  (i.e., #symExpr's are also Variable)
   */
+
+  // move to -common or -utils or something
+  syntax KItem ::= renameVariablesConf(K) | #renameVarsConf(K, K)
+  rule renameVariablesConf(K) => #renameVarsConf(getAlpha(K), K)
+  rule <k> #renameVarsConf(Alpha, K) => applySubst(Alpha, K) ...</k>
+       <tenv> Gamma => Gamma[#renameVarsCtx(Gamma, Alpha)] </tenv>
+  syntax Map ::= #renameVarsCtx(Map, K)  [function]
+  rule #renameVarsCtx(_, subst(.KList)) => .Map
+  rule #renameVarsCtx(_ (K |-> V), subst((eqn(K,,X) => .KList),,_)) (.Map => X |-> V)
+  rule #renameVarsCtx(_, subst((eqn(_,,X) => .KList),,_)) (.Map => X |-> T)  when fresh(T:Expr)  [owise]
+
 
   syntax List ::= applyMguKeysL(Mgu, List)   [function]
   rule applyMguKeysL(Theta, .List) => .List
