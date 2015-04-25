@@ -119,7 +119,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   syntax Bool ::= cond(Expr, Expr)  [function]
   rule cond(E1, E2) => true  when leftmost(E1) ==K Fun("rename") andBool leftmost(E2) ==K Fun("liftR")
-  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> chich ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf /*~> chich*/ ...</k>
+  rule <k> t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> /*chich ~>*/ unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf /*~> chich*/ ...</k>
     when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr) andBool cond(E1, E2) ==K true
   syntax KItem ::= Expr "fake==" Expr
   rule _ fake== _ => .

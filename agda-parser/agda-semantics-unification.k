@@ -22,7 +22,20 @@ module AGDA-SEMANTICS-UNIFICATION
        <mgu> Theta => updateMgu(Theta, E, E') </mgu>
     when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
          isMguError(updateMgu(Theta, E, E')) =/=K true
-  syntax KItem ::= "BREAK"
+
+  syntax KItem ::= K "errx#==" K
+  rule <k> nf(E) errx#== E' => nf(applyMgu(Theta, E)) ~> HOLE errx#== E' ...</k>
+       <mgu> Theta </mgu>
+  rule nf(E) ~> HOLE errx#== E' => E errx#== E'  when isNf(E)
+  rule <k> E errx#== nf(E') => nf(applyMgu(Theta, E')) ~> E errx#== HOLE ...</k>
+       <mgu> Theta </mgu>
+  rule nf(E') ~> E errx#== HOLE => E errx#== E'  when isNf(E')
+  rule <k> E errx#== E' => . ...</k>
+       <mgu> Theta => updateMgu(Theta, E, E') </mgu>
+    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf //andBool
+         //isMguError(updateMgu(Theta, E, E')) =/=K true
+
+  syntax KItem ::= "BREAKx" K K
   // FIXME tu Theta a updateMgu si viem zistit aj potom v resolveFunClauses, nemusim predavat ako arg
   rule <k> E #== E' => resolveFunClauses(Theta, updateMgu(Theta, E, E'), ListItem(E), ListItem(E')) ...</k>
        <mgu> Theta </mgu>  //=> resolveFunClauses(Theta, updateMgu(Theta, E, E'), E, E') </mgu>
@@ -66,19 +79,37 @@ module AGDA-SEMANTICS-UNIFICATION
     //TUSOM subExpr(numReqArgs(leftmost(E1)), E1) suitableLHS(Theta, leftmost(E1), C2) ~>
     //MguXX updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)) ~>
     //MguXX updateMgu(updateMgu(Theta, freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2)), E1, E2) ~>
-    subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> E1 == E2 ~> chich
+    subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> E1 == E2 //~> chich
     //updateMgu(Theta, freshFunName(E1)[getMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))], E2)
     when isFunClauses(leftmost(C1)) andBool isFunClauses(leftmost(E1)) andBool
-         leftmost(C1) ==K leftmost(E1) //////andBool
+         leftmost(C1) ==K leftmost(E1) andBool leftmost(C2) ==K leftmost(E2)
+         andBool condit(E2) =/=K true
+    ////////andBool
          //(any(isVariable, args(E1)) orBool any(isSymbolicExpr, args(E1))) andBool
          //matchable(C2
          // reverted isMatching should be a sufficient test...? (normally LHS is the first argument of isMatching)
     ////////isMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))
     // when: updateMgu so suitableLHS neurobi MguError
-  rule resolveFunClauses(Theta, clash(C1,,C2), (. => stop args(E1)) (ListItem(E1) => .) _, (. => stop args(E2)) (ListItem(E2) => .) _) //=> TUSOM l(args(E1)) l(args(E2))
+
+  syntax Cond ::= condit(Expr)  [function]
+  rule condit(E) => true when leftmost(leftmost(leftmost(E))) ==K Data("_+_")
+
+  rule //(. => TUSOM 3 3 ~> isFunClauses(leftmost(C1)) ~> isFunClauses(leftmost(E1)) ~> leftmost(C1) ==K leftmost(E1) ~> leftmost(C2) ==K leftmost(E2)) ~>
+       resolveFunClauses(Theta, clash(C1,,C2), ListItem(E1) _, ListItem(E2) _)
+       => //nf(applyMgu(updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)), E1)) ~>
+          //MguXX updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)) ~>
+          subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> nf(E1) errx#== nf(E2) //~> chich
+    when isFunClauses(leftmost(C1)) andBool isFunClauses(leftmost(E1)) andBool
+         leftmost(C1) ==K leftmost(E1) andBool leftmost(C2) ==K leftmost(E2)
+         andBool
+         condit(E2) ==K true
+ 
+  rule resolveFunClauses(Theta, clash(C1,,C2), ListItem(E1) L1, ListItem(E2) L2)
+       => resolveFunClauses(Theta, clash(C1,,C2), args(E1) L1, args(E2) L2) ~> E1 == E2 //~> chich
     when isFunClauses(leftmost(C1)) andBool
-         ((isFunClauses(leftmost(E1)) ==K true andBool leftmost(C1) =/=K leftmost(E1)) orBool
+         ((isFunClauses(leftmost(E1)) ==K true andBool (leftmost(C1) =/=K leftmost(E1) orBool leftmost(C2) =/=K leftmost(E2))) orBool
           (isFunClauses(leftmost(E1)) =/=K true andBool isFunClauses(leftmost(E2)) =/=K true))
+         andBool condit(E2) =/=K true
 
 
   syntax Expr ::= subExpr(Int, Expr)   [function]
@@ -111,13 +142,16 @@ module AGDA-SEMANTICS-UNIFICATION
   // The LHS of eqn() below gets replaced with the RHS: swapping the sides
   // when necessary.
   // - Metavariables should be always substituted *for*, not vice versa.
+  /*
   rule eqns((eqn(K,,#symExpr(I)) => eqn(#symExpr(I),,K)),,_)
     when getKLabel(K) =/=KLabel #symExpr  [structural, anywhere]
+  */
   //rule eqns((eqn(K,,K') => .KList),,_)
   //  when isVariable(K) andBool isVariable(K')  [structural, anywhere]
 
-  rule eqns((eqn(X:Variable,,#symVariable(I)) => eqn(#symVariable(I),,X)),,_)
-    when getKLabel(X) =/=KLabel #symVariable  [structural, anywhere]
+  // NOTE ked zakomentujem tak cykli
+  rule eqns((eqn(K,,#symVariable(I)) => eqn(#symVariable(I),,K)),,_)
+    when getKLabel(K) =/=KLabel #symVariable  [structural, anywhere]
   //rule eqns((eqn(#symExpr(I),,#symVariable(J)) => eqn(#symVariable(J),,#symExpr(I))),,_)  [structural, anywhere]
 
 endmodule

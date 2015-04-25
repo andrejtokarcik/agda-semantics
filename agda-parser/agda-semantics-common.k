@@ -74,6 +74,9 @@ module AGDA-SEMANTICS-COMMON
   rule take(0, _) => .List
   rule (.List => ListItem(K)) take(I => I -Int 1, (ListItem(K) => .List) _)   [owise]
 
+  syntax K ::= head(List)   [function]
+  rule head(ListItem(K) _) => K
+
   // wrappers for containers (that do not belong to sort K)
   // NOTE: module K-WRAPPERS-LABELS in k-prelude.k seems to provide similar functionality
   syntax K ::= l(List)

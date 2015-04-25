@@ -51,8 +51,15 @@ module AGDA
           "suc" ) Var ( "n" ))) Var ( "m" )) = (Con ( "suc" ) ((Fun ( "plus" )
            Var ( "n" )) Var ( "m" )))) ) Con ( "zero" )) Con ( "zero" ))
 
+  syntax Bool ::= "testxx"  [function]
+  rule testxx => isNf( ((Data ( "_+_" ) Data ( "One" )) (FunClauses ( 1 , ListItem((
+          #symFunClauses(935) Con ( "zero" )) = Data ( "Zero" )) ListItem((
+          #symFunClauses(952) (Con ( "suc" ) Var ( "n" ))) = ((Data ( "_+_" ) 
+          Data ( "One" )) (Fun ( "Fin" ) Var ( "n" )))) ) #symVariable(1563))) )
+
+
   configuration <T>
-                  <k> $PGM:Program </k>  //~> check ~> l(args) </k>   //~> test </k>
+                  <k> $PGM:Program </k>  //~> testxx </k>  //~> check ~> l(args) </k>   //~> test </k>
                   <tenv> .Map </tenv>   // <ctx>    --- contains only metas' types after completion
                   <fenv> .Map </fenv>   // <fun> alebo <env> alebo <fenv>
                   <mgu> .Mgu </mgu>
