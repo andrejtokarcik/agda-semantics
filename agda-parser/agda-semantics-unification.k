@@ -20,11 +20,11 @@ module AGDA-SEMANTICS-UNIFICATION
   rule nf(E') ~> E #== HOLE => E #== E'  when isNf(E')
   rule <k> E #== E' => . ...</k>
        <mgu> Theta => updateMgu(Theta, E, E') </mgu>
-    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf //andBool
-         //isMguError(updateMgu(Theta, E, E')) =/=K true
+    when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
+         isMguError(updateMgu(Theta, E, E')) =/=K true
   syntax KItem ::= "BREAK"
   // FIXME tu Theta a updateMgu si viem zistit aj potom v resolveFunClauses, nemusim predavat ako arg
-  rule <k> E #== E' => resolveFunClauses(Theta, updateMgu(Theta, E, E'), E, E') ...</k>
+  rule <k> E #== E' => resolveFunClauses(Theta, updateMgu(Theta, E, E'), ListItem(E), ListItem(E')) ...</k>
        <mgu> Theta </mgu>  //=> resolveFunClauses(Theta, updateMgu(Theta, E, E'), E, E') </mgu>
     when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
          isMguError(updateMgu(Theta, E, E')) andBool
@@ -49,20 +49,24 @@ module AGDA-SEMANTICS-UNIFICATION
   rule troublesomeFunClauses(clash(C1,,C2)) => true
     when isFunClauses(leftmost(C1)) orElseBool isFunClauses(leftmost(C2))
 
-  syntax KItem ::= "TUSOM" Expr Expr Int LHS Map
+  syntax KItem ::= "TUSOM" K K //Int LHS Map
   syntax KItem ::= "MguXX" Mgu
-  syntax KItem ::= resolveFunClauses(Mgu, Mgu, Expr, Expr)     //[function]
-  rule resolveFunClauses(_, _, E1 => E2, E2 => E1)
+  syntax KItem ::= resolveFunClauses(Mgu, Mgu, List, List)     //[function]
+  syntax List ::= "stop"
+
+  // nepozeraj len na leftmost v E1 ale na leftmost v kazdom argu E1
+  rule resolveFunClauses(_, _, ListItem(E1 => E2) _, ListItem(E2 => E1) _)
     when isFunClauses(leftmost(E1)) =/=K true andBool isFunClauses(leftmost(E2))
   rule resolveFunClauses(_, clash((C1 => C2),,(C2 => C1)), _, _)
     when isFunClauses(leftmost(C1)) =/=K true andBool isFunClauses(leftmost(C2))
-  rule resolveFunClauses(Theta, clash(C1,,C2), E1, E2) => /*TUSOM 
+  rule resolveFunClauses(Theta, clash(C1,,C2), ListItem(E1) _, ListItem(E2) _) => /*TUSOM 
     freshFunName(E1) freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)) numReqArgs(leftmost(E1))
     suitableLHS(Theta, leftmost(E1), C2)
     getMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2)) ~> */
-    MguXX updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)) ~>
-    MguXX updateMgu(updateMgu(Theta, freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2)), E1, E2) ~>
-    subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> E1 #== E2
+    //TUSOM subExpr(numReqArgs(leftmost(E1)), E1) suitableLHS(Theta, leftmost(E1), C2) ~>
+    //MguXX updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)) ~>
+    //MguXX updateMgu(updateMgu(Theta, freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2)), E1, E2) ~>
+    subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> E1 == E2 ~> chich
     //updateMgu(Theta, freshFunName(E1)[getMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))], E2)
     when isFunClauses(leftmost(C1)) andBool isFunClauses(leftmost(E1)) andBool
          leftmost(C1) ==K leftmost(E1) //////andBool
@@ -71,6 +75,11 @@ module AGDA-SEMANTICS-UNIFICATION
          // reverted isMatching should be a sufficient test...? (normally LHS is the first argument of isMatching)
     ////////isMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))
     // when: updateMgu so suitableLHS neurobi MguError
+  rule resolveFunClauses(Theta, clash(C1,,C2), (. => stop args(E1)) (ListItem(E1) => .) _, (. => stop args(E2)) (ListItem(E2) => .) _) //=> TUSOM l(args(E1)) l(args(E2))
+    when isFunClauses(leftmost(C1)) andBool
+         ((isFunClauses(leftmost(E1)) ==K true andBool leftmost(C1) =/=K leftmost(E1)) orBool
+          (isFunClauses(leftmost(E1)) =/=K true andBool isFunClauses(leftmost(E2)) =/=K true))
+
 
   syntax Expr ::= subExpr(Int, Expr)   [function]
   rule subExpr(I, E) => E when lengthList(args(E)) <=Int I
@@ -78,7 +87,7 @@ module AGDA-SEMANTICS-UNIFICATION
 
   syntax LHS ::= suitableLHS(Mgu, FunClauses, Expr)  [function]
   //rule suitableLHS(Theta, FunClauses(_, .List), _) => false
-  rule suitableLHS(Theta, FunClauses(_, ListItem(L = R) _), T) => L
+  rule suitableLHS(Theta, FunClauses(_, ListItem(L = R) _), T) => renameVariables(L)
     when isMguError(updateMgu(Theta, leftmost(R), leftmost(T))) =/=K true
   rule suitableLHS(_, FunClauses(_, (_:ListItem => .) _), _)  [owise]
 

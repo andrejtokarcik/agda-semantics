@@ -37,6 +37,10 @@ module AGDA-SYNTAX
   // these binders get really repetitive.  do I need them after all? pattern matching doesn't take them
   // into account anyway (or does it?).  the only occassion when it appears to be of use is when
   // calling freeVariables() which I could, however, implement on my own.
+  // --- see modules/unification.k, accumulateVars().  I would perhaps also need an analogue: accumulateNames()
+  // --- HOWEVER, substitution that is now used for lambda evaluation DOES take the binder attributes into account
+  // to avoid capture.  [pattern matching should do so, too...!]
+  // (and provides interesting isBinder/isBound/isBounding functions which I could eventually use, too)
   // syntax Pi ::= TypedBinding -> Expr    would be quite ideal
   // (so that I can latter have rules with `_ -> _` on LHS instead of both `(_ : _) -> _` and `{_ : _} -> _`)
   // TODO: gotta test all those binding gotchas anyway.
