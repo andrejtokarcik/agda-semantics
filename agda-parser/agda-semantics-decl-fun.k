@@ -66,7 +66,7 @@ module AGDA-SEMANTICS-DECL-FUN
             => Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
-       <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>
+       <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>   // TODO: don't save #symExpr's & co.
     when condz(L, R) =/=K true
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)

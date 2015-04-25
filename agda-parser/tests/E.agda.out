@@ -23,8 +23,8 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( "t" ) |-> FunClauses ( 1 , ListItem((%fun Var ( "x" )) = Var ( 
-          "x" )) )
+        Fun ( "t" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(6) Var ( "x"
+           )) = Var ( "x" )) )
     </fenv>
     <tenv>
         .Map

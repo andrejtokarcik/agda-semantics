@@ -18,63 +18,64 @@
           ListItem(Con ( "_::_" )) )
     </con>
     <funtenvs>
-        Fun ( "map" ) |-> m ( Var ( "f" ) |-> ( #symVariable(84) : #symExpr(90
-          ) ) -> #symExpr(88) Var ( "x" ) |-> #symExpr(90) Var ( "xs" ) |-> (
-          Data ( "List" ) #symExpr(90)) #symExpr(16) |-> Set ( #symInt(18) ) 
-          #symExpr(61) |-> Set ( 0 ) #symExpr(61) |-> Set ( 0 ) #symExpr(63)
-           |-> Set ( 0 ) #symExpr(68) |-> Set ( 0 ) #symExpr(71) |-> Set ( 0 )
-           #symExpr(80) |-> Set ( 0 ) #symExpr(80) |-> Set ( 0 ) #symExpr(81)
-           |-> Set ( 0 ) #symExpr(82) |-> Set ( 0 ) #symExpr(85) |-> Set ( 0 )
-           #symExpr(85) |-> Set ( 0 ) #symExpr(86) |-> Set ( 0 ) #symExpr(88)
-           |-> Set ( 0 ) #symExpr(88) |-> Set ( 0 ) #symExpr(88) |-> Set ( 0 )
-           #symExpr(88) |-> Set ( 0 ) #symExpr(88) |-> Set ( 0 ) #symExpr(90)
-           |-> Set ( 0 ) #symExpr(90) |-> Set ( 0 ) #symExpr(90) |-> Set ( 0 )
-           #symExpr(92) |-> Set ( 0 ) #symExpr(92) |-> Set ( 0 ) #symExpr(92)
+        Fun ( "map" ) |-> m ( Var ( "f" ) |-> ( #symVariable(87) : #symExpr(93
+          ) ) -> #symExpr(91) Var ( "x" ) |-> #symExpr(93) Var ( "xs" ) |-> (
+          Data ( "List" ) #symExpr(93)) #symExpr(16) |-> Set ( #symInt(18) ) 
+          #symExpr(64) |-> Set ( 0 ) #symExpr(64) |-> Set ( 0 ) #symExpr(66)
+           |-> Set ( 0 ) #symExpr(71) |-> Set ( 0 ) #symExpr(74) |-> Set ( 0 )
+           #symExpr(83) |-> Set ( 0 ) #symExpr(83) |-> Set ( 0 ) #symExpr(84)
+           |-> Set ( 0 ) #symExpr(85) |-> Set ( 0 ) #symExpr(88) |-> Set ( 0 )
+           #symExpr(88) |-> Set ( 0 ) #symExpr(89) |-> Set ( 0 ) #symExpr(91)
+           |-> Set ( 0 ) #symExpr(91) |-> Set ( 0 ) #symExpr(91) |-> Set ( 0 )
+           #symExpr(91) |-> Set ( 0 ) #symExpr(91) |-> Set ( 0 ) #symExpr(93)
+           |-> Set ( 0 ) #symExpr(93) |-> Set ( 0 ) #symExpr(93) |-> Set ( 0 )
+           #symExpr(95) |-> Set ( 0 ) #symExpr(95) |-> Set ( 0 ) #symExpr(95)
            |-> Set ( 0 ) )
     </funtenvs>
     <metavars>
         #symExpr(16) |-> t ( Set ( 1 ) , Set ( #symInt(18) ) )
         #symExpr(25) |-> t ( #symExpr(27) , Set ( 0 ) )
         #symExpr(27) |-> t ( #symExpr(27) , Set ( 0 ) )
-        #symExpr(29) |-> t ( #symExpr(29) , Set ( 1 ) )
-        #symExpr(41) |-> t ( #symExpr(41) , Set ( 0 ) )
-        #symExpr(43) |-> t ( #symExpr(56) , Set ( 0 ) )
-        #symExpr(51) |-> t ( #symExpr(41) , Set ( 0 ) )
-        #symExpr(56) |-> t ( #symExpr(56) , Set ( 0 ) )
-        #symExpr(61) |-> t ( #symExpr(90) , Set ( 0 ) )
-        #symExpr(63) |-> t ( #symExpr(88) , Set ( 0 ) )
-        #symExpr(68) |-> t ( #symExpr(90) , Set ( 0 ) )
-        #symExpr(82) |-> t ( #symExpr(88) , Set ( 0 ) )
-        #symExpr(90) |-> t ( #symExpr(90) , Set ( 0 ) )
-        #symExpr(92) |-> t ( #symExpr(88) , Set ( 0 ) )
+        #symExpr(30) |-> t ( #symExpr(30) , Set ( 1 ) )
+        #symExpr(43) |-> t ( #symExpr(43) , Set ( 0 ) )
+        #symExpr(45) |-> t ( #symExpr(58) , Set ( 0 ) )
+        #symExpr(53) |-> t ( #symExpr(43) , Set ( 0 ) )
+        #symExpr(58) |-> t ( #symExpr(58) , Set ( 0 ) )
+        #symExpr(64) |-> t ( #symExpr(93) , Set ( 0 ) )
+        #symExpr(66) |-> t ( #symExpr(91) , Set ( 0 ) )
+        #symExpr(71) |-> t ( #symExpr(93) , Set ( 0 ) )
+        #symExpr(85) |-> t ( #symExpr(91) , Set ( 0 ) )
+        #symExpr(93) |-> t ( #symExpr(93) , Set ( 0 ) )
+        #symExpr(95) |-> t ( #symExpr(91) , Set ( 0 ) )
     </metavars>
     <fenv>
-        Fun ( "map" ) |-> FunClauses ( 4 , ListItem(((((%fun { #symExpr(41) })
-           { #symExpr(43) }) Var ( "f" )) (Con ( "nil" ) { #symExpr(41) })) = 
-          (Con ( "nil" ) { #symExpr(56) })) ListItem(((((%fun { #symExpr(61) }
-          ) { #symExpr(63) }) Var ( "f" )) (((Con ( "_::_" ) { #symExpr(61) })
-           Var ( "x" )) Var ( "xs" ))) = (((Con ( "_::_" ) { #symExpr(88) }) (
-          Var ( "f" ) Var ( "x" ))) ((((Fun ( "map" ) { #symExpr(90) }) { 
-          #symExpr(88) }) Var ( "f" )) Var ( "xs" )))) )
-        Fun ( "nil2" ) |-> FunClauses ( 1 , ListItem((%fun { #symExpr(25) }) =
-           (Con ( "nil" ) { #symExpr(27) })) )
-        Fun ( "tt" ) |-> FunClauses ( 1 , ListItem((%fun #symExpr(29)) = Set (
-           1 )) )
+        Fun ( "map" ) |-> FunClauses ( 4 , ListItem(((((#symFunClauses(60) { 
+          #symExpr(43) }) { #symExpr(45) }) Var ( "f" )) (Con ( "nil" ) { 
+          #symExpr(43) })) = (Con ( "nil" ) { #symExpr(58) })) ListItem(((((
+          #symFunClauses(106) { #symExpr(64) }) { #symExpr(66) }) Var ( "f" ))
+           (((Con ( "_::_" ) { #symExpr(64) }) Var ( "x" )) Var ( "xs" ))) = (
+          ((Con ( "_::_" ) { #symExpr(91) }) (Var ( "f" ) Var ( "x" ))) ((((
+          Fun ( "map" ) { #symExpr(93) }) { #symExpr(91) }) Var ( "f" )) Var (
+           "xs" )))) )
+        Fun ( "nil2" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(29) { 
+          #symExpr(25) }) = (Con ( "nil" ) { #symExpr(27) })) )
+        Fun ( "tt" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(35) 
+          #symExpr(30)) = Set ( 1 )) )
     </fenv>
     <tenv>
         #symExpr(16) |-> Set ( #symInt(18) )
     </tenv>
     <sig>
         Fun ( "map" ) |-> { Var ( "a" ) : Set ( 0 ) } -> { Var ( "b" ) : Set (
-           0 ) } -> ( #symVariable(94) : ( #symVariable(84) : Var ( "a" ) ) ->
-           Var ( "b" ) ) -> ( #symVariable(97) : (Data ( "List" ) Var ( "a" ))
-           ) -> (Data ( "List" ) Var ( "b" ))
+           0 ) } -> ( #symVariable(97) : ( #symVariable(87) : Var ( "a" ) ) ->
+           Var ( "b" ) ) -> ( #symVariable(100) : (Data ( "List" ) Var ( "a" )
+          ) ) -> (Data ( "List" ) Var ( "b" ))
         Fun ( "nil2" ) |-> (\ ( Var ( "x" ) : Set ( 1 ) ) -> Var ( "x" ) { Var
            ( "a" ) : Set ( 0 ) } -> (Data ( "List" ) Var ( "a" )))
-        Fun ( "tt" ) |-> ( #symVariable(31) : Set ( 1 ) ) -> Set ( 2 )
+        Fun ( "tt" ) |-> ( #symVariable(32) : Set ( 1 ) ) -> Set ( 2 )
         Data ( "List" ) |-> ( Var ( "a" ) : Set ( 0 ) ) -> Set ( 0 )
-        Con ( "_::_" ) |-> { Var ( "a" ) : Set ( 0 ) } -> ( #symVariable(87) :
-           Var ( "a" ) ) -> ( #symVariable(100) : (Data ( "List" ) Var ( "a" )
+        Con ( "_::_" ) |-> { Var ( "a" ) : Set ( 0 ) } -> ( #symVariable(90) :
+           Var ( "a" ) ) -> ( #symVariable(103) : (Data ( "List" ) Var ( "a" )
           ) ) -> (Data ( "List" ) Var ( "a" ))
         Con ( "nil" ) |-> { Var ( "a" ) : Set ( 0 ) } -> (Data ( "List" ) Var 
           ( "a" ))

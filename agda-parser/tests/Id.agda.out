@@ -17,22 +17,22 @@
         .Map
     </con>
     <funtenvs>
-        Fun ( "id" ) |-> m ( Var ( "A" ) |-> Set ( 0 ) Var ( "x" ) |-> Var ( 
-          "A" ) )
+        Fun ( "id" ) |-> m ( Var ( "A" ) |-> Set ( 0 ) Var ( "x" ) |-> 
+          #symExpr(9) #symExpr(9) |-> Set ( 0 ) )
     </funtenvs>
     <metavars>
         .Map
     </metavars>
     <fenv>
-        Fun ( "id" ) |-> FunClauses ( 2 , ListItem(((%fun Var ( "A" )) Var ( 
-          "x" )) = Var ( "x" )) )
+        Fun ( "id" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(10) 
+          #symExpr(9)) Var ( "x" )) = Var ( "x" )) )
     </fenv>
     <tenv>
         .Map
     </tenv>
     <sig>
-        Fun ( "id" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(7) : 
-          Var ( "A" ) ) -> Var ( "A" )
+        Fun ( "id" ) |-> ( #symExpr(9) : Set ( 0 ) ) -> ( #symVariable(7) : 
+          #symExpr(9) ) -> #symExpr(9)
     </sig>
     <ncat>
         Name ( "id" ) |-> Fun ( "id" )
