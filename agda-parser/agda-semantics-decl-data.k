@@ -3,10 +3,12 @@ require "agda-semantics-common.k"
 module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SEMANTICS-COMMON
 
-  context data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
-  rule <k> data Name(N) Ps : t(T, Set(_)) where Cons
+  syntax KItem ::= "params!"
+  rule (. => params!) ~> data _ Ps : (T => Pi(Ps, T)) where _   [structural]
+  context params! ~> data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
+  rule <k> params! ~> data Name(N) Ps : t(T, Set(_)) where Cons
            => //I >=Int 1 ~> pass? ~>        // << FIXME   (the `-Int 1' guard below is sufficient?)
-              addDataSig(Data(N), App(Data(N), Ps), Pi(Ps, T)) ~>
+              addDataSig(Data(N), App(Data(N), Ps), T) ~>
               addConSigs(App(Data(N), Ps), Ps, Cons) ...</k>
        <ncat> NCat (. => Name(N) |-> Data(N)) </ncat>
     when notBool (Name(N) in keys(NCat))     // this may be already guaranteed by the external parser
@@ -35,6 +37,8 @@ module AGDA-SEMANTICS-DECL-DATA
   rule D:Name constructorOf D => true
   rule Set(I) constructorOf Set(I) => true
   rule (T:Expr _:Variable => T) constructorOf (D:Expr _:Variable => D)
+  rule _:Expr E:Expr constructorOf (D:Expr {_} => D)
+    when isImplicit(E) =/=K true
   rule (T:Expr _:Expr => T) constructorOf _:Expr  [owise]
 
   syntax Telescope ::= makeHidden(Telescope)  [function]
