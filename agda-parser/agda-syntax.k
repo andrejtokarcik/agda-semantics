@@ -124,7 +124,7 @@ module AGDA-SYNTAX
   // here, though, if two distinct wild patterns get replaced with the same 'fresh' variable
   // in the same LHS, it leads to errors.
   // fixed with %meta in the meantime...
-  rule %wild => %meta  [macro] //X  when fresh(X:Variable)  [macro]
+  rule %wild => %meta  [macro]   // WAS:  => X  when fresh(X:Variable)  [macro]
   syntax Patterns ::= List{Pattern, ""}    [klabel('Cons), notInRules]
 
   syntax LHS ::= Pattern

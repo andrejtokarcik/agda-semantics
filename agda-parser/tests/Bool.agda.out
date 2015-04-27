@@ -1,0 +1,51 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenvRestore>
+        .List
+    </tenvRestore>
+    <metadata>
+        <range>
+            .K
+        </range>
+    </metadata>
+    <con>
+        Data ( "Bool" ) |-> l ( ListItem(Con ( "true" )) ListItem(Con ( 
+          "false" )) )
+    </con>
+    <funtenvs>
+        Fun ( "if_then_else_" ) |-> m ( Var ( "x" ) |-> #symExpr(30) Var ( "y"
+           ) |-> #symExpr(30) )
+    </funtenvs>
+    <metavars>
+        .Map
+    </metavars>
+    <fenv>
+        Fun ( "if_then_else_" ) |-> FunClauses ( 4 , ListItem(((((
+          #symFunClauses(17) { #symExpr(16) }) Con ( "true" )) Var ( "x" )) 
+          Var ( "y" )) = Var ( "x" )) ListItem(((((#symFunClauses(31) { 
+          #symExpr(30) }) Con ( "false" )) Var ( "x" )) Var ( "y" )) = Var ( 
+          "y" )) )
+    </fenv>
+    <tenv>
+        .Map
+    </tenv>
+    <sig>
+        Fun ( "if_then_else_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( 
+          #symVariable(22) : Data ( "Bool" ) ) -> ( #symVariable(25) : Var ( 
+          "A" ) ) -> ( #symVariable(28) : Var ( "A" ) ) -> Var ( "A" )
+        Data ( "Bool" ) |-> Set ( 0 )
+        Con ( "false" ) |-> Data ( "Bool" )
+        Con ( "true" ) |-> Data ( "Bool" )
+    </sig>
+    <ncat>
+        Name ( "Bool" ) |-> Data ( "Bool" )
+        Name ( "false" ) |-> Con ( "false" )
+        Name ( "if_then_else_" ) |-> Fun ( "if_then_else_" )
+        Name ( "true" ) |-> Con ( "true" )
+    </ncat>
+</T>
