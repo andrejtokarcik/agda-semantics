@@ -117,14 +117,16 @@ module AGDA-SYNTAX
   syntax Pattern ::= "(" Pattern ")" [bracket]
     | Arg
     | App
+    | "%wild"     [klabel('WildP)]
+  rule %wild => X  when fresh(X:Variable)  [macro]
   syntax Patterns ::= List{Pattern, ""}    [klabel('Cons), notInRules]
 
   syntax LHS ::= Pattern
   syntax RHS ::= Expr
                | "AbsurdRHS"                         [klabel('AbsurdRHS)]
   syntax FunClause ::= LHS "=" RHS                   [binder, klabel('FunClause)]
-                     | LHS
-  rule L:LHS = AbsurdRHS => L       [macro]
+                     | Absurd(LHS)
+  rule L:LHS = AbsurdRHS => Absurd(L)       [macro]
 
   syntax DataDeclaration ::= Data(Name, LamBindings, Expr, TypeSignatures)  [klabel('Data)]
                            | "data" Name Telescope ":" Expr "where" TypeSignatures

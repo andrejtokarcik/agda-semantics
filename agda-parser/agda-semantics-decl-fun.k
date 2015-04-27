@@ -20,7 +20,7 @@ module AGDA-SEMANTICS-DECL-FUN
   // to be discarded with no checks  (FIXME, we would like to update funtenvs
   // at the very least.  we also should verify that there really are no suitable
   // constructors.)
-  rule %absurd ~> _ => .
+  rule Absurd(_) => .
 
   syntax KItem ::= "autotyped!"
 

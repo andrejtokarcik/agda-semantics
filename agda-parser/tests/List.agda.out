@@ -34,10 +34,10 @@
           ((Con ( "_::_" ) { #symExpr(91) }) (Var ( "f" ) Var ( "x" ))) ((((
           Fun ( "map" ) { #symExpr(93) }) { #symExpr(91) }) Var ( "f" )) Var (
            "xs" )))) )
-        Fun ( "nil2" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(29) { 
-          #symExpr(27) }) = (Con ( "nil" ) { #symExpr(25) })) )
+        Fun ( "nil2" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(30) { 
+          #symExpr(28) }) = (Con ( "nil" ) { #symExpr(26) })) )
         Fun ( "tt" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(35) 
-          #symExpr(30)) = Set ( 1 )) )
+          #symVariable(4)) = Set ( 1 )) )
     </fenv>
     <tenv>
         .Map
