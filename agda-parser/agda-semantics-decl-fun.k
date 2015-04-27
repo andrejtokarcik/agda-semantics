@@ -33,7 +33,7 @@ module AGDA-SEMANTICS-DECL-FUN
 
   rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> restoreTEnv ...</k>
        <tenv> Gamma </tenv>
-       <funtenvs> GammaF => .Map </funtenvs>    // => .Map to unclutter the cache
+       <funtenvs> GammaF </funtenvs>
     when notBool (funName(L) in keys(GammaF))
   rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> restoreTEnv ...</k>
        <tenv> Gamma => unm(GammaF(funName(L))) </tenv>
@@ -51,9 +51,11 @@ module AGDA-SEMANTICS-DECL-FUN
   context autotyped! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond2(L) =/=K true   [result(WhnfTypedExpr)]
   context autotyped! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond2(L) ==K true   [result(WhnfTypedExpr)]
 
-  // insert implicit metavariables at the end of the {left,right}-hand side of function clauses
-  rule autotyped! ~> (t(L, ({_ : _} -> _)) => L {%meta}) = _
-  rule autotyped! ~> _ = (t(R, ({_ : _} -> _)) => R {%meta})
+  // insert implicit metavariables at the end of the {left,right}-hand side of function clauses as appropriate
+  rule autotyped! ~> (t(L, Tl) => L {%meta}) = t(_, Tr)  when isImplicitPi(Tl) andBool isImplicitPi(Tr) =/=K true
+  rule autotyped! ~> t(_, Tl) = (t(R, Tr) => R {%meta})  when isImplicitPi(Tl) =/=K true andBool isImplicitPi(Tr)
+  rule autotyped! ~> t(L, Tl) = t(R, Tr) => L {X} = R {X}   // NOTE: this gives a different behaviour as offic Agda, cf. Id8 test case
+    when isImplicitPi(Tl) andBool isImplicitPi(Tr) andBool fresh(X:Variable)
 
   syntax Bool ::= condz(LHS, RHS) [function]
   //rule condz(L, R) => true
@@ -66,14 +68,16 @@ module AGDA-SEMANTICS-DECL-FUN
             => Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
-       <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>   // TODO: don't save #symExpr's & co.
+       <funtenvs> GammaF => funName(L) |-> m(Gamma) </funtenvs>   // TODO: don't save #symExpr's & co. [side effect of separating tenv and meta]
+       //<metavars> _ => .Map </metavars>   // these metas shouldn't be needed any more, clean-up for speed-up
     when condz(L, R) =/=K true
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
             => nf(Tl) ~> nf(Tr) ~> Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
-       <funtenvs> GammaF => GammaF[m(Gamma)/funName(L)] </funtenvs>
+       <funtenvs> _ => funName(L) |-> m(Gamma) </funtenvs>
+       //<metavars> _ => .Map </metavars>
     when condz(L, R) ==K true
 
 
@@ -112,7 +116,7 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax Name ::= funName(LHS)  [function]
   rule funName(L) => leftmost(L)
 
-  syntax Name ::= "%fun"
+  //syntax Variable ::= "%fun"
   syntax Expr ::= freshFunName(LHS)  [function]
   //rule freshFunName(L) => replaceLeftmost(L, %fun)
   //rule freshFunName(L) => L    // << toto nechces lebo ten List obshuje Fun("plus") napr. ale v reali tam uz mas nasubstituovane plusove FunClauses

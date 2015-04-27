@@ -34,8 +34,8 @@
     </funtenvs>
     <metavars>
         #symExpr(16) |-> t ( Set ( 1 ) , Set ( #symInt(18) ) )
-        #symExpr(25) |-> t ( #symExpr(27) , Set ( 0 ) )
-        #symExpr(27) |-> t ( #symExpr(27) , Set ( 0 ) )
+        #symExpr(25) |-> t ( #symExpr(25) , Set ( 0 ) )
+        #symExpr(27) |-> t ( #symExpr(25) , Set ( 0 ) )
         #symExpr(30) |-> t ( #symExpr(30) , Set ( 1 ) )
         #symExpr(43) |-> t ( #symExpr(43) , Set ( 0 ) )
         #symExpr(45) |-> t ( #symExpr(58) , Set ( 0 ) )
@@ -58,7 +58,7 @@
           Fun ( "map" ) { #symExpr(93) }) { #symExpr(91) }) Var ( "f" )) Var (
            "xs" )))) )
         Fun ( "nil2" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(29) { 
-          #symExpr(25) }) = (Con ( "nil" ) { #symExpr(27) })) )
+          #symExpr(27) }) = (Con ( "nil" ) { #symExpr(25) })) )
         Fun ( "tt" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(35) 
           #symExpr(30)) = Set ( 1 )) )
     </fenv>

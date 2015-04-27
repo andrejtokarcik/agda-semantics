@@ -59,6 +59,7 @@ module AGDA-SEMANTICS-UNIFICATION
        <tenv> Gamma => applyMguKeys(Theta, Gamma) </tenv>
        <tenvRestore> TEnvR => applyMguKeysL(Theta, TEnvR) </tenvRestore>
        <fenv> Rho => applyMgu(Theta, Rho) </fenv>
+       //<metavars> Meta => extendMeta(applyMgu(Theta, Meta)) </metavars>
        <metavars> Meta => applyMgu(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
 
@@ -126,7 +127,6 @@ module AGDA-SEMANTICS-UNIFICATION
   rule subExpr(I, E _ => E)  [owise]
 
   syntax LHS ::= suitableLHS(Mgu, FunClauses, Expr)  [function]
-  //rule suitableLHS(Theta, FunClauses(_, .List), _) => false
   rule suitableLHS(Theta, FunClauses(_, ListItem(L = R) _), T) => L
     when isMguError(updateMgu(Theta, leftmost(R), leftmost(T))) =/=K true
   rule suitableLHS(_, FunClauses(_, (_:ListItem => .) _), _)  [owise]
@@ -149,6 +149,11 @@ module AGDA-SEMANTICS-UNIFICATION
   rule #renameVarsCtx(_, subst((eqn(_,,X) => .KList),,_)) (.Map => X |-> T)  when fresh(T:Expr)  [owise]
 
 
+  syntax List ::= applyMguL(Mgu, List)   [function]
+  rule applyMguL(Theta, .List) => .List
+  rule applyMguL(Theta, _ (ListItem(m(TEnv)) => .List)) (.List => ListItem(m(applyMgu(Theta, TEnv))))
+
+
   syntax List ::= applyMguKeysL(Mgu, List)   [function]
   rule applyMguKeysL(Theta, .List) => .List
   rule applyMguKeysL(Theta, _ (ListItem(m(TEnv)) => .List)) (.List => ListItem(m(applyMguKeys(Theta, TEnv))))
@@ -156,8 +161,18 @@ module AGDA-SEMANTICS-UNIFICATION
   syntax Map ::= applyMguKeys(Mgu, Map)  [function]
   rule applyMguKeys(_, .Map) => .Map
   rule applyMguKeys(Theta, _ (K |-> V => .Map)) (.Map => (K |-> applyMgu(Theta, V)) (applyMgu(Theta, K) |-> applyMgu(Theta, V)))
-    when isVariable(K) andThenBool isVariable(applyMgu(Theta, K)) andThenBool applyMgu(Theta, K) =/=K K
+    when isVariable(applyMgu(Theta, K)) andBool applyMgu(Theta, K) =/=K K
   rule applyMguKeys(Theta, _ (K |-> V => .Map)) (.Map => K |-> applyMgu(Theta, V))  [owise]
+
+  /*
+  syntax Map ::= extendMeta(Map)  [function]
+               | #extendMeta(Map, Map)  [function]
+  rule extendMeta(M) => #extendMeta(M, .Map)
+  rule #extendMeta(.Map, M') => M'
+  rule #extendMeta(M (X |-> t(E, T)), M' (.Map => E |-> t(E, T)))
+    when isMetaVariable(E) andBool E =/=K X andBool notBool (E in keys(M) keys(M'))
+  rule #extendMeta(_ (X |-> V => .Map), _ (.Map => X |-> V))  [owise]
+  */
 
   // The LHS of eqn() below gets replaced with the RHS: swapping the sides
   // when necessary.

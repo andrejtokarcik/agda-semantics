@@ -1,7 +1,8 @@
 module AGDA-SYNTAX
   // TODO: agda-syntax-utils.k    -- presunut tam aj makra?
   syntax Telescope ::= castTelescope(LamBindings)  [function, notInPrograms]
-  rule castTelescope(X:Variable Bs:LamBindings) => (X : %meta) castTelescope(Bs)  [structural]
+  rule castTelescope(LamBind(Relevant, NotHidden, X:Variable) Bs:LamBindings) => (X : %meta) castTelescope(Bs)  [structural]
+  rule castTelescope(LamBind(Relevant, Hidden, X:Variable) Bs:LamBindings) => {X : %meta} castTelescope(Bs)  [structural]
   rule castTelescope(B:TypedBinding Bs:LamBindings) => B castTelescope(Bs)  [structural]
   rule castTelescope(.LamBindings) => .Telescope   [structural]
 
@@ -44,8 +45,9 @@ module AGDA-SYNTAX
   // syntax Pi ::= TypedBinding -> Expr    would be quite ideal
   // (so that I can latter have rules with `_ -> _` on LHS instead of both `(_ : _) -> _` and `{_ : _} -> _`)
   // TODO: gotta test all those binding gotchas anyway.
+  syntax ImplicitPi ::= "{" Variable ":" Expr "}" "->" Expr  [binder(1 -> 3), latex(\{{#1}\,:\,{#2}\} \rightarrow {#3})]
   syntax Pi ::= "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(({#1}\,:\,{#2}) \rightarrow {#3})]
-              | "{" Variable ":" Expr "}" "->" Expr  [binder(1 -> 3), latex({\{#1}\,:\,{#2}\} \rightarrow {#3})]
+              | ImplicitPi
               | Pi(Telescope, Expr)                  [klabel('Pi)]
               | Fun(Expr, Expr)                      [klabel('Fun)]
   rule Pi((X:Variable : T1:Expr) Tel:Telescope, T2:Expr) => (X : T1) -> Pi(Tel, T2)  [macro]
@@ -53,7 +55,8 @@ module AGDA-SYNTAX
   rule Pi(.Telescope, T:Expr) => T                                                   [macro]
   rule Fun(T1:Expr, T2:Expr) => (X : T1) -> T2  when fresh(X:Variable)               [macro]
 
-  syntax LamBinding ::= Variable | TypedBinding
+  syntax LamBinding ::= LamBind(Relevance, Hiding, Variable)     [klabel('LamBind)]
+                      | TypedBinding
   syntax LamBindings ::= List{LamBinding, ""}    [klabel('Cons)]
                        | Telescope
   syntax Lambda ::= "\\" "(" Variable ":" Expr ")" "->" Expr  [binder(1 -> 3), latex(\lambda ({#1}\,:\,{#2}) \rightarrow {#3})]

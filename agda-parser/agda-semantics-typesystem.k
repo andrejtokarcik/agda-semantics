@@ -19,11 +19,21 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule [infer-universe]:
        Set(I) => t(Set(I), Set(I +Int 1))
 
+  syntax Bool ::= condM(Expr)  [function]
+  rule condM(#symExpr(7)) => true
+
   rule [infer-meta]:
-       <k> %meta => E ...</k>
+       <k> %meta => t(E, T) ...</k> // ~> #if condM(E) ==K true #then . #else . #fi ...</k>
        <tenv>... . => E |-> T ...</tenv>
        <metavars>... . => E |-> t(E, T) ...</metavars>
     when fresh(E:Expr) andBool fresh(T:Expr)
+  /*
+    ensures isMetaVariable(E)
+  rule [infer-meta]:
+       <k> X:MetaVariable => t(E, T) ...</k>
+       <metavars>... X |-> t(E, T) ...</metavars>
+  */
+
 
   // implicit args
   context {HOLE}
@@ -87,7 +97,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule [infer-lambda]:
        <k> (bound! => .) ~>
            (\ (X : t(T, Set(_))) -> t(E, T')
-            => t(\ (X : T) -> E, ((X : T) -> T'))) ...</k>
+            => t(\ (X : T) -> E, (X : T) -> T')) ...</k>
 
   context \ {_ : (HOLE => checkSetType(HOLE))} -> _   [result(SetTypedExpr)]
   rule [bind-lambda]:
@@ -96,9 +106,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <tenv> Gamma => Gamma[T/X] </tenv>
   context bound! ~> \ {_ : _} -> HOLE
   rule [infer-lambda]:
-       <k> (bound! => .) ~>
+       <k> (bound! => . ) ~> //isWhnfTypedExpr(t(\ {X : T} -> E, ({X : T} -> T')))) ~>
            (\ {X : t(T, Set(_))} -> t(E, T')
-            => t(\ {X : T} -> E, ({X : T} -> T'))) ...</k>
+            => t(\ {X : T} -> E, {X : T} -> T')) ...</k>
 
 
   context (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]

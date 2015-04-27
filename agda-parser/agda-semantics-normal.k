@@ -37,7 +37,7 @@ module AGDA-SEMANTICS-NORMAL
   syntax Expr ::= Whnf
 
   syntax NfTypedExpr
-  rule isWhnfTypedExpr(t(_, _:Nf)) => true
+  rule isNfTypedExpr(t(_, _:Nf)) => true
   syntax WhnfTypedExpr ::= NfTypedExpr
   rule isWhnfTypedExpr(t(_, _:Whnf)) => true
   syntax TypedExpr ::= WhnfTypedExpr
