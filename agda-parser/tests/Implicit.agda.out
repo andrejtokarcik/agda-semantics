@@ -26,12 +26,12 @@
     <fenv>
         Fun ( "four" ) |-> ((Fun ( "id" ) { Data ( "Nat" ) }) (Con ( "suc" ) 
           Fun ( "three" )))
-        Fun ( "id" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(41) { 
-          #symExpr(40) }) Var ( "x" )) = Var ( "x" )) )
-        Fun ( "id'" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(12) 
-          #symExpr(11)) Var ( "x" )) = Var ( "x" )) )
-        Fun ( "id0" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(69) 
-          #symExpr(68)) Var ( "x" )) = Var ( "x" )) )
+        Fun ( "id" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(40) { 
+          #symExpr(39) }) Var ( "x" )) = Var ( "x" )) )
+        Fun ( "id'" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(11) 
+          #symExpr(10)) Var ( "x" )) = Var ( "x" )) )
+        Fun ( "id0" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(68) 
+          #symExpr(67)) Var ( "x" )) = Var ( "x" )) )
         Fun ( "id1" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(78) 
           #symExpr(77)) Var ( "x" )) = Var ( "x" )) )
         Fun ( "id2" ) |-> \ ( #symExpr(101) : #symExpr(79) ) -> \ ( Var ( "x" 
@@ -47,6 +47,9 @@
            )
         Fun ( "id7" ) |-> (\ { Var ( "A" ) : Set ( 0 ) } -> \ ( Var ( "x" ) : 
           Var ( "A" ) ) -> Var ( "x" ) { #symExpr(112) })
+        Fun ( "id8" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(123) { 
+          #symVariable(121) }) = (\ { Var ( "A" ) : Set ( 0 ) } -> \ ( Var ( 
+          "x" ) : #symExpr(118) ) -> Var ( "x" ) { #symVariable(121) })) )
         Fun ( "one" ) |-> ((Fun ( "id'" ) Data ( "Nat" )) (Con ( "suc" ) Con (
            "zero" )))
         Fun ( "three" ) |-> ((Fun ( "id" ) { Data ( "Nat" ) }) (Con ( "suc" ) 
@@ -67,25 +70,27 @@
     </tenv>
     <sig>
         Fun ( "four" ) |-> Data ( "Nat" )
-        Fun ( "id" ) |-> { #symExpr(68) : Set ( 0 ) } -> ( #symVariable(57) : 
-          #symExpr(68) ) -> #symExpr(68)
-        Fun ( "id'" ) |-> ( #symExpr(11) : Set ( 0 ) ) -> ( #symVariable(31) :
-           #symExpr(11) ) -> #symExpr(11)
-        Fun ( "id0" ) |-> ( #symExpr(68) : Set ( 0 ) ) -> ( #symVariable(133) 
-          : #symExpr(68) ) -> #symExpr(68)
+        Fun ( "id" ) |-> { #symExpr(67) : Set ( 0 ) } -> ( #symVariable(56) : 
+          #symExpr(67) ) -> #symExpr(67)
+        Fun ( "id'" ) |-> ( #symExpr(10) : Set ( 0 ) ) -> ( #symVariable(30) :
+           #symExpr(10) ) -> #symExpr(10)
+        Fun ( "id0" ) |-> ( #symExpr(67) : Set ( 0 ) ) -> ( #symVariable(142) 
+          : #symExpr(67) ) -> #symExpr(67)
         Fun ( "id1" ) |-> ( #symExpr(82) : Set ( 0 ) ) -> ( #symVariable(75) :
            #symExpr(82) ) -> #symExpr(82)
         Fun ( "id2" ) |-> ( #symExpr(82) : Set ( 0 ) ) -> ( Var ( "x" ) : 
           #symExpr(82) ) -> #symExpr(82)
         Fun ( "id3" ) |-> ( #symExpr(101) : Set ( 0 ) ) -> ( Var ( "x" ) : 
           #symExpr(101) ) -> #symExpr(101)
-        Fun ( "id4" ) |-> { #symExpr(101) : Set ( 0 ) } -> ( #symVariable(158)
+        Fun ( "id4" ) |-> { #symExpr(101) : Set ( 0 ) } -> ( #symVariable(167)
            : #symExpr(101) ) -> #symExpr(101)
         Fun ( "id5" ) |-> { #symExpr(101) : Set ( 0 ) } -> ( #symVariable(99) 
           : #symExpr(101) ) -> #symExpr(101)
         Fun ( "id6" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "x" ) : Var (
            "A" ) ) -> Var ( "A" )
         Fun ( "id7" ) |-> ( Var ( "x" ) : #symExpr(112) ) -> #symExpr(112)
+        Fun ( "id8" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "x" ) : Var (
+           "A" ) ) -> Var ( "A" )
         Fun ( "one" ) |-> Data ( "Nat" )
         Fun ( "three" ) |-> Data ( "Nat" )
         Fun ( "two" ) |-> Data ( "Nat" )
@@ -95,7 +100,7 @@
         Fun ( "zero3" ) |-> Data ( "Nat" )
         Fun ( "zero4" ) |-> Data ( "Nat" )
         Data ( "Nat" ) |-> Set ( 0 )
-        Con ( "suc" ) |-> ( #symVariable(54) : Data ( "Nat" ) ) -> Data ( 
+        Con ( "suc" ) |-> ( #symVariable(53) : Data ( "Nat" ) ) -> Data ( 
           "Nat" )
         Con ( "zero" ) |-> Data ( "Nat" )
     </sig>
@@ -112,6 +117,7 @@
         Name ( "id5" ) |-> Fun ( "id5" )
         Name ( "id6" ) |-> Fun ( "id6" )
         Name ( "id7" ) |-> Fun ( "id7" )
+        Name ( "id8" ) |-> Fun ( "id8" )
         Name ( "one" ) |-> Fun ( "one" )
         Name ( "suc" ) |-> Con ( "suc" )
         Name ( "three" ) |-> Fun ( "three" )

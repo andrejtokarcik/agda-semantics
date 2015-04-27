@@ -104,7 +104,7 @@ module AGDA-SEMANTICS-DECL-FUN
     when notBool (F in keys(Rho))
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fenv>... F |-> FunClauses(I, _ (. => ListItem(freshFunName(L) = R))) ...</fenv>
-    when lengthList(args(L)) ==Int I
+    when lengthList(args(L)) ==Int I   // check the arities are equal
 
   rule FunClauses(0, ListItem(_ = R)) => R   [structural, anywhere]
 

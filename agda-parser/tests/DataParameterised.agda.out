@@ -1,0 +1,68 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenvRestore>
+        .List
+    </tenvRestore>
+    <metadata>
+        <range>
+            .K
+        </range>
+    </metadata>
+    <con>
+        (Data ( "List" ) Var ( "A" )) |-> l ( ListItem(Con ( "nil" )) 
+          ListItem(Con ( "cons" )) )
+        Data ( "Bool" ) |-> l ( ListItem(Con ( "false" )) ListItem(Con ( 
+          "true" )) )
+        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
+          ) )
+    </con>
+    <funtenvs>
+        Fun ( "null" ) |-> m ( .Map )
+    </funtenvs>
+    <metavars>
+        .Map
+    </metavars>
+    <fenv>
+        Fun ( "null" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(24) { 
+          #symExpr(17) }) (Con ( "nil" ) { #symExpr(17) })) = Con ( "true" )) 
+          ListItem(((#symFunClauses(48) { #symExpr(37) }) (((Con ( "cons" ) { 
+          #symExpr(37) }) #symExpr(25)) #symExpr(32))) = Con ( "false" )) )
+    </fenv>
+    <tenv>
+        .Map
+    </tenv>
+    <sig>
+        Fun ( "null" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(45) :
+           (Data ( "List" ) Var ( "A" )) ) -> Data ( "Bool" )
+        Data ( "Bool" ) |-> Set ( 0 )
+        Data ( "List" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> Set ( 0 )
+        Data ( "Nat" ) |-> Set ( 0 )
+        Con ( "cons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(39) :
+           Var ( "A" ) ) -> ( #symVariable(42) : (Data ( "List" ) Var ( "A" ))
+           ) -> (Data ( "List" ) Var ( "A" ))
+        Con ( "false" ) |-> Data ( "Bool" )
+        Con ( "nil" ) |-> { Var ( "A" ) : Set ( 0 ) } -> (Data ( "List" ) Var 
+          ( "A" ))
+        Con ( "suc" ) |-> ( #symVariable(1) : Data ( "Nat" ) ) -> Data ( "Nat"
+           )
+        Con ( "true" ) |-> Data ( "Bool" )
+        Con ( "zero" ) |-> Data ( "Nat" )
+    </sig>
+    <ncat>
+        Name ( "Bool" ) |-> Data ( "Bool" )
+        Name ( "List" ) |-> Data ( "List" )
+        Name ( "Nat" ) |-> Data ( "Nat" )
+        Name ( "cons" ) |-> Con ( "cons" )
+        Name ( "false" ) |-> Con ( "false" )
+        Name ( "nil" ) |-> Con ( "nil" )
+        Name ( "null" ) |-> Fun ( "null" )
+        Name ( "suc" ) |-> Con ( "suc" )
+        Name ( "true" ) |-> Con ( "true" )
+        Name ( "zero" ) |-> Con ( "zero" )
+    </ncat>
+</T>

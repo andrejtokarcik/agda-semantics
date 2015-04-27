@@ -118,7 +118,13 @@ module AGDA-SYNTAX
     | Arg
     | App
     | "%wild"     [klabel('WildP)]
-  rule %wild => X  when fresh(X:Variable)  [macro]
+  // XXX this seems to cause troubles -- X may get expanded into the *same* Variable
+  // (as though the macro expansion executed in parallel)
+  // this isn't a great problem with Fun above as the variables do not occur in the expression.
+  // here, though, if two distinct wild patterns get replaced with the same 'fresh' variable
+  // in the same LHS, it leads to errors.
+  // fixed with %meta in the meantime...
+  rule %wild => %meta  [macro] //X  when fresh(X:Variable)  [macro]
   syntax Patterns ::= List{Pattern, ""}    [klabel('Cons), notInRules]
 
   syntax LHS ::= Pattern
