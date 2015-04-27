@@ -18,7 +18,7 @@
     </con>
     <funtenvs>
         Fun ( "id" ) |-> m ( Var ( "A" ) |-> Set ( 0 ) Var ( "x" ) |-> 
-          #symExpr(9) #symExpr(9) |-> Set ( 0 ) )
+          #symExpr(9) )
     </funtenvs>
     <metavars>
         .Map

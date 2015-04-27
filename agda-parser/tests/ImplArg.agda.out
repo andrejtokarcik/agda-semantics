@@ -20,19 +20,10 @@
           ) )
     </con>
     <funtenvs>
-        Fun ( "cons" ) |-> m ( Var ( "a" ) |-> #symExpr(59) #symExpr(26) |-> 
-          Set ( #symInt(28) ) #symExpr(46) |-> Set ( 0 ) #symExpr(49) |-> Set 
-          ( 0 ) #symExpr(51) |-> Set ( 0 ) #symExpr(53) |-> Data ( "Nat" ) 
-          #symExpr(56) |-> Set ( 0 ) #symExpr(56) |-> Set ( 0 ) #symExpr(59)
-           |-> Set ( 0 ) #symExpr(59) |-> Set ( 0 ) #symExpr(59) |-> Set ( 0 )
-           #symExpr(61) |-> Data ( "Nat" ) )
+        Fun ( "cons" ) |-> m ( Var ( "a" ) |-> #symExpr(59) )
     </funtenvs>
     <metavars>
-        #symExpr(26) |-> t ( Set ( 1 ) , Set ( #symInt(28) ) )
-        #symExpr(46) |-> t ( #symExpr(56) , Set ( 0 ) )
-        #symExpr(51) |-> t ( #symExpr(56) , Set ( 0 ) )
-        #symExpr(53) |-> t ( #symExpr(53) , Data ( "Nat" ) )
-        #symExpr(61) |-> t ( #symExpr(53) , Data ( "Nat" ) )
+        .Map
     </metavars>
     <fenv>
         Fun ( "Cons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "a" ) : Var 
@@ -44,7 +35,7 @@
           { #symExpr(56) }) { #symExpr(53) }) Var ( "a" ))) )
     </fenv>
     <tenv>
-        #symExpr(26) |-> Set ( #symInt(28) )
+        .Map
     </tenv>
     <sig>
         Fun ( "Cons" ) |-> Set ( 1 )

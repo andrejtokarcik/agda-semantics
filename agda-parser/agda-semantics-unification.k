@@ -56,11 +56,11 @@ module AGDA-SEMANTICS-UNIFICATION
   rule R:KResult ~> unifyConf => unifyConf ~> R  [structural]
   rule <k> unifyConf => . ...</k>
        <sig> Sigma => applyMgu(Theta, Sigma) </sig>
-       <tenv> Gamma => applyMguKeys(Theta, Gamma) </tenv>
-       <tenvRestore> TEnvR => applyMguKeysL(Theta, TEnvR) </tenvRestore>
+       <tenv> Gamma => applyMgu/*Keys*/(Theta, Gamma) </tenv>
+       <tenvRestore> TEnvR => applyMguL/*KeysL*/(Theta, TEnvR) </tenvRestore>
        <fenv> Rho => applyMgu(Theta, Rho) </fenv>
-       //<metavars> Meta => extendMeta(applyMgu(Theta, Meta)) </metavars>
-       <metavars> Meta => applyMgu(Theta, Meta) </metavars>
+       <metavars> Meta => extendMeta(applyMgu(Theta, Meta)) </metavars>
+       //<metavars> Meta => applyMgu(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
 
   syntax KItem ::= unify(K)
@@ -132,11 +132,9 @@ module AGDA-SEMANTICS-UNIFICATION
   rule suitableLHS(_, FunClauses(_, (_:ListItem => .) _), _)  [owise]
 
 
-  /*
   syntax MetaVariable
   rule isMetaVariable(K) => true  when getKLabel(K) ==KLabel #symExpr
   // it holds that Variable ::= MetaVariable  (i.e., #symExpr's are also Variable)
-  */
 
   // move to -common or -utils or something
   syntax KItem ::= renameVariablesConf(K) | #renameVarsConf(K, K)
@@ -164,7 +162,6 @@ module AGDA-SEMANTICS-UNIFICATION
     when isVariable(applyMgu(Theta, K)) andBool applyMgu(Theta, K) =/=K K
   rule applyMguKeys(Theta, _ (K |-> V => .Map)) (.Map => K |-> applyMgu(Theta, V))  [owise]
 
-  /*
   syntax Map ::= extendMeta(Map)  [function]
                | #extendMeta(Map, Map)  [function]
   rule extendMeta(M) => #extendMeta(M, .Map)
@@ -172,7 +169,6 @@ module AGDA-SEMANTICS-UNIFICATION
   rule #extendMeta(M (X |-> t(E, T)), M' (.Map => E |-> t(E, T)))
     when isMetaVariable(E) andBool E =/=K X andBool notBool (E in keys(M) keys(M'))
   rule #extendMeta(_ (X |-> V => .Map), _ (.Map => X |-> V))  [owise]
-  */
 
   // The LHS of eqn() below gets replaced with the RHS: swapping the sides
   // when necessary.

@@ -23,16 +23,14 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule condM(#symExpr(7)) => true
 
   rule [infer-meta]:
-       <k> %meta => t(E, T) ...</k> // ~> #if condM(E) ==K true #then . #else . #fi ...</k>
-       <tenv>... . => E |-> T ...</tenv>
+       <k> %meta => E ...</k> //t(E, T) ...</k> // ~> #if condM(E) ==K true #then . #else . #fi ...</k>
+       //<tenv>... . => E |-> T ...</tenv>
        <metavars>... . => E |-> t(E, T) ...</metavars>
     when fresh(E:Expr) andBool fresh(T:Expr)
-  /*
-    ensures isMetaVariable(E)
+    //ensures isMetaVariable(E)
   rule [infer-meta]:
        <k> X:MetaVariable => t(E, T) ...</k>
        <metavars>... X |-> t(E, T) ...</metavars>
-  */
 
 
   // implicit args

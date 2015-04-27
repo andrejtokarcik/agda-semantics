@@ -20,33 +20,10 @@
     <funtenvs>
         Fun ( "map" ) |-> m ( Var ( "f" ) |-> ( #symVariable(87) : #symExpr(93
           ) ) -> #symExpr(91) Var ( "x" ) |-> #symExpr(93) Var ( "xs" ) |-> (
-          Data ( "List" ) #symExpr(93)) #symExpr(16) |-> Set ( #symInt(18) ) 
-          #symExpr(64) |-> Set ( 0 ) #symExpr(64) |-> Set ( 0 ) #symExpr(66)
-           |-> Set ( 0 ) #symExpr(71) |-> Set ( 0 ) #symExpr(74) |-> Set ( 0 )
-           #symExpr(83) |-> Set ( 0 ) #symExpr(83) |-> Set ( 0 ) #symExpr(84)
-           |-> Set ( 0 ) #symExpr(85) |-> Set ( 0 ) #symExpr(88) |-> Set ( 0 )
-           #symExpr(88) |-> Set ( 0 ) #symExpr(89) |-> Set ( 0 ) #symExpr(91)
-           |-> Set ( 0 ) #symExpr(91) |-> Set ( 0 ) #symExpr(91) |-> Set ( 0 )
-           #symExpr(91) |-> Set ( 0 ) #symExpr(91) |-> Set ( 0 ) #symExpr(93)
-           |-> Set ( 0 ) #symExpr(93) |-> Set ( 0 ) #symExpr(93) |-> Set ( 0 )
-           #symExpr(95) |-> Set ( 0 ) #symExpr(95) |-> Set ( 0 ) #symExpr(95)
-           |-> Set ( 0 ) )
+          Data ( "List" ) #symExpr(93)) )
     </funtenvs>
     <metavars>
-        #symExpr(16) |-> t ( Set ( 1 ) , Set ( #symInt(18) ) )
-        #symExpr(25) |-> t ( #symExpr(25) , Set ( 0 ) )
-        #symExpr(27) |-> t ( #symExpr(25) , Set ( 0 ) )
-        #symExpr(30) |-> t ( #symExpr(30) , Set ( 1 ) )
-        #symExpr(43) |-> t ( #symExpr(43) , Set ( 0 ) )
-        #symExpr(45) |-> t ( #symExpr(58) , Set ( 0 ) )
-        #symExpr(53) |-> t ( #symExpr(43) , Set ( 0 ) )
-        #symExpr(58) |-> t ( #symExpr(58) , Set ( 0 ) )
-        #symExpr(64) |-> t ( #symExpr(93) , Set ( 0 ) )
-        #symExpr(66) |-> t ( #symExpr(91) , Set ( 0 ) )
-        #symExpr(71) |-> t ( #symExpr(93) , Set ( 0 ) )
-        #symExpr(85) |-> t ( #symExpr(91) , Set ( 0 ) )
-        #symExpr(93) |-> t ( #symExpr(93) , Set ( 0 ) )
-        #symExpr(95) |-> t ( #symExpr(91) , Set ( 0 ) )
+        .Map
     </metavars>
     <fenv>
         Fun ( "map" ) |-> FunClauses ( 4 , ListItem(((((#symFunClauses(60) { 
@@ -63,7 +40,7 @@
           #symExpr(30)) = Set ( 1 )) )
     </fenv>
     <tenv>
-        #symExpr(16) |-> Set ( #symInt(18) )
+        .Map
     </tenv>
     <sig>
         Fun ( "map" ) |-> { Var ( "a" ) : Set ( 0 ) } -> { Var ( "b" ) : Set (

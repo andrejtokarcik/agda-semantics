@@ -69,7 +69,7 @@ module AGDA-SEMANTICS-DECL-FUN
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> GammaF => funName(L) |-> m(Gamma) </funtenvs>   // TODO: don't save #symExpr's & co. [side effect of separating tenv and meta]
-       //<metavars> _ => .Map </metavars>   // these metas shouldn't be needed any more, clean-up for speed-up
+       <metavars> _ => .Map </metavars>   // these metas shouldn't be needed any more, clean-up for speed-up
     when condz(L, R) =/=K true
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
@@ -77,7 +77,7 @@ module AGDA-SEMANTICS-DECL-FUN
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> _ => funName(L) |-> m(Gamma) </funtenvs>
-       //<metavars> _ => .Map </metavars>
+       <metavars> _ => .Map </metavars>
     when condz(L, R) ==K true
 
 
