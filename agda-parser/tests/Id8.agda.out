@@ -1,0 +1,40 @@
+<T>
+    <k>
+        .K
+    </k>
+    <mgu>
+        subst(.KList)
+    </mgu>
+    <tenvRestore>
+        .List
+    </tenvRestore>
+    <metadata>
+        <range>
+            .K
+        </range>
+    </metadata>
+    <con>
+        .Map
+    </con>
+    <funtenvs>
+        Fun ( "id8" ) |-> m ( #symVariable(8) |-> Set ( 0 ) )
+    </funtenvs>
+    <metavars>
+        .Map
+    </metavars>
+    <fenv>
+        Fun ( "id8" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(10) { 
+          #symVariable(8) }) = (\ { Var ( "A" ) : Set ( 0 ) } -> \ ( Var ( "x"
+           ) : #symExpr(5) ) -> Var ( "x" ) { #symVariable(8) })) )
+    </fenv>
+    <tenv>
+        .Map
+    </tenv>
+    <sig>
+        Fun ( "id8" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "x" ) : Var (
+           "A" ) ) -> Var ( "A" )
+    </sig>
+    <ncat>
+        Name ( "id8" ) |-> Fun ( "id8" )
+    </ncat>
+</T>
