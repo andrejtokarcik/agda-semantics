@@ -26,7 +26,7 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( "map" ) |-> FunClauses ( 4 , ListItem(((((#symFunClauses(60) { 
+        Fun ( "map" ) |-> FunClauses ( ListItem(((((#symFunClauses(60) { 
           #symExpr(43) }) { #symExpr(45) }) Var ( "f" )) (Con ( "nil" ) { 
           #symExpr(43) })) = (Con ( "nil" ) { #symExpr(58) })) ListItem(((((
           #symFunClauses(106) { #symExpr(64) }) { #symExpr(66) }) Var ( "f" ))
@@ -34,10 +34,10 @@
           ((Con ( "_::_" ) { #symExpr(91) }) (Var ( "f" ) Var ( "x" ))) ((((
           Fun ( "map" ) { #symExpr(93) }) { #symExpr(91) }) Var ( "f" )) Var (
            "xs" )))) )
-        Fun ( "nil2" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(29) { 
+        Fun ( "nil2" ) |-> FunClauses ( ListItem((#symFunClauses(29) { 
           #symExpr(27) }) = (Con ( "nil" ) { #symExpr(25) })) )
-        Fun ( "tt" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(35) 
-          #symExpr(30)) = Set ( 1 )) )
+        Fun ( "tt" ) |-> FunClauses ( ListItem((#symFunClauses(35) #symExpr(30
+          )) = Set ( 1 )) )
     </fenv>
     <tenv>
         .Map

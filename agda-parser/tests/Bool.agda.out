@@ -25,11 +25,10 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( "if_then_else_" ) |-> FunClauses ( 4 , ListItem(((((
-          #symFunClauses(17) { #symExpr(16) }) Con ( "true" )) Var ( "x" )) 
-          Var ( "y" )) = Var ( "x" )) ListItem(((((#symFunClauses(31) { 
-          #symExpr(30) }) Con ( "false" )) Var ( "x" )) Var ( "y" )) = Var ( 
-          "y" )) )
+        Fun ( "if_then_else_" ) |-> FunClauses ( ListItem(((((#symFunClauses(
+          17) { #symExpr(16) }) Con ( "true" )) Var ( "x" )) Var ( "y" )) = 
+          Var ( "x" )) ListItem(((((#symFunClauses(31) { #symExpr(30) }) Con (
+           "false" )) Var ( "x" )) Var ( "y" )) = Var ( "y" )) )
     </fenv>
     <tenv>
         .Map

@@ -24,8 +24,8 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( "id" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(10) 
-          #symExpr(9)) Var ( "x" )) = Var ( "x" )) )
+        Fun ( "id" ) |-> FunClauses ( ListItem(((#symFunClauses(10) #symExpr(9
+          )) Var ( "x" )) = Var ( "x" )) )
     </fenv>
     <tenv>
         .Map

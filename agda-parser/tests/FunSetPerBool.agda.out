@@ -33,9 +33,9 @@
         Fun ( "h" ) |-> ((Fun ( "f2" ) Con ( "False" )) Con ( "E" ))
         Fun ( "i" ) |-> (Fun ( "f2" ) Con ( "True" ))
         Fun ( "j" ) |-> (Fun ( "f2" ) Con ( "False" ))
-        Fun ( "s" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(5) Con ( 
-          "True" )) = Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( 
-          "False" )) = Data ( "T" )) )
+        Fun ( "s" ) |-> FunClauses ( ListItem((#symFunClauses(5) Con ( "True" 
+          )) = Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) =
+           Data ( "T" )) )
     </fenv>
     <tenv>
         .Map
@@ -43,11 +43,11 @@
     <sig>
         Fun ( "f" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
         Fun ( "f2" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> ( Var ( "y" ) : 
-          (FunClauses ( 1 , ListItem((#symFunClauses(5) Con ( "True" )) = Data
-           ( "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) = Data ( 
-          "T" )) ) Var ( "x" )) ) -> (FunClauses ( 1 , ListItem((
-          #symFunClauses(5) Con ( "True" )) = Data ( "Bool" )) ListItem((
-          #symFunClauses(9) Con ( "False" )) = Data ( "T" )) ) Var ( "x" ))
+          (FunClauses ( ListItem((#symFunClauses(5) Con ( "True" )) = Data ( 
+          "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) = Data ( "T" 
+          )) ) Var ( "x" )) ) -> (FunClauses ( ListItem((#symFunClauses(5) Con
+           ( "True" )) = Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( 
+          "False" )) = Data ( "T" )) ) Var ( "x" ))
         Fun ( "g" ) |-> Data ( "Bool" )
         Fun ( "h" ) |-> Data ( "T" )
         Fun ( "i" ) |-> ( Var ( "y" ) : Data ( "Bool" ) ) -> Data ( "Bool" )

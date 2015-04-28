@@ -122,12 +122,12 @@ module AGDA-SEMANTICS-NORMAL
     when isFunClauses(leftmost(E)) andBool all(isNf, args(E)) andBool notBool matches(leftmost(E), E)
 
   syntax Bool ::= matches(FunClauses, Expr)  [function]
-  rule matches(FunClauses(_, .List), _) => false
-  rule matches(FunClauses(_, ListItem(L = _) _), E) => true  when isMatching(L, E)
-  rule matches(FunClauses(_, _ Cs:List => Cs), _)  [owise]
+  rule matches(FunClauses(.List), _) => false
+  rule matches(FunClauses(ListItem(L = _) _), E) => true  when isMatching(L, E)
+  rule matches(FunClauses(_ Cs:List => Cs), _)  [owise]
 
   syntax Expr ::= matchClause(FunClauses, Expr, Expr, Expr)  [function]
-  rule matchClause(FunClauses(_, .List), _, E1, E2) => E1 ~> E2 ~> error("nay matchin' cap'n")
-  rule matchClause(FunClauses(_, ListItem(L = R) _), E, _, _) => R[getMatching(L, E)]  when isMatching(L, E)
-  rule matchClause(FunClauses(_, _ Cs:List => Cs), _, _, _)  [owise]
+  rule matchClause(FunClauses(.List), _, E1, E2) => E1 ~> E2 ~> error("nay matchin' cap'n")   // FIXME?
+  rule matchClause(FunClauses(ListItem(L = R) _), E, _, _) => R[getMatching(L, E)]  when isMatching(L, E)
+  rule matchClause(FunClauses(_ Cs:List => Cs), _, _, _)  [owise]
 endmodule

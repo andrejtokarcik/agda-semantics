@@ -23,7 +23,7 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( "id8" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(10) { 
+        Fun ( "id8" ) |-> FunClauses ( ListItem((#symFunClauses(10) { 
           #symVariable(8) }) = (\ { Var ( "A" ) : Set ( 0 ) } -> \ ( Var ( "x"
            ) : #symExpr(5) ) -> Var ( "x" ) { #symVariable(8) })) )
     </fenv>

@@ -28,7 +28,7 @@
         .Map
     </metavars>
     <fenv>
-        Fun ( "null" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(24) { 
+        Fun ( "null" ) |-> FunClauses ( ListItem(((#symFunClauses(24) { 
           #symExpr(17) }) (Con ( "nil" ) { #symExpr(17) })) = Con ( "true" )) 
           ListItem(((#symFunClauses(48) { #symExpr(37) }) (((Con ( "cons" ) { 
           #symExpr(37) }) #symExpr(25)) #symExpr(32))) = Con ( "false" )) )

@@ -30,7 +30,7 @@
           ( "A" ) ) -> { Var ( "n" ) : Data ( "Nat" ) } -> ( #symVariable(3) :
            ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) 
           Var ( "A" )) (Con ( "suc" ) Var ( "n" )))
-        Fun ( "cons" ) |-> FunClauses ( 3 , ListItem((((#symFunClauses(63) { 
+        Fun ( "cons" ) |-> FunClauses ( ListItem((((#symFunClauses(63) { 
           #symExpr(59) }) Var ( "a" )) { #symExpr(61) }) = (((Con ( "vcons" ) 
           { #symExpr(56) }) { #symExpr(53) }) Var ( "a" ))) )
     </fenv>

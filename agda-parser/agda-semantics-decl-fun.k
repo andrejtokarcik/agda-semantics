@@ -90,20 +90,21 @@ module AGDA-SEMANTICS-DECL-FUN
        <tenv> Gamma => Gamma[T/X] </tenv>
     when notBool (X in keys(Gamma)) andBool fresh(T:Expr)
 
-  // TODO get rid of the Int, the information can be extracted from the ListItems
-  syntax FunClauses ::= FunClauses(Int, List)
+  syntax FunClauses ::= FunClauses(List)
   syntax Expr ::= FunClauses
 
   syntax KItem ::= addFunClause(Name, LHS, RHS)
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fenv> Rho
-              (. => F |-> FunClauses(lengthList(args(L)), ListItem(freshFunName(L) = R))) </fenv>
+              (. => F |-> FunClauses(ListItem(freshFunName(L) = R))) </fenv>
     when notBool (F in keys(Rho))
   rule <k> addFunClause(F, L, R) => . ...</k>
-       <fenv>... F |-> FunClauses(I, _ (. => ListItem(freshFunName(L) = R))) ...</fenv>
-    when lengthList(args(L)) ==Int I   // check the arities are equal
+       <fenv>... F |-> FunClauses(Cs (. => ListItem(freshFunName(L) = R))) ...</fenv>
+    when lengthList(args(L)) ==Int numReqArgs(FunClauses(Cs))   // check the arities are equal
 
-  rule FunClauses(0, ListItem(_ = R)) => R   [structural, anywhere]
+  rule FunClauses(ListItem(L = R)) => R
+    when lengthList(args(L)) ==Int 0   // i.e., when numReqArgs for the FunClauses is zero
+    [structural, anywhere]
 
   // XXX hack for typing FunClauses
   rule <k> F:FunClauses => t(F, T) ...</k>
@@ -119,7 +120,7 @@ module AGDA-SEMANTICS-DECL-FUN
   //rule freshFunName(L) => L    // << toto nechces lebo ten List obshuje Fun("plus") napr. ale v reali tam uz mas nasubstituovane plusove FunClauses
   rule freshFunName(L) => replaceLeftmost(L, F)  when fresh(F:FunClauses)
 
-  // the information can be extracted from the ListItems
   syntax Int ::= numReqArgs(FunClauses)  [function]
-  rule numReqArgs(FunClauses(I, _)) => I
+  rule numReqArgs(FunClauses(ListItem(L = _))) => lengthList(args(L))
+  rule numReqArgs(FunClauses(ListItem(L = _) _)) => lengthList(args(L))
 endmodule

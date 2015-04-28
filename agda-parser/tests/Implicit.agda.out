@@ -26,28 +26,28 @@
     <fenv>
         Fun ( "four" ) |-> ((Fun ( "id" ) { Data ( "Nat" ) }) (Con ( "suc" ) 
           Fun ( "three" )))
-        Fun ( "id" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(40) { 
-          #symExpr(39) }) Var ( "x" )) = Var ( "x" )) )
-        Fun ( "id'" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(11) 
-          #symExpr(10)) Var ( "x" )) = Var ( "x" )) )
-        Fun ( "id0" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(68) 
-          #symExpr(67)) Var ( "x" )) = Var ( "x" )) )
-        Fun ( "id1" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(78) 
-          #symExpr(77)) Var ( "x" )) = Var ( "x" )) )
+        Fun ( "id" ) |-> FunClauses ( ListItem(((#symFunClauses(40) { #symExpr
+          (39) }) Var ( "x" )) = Var ( "x" )) )
+        Fun ( "id'" ) |-> FunClauses ( ListItem(((#symFunClauses(11) #symExpr(
+          10)) Var ( "x" )) = Var ( "x" )) )
+        Fun ( "id0" ) |-> FunClauses ( ListItem(((#symFunClauses(68) #symExpr(
+          67)) Var ( "x" )) = Var ( "x" )) )
+        Fun ( "id1" ) |-> FunClauses ( ListItem(((#symFunClauses(78) #symExpr(
+          77)) Var ( "x" )) = Var ( "x" )) )
         Fun ( "id2" ) |-> \ ( #symExpr(101) : #symExpr(79) ) -> \ ( Var ( "x" 
           ) : #symExpr(82) ) -> Var ( "x" )
         Fun ( "id3" ) |-> \ ( #symExpr(101) : Set ( 0 ) ) -> \ ( Var ( "x" ) :
            #symExpr(101) ) -> Var ( "x" )
-        Fun ( "id4" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(96) { 
+        Fun ( "id4" ) |-> FunClauses ( ListItem(((#symFunClauses(96) { 
           #symExpr(95) }) Var ( "x" )) = Var ( "x" )) )
-        Fun ( "id5" ) |-> FunClauses ( 2 , ListItem(((#symFunClauses(102) { 
+        Fun ( "id5" ) |-> FunClauses ( ListItem(((#symFunClauses(102) { 
           #symExpr(101) }) Var ( "x" )) = Var ( "x" )) )
-        Fun ( "id6" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(108) { 
+        Fun ( "id6" ) |-> FunClauses ( ListItem((#symFunClauses(108) { 
           #symExpr(106) }) = \ ( Var ( "x" ) : #symExpr(103) ) -> Var ( "x" ))
            )
         Fun ( "id7" ) |-> (\ { Var ( "A" ) : Set ( 0 ) } -> \ ( Var ( "x" ) : 
           Var ( "A" ) ) -> Var ( "x" ) { #symExpr(112) })
-        Fun ( "id8" ) |-> FunClauses ( 1 , ListItem((#symFunClauses(123) { 
+        Fun ( "id8" ) |-> FunClauses ( ListItem((#symFunClauses(123) { 
           #symVariable(121) }) = (\ { Var ( "A" ) : Set ( 0 ) } -> \ ( Var ( 
           "x" ) : #symExpr(118) ) -> Var ( "x" ) { #symVariable(121) })) )
         Fun ( "one" ) |-> ((Fun ( "id'" ) Data ( "Nat" )) (Con ( "suc" ) Con (

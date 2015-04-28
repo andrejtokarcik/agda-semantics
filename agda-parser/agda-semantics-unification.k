@@ -112,9 +112,9 @@ module AGDA-SEMANTICS-UNIFICATION
   rule subExpr(I, E _ => E)  [owise]
 
   syntax LHS ::= suitableLHS(Mgu, FunClauses, Expr)  [function]
-  rule suitableLHS(Theta, FunClauses(_, ListItem(L = R) _), T) => L
+  rule suitableLHS(Theta, FunClauses(ListItem(L = R) _), T) => L
     when isMguError(updateMgu(Theta, leftmost(R), leftmost(T))) =/=K true
-  rule suitableLHS(_, FunClauses(_, (_:ListItem => .) _), _)  [owise]
+  rule suitableLHS(_, FunClauses((_:ListItem => .) _), _)  [owise]
 
 
   syntax MetaVariable
