@@ -76,30 +76,15 @@ module AGDA-SEMANTICS-UNIFICATION
   syntax KItem ::= resolveFunClauses(Mgu, Mgu, List, List)     //[function]
   syntax List ::= "stop"
 
-  // nepozeraj len na leftmost v E1 ale na leftmost v kazdom argu E1
   rule resolveFunClauses(_, _, ListItem(E1 => E2) _, ListItem(E2 => E1) _)
     when isFunClauses(leftmost(E1)) =/=K true andBool isFunClauses(leftmost(E2))
   rule resolveFunClauses(_, clash((C1 => C2),,(C2 => C1)), _, _)
     when isFunClauses(leftmost(C1)) =/=K true andBool isFunClauses(leftmost(C2))
-  rule resolveFunClauses(Theta, clash(C1,,C2), ListItem(E1) _, ListItem(E2) _) => /*TUSOM 
-    freshFunName(E1) freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)) numReqArgs(leftmost(E1))
-    suitableLHS(Theta, leftmost(E1), C2)
-    getMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2)) ~> */
-    //TUSOM subExpr(numReqArgs(leftmost(E1)), E1) suitableLHS(Theta, leftmost(E1), C2) ~>
-    //MguXX updateMgu(Theta, subExpr(numReqArgs(leftmost(E1)), E1), suitableLHS(Theta, leftmost(E1), C2)) ~>
-    //MguXX updateMgu(updateMgu(Theta, freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2)), E1, E2) ~>
-    //subExpr(numReqArgs(leftmost(E1)), E1) #== suitableLHS(Theta, leftmost(E1), C2) ~> E1 == E2 //~> chich
-//////updateMgu(Theta, freshFunName(E1)[getMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))], E2)
+  rule resolveFunClauses(Theta, clash(C1,,C2), ListItem(E1) _, ListItem(E2) _) =>
     renameVariablesConf(suitableLHS(Theta, leftmost(E1), C2)) ~> subExpr(numReqArgs(leftmost(E1)), E1) #== HOLE ~> nf(E1) #== nf(E2) //~> chich
     when isFunClauses(leftmost(C1)) andBool isFunClauses(leftmost(E1)) andBool
          leftmost(C1) ==K leftmost(E1) andBool leftmost(C2) ==K leftmost(E2)
-         andBool condit(E2) =/=K true
-    ////////andBool
-         //(any(isVariable, args(E1)) orBool any(isSymbolicExpr, args(E1))) andBool
-         //matchable(C2
-         // reverted isMatching should be a sufficient test...? (normally LHS is the first argument of isMatching)
-    ////////isMatching(freshFunName(subExpr(numReqArgs(leftmost(E1)), E1)), suitableLHS(Theta, leftmost(E1), C2))
-    // when: updateMgu so suitableLHS neurobi MguError
+         //andBool condit(E2) =/=K true
 
   syntax Cond ::= condit(Expr)  [function]
   rule condit(E) => true when leftmost(leftmost(leftmost(E))) ==K Data("_+_")

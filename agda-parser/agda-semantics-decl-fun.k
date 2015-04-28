@@ -6,15 +6,12 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax Bool ::= cond5(Expr)  [function]
   rule cond5(Name("i")) => true
 
-  context _ : (HOLE => checkSetType(HOLE))   [result(SetTypedExpr)]
-  rule <k> Name(F) : t(E, Set(_)) => . ...</k>
+  context _ : (HOLE => checkSetType(HOLE))   [infer-type-sig, result(SetTypedExpr)]
+  rule [process-type-sig]:
+       <k> Name(F) : t(E, Set(_)) => . ...</k>
        <ncat> NCat (. => Name(F) |-> Fun(F)) </ncat>
-       <sig> Sigma (. => Fun(F) |-> E) </sig>
-    when notBool (Name(F) in keys(NCat)) andBool cond5(Name(F)) ==K true
-  rule <k> Name(F) : t(E, Set(_)) => . ...</k>
-       <ncat> NCat (. => Name(F) |-> Fun(F)) </ncat>
-       <sig> Sigma (. => Fun(F) |-> E) </sig>
-    when notBool (Name(F) in keys(NCat)) andBool cond5(Name(F)) =/=K true
+       <sig>... . => Fun(F) |-> E ...</sig>
+    when notBool (Name(F) in keys(NCat))
 
   // for now, an absurd pattern causes its respective clause (consisting only of the LHS)
   // to be discarded with no checks  (FIXME, we would like to update funtenvs
@@ -73,7 +70,7 @@ module AGDA-SEMANTICS-DECL-FUN
     when condz(L, R) =/=K true
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
-            => nf(Tl) ~> nf(Tr) ~> Tl == Tr ~> unifyConf ~>
+            => chich ~> Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
        <funtenvs> _ => funName(L) |-> m(Gamma) </funtenvs>

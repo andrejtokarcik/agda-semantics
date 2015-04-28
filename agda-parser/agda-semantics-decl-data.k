@@ -3,31 +3,34 @@ require "agda-semantics-common.k"
 module AGDA-SEMANTICS-DECL-DATA
   imports AGDA-SEMANTICS-COMMON
 
-  syntax KItem ::= "params!"
-  rule (. => params!) ~> data _ Ps : (T => Pi(Ps, T)) where _   [structural]
-  context params! ~> data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
-  rule <k> params! ~> data Name(N) Ps : t(T, Set(_)) where Cons
+  //syntax KItem ::= "params!"
+  //rule (. => params!) ~> data _ Ps : (T => Pi(Ps, T)) where _   [structural]    // << note that this isn't valid Agda syntax
+  //context params! ~> data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
+  rule [process-data-decl]:
+       <k> data Name(N) Ps : T where Cons
            => //I >=Int 1 ~> pass? ~>        // << FIXME   (the `-Int 1' guard below is sufficient?)
-              addDataSig(Data(N), App(Data(N), Ps), T) ~>
-              addConSigs(App(Data(N), Ps), Ps, Cons) ...</k>
+              addTypeCon(Data(N), App(Data(N), Ps), Pi(Ps, T)) ~>
+              addDataCons(App(Data(N), Ps), Ps, Cons) ...</k>
        <ncat> NCat (. => Name(N) |-> Data(N)) </ncat>
     when notBool (Name(N) in keys(NCat))     // this may be already guaranteed by the external parser
 
-  syntax KItem ::= addDataSig(Name, Expr, Expr)              [strict(3(context('checkSetType)))]
+  syntax KItem ::= addTypeCon(Name, Expr, Expr)              [strict(3(context('checkSetType)))]
   // FIXME not sure if the condition is correct: what universe must the datatype fit in?
-  rule <k> addDataSig(D, DPs, t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>
-       <sig> Sigma (. => D |-> T) </sig>
+  rule [add-type-con]:
+       <k> addTypeCon(D, DPs, t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>
+       <sig>... . => D |-> T ...</sig>
        <con>... . => DPs |-> l(.List) ...</con>
 
-  syntax KItem ::= addConSigs(Expr, Telescope, TypeSignatures)
-  rule addConSigs(DPs, Ps, .TypeSignatures) => .    [structural]
-  rule addConSigs(DPs, Ps, (C : T) Cons) => addConSig(DPs, C, Pi(makeHidden(Ps), T)) ~> addConSigs(DPs, Ps, Cons)  [structural]
+  syntax KItem ::= addDataCons(Expr, Telescope, TypeSignatures)
+  rule addDataCons(DPs, Ps, .TypeSignatures) => .    [structural]
+  rule addDataCons(DPs, Ps, (C : T) Cons) => addDataCon(DPs, C, Pi(makeHidden(Ps), T)) ~> addDataCons(DPs, Ps, Cons)  [structural]
 
-  syntax KItem ::= addConSig(Expr, Name, Expr)  [strict(3(context('checkSetType)))]
+  syntax KItem ::= addDataCon(Expr, Name, Expr)  [strict(3(context('checkSetType)))]
   // TODO: check the constructor's universe whether it fits into the datatype's
-  rule <k> addConSig(DPs, Name(C), t(T:Expr, Set(_))) => T constructorOf DPs ~> pass? ...</k>
+  rule [add-data-con]:
+       <k> addDataCon(DPs, Name(C), t(T:Expr, Set(_))) => T constructorOf DPs ~> pass? ...</k>
        <ncat> NCat (. => Name(C) |-> Con(C)) </ncat>
-       <sig> Sigma (. => Con(C) |-> T) </sig>
+       <sig>... . => Con(C) |-> T ...</sig>
        <con>... DPs |-> l(_ (. => ListItem(Con(C)))) ...</con>
     when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the external parser
 

@@ -69,6 +69,8 @@ module Vec where
 -}
 
 {-
+AT FIXME
+
 -- Ok. Let's make the implicit stuff explicit.
 module WhatsGoingOnHere? where
 

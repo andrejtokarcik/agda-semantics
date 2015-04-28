@@ -108,6 +108,11 @@ thmPlusZero : (n : Nat) -> plus n zero == n   -- A function from a number n to
 thmPlusZero  zero   = tt
 thmPlusZero (suc n) = thmPlusZero n
 
+thmPlusZero' : (n : Nat) -> plus zero n == n
+thmPlusZero'  zero   = tt
+thmPlusZero' (suc n) = thmPlusZero' n
+
+
 {- In both branches the reduction makes the proof very simple. In the first
    case the goal is
 
