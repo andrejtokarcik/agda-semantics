@@ -108,9 +108,9 @@ module AGDA-SEMANTICS-NORMAL
   rule condd(_ E) => E =/=K Con("zero")
 
   // TODO: odstran tie posledne dva argumenty z matchClause
-  rule whnf(E => matchClause(leftmost(E), E, leftmost(E), freshFunName(E)))
+  rule whnf(E => matchClause(leftmost(E), E))
     when condd(E) andThenBool isFunClauses(leftmost(E)) andThenBool matches(leftmost(E), E) //andThenBool lengthList(args(E)) ==Int numReqArgs(leftmost(E))
-  rule whnf(E => matchClause(leftmost(E), E, leftmost(E), freshFunName(E)))
+  rule whnf(E => matchClause(leftmost(E), E))
     when notBool condd(E) andThenBool isFunClauses(leftmost(E)) andThenBool matches(leftmost(E), E) //andThenBool lengthList(args(E)) ==Int numReqArgs(leftmost(E))
 
 
@@ -126,8 +126,8 @@ module AGDA-SEMANTICS-NORMAL
   rule matches(FunClauses(ListItem(L = _) _), E) => true  when isMatching(L, E)
   rule matches(FunClauses(_ Cs:List => Cs), _)  [owise]
 
-  syntax Expr ::= matchClause(FunClauses, Expr, Expr, Expr)  [function]
-  rule matchClause(FunClauses(.List), _, E1, E2) => E1 ~> E2 ~> error("nay matchin' cap'n")   // FIXME?
-  rule matchClause(FunClauses(ListItem(L = R) _), E, _, _) => R[getMatching(L, E)]  when isMatching(L, E)
-  rule matchClause(FunClauses(_ Cs:List => Cs), _, _, _)  [owise]
+  syntax Expr ::= matchClause(FunClauses, Expr)  [function]
+  //rule matchClause(FunClauses(.List), _) => error("nay matchin' cap'n")   // FIXME?
+  rule matchClause(FunClauses(ListItem(L = R) _), E) => R[getMatching(L, E)]  when isMatching(L, E)
+  rule matchClause(FunClauses(_ Cs:List => Cs), _)  [owise]
 endmodule

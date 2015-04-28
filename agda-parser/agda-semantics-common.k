@@ -79,10 +79,10 @@ module AGDA-SEMANTICS-COMMON
 
   // wrappers for containers (that do not belong to sort K)
   // NOTE: module K-WRAPPERS-LABELS in k-prelude.k seems to provide similar functionality
-  syntax K ::= l(List)
+  syntax K ::= l(List)   [latex({#1})]
   syntax List ::= unl(K) [function]
   rule unl(l(L)) => L  [structural]
-  syntax K ::= m(Map)
+  syntax K ::= m(Map)    [latex({#1})]
   syntax Map ::= unm(K)  [function]
   rule unm(m(M)) => M  [structural]
 endmodule

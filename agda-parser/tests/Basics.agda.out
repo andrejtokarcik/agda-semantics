@@ -49,11 +49,11 @@
           "zero" )) Var ( "m" )) = Var ( "m" )) ListItem(((#symFunClauses(36) 
           (Con ( "suc" ) Var ( "n" ))) Var ( "m" )) = (Con ( "suc" ) ((Fun ( 
           "plus" ) Var ( "n" )) Var ( "m" )))) )
-        Fun ( "thmPlusZero" ) |-> FunClauses ( ListItem((#symFunClauses(153) 
-          Con ( "zero" )) = Con ( "tt" )) ListItem((#symFunClauses(166) (Con (
+        Fun ( "thmPlusZero" ) |-> FunClauses ( ListItem((#symFunClauses(151) 
+          Con ( "zero" )) = Con ( "tt" )) ListItem((#symFunClauses(162) (Con (
            "suc" ) Var ( "n" ))) = (Fun ( "thmPlusZero" ) Var ( "n" ))) )
-        Fun ( "thmPlusZero'" ) |-> FunClauses ( ListItem((#symFunClauses(184) 
-          Con ( "zero" )) = Con ( "tt" )) ListItem((#symFunClauses(198) (Con (
+        Fun ( "thmPlusZero'" ) |-> FunClauses ( ListItem((#symFunClauses(178) 
+          Con ( "zero" )) = Con ( "tt" )) ListItem((#symFunClauses(189) (Con (
            "suc" ) Var ( "n" ))) = (Fun ( "thmPlusZero'" ) Var ( "n" ))) )
     </fenv>
     <tenv>
@@ -61,8 +61,8 @@
     </tenv>
     <sig>
         Fun ( "N" ) |-> Set ( 0 )
-        Fun ( "_==_" ) |-> ( #symVariable(173) : Data ( "Nat" ) ) -> ( 
-          #symVariable(176) : Data ( "Nat" ) ) -> Set ( 0 )
+        Fun ( "_==_" ) |-> ( #symVariable(169) : Data ( "Nat" ) ) -> ( 
+          #symVariable(172) : Data ( "Nat" ) ) -> Set ( 0 )
         Fun ( "even" ) |-> ( #symVariable(63) : Data ( "Nat" ) ) -> Data ( 
           "Bool" )
         Fun ( "id" ) |-> ( #symExpr(74) : Set ( 0 ) ) -> ( #symVariable(82) : 
@@ -70,8 +70,8 @@
         Fun ( "odd" ) |-> ( #symVariable(63) : Data ( "Nat" ) ) -> Data ( 
           "Bool" )
         Fun ( "one" ) |-> Data ( "Nat" )
-        Fun ( "plus" ) |-> ( #symVariable(167) : Data ( "Nat" ) ) -> ( 
-          #symVariable(186) : Data ( "Nat" ) ) -> Data ( "Nat" )
+        Fun ( "plus" ) |-> ( #symVariable(163) : Data ( "Nat" ) ) -> ( 
+          #symVariable(180) : Data ( "Nat" ) ) -> Data ( "Nat" )
         Fun ( "s" ) |-> ( #symVariable(1) : Fun ( "N" ) ) -> Fun ( "N" )
         Fun ( "thmPlusZero" ) |-> ( Var ( "n" ) : Data ( "Nat" ) ) -> ((Fun ( 
           "_==_" ) ((Fun ( "plus" ) Var ( "n" )) Con ( "zero" ))) Var ( "n" ))
@@ -84,7 +84,7 @@
         Data ( "Nat" ) |-> Set ( 0 )
         Data ( "True" ) |-> Set ( 0 )
         Con ( "false" ) |-> Data ( "Bool" )
-        Con ( "suc" ) |-> ( #symVariable(186) : Data ( "Nat" ) ) -> Data ( 
+        Con ( "suc" ) |-> ( #symVariable(180) : Data ( "Nat" ) ) -> Data ( 
           "Nat" )
         Con ( "true" ) |-> Data ( "Bool" )
         Con ( "tt" ) |-> Data ( "True" )

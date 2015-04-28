@@ -25,37 +25,37 @@
           ) )
     </con>
     <funtenvs>
-        Fun ( "_8800_" ) |-> m ( Var ( "x" ) |-> #symExpr(368) Var ( "y" )
-           |-> #symExpr(368) )
+        Fun ( "_8800_" ) |-> m ( Var ( "x" ) |-> #symExpr(366) Var ( "y" )
+           |-> #symExpr(366) )
     </funtenvs>
     <metavars>
-        #symExpr(374) |-> t ( Data ( "Bool" ) , Set ( 0 ) )
+        #symExpr(372) |-> t ( Data ( "Bool" ) , Set ( 0 ) )
     </metavars>
     <fenv>
         Fun ( "_*_" ) |-> FunClauses ( ListItem(((#symFunClauses(53) Con ( 
           "zero" )) Var ( "m" )) = Con ( "zero" )) ListItem(((#symFunClauses(
           77) (Con ( "suc" ) Var ( "n" ))) Var ( "m" )) = ((Fun ( "_+_" ) Var 
           ( "m" )) ((Fun ( "_*_" ) Var ( "n" )) Var ( "m" )))) )
-        Fun ( "_++_" ) |-> FunClauses ( ListItem((((((#symFunClauses(271) { 
+        Fun ( "_++_" ) |-> FunClauses ( ListItem((((((#symFunClauses(270) { 
           #symExpr(256) }) { Con ( "zero" ) }) { #symExpr(260) }) (Con ( "[]" 
           ) { #symExpr(256) })) Var ( "ys" )) = Var ( "ys" )) ListItem((((((
-          #symFunClauses(338) { #symExpr(285) }) { (Con ( "suc" ) #symExpr(277
-          )) }) { #symExpr(301) }) ((((Con ( "_::_" ) { #symExpr(285) }) { 
-          #symExpr(277) }) Var ( "x" )) Var ( "xs" ))) Var ( "ys" )) = ((((Con
-           ( "_::_" ) { #symExpr(321) }) { ((FunClauses ( ListItem(((
+          #symFunClauses(336) { #symExpr(284) }) { (Con ( "suc" ) #symExpr(276
+          )) }) { #symExpr(300) }) ((((Con ( "_::_" ) { #symExpr(284) }) { 
+          #symExpr(276) }) Var ( "x" )) Var ( "xs" ))) Var ( "ys" )) = ((((Con
+           ( "_::_" ) { #symExpr(319) }) { ((FunClauses ( ListItem(((
           #symFunClauses(24) Con ( "zero" )) Var ( "m" )) = Var ( "m" )) 
           ListItem(((#symFunClauses(45) (Con ( "suc" ) Var ( "n" ))) Var ( "m"
            )) = (Con ( "suc" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" )))) ) 
-          #symExpr(325)) #symExpr(327)) }) Var ( "x" )) (((((Fun ( "_++_" ) { 
-          #symExpr(321) }) { #symExpr(325) }) { #symExpr(327) }) Var ( "xs" ))
+          #symExpr(323)) #symExpr(325)) }) Var ( "x" )) (((((Fun ( "_++_" ) { 
+          #symExpr(319) }) { #symExpr(323) }) { #symExpr(325) }) Var ( "xs" ))
            Var ( "ys" )))) )
         Fun ( "_+_" ) |-> FunClauses ( ListItem(((#symFunClauses(24) Con ( 
           "zero" )) Var ( "m" )) = Var ( "m" )) ListItem(((#symFunClauses(45) 
           (Con ( "suc" ) Var ( "n" ))) Var ( "m" )) = (Con ( "suc" ) ((Fun ( 
           "_+_" ) Var ( "n" )) Var ( "m" )))) )
-        Fun ( "_8800_" ) |-> FunClauses ( ListItem((((#symFunClauses(373) { 
-          #symExpr(360) }) Var ( "x" )) Var ( "y" )) = (Fun ( "z_" ) (((Data (
-           "_==_" ) { #symExpr(368) }) Var ( "x" )) Var ( "y" )))) )
+        Fun ( "_8800_" ) |-> FunClauses ( ListItem((((#symFunClauses(371) { 
+          #symExpr(358) }) Var ( "x" )) Var ( "y" )) = (Fun ( "z_" ) (((Data (
+           "_==_" ) { #symExpr(366) }) Var ( "x" )) Var ( "y" )))) )
         Fun ( "head" ) |-> FunClauses ( ListItem((((#symFunClauses(140) { 
           #symExpr(139) }) { #symExpr(129) }) ((((Con ( "_::_" ) { #symExpr(
           139) }) { #symExpr(129) }) Var ( "x" )) #symExpr(116))) = Var ( "x" 
@@ -69,7 +69,7 @@
           "xs" ))) = ((((Con ( "_::_" ) { #symExpr(213) }) { #symExpr(207) }) 
           (Var ( "f" ) Var ( "x" ))) (((((Fun ( "map" ) { #symExpr(215) }) { 
           #symExpr(213) }) { #symExpr(207) }) Var ( "f" )) Var ( "xs" )))) )
-        Fun ( "z_" ) |-> FunClauses ( ListItem((#symFunClauses(351) Var ( "A" 
+        Fun ( "z_" ) |-> FunClauses ( ListItem((#symFunClauses(349) Var ( "A" 
           )) = ( #symVariable(14) : Var ( "A" ) ) -> Data ( "False" )) )
     </fenv>
     <tenv>
@@ -78,46 +78,46 @@
     <sig>
         Fun ( "_*_" ) |-> ( #symVariable(68) : Data ( "Nat" ) ) -> ( 
           #symVariable(71) : Data ( "Nat" ) ) -> Data ( "Nat" )
-        Fun ( "_++_" ) |-> { #symExpr(345) : Set ( 0 ) } -> { Var ( "n" ) : 
+        Fun ( "_++_" ) |-> { #symExpr(343) : Set ( 0 ) } -> { Var ( "n" ) : 
           Data ( "Nat" ) } -> { Var ( "m" ) : Data ( "Nat" ) } -> ( 
-          #symVariable(329) : ((Data ( "Vec" ) #symExpr(345)) Var ( "n" )) ) 
-          -> ( #symVariable(332) : ((Data ( "Vec" ) #symExpr(345)) Var ( "m" )
-          ) ) -> ((Data ( "Vec" ) #symExpr(345)) ((Fun ( "_+_" ) Var ( "n" )) 
+          #symVariable(327) : ((Data ( "Vec" ) #symExpr(343)) Var ( "n" )) ) 
+          -> ( #symVariable(330) : ((Data ( "Vec" ) #symExpr(343)) Var ( "m" )
+          ) ) -> ((Data ( "Vec" ) #symExpr(343)) ((Fun ( "_+_" ) Var ( "n" )) 
           Var ( "m" )))
         Fun ( "_+_" ) |-> ( #symVariable(246) : Data ( "Nat" ) ) -> ( 
           #symVariable(249) : Data ( "Nat" ) ) -> Data ( "Nat" )
-        Fun ( "_8800_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(356
-          ) : Var ( "A" ) ) -> ( #symVariable(359) : Var ( "A" ) ) -> Set ( 0 
+        Fun ( "_8800_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(354
+          ) : Var ( "A" ) ) -> ( #symVariable(357) : Var ( "A" ) ) -> Set ( 0 
           )
-        Fun ( "head" ) |-> { #symExpr(345) : Set ( 0 ) } -> { Var ( "n" ) : 
+        Fun ( "head" ) |-> { #symExpr(343) : Set ( 0 ) } -> { Var ( "n" ) : 
           Data ( "Nat" ) } -> ( #symVariable(137) : ((Data ( "Vec" ) #symExpr(
-          345)) (Con ( "suc" ) Var ( "n" ))) ) -> #symExpr(345)
-        Fun ( "map" ) |-> { #symExpr(345) : Set ( 0 ) } -> { Var ( "B" ) : Set
+          343)) (Con ( "suc" ) Var ( "n" ))) ) -> #symExpr(343)
+        Fun ( "map" ) |-> { #symExpr(343) : Set ( 0 ) } -> { Var ( "B" ) : Set
            ( 0 ) } -> { Var ( "n" ) : Data ( "Nat" ) } -> ( #symVariable(221) 
-          : ( #symVariable(209) : #symExpr(345) ) -> Var ( "B" ) ) -> ( 
-          #symVariable(224) : ((Data ( "Vec" ) #symExpr(345)) Var ( "n" )) ) 
+          : ( #symVariable(209) : #symExpr(343) ) -> Var ( "B" ) ) -> ( 
+          #symVariable(224) : ((Data ( "Vec" ) #symExpr(343)) Var ( "n" )) ) 
           -> ((Data ( "Vec" ) Var ( "B" )) Var ( "n" ))
         Fun ( "true8800false" ) |-> ( #symVariable(16) : (((Data ( "_==_" ) { 
           Data ( "Bool" ) }) Con ( "true" )) Con ( "false" )) ) -> Data ( 
           "False" )
-        Fun ( "z_" ) |-> ( #symVariable(370) : Set ( 0 ) ) -> Set ( 0 )
+        Fun ( "z_" ) |-> ( #symVariable(368) : Set ( 0 ) ) -> Set ( 0 )
         Data ( "Bool" ) |-> Set ( 0 )
         Data ( "False" ) |-> Set ( 0 )
         Data ( "Nat" ) |-> Set ( 0 )
-        Data ( "Vec" ) |-> ( #symExpr(345) : Set ( 0 ) ) -> ( #symVariable(252
+        Data ( "Vec" ) |-> ( #symExpr(343) : Set ( 0 ) ) -> ( #symVariable(252
           ) : Data ( "Nat" ) ) -> Set ( 0 )
-        Data ( "_==_" ) |-> { #symExpr(345) : Set ( 0 ) } -> ( Var ( "x" ) : 
-          #symExpr(345) ) -> ( #symVariable(379) : #symExpr(345) ) -> Set ( 0 
+        Data ( "_==_" ) |-> { #symExpr(343) : Set ( 0 ) } -> ( Var ( "x" ) : 
+          #symExpr(343) ) -> ( #symVariable(377) : #symExpr(343) ) -> Set ( 0 
           )
-        Con ( "[]" ) |-> { #symExpr(345) : Set ( 0 ) } -> ((Data ( "Vec" ) 
-          #symExpr(345)) Con ( "zero" ))
-        Con ( "_::_" ) |-> { #symExpr(345) : Set ( 0 ) } -> { Var ( "n" ) : 
-          Data ( "Nat" ) } -> ( #symVariable(320) : #symExpr(345) ) -> ( 
-          #symVariable(335) : ((Data ( "Vec" ) #symExpr(345)) Var ( "n" )) ) 
-          -> ((Data ( "Vec" ) #symExpr(345)) (Con ( "suc" ) Var ( "n" )))
+        Con ( "[]" ) |-> { #symExpr(343) : Set ( 0 ) } -> ((Data ( "Vec" ) 
+          #symExpr(343)) Con ( "zero" ))
+        Con ( "_::_" ) |-> { #symExpr(343) : Set ( 0 ) } -> { Var ( "n" ) : 
+          Data ( "Nat" ) } -> ( #symVariable(318) : #symExpr(343) ) -> ( 
+          #symVariable(333) : ((Data ( "Vec" ) #symExpr(343)) Var ( "n" )) ) 
+          -> ((Data ( "Vec" ) #symExpr(343)) (Con ( "suc" ) Var ( "n" )))
         Con ( "false" ) |-> Data ( "Bool" )
         Con ( "refl" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "x" ) : Var 
-          ( "A" ) } -> (((Data ( "_==_" ) { #symExpr(345) }) Var ( "x" )) Var 
+          ( "A" ) } -> (((Data ( "_==_" ) { #symExpr(343) }) Var ( "x" )) Var 
           ( "x" ))
         Con ( "suc" ) |-> ( #symVariable(249) : Data ( "Nat" ) ) -> Data ( 
           "Nat" )

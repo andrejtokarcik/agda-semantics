@@ -33,7 +33,7 @@ module AGDA
   // TODO: do some cleaning of funtenvs tenvRestore etc after .K is reached
 
   configuration <T>
-                  <k> $PGM:Program </k>
+                  <k> $PGM:Program </k> //~> nf(Fun("maj") Con("ff") Con("tt") Con("ff")) </k>
                   <tenv> .Map </tenv>   // <ctx>    --- contains only metas' types after completion
                   <fenv> .Map </fenv>   // <fun> alebo <env> alebo <fenv>
                   <mgu> .Mgu </mgu>
