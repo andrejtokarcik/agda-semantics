@@ -7,7 +7,6 @@ module AGDA-SEMANTICS-NORMAL
   imports SUBSTITUTION
   imports AGDA-SEMANTICS-COMMON
 
-
   syntax Neut
   rule isNeut(_:Variable) => true
   // most notably, Fun's are not accepted

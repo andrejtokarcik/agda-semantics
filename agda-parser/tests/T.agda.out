@@ -1,35 +1,33 @@
-<T>
-    <k>
-        .K
-    </k>
-    <mgu>
-        subst(.KList)
-    </mgu>
-    <ctxstack>
-        .List
-    </ctxstack>
-    <sig>
-        Fun ( "e" ) |-> Set ( 0 )
-        Fun ( "p" ) |-> ( #symVariable(2) : Set ( 0 ) ) -> Set ( 0 )
-        Fun ( "x" ) |-> Set ( 0 )
-        Fun ( "y" ) |-> Set ( 0 )
-    </sig>
-    <con>
-        .Map
-    </con>
-    <ctx>
-        .Map
-    </ctx>
-    <meta>
-        .Map
-    </meta>
-    <ncat>
-        Name ( "e" ) |-> Fun ( "e" )
-        Name ( "p" ) |-> Fun ( "p" )
-        Name ( "x" ) |-> Fun ( "x" )
-        Name ( "y" ) |-> Fun ( "y" )
-    </ncat>
-    <fun>
-        Fun ( "e" ) |-> (Fun ( "p" ) Fun ( "y" ))
-    </fun>
-</T>
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "e" ) |-> Set ( 0 )
+    Fun ( "p" ) |-> ( #symVariable(2) : Set ( 0 ) ) -> Set ( 0 )
+    Fun ( "x" ) |-> Set ( 0 )
+    Fun ( "y" ) |-> Set ( 0 )
+</sig>
+<con>
+    .Map
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "e" ) |-> Fun ( "e" )
+    Name ( "p" ) |-> Fun ( "p" )
+    Name ( "x" ) |-> Fun ( "x" )
+    Name ( "y" ) |-> Fun ( "y" )
+</ncat>
+<fun>
+    Fun ( "e" ) |-> (Fun ( "p" ) Fun ( "y" ))
+</fun>

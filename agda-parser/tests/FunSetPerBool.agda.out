@@ -1,69 +1,67 @@
-<T>
-    <k>
-        .K
-    </k>
-    <mgu>
-        subst(.KList)
-    </mgu>
-    <ctxstack>
-        .List
-    </ctxstack>
-    <sig>
-        Fun ( "f" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
-        Fun ( "f2" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> ( Var ( "y" ) : 
-          (FunClauses ( ListItem((#symFunClauses(5) Con ( "True" )) = Data ( 
-          "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) = Data ( "T" 
-          )) ) Var ( "x" )) ) -> (FunClauses ( ListItem((#symFunClauses(5) Con
-           ( "True" )) = Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( 
-          "False" )) = Data ( "T" )) ) Var ( "x" ))
-        Fun ( "g" ) |-> Data ( "Bool" )
-        Fun ( "h" ) |-> Data ( "T" )
-        Fun ( "i" ) |-> ( Var ( "y" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
-        Fun ( "j" ) |-> ( Var ( "y" ) : (Fun ( "s" ) Con ( "False" )) ) -> (
-          Fun ( "s" ) Con ( "False" ))
-        Fun ( "s" ) |-> ( #symVariable(51) : Data ( "Bool" ) ) -> Set ( 0 )
-        Data ( "Bool" ) |-> Set ( 0 )
-        Data ( "T" ) |-> Set ( 0 )
-        Con ( "E" ) |-> Data ( "T" )
-        Con ( "False" ) |-> Data ( "Bool" )
-        Con ( "True" ) |-> Data ( "Bool" )
-    </sig>
-    <con>
-        Data ( "Bool" ) |-> l ( ListItem(Con ( "True" )) ListItem(Con ( 
-          "False" )) )
-        Data ( "T" ) |-> l ( ListItem(Con ( "E" )) )
-    </con>
-    <ctx>
-        .Map
-    </ctx>
-    <meta>
-        .Map
-    </meta>
-    <ncat>
-        Name ( "Bool" ) |-> Data ( "Bool" )
-        Name ( "E" ) |-> Con ( "E" )
-        Name ( "False" ) |-> Con ( "False" )
-        Name ( "T" ) |-> Data ( "T" )
-        Name ( "True" ) |-> Con ( "True" )
-        Name ( "f" ) |-> Fun ( "f" )
-        Name ( "f2" ) |-> Fun ( "f2" )
-        Name ( "g" ) |-> Fun ( "g" )
-        Name ( "h" ) |-> Fun ( "h" )
-        Name ( "i" ) |-> Fun ( "i" )
-        Name ( "j" ) |-> Fun ( "j" )
-        Name ( "s" ) |-> Fun ( "s" )
-    </ncat>
-    <fun>
-        Fun ( "f" ) |-> \ ( Var ( "x" ) : (Fun ( "s" ) Con ( "True" )) ) -> 
-          Var ( "x" )
-        Fun ( "f2" ) |-> \ ( Var ( "x" ) : Data ( "Bool" ) ) -> \ ( Var ( "y" 
-          ) : (Fun ( "s" ) Var ( "x" )) ) -> Var ( "y" )
-        Fun ( "g" ) |-> (Fun ( "f" ) Con ( "True" ))
-        Fun ( "h" ) |-> ((Fun ( "f2" ) Con ( "False" )) Con ( "E" ))
-        Fun ( "i" ) |-> (Fun ( "f2" ) Con ( "True" ))
-        Fun ( "j" ) |-> (Fun ( "f2" ) Con ( "False" ))
-        Fun ( "s" ) |-> FunClauses ( ListItem((#symFunClauses(5) Con ( "True" 
-          )) = Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) =
-           Data ( "T" )) )
-    </fun>
-</T>
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "f" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
+    Fun ( "f2" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> ( Var ( "y" ) : (
+      FunClauses ( ListItem((#symFunClauses(5) Con ( "True" )) = Data ( "Bool"
+       )) ListItem((#symFunClauses(9) Con ( "False" )) = Data ( "T" )) ) Var (
+       "x" )) ) -> (FunClauses ( ListItem((#symFunClauses(5) Con ( "True" )) =
+       Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) = Data ( 
+      "T" )) ) Var ( "x" ))
+    Fun ( "g" ) |-> Data ( "Bool" )
+    Fun ( "h" ) |-> Data ( "T" )
+    Fun ( "i" ) |-> ( Var ( "y" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
+    Fun ( "j" ) |-> ( Var ( "y" ) : (Fun ( "s" ) Con ( "False" )) ) -> (Fun ( 
+      "s" ) Con ( "False" ))
+    Fun ( "s" ) |-> ( #symVariable(51) : Data ( "Bool" ) ) -> Set ( 0 )
+    Data ( "Bool" ) |-> Set ( 0 )
+    Data ( "T" ) |-> Set ( 0 )
+    Con ( "E" ) |-> Data ( "T" )
+    Con ( "False" ) |-> Data ( "Bool" )
+    Con ( "True" ) |-> Data ( "Bool" )
+</sig>
+<con>
+    Data ( "Bool" ) |-> l ( ListItem(Con ( "True" )) ListItem(Con ( "False" ))
+       )
+    Data ( "T" ) |-> l ( ListItem(Con ( "E" )) )
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Bool" ) |-> Data ( "Bool" )
+    Name ( "E" ) |-> Con ( "E" )
+    Name ( "False" ) |-> Con ( "False" )
+    Name ( "T" ) |-> Data ( "T" )
+    Name ( "True" ) |-> Con ( "True" )
+    Name ( "f" ) |-> Fun ( "f" )
+    Name ( "f2" ) |-> Fun ( "f2" )
+    Name ( "g" ) |-> Fun ( "g" )
+    Name ( "h" ) |-> Fun ( "h" )
+    Name ( "i" ) |-> Fun ( "i" )
+    Name ( "j" ) |-> Fun ( "j" )
+    Name ( "s" ) |-> Fun ( "s" )
+</ncat>
+<fun>
+    Fun ( "f" ) |-> \ ( Var ( "x" ) : (Fun ( "s" ) Con ( "True" )) ) -> Var ( 
+      "x" )
+    Fun ( "f2" ) |-> \ ( Var ( "x" ) : Data ( "Bool" ) ) -> \ ( Var ( "y" ) : 
+      (Fun ( "s" ) Var ( "x" )) ) -> Var ( "y" )
+    Fun ( "g" ) |-> (Fun ( "f" ) Con ( "True" ))
+    Fun ( "h" ) |-> ((Fun ( "f2" ) Con ( "False" )) Con ( "E" ))
+    Fun ( "i" ) |-> (Fun ( "f2" ) Con ( "True" ))
+    Fun ( "j" ) |-> (Fun ( "f2" ) Con ( "False" ))
+    Fun ( "s" ) |-> FunClauses ( ListItem((#symFunClauses(5) Con ( "True" )) =
+       Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) = Data ( 
+      "T" )) )
+</fun>

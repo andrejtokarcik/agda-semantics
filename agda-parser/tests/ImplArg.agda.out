@@ -1,58 +1,54 @@
-<T>
-    <k>
-        .K
-    </k>
-    <mgu>
-        subst(.KList)
-    </mgu>
-    <ctxstack>
-        .List
-    </ctxstack>
-    <sig>
-        Fun ( "Cons" ) |-> Set ( 1 )
-        Fun ( "cons" ) |-> Fun ( "Cons" )
-        Data ( "Nat" ) |-> Set ( 0 )
-        Data ( "Vec" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(41) :
-           Data ( "Nat" ) ) -> Set ( 0 )
-        Con ( "suc" ) |-> ( #symVariable(38) : Data ( "Nat" ) ) -> Data ( 
-          "Nat" )
-        Con ( "vcons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "n" ) : 
-          Data ( "Nat" ) } -> ( #symVariable(55) : Var ( "A" ) ) -> ( 
-          #symVariable(3) : ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((
-          Data ( "Vec" ) Var ( "A" )) (Con ( "suc" ) Var ( "n" )))
-        Con ( "vnil" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ((Data ( "Vec" ) Var
-           ( "A" )) Con ( "zero" ))
-        Con ( "zero" ) |-> Data ( "Nat" )
-    </sig>
-    <con>
-        (Data ( "Vec" ) Var ( "A" )) |-> l ( ListItem(Con ( "vnil" )) 
-          ListItem(Con ( "vcons" )) )
-        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
-          ) )
-    </con>
-    <ctx>
-        .Map
-    </ctx>
-    <meta>
-        .Map
-    </meta>
-    <ncat>
-        Name ( "Cons" ) |-> Fun ( "Cons" )
-        Name ( "Nat" ) |-> Data ( "Nat" )
-        Name ( "Vec" ) |-> Data ( "Vec" )
-        Name ( "cons" ) |-> Fun ( "cons" )
-        Name ( "suc" ) |-> Con ( "suc" )
-        Name ( "vcons" ) |-> Con ( "vcons" )
-        Name ( "vnil" ) |-> Con ( "vnil" )
-        Name ( "zero" ) |-> Con ( "zero" )
-    </ncat>
-    <fun>
-        Fun ( "Cons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "a" ) : Var 
-          ( "A" ) ) -> { Var ( "n" ) : Data ( "Nat" ) } -> ( #symVariable(3) :
-           ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) 
-          Var ( "A" )) (Con ( "suc" ) Var ( "n" )))
-        Fun ( "cons" ) |-> FunClauses ( ListItem((((#symFunClauses(63) { 
-          #symExpr(59) }) Var ( "a" )) { #symExpr(61) }) = (((Con ( "vcons" ) 
-          { #symExpr(56) }) { #symExpr(53) }) Var ( "a" ))) )
-    </fun>
-</T>
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "Cons" ) |-> Set ( 1 )
+    Fun ( "cons" ) |-> Fun ( "Cons" )
+    Data ( "Nat" ) |-> Set ( 0 )
+    Data ( "Vec" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(41) : 
+      Data ( "Nat" ) ) -> Set ( 0 )
+    Con ( "suc" ) |-> ( #symVariable(38) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "vcons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "n" ) : Data ( 
+      "Nat" ) } -> ( #symVariable(55) : Var ( "A" ) ) -> ( #symVariable(3) : (
+      (Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) Var ( 
+      "A" )) (Con ( "suc" ) Var ( "n" )))
+    Con ( "vnil" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ((Data ( "Vec" ) Var ( 
+      "A" )) Con ( "zero" ))
+    Con ( "zero" ) |-> Data ( "Nat" )
+</sig>
+<con>
+    (Data ( "Vec" ) Var ( "A" )) |-> l ( ListItem(Con ( "vnil" )) ListItem(Con
+       ( "vcons" )) )
+    Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )) )
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Cons" ) |-> Fun ( "Cons" )
+    Name ( "Nat" ) |-> Data ( "Nat" )
+    Name ( "Vec" ) |-> Data ( "Vec" )
+    Name ( "cons" ) |-> Fun ( "cons" )
+    Name ( "suc" ) |-> Con ( "suc" )
+    Name ( "vcons" ) |-> Con ( "vcons" )
+    Name ( "vnil" ) |-> Con ( "vnil" )
+    Name ( "zero" ) |-> Con ( "zero" )
+</ncat>
+<fun>
+    Fun ( "Cons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "a" ) : Var ( 
+      "A" ) ) -> { Var ( "n" ) : Data ( "Nat" ) } -> ( #symVariable(3) : ((
+      Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) Var ( "A"
+       )) (Con ( "suc" ) Var ( "n" )))
+    Fun ( "cons" ) |-> FunClauses ( ListItem((((#symFunClauses(63) { #symExpr(
+      59) }) Var ( "a" )) { #symExpr(61) }) = (((Con ( "vcons" ) { #symExpr(56
+      ) }) { #symExpr(53) }) Var ( "a" ))) )
+</fun>

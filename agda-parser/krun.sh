@@ -1,3 +1,4 @@
 #!/bin/sh
 
-krun -v --parser='agda -itests' $1 | tee out
+dir=$(dirname $1)
+krun -v --parser="agda -i$dir" $1 | tee out

@@ -26,20 +26,20 @@ module AGDA
        <metadata> _ => M' </metadata>   [structural]
   */
 
-  configuration <T>
+  configuration //<T>
                   <k> $PGM:Program </k>
                   <ctx> .Map </ctx>
+                  <ctxstack> .List </ctxstack>
                   <sig> .Map </sig>
+                  <meta> .Map </meta>
                   <fun> .Map </fun>
                   <con> .Map </con>
                   <ncat> .Map </ncat>
                   <mgu> .Mgu </mgu>
-                  <ctxstack> .List </ctxstack>
-                  <meta> .Map </meta>
                   /*
                   <md>                    // <md> [?]
                     <range> .K </range>
                   </md>
                   */
-                </T>
+                //</T>
 endmodule

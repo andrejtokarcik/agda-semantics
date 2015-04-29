@@ -1,58 +1,55 @@
-<T>
-    <k>
-        .K
-    </k>
-    <mgu>
-        subst(.KList)
-    </mgu>
-    <ctxstack>
-        .List
-    </ctxstack>
-    <sig>
-        Fun ( "map" ) |-> { Var ( "a" ) : Set ( 0 ) } -> { Var ( "b" ) : Set (
-           0 ) } -> ( #symVariable(97) : ( #symVariable(87) : Var ( "a" ) ) ->
-           Var ( "b" ) ) -> ( #symVariable(100) : (Data ( "List" ) Var ( "a" )
-          ) ) -> (Data ( "List" ) Var ( "b" ))
-        Fun ( "nil2" ) |-> (\ ( Var ( "x" ) : Set ( 1 ) ) -> Var ( "x" ) { Var
-           ( "a" ) : Set ( 0 ) } -> (Data ( "List" ) Var ( "a" )))
-        Fun ( "tt" ) |-> ( #symVariable(32) : Set ( 1 ) ) -> Set ( 2 )
-        Data ( "List" ) |-> ( Var ( "a" ) : Set ( 0 ) ) -> Set ( 0 )
-        Con ( "_::_" ) |-> { Var ( "a" ) : Set ( 0 ) } -> ( #symVariable(90) :
-           Var ( "a" ) ) -> ( #symVariable(103) : (Data ( "List" ) Var ( "a" )
-          ) ) -> (Data ( "List" ) Var ( "a" ))
-        Con ( "nil" ) |-> { Var ( "a" ) : Set ( 0 ) } -> (Data ( "List" ) Var 
-          ( "a" ))
-    </sig>
-    <con>
-        (Data ( "List" ) Var ( "a" )) |-> l ( ListItem(Con ( "nil" )) 
-          ListItem(Con ( "_::_" )) )
-    </con>
-    <ctx>
-        .Map
-    </ctx>
-    <meta>
-        .Map
-    </meta>
-    <ncat>
-        Name ( "List" ) |-> Data ( "List" )
-        Name ( "_::_" ) |-> Con ( "_::_" )
-        Name ( "map" ) |-> Fun ( "map" )
-        Name ( "nil" ) |-> Con ( "nil" )
-        Name ( "nil2" ) |-> Fun ( "nil2" )
-        Name ( "tt" ) |-> Fun ( "tt" )
-    </ncat>
-    <fun>
-        Fun ( "map" ) |-> FunClauses ( ListItem(((((#symFunClauses(60) { 
-          #symExpr(43) }) { #symExpr(45) }) Var ( "f" )) (Con ( "nil" ) { 
-          #symExpr(43) })) = (Con ( "nil" ) { #symExpr(58) })) ListItem(((((
-          #symFunClauses(106) { #symExpr(64) }) { #symExpr(66) }) Var ( "f" ))
-           (((Con ( "_::_" ) { #symExpr(64) }) Var ( "x" )) Var ( "xs" ))) = (
-          ((Con ( "_::_" ) { #symExpr(91) }) (Var ( "f" ) Var ( "x" ))) ((((
-          Fun ( "map" ) { #symExpr(93) }) { #symExpr(91) }) Var ( "f" )) Var (
-           "xs" )))) )
-        Fun ( "nil2" ) |-> FunClauses ( ListItem((#symFunClauses(29) { 
-          #symExpr(27) }) = (Con ( "nil" ) { #symExpr(25) })) )
-        Fun ( "tt" ) |-> FunClauses ( ListItem((#symFunClauses(35) #symExpr(30
-          )) = Set ( 1 )) )
-    </fun>
-</T>
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "map" ) |-> { Var ( "a" ) : Set ( 0 ) } -> { Var ( "b" ) : Set ( 0 )
+       } -> ( #symVariable(97) : ( #symVariable(87) : Var ( "a" ) ) -> Var ( 
+      "b" ) ) -> ( #symVariable(100) : (Data ( "List" ) Var ( "a" )) ) -> (
+      Data ( "List" ) Var ( "b" ))
+    Fun ( "nil2" ) |-> (\ ( Var ( "x" ) : Set ( 1 ) ) -> Var ( "x" ) { Var ( 
+      "a" ) : Set ( 0 ) } -> (Data ( "List" ) Var ( "a" )))
+    Fun ( "tt" ) |-> ( #symVariable(32) : Set ( 1 ) ) -> Set ( 2 )
+    Data ( "List" ) |-> ( Var ( "a" ) : Set ( 0 ) ) -> Set ( 0 )
+    Con ( "_::_" ) |-> { Var ( "a" ) : Set ( 0 ) } -> ( #symVariable(90) : Var
+       ( "a" ) ) -> ( #symVariable(103) : (Data ( "List" ) Var ( "a" )) ) -> (
+      Data ( "List" ) Var ( "a" ))
+    Con ( "nil" ) |-> { Var ( "a" ) : Set ( 0 ) } -> (Data ( "List" ) Var ( 
+      "a" ))
+</sig>
+<con>
+    (Data ( "List" ) Var ( "a" )) |-> l ( ListItem(Con ( "nil" )) ListItem(Con
+       ( "_::_" )) )
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "List" ) |-> Data ( "List" )
+    Name ( "_::_" ) |-> Con ( "_::_" )
+    Name ( "map" ) |-> Fun ( "map" )
+    Name ( "nil" ) |-> Con ( "nil" )
+    Name ( "nil2" ) |-> Fun ( "nil2" )
+    Name ( "tt" ) |-> Fun ( "tt" )
+</ncat>
+<fun>
+    Fun ( "map" ) |-> FunClauses ( ListItem(((((#symFunClauses(60) { #symExpr(
+      43) }) { #symExpr(45) }) Var ( "f" )) (Con ( "nil" ) { #symExpr(43) })) 
+      = (Con ( "nil" ) { #symExpr(58) })) ListItem(((((#symFunClauses(106) { 
+      #symExpr(64) }) { #symExpr(66) }) Var ( "f" )) (((Con ( "_::_" ) { 
+      #symExpr(64) }) Var ( "x" )) Var ( "xs" ))) = (((Con ( "_::_" ) { 
+      #symExpr(91) }) (Var ( "f" ) Var ( "x" ))) ((((Fun ( "map" ) { #symExpr(
+      93) }) { #symExpr(91) }) Var ( "f" )) Var ( "xs" )))) )
+    Fun ( "nil2" ) |-> FunClauses ( ListItem((#symFunClauses(29) { #symExpr(27
+      ) }) = (Con ( "nil" ) { #symExpr(25) })) )
+    Fun ( "tt" ) |-> FunClauses ( ListItem((#symFunClauses(35) #symExpr(30)) =
+       Set ( 1 )) )
+</fun>

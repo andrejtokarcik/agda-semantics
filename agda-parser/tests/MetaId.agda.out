@@ -1,38 +1,34 @@
-<T>
-    <k>
-        .K
-    </k>
-    <mgu>
-        subst(.KList)
-    </mgu>
-    <ctxstack>
-        .List
-    </ctxstack>
-    <sig>
-        Fun ( "expr" ) |-> Data ( "Nat" )
-        Data ( "Nat" ) |-> Set ( 0 )
-        Con ( "suc" ) |-> ( #symVariable(1) : Data ( "Nat" ) ) -> Data ( "Nat"
-           )
-        Con ( "zero" ) |-> Data ( "Nat" )
-    </sig>
-    <con>
-        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
-          ) )
-    </con>
-    <ctx>
-        .Map
-    </ctx>
-    <meta>
-        .Map
-    </meta>
-    <ncat>
-        Name ( "Nat" ) |-> Data ( "Nat" )
-        Name ( "expr" ) |-> Fun ( "expr" )
-        Name ( "suc" ) |-> Con ( "suc" )
-        Name ( "zero" ) |-> Con ( "zero" )
-    </ncat>
-    <fun>
-        Fun ( "expr" ) |-> ((\ ( Var ( "a" ) : Set ( 0 ) ) -> \ ( Var ( "x" ) 
-          : Var ( "a" ) ) -> Var ( "x" ) Data ( "Nat" )) Con ( "zero" ))
-    </fun>
-</T>
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "expr" ) |-> Data ( "Nat" )
+    Data ( "Nat" ) |-> Set ( 0 )
+    Con ( "suc" ) |-> ( #symVariable(1) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "zero" ) |-> Data ( "Nat" )
+</sig>
+<con>
+    Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )) )
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Nat" ) |-> Data ( "Nat" )
+    Name ( "expr" ) |-> Fun ( "expr" )
+    Name ( "suc" ) |-> Con ( "suc" )
+    Name ( "zero" ) |-> Con ( "zero" )
+</ncat>
+<fun>
+    Fun ( "expr" ) |-> ((\ ( Var ( "a" ) : Set ( 0 ) ) -> \ ( Var ( "x" ) : 
+      Var ( "a" ) ) -> Var ( "x" ) Data ( "Nat" )) Con ( "zero" ))
+</fun>
