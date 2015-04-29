@@ -28,7 +28,7 @@ module AGDA-SEMANTICS-DECL-DATA
   syntax KItem ::= addDataCon(Expr, Name, Expr)  [strict(3(context('checkSetType)))]
   // TODO: check the constructor's universe whether it fits into the datatype's
   rule [add-data-con]:
-       <k> addDataCon(DPs, Name(C), t(T:Expr, Set(_))) => T constructorOf DPs ~> pass? ...</k>
+       <k> addDataCon(DPs, Name(C), t(T, Set(_))) => T constructorOf DPs ~> pass? ...</k>
        <ncat> NCat (. => Name(C) |-> Con(C)) </ncat>
        <sig>... . => Con(C) |-> T ...</sig>
        <con>... DPs |-> l(_ (. => ListItem(Con(C)))) ...</con>
