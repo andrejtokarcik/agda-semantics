@@ -37,8 +37,8 @@ module AGDA-SEMANTICS-COMMON
 
   // perform unification in order to obtain a universe type
   syntax KItem ::= checkSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
-  rule checkSetType(t(E, T)) => T == Set(I) ~> unify(t(E, T)) ~> unifyConf ~> checkSetType(HOLE)
-    when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(I:Int)
+  rule checkSetType(t(E, T)) => T == Set(Alpha) ~> unify(t(E, T)) ~> unifyConf ~> checkSetType(HOLE)
+    when isSetTypedExpr(t(E, T)) =/=K true andBool fresh(Alpha:Int)
   rule Te:SetTypedExpr ~> checkSetType(HOLE) => checkSetType(Te)
 
   syntax KItem ::= tsubst(Map)

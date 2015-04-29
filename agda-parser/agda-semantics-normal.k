@@ -60,59 +60,29 @@ module AGDA-SEMANTICS-NORMAL
   context nf(\ {_ : _} -> (HOLE => nf(HOLE)))  [result(Nf)]
 
 
-  syntax Bool ::= cond8(Expr)  [function]
-  rule cond8(Fun("thmPlusZero") _) => true
-
   syntax KItem ::= whnfType(Expr)  [strict, context(result(WhnfTypedExpr))]
-  context whnfType(t(E, HOLE => whnf(HOLE))) when cond8(E) [result(Whnf)]
-  context whnfType(t(E, HOLE => whnf(HOLE))) when cond8(E) =/=K true [result(Whnf)]
-
+  context whnfType(t(E, HOLE => whnf(HOLE)))  [result(Whnf)]
 
   syntax KItem ::= whnf(Expr)                   [context(result(Whnf))]
   context whnf({HOLE => whnf(HOLE)})            [result(Whnf)]
 
   context whnf((HOLE => whnf(HOLE)) _)   [result(Whnf)]
-    //when isFunClauses(leftmost(HOLE)) =/=K true   [result(Whnf)]
-    //orElseBool numArgs(HOLE) +Int 1 >Int numReqArgs(leftmost(HOLE))   [result(Whnf)]
-
-  syntax Bool ::= cond3(Expr)  [function]
-  //rule cond3(Aux(Fun("_==_"))) => true
-  //rule whnf(E => chich ~> E) when cond3(E)
 
   rule <k> whnf(N => Nc) ...</k>  <ncat>... N |-> Nc ...</ncat>
-  rule <k> whnf(F => E) ...</k>   <fun>... F |-> E ...</fun>  when cond3(F) =/=K true
-  rule <k> whnf(F => E) ...</k>   <fun>... F |-> E ...</fun>  when cond3(F)
-
+  rule <k> whnf(F => E) ...</k>   <fun>... F |-> E ...</fun>
 
   rule whnf((\ (X : _) -> E1) E2 => E1[E2/X])
     when isImplicit(E2) =/=K true
 
   rule whnf((\ {X : _} -> E1) {E2} => E1[E2/X])
 
-  // is this insertion already performed in -typesystem?
-  /*
-  rule <k> whnf((\ {X : T} -> E) V => ((\ {X : T} -> E) {%underscore}) V) ...</k>   // %underscore isn't expanded in whnf
-    when isImplicit(V) =/=K true
-  */
-
-  /*
-  context whnf(E (HOLE => whnf(HOLE)))
-    when isFunClauses(leftmost(E)) andBool lengthList(args(E HOLE)) <=Int numReqArgs(leftmost(E)) andBool notBool matches(leftmost(E), E HOLE)   [result(Whnf)]
-  */
   context whnf(HOLE => nf(HOLE))
     when isFunClauses(leftmost(HOLE)) andBool lengthList(args(HOLE)) <=Int numReqArgs(leftmost(HOLE))  [result(Nf)]
 
-
-  syntax Bool ::= condd(Expr)  [function]
-  rule condd(_ E) => E =/=K Con("zero")
-
-  // TODO: odstran tie posledne dva argumenty z matchClause
   rule whnf(E => matchClause(leftmost(E), E))
-    when condd(E) andThenBool isFunClauses(leftmost(E)) andThenBool matches(leftmost(E), E) //andThenBool lengthList(args(E)) ==Int numReqArgs(leftmost(E))
-  rule whnf(E => matchClause(leftmost(E), E))
-    when notBool condd(E) andThenBool isFunClauses(leftmost(E)) andThenBool matches(leftmost(E), E) //andThenBool lengthList(args(E)) ==Int numReqArgs(leftmost(E))
+    when isFunClauses(leftmost(E)) andBool lengthList(args(E)) ==Int numReqArgs(leftmost(E)) andBool matches(leftmost(E), E) 
 
-
+  // you don't want FunClauses as WhNeut:
   // isWhnf(E:Expr) would generate a sort memebership check,
   // leading to an infinite cycle because of Expr ::= Whnf
   //rule isWhNeut(E) => true

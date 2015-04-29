@@ -3,9 +3,6 @@ require "agda-semantics-common.k"
 module AGDA-SEMANTICS-DECL-FUN
   imports AGDA-SEMANTICS-COMMON
 
-  syntax Bool ::= cond5(Expr)  [function]
-  rule cond5(Name("i")) => true
-
   context _ : (HOLE => checkSetType(HOLE))   [infer-type-sig, result(SetTypedExpr)]
   rule [process-type-sig]:
        <k> Name(F) : t(E, Set(_)) => . ...</k>
@@ -30,16 +27,9 @@ module AGDA-SEMANTICS-DECL-FUN
   rule <k> L = R => saveCtx(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> loadCtx ...</k>
        <ctx> Gamma </ctx>
 
-  syntax Bool ::= cond2(Expr)  [function]
-  rule cond2(Name("thmPlusZero") _) => true
-  rule cond2(t(Fun("thmPlusZero") _, _)) => true
-  rule cond2(t(Fun("i"), _)) => true
+  context autotyped! ~> (HOLE => whnfType(HOLE)) = _  [result(WhnfTypedExpr)]
 
-  context autotyped! ~> (HOLE => whnfType(HOLE)) = _  when cond2(HOLE) =/=K true [result(WhnfTypedExpr)]
-  context autotyped! ~> (HOLE => whnfType(HOLE)) = _  when cond2(HOLE) ==K true [result(WhnfTypedExpr)]
-
-  context autotyped! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond2(L) =/=K true   [result(WhnfTypedExpr)]
-  context autotyped! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE)) when cond2(L) ==K true   [result(WhnfTypedExpr)]
+  context autotyped! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE))  [result(WhnfTypedExpr)]
 
   // insert implicit metavariables at the end of the {left,right}-hand side of function clauses as appropriate
   rule autotyped! ~> (t(L, Tl) => L {%meta}) = t(_, Tr)  when isImplicitPi(Tl) andBool isImplicitPi(Tr) =/=K true
@@ -47,27 +37,12 @@ module AGDA-SEMANTICS-DECL-FUN
   rule autotyped! ~> t(L, Tl) = t(R, Tr) => L {X} = R {X}   // NOTE: this gives a different behaviour as offic Agda, cf. Id8 test case
     when isImplicitPi(Tl) andBool isImplicitPi(Tr) andBool fresh(X:Variable)
 
-  syntax Bool ::= condz(LHS, RHS) [function]
-  //rule condz(L, R) => true
-  //  when leftmost(L) ==K Fun("vec") andBool leftmost(R) ==K Con("pair")
-  //rule condz(L, R) => true
-  //  when leftmost(L) ==K Fun("thmPlusZero") andBool leftmost(R) ==K Fun("thmPlusZero")
-
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
             => Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <ctx> Gamma </ctx>
        <meta> _ => .Map </meta>   // these metas shouldn't be needed any more, clean-up for speed-up
-    when condz(L, R) =/=K true
-  rule <k> (autotyped! => .) ~>
-           (t(L, Tl) = t(R, Tr)
-            => chich ~> Tl == Tr ~> unifyConf ~>
-               addFunClause(funName(L), L, R)) ...</k>
-       <ctx> Gamma </ctx>
-       <meta> _ => .Map </meta>
-    when condz(L, R) ==K true
-
 
   syntax KItem ::= autotype(LHS)
   rule autotype(P1 P2) => autotype(P1) ~> autotype(P2)

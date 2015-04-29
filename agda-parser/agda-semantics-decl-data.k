@@ -17,7 +17,7 @@ module AGDA-SEMANTICS-DECL-DATA
   syntax KItem ::= addTypeCon(Name, Expr, Expr)              [strict(3(context('checkSetType)))]
   // FIXME not sure if the condition is correct: what universe must the datatype fit in?
   rule [add-type-con]:
-       <k> addTypeCon(D, DPs, t(T, Set(I))) => T constructorOf Set(I -Int 1) ~> pass? ...</k>
+       <k> addTypeCon(D, DPs, t(T, Set(Alpha))) => T constructorOf Set(Alpha -Int 1) ~> pass? ...</k>
        <sig>... . => D |-> T ...</sig>
        <con>... . => DPs |-> l(.List) ...</con>
 
@@ -38,7 +38,7 @@ module AGDA-SEMANTICS-DECL-DATA
   rule ((_ : _) -> T => T) constructorOf _
   rule ({_ : _} -> T => T) constructorOf _
   rule D:Name constructorOf D => true
-  rule Set(I) constructorOf Set(I) => true
+  rule Set(Alpha) constructorOf Set(Alpha) => true
   rule (T:Expr _:Variable => T) constructorOf (D:Expr _:Variable => D)
   rule _:Expr E:Expr constructorOf (D:Expr {_} => D)
     when isImplicit(E) =/=K true
