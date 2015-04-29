@@ -157,6 +157,8 @@ module AGDA-SYNTAX
     | "%someRange"
     | Token{([a-zA-Z0-9\/\-]+ "." "l"? "agda" ":")? [0-9]+ "," [0-9]+ "-" ([0-9]+ ",")? [0-9]+}  [notInRules]
   */
+  /*
   syntax Range ::= String
   syntax Declaration ::= "[" Range "]" Declaration
+  */
 endmodule

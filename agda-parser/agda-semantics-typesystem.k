@@ -9,7 +9,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule [infer-variable]:
        <k> X:Variable => t(X, T) ...</k>
-       <tenv>... X |-> T ...</tenv>
+       <ctx>... X |-> T ...</ctx>
 
   rule <k> N:Name => Nc ...</k>  <ncat>... N |-> Nc ...</ncat>
   rule [infer-name]:
@@ -24,13 +24,13 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule [infer-meta]:
        <k> %meta => E ...</k> //t(E, T) ...</k> // ~> #if condM(E) ==K true #then . #else . #fi ...</k>
-       //<tenv>... . => E |-> T ...</tenv>
-       <metavars>... . => E |-> t(E, T) ...</metavars>
+       //<ctx>... . => E |-> T ...</ctx>
+       <meta>... . => E |-> t(E, T) ...</meta>
     when fresh(E:Expr) andBool fresh(T:Expr)
     //ensures isMetaVariable(E)
   rule [infer-meta]:
        <k> X:MetaVariable => t(E, T) ...</k>
-       <metavars>... X |-> t(E, T) ...</metavars>
+       <meta>... X |-> t(E, T) ...</meta>
 
 
   // implicit args
@@ -50,14 +50,14 @@ module AGDA-SEMANTICS-TYPESYSTEM
   context (X : (HOLE => checkSetType(HOLE))) -> _   when cond4(X) =/=K true  [infer-pi-arg1, result(SetTypedExpr)]
   context (X : (HOLE => checkSetType(HOLE))) -> _ when cond4(X) ==K true  [result(SetTypedExpr)]
   rule [bind-pi]:
-       <k> (. => saveTEnv(Gamma) ~> bound!) ~> (X : t(T1, Set(_))) -> _ ~>
-           (. => restoreTEnv) ...</k>
-       <tenv> Gamma => Gamma[T1/X] </tenv>
+       <k> (. => saveCtx(Gamma) ~> bound!) ~> (X : t(T1, Set(_))) -> _ ~>
+           (. => loadCtx) ...</k>
+       <ctx> Gamma => Gamma[T1/X] </ctx>
     when fresh(I1:Int) andBool cond4(X) ==K true
   rule [bind-pi]:
-       <k> (. => saveTEnv(Gamma) ~> bound!) ~> (X : t(T1, Set(_))) -> _ ~>
-           (. => restoreTEnv) ...</k>
-       <tenv> Gamma => Gamma[T1/X] </tenv>
+       <k> (. => saveCtx(Gamma) ~> bound!) ~> (X : t(T1, Set(_))) -> _ ~>
+           (. => loadCtx) ...</k>
+       <ctx> Gamma => Gamma[T1/X] </ctx>
     when fresh(I1:Int) andBool cond4(X) =/=K true
 
   context bound! ~> (_ : _) -> (HOLE => checkSetType(HOLE))    [infer-pi-arg2, result(SetTypedExpr)]
@@ -75,9 +75,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   context {_ : (HOLE => checkSetType(HOLE))} -> _   [result(SetTypedExpr)]
   rule
-       <k> (. => saveTEnv(Gamma) ~> bound!) ~> {X : t(T1, Set(_))} -> _ ~>
-           (. => restoreTEnv) ...</k>
-       <tenv> Gamma => Gamma[T1/X] </tenv>
+       <k> (. => saveCtx(Gamma) ~> bound!) ~> {X : t(T1, Set(_))} -> _ ~>
+           (. => loadCtx) ...</k>
+       <ctx> Gamma => Gamma[T1/X] </ctx>
     when fresh(I1:Int)
   context bound! ~> {_ : _} -> (HOLE => checkSetType(HOLE))    [result(SetTypedExpr)]
   rule
@@ -88,9 +88,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   context \ (_ : (HOLE => checkSetType(HOLE))) -> _  [result(SetTypedExpr)]
   rule [bind-lambda]:
-       <k> (. => saveTEnv(Gamma) ~> bound!) ~> \ (X : t(T, Set(_))) -> _ ~>
-           (. => restoreTEnv) ...</k>
-       <tenv> Gamma => Gamma[T/X] </tenv>
+       <k> (. => saveCtx(Gamma) ~> bound!) ~> \ (X : t(T, Set(_))) -> _ ~>
+           (. => loadCtx) ...</k>
+       <ctx> Gamma => Gamma[T/X] </ctx>
   context bound! ~> \ (_ : _) -> HOLE
   rule [infer-lambda]:
        <k> (bound! => .) ~>
@@ -99,9 +99,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   context \ {_ : (HOLE => checkSetType(HOLE))} -> _   [result(SetTypedExpr)]
   rule [bind-lambda]:
-       <k> (. => saveTEnv(Gamma) ~> bound!) ~> \ {X : t(T, Set(_))} -> _ ~>
-           (. => restoreTEnv) ...</k>
-       <tenv> Gamma => Gamma[T/X] </tenv>
+       <k> (. => saveCtx(Gamma) ~> bound!) ~> \ {X : t(T, Set(_))} -> _ ~>
+           (. => loadCtx) ...</k>
+       <ctx> Gamma => Gamma[T/X] </ctx>
   context bound! ~> \ {_ : _} -> HOLE
   rule [infer-lambda]:
        <k> (bound! => . ) ~> //isWhnfTypedExpr(t(\ {X : T} -> E, ({X : T} -> T')))) ~>

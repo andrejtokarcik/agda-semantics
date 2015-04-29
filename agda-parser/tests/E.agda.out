@@ -5,31 +5,26 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenvRestore>
+    <ctxstack>
         .List
-    </tenvRestore>
-    <metadata>
-        <range>
-            .K
-        </range>
-    </metadata>
-    <con>
-        .Map
-    </con>
-    <metavars>
-        .Map
-    </metavars>
-    <fenv>
-        Fun ( "t" ) |-> FunClauses ( ListItem((#symFunClauses(6) Var ( "x" )) 
-          = Var ( "x" )) )
-    </fenv>
-    <tenv>
-        .Map
-    </tenv>
+    </ctxstack>
     <sig>
         Fun ( "t" ) |-> ( #symVariable(3) : Set ( 0 ) ) -> Set ( 0 )
     </sig>
+    <con>
+        .Map
+    </con>
+    <ctx>
+        .Map
+    </ctx>
+    <meta>
+        .Map
+    </meta>
     <ncat>
         Name ( "t" ) |-> Fun ( "t" )
     </ncat>
+    <fun>
+        Fun ( "t" ) |-> FunClauses ( ListItem((#symFunClauses(6) Var ( "x" )) 
+          = Var ( "x" )) )
+    </fun>
 </T>

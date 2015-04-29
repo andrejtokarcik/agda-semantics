@@ -5,35 +5,9 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenvRestore>
+    <ctxstack>
         .List
-    </tenvRestore>
-    <metadata>
-        <range>
-            .K
-        </range>
-    </metadata>
-    <con>
-        (Data ( "Vec" ) Var ( "A" )) |-> l ( ListItem(Con ( "vnil" )) 
-          ListItem(Con ( "vcons" )) )
-        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
-          ) )
-    </con>
-    <metavars>
-        .Map
-    </metavars>
-    <fenv>
-        Fun ( "Cons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "a" ) : Var 
-          ( "A" ) ) -> { Var ( "n" ) : Data ( "Nat" ) } -> ( #symVariable(3) :
-           ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) 
-          Var ( "A" )) (Con ( "suc" ) Var ( "n" )))
-        Fun ( "cons" ) |-> FunClauses ( ListItem((((#symFunClauses(63) { 
-          #symExpr(59) }) Var ( "a" )) { #symExpr(61) }) = (((Con ( "vcons" ) 
-          { #symExpr(56) }) { #symExpr(53) }) Var ( "a" ))) )
-    </fenv>
-    <tenv>
-        .Map
-    </tenv>
+    </ctxstack>
     <sig>
         Fun ( "Cons" ) |-> Set ( 1 )
         Fun ( "cons" ) |-> Fun ( "Cons" )
@@ -50,6 +24,18 @@
            ( "A" )) Con ( "zero" ))
         Con ( "zero" ) |-> Data ( "Nat" )
     </sig>
+    <con>
+        (Data ( "Vec" ) Var ( "A" )) |-> l ( ListItem(Con ( "vnil" )) 
+          ListItem(Con ( "vcons" )) )
+        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
+          ) )
+    </con>
+    <ctx>
+        .Map
+    </ctx>
+    <meta>
+        .Map
+    </meta>
     <ncat>
         Name ( "Cons" ) |-> Fun ( "Cons" )
         Name ( "Nat" ) |-> Data ( "Nat" )
@@ -60,4 +46,13 @@
         Name ( "vnil" ) |-> Con ( "vnil" )
         Name ( "zero" ) |-> Con ( "zero" )
     </ncat>
+    <fun>
+        Fun ( "Cons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "a" ) : Var 
+          ( "A" ) ) -> { Var ( "n" ) : Data ( "Nat" ) } -> ( #symVariable(3) :
+           ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) 
+          Var ( "A" )) (Con ( "suc" ) Var ( "n" )))
+        Fun ( "cons" ) |-> FunClauses ( ListItem((((#symFunClauses(63) { 
+          #symExpr(59) }) Var ( "a" )) { #symExpr(61) }) = (((Con ( "vcons" ) 
+          { #symExpr(56) }) { #symExpr(53) }) Var ( "a" ))) )
+    </fun>
 </T>

@@ -14,21 +14,21 @@ module AGDA-SEMANTICS-COMMON
 
   syntax Name ::= Data(Identifier) | Con(Identifier) | Fun(Identifier)
 
-  syntax TEnvRestore
-  rule isTEnvRestore(_:KResult) => true
+  syntax CtxLoader
+  rule isCtxLoader(_:KResult) => true
   /*
-  syntax KItem ::= tenv(Map)
-  rule R:TEnvRestore ~> tenv(Gamma) => tenv(Gamma) ~> R  [structural]
-  rule <k> tenv(Gamma) => . ...</k>
-       <tenv> _ => Gamma </tenv>
+  syntax KItem ::= ctx(Map)
+  rule R:CtxLoader ~> ctx(Gamma) => ctx(Gamma) ~> R  [structural]
+  rule <k> ctx(Gamma) => . ...</k>
+       <ctx> _ => Gamma </ctx>
   */
-  syntax KItem ::= saveTEnv(Map) | "restoreTEnv"
-  rule <k> saveTEnv(Gamma) => . ...</k>
-       <tenvRestore> L => ListItem(m(Gamma)) L </tenvRestore>
-  rule R:TEnvRestore ~> restoreTEnv => restoreTEnv ~> R  [structural]
-  rule <k> restoreTEnv => . ...</k>
-       <tenv> _ => Gamma </tenv>
-       <tenvRestore> ListItem(m(Gamma)) L => L </tenvRestore>
+  syntax KItem ::= saveCtx(Map) | "loadCtx"
+  rule <k> saveCtx(Gamma) => . ...</k>
+       <ctxstack> L => ListItem(m(Gamma)) L </ctxstack>
+  rule R:CtxLoader ~> loadCtx => loadCtx ~> R  [structural]
+  rule <k> loadCtx => . ...</k>
+       <ctx> _ => Gamma </ctx>
+       <ctxstack> ListItem(m(Gamma)) L => L </ctxstack>
 
   syntax KItem ::= "pass?" | error(String)
   syntax GuardPass

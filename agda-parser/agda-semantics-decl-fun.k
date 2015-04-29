@@ -14,9 +14,8 @@ module AGDA-SEMANTICS-DECL-FUN
     when notBool (Name(F) in keys(NCat))
 
   // for now, an absurd pattern causes its respective clause (consisting only of the LHS)
-  // to be discarded with no checks  (FIXME, we would like to update funtenvs
-  // at the very least.  we also should verify that there really are no suitable
-  // constructors.)
+  // to be discarded with no checks  (FIXME, should verify that there really are
+  // no suitable constructors.)
   rule Absurd(_) => .
 
   syntax KItem ::= "autotyped!"
@@ -28,8 +27,8 @@ module AGDA-SEMANTICS-DECL-FUN
   rule freshArgs(L) => L  [owise]
   */
 
-  rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> restoreTEnv ...</k>
-       <tenv> Gamma </tenv>
+  rule <k> L = R => saveCtx(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> loadCtx ...</k>
+       <ctx> Gamma </ctx>
 
   syntax Bool ::= cond2(Expr)  [function]
   rule cond2(Name("thmPlusZero") _) => true
@@ -58,15 +57,15 @@ module AGDA-SEMANTICS-DECL-FUN
            (t(L, Tl) = t(R, Tr)
             => Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
-       <tenv> Gamma </tenv>
-       <metavars> _ => .Map </metavars>   // these metas shouldn't be needed any more, clean-up for speed-up
+       <ctx> Gamma </ctx>
+       <meta> _ => .Map </meta>   // these metas shouldn't be needed any more, clean-up for speed-up
     when condz(L, R) =/=K true
   rule <k> (autotyped! => .) ~>
            (t(L, Tl) = t(R, Tr)
             => chich ~> Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
-       <tenv> Gamma </tenv>
-       <metavars> _ => .Map </metavars>
+       <ctx> Gamma </ctx>
+       <meta> _ => .Map </meta>
     when condz(L, R) ==K true
 
 
@@ -76,10 +75,10 @@ module AGDA-SEMANTICS-DECL-FUN
   rule autotype(_:Name) => .
   rule autotype(%meta) => .
   rule <k> autotype(X:Variable) => . ...</k>
-       <tenv> Gamma </tenv>
+       <ctx> Gamma </ctx>
     when X in keys(Gamma)
   rule <k> autotype(X:Variable) => . ...</k>
-       <tenv> Gamma => Gamma[T/X] </tenv>
+       <ctx> Gamma => Gamma[T/X] </ctx>
     when notBool (X in keys(Gamma)) andBool fresh(T:Expr)
 
   syntax FunClauses ::= FunClauses(List)
@@ -87,11 +86,11 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax KItem ::= addFunClause(Name, LHS, RHS)
   rule <k> addFunClause(F, L, R) => . ...</k>
-       <fenv> Rho
-              (. => F |-> FunClauses(ListItem(freshFunName(L) = R))) </fenv>
+       <fun> Rho
+              (. => F |-> FunClauses(ListItem(freshFunName(L) = R))) </fun>
     when notBool (F in keys(Rho))
   rule <k> addFunClause(F, L, R) => . ...</k>
-       <fenv>... F |-> FunClauses(Cs (. => ListItem(freshFunName(L) = R))) ...</fenv>
+       <fun>... F |-> FunClauses(Cs (. => ListItem(freshFunName(L) = R))) ...</fun>
     when lengthList(args(L)) ==Int numReqArgs(FunClauses(Cs))   // check the arities are equal
 
   rule FunClauses(ListItem(L = R)) => R
@@ -100,16 +99,13 @@ module AGDA-SEMANTICS-DECL-FUN
 
   // XXX hack for typing FunClauses
   rule <k> F:FunClauses => t(F, T) ...</k>
-       <fenv>... N |-> F ...</fenv>
+       <fun>... N |-> F ...</fun>
        <sig>... N |-> T ...</sig>
 
   syntax Name ::= funName(LHS)  [function]
   rule funName(L) => leftmost(L)
 
-  //syntax Variable ::= "%fun"
   syntax Expr ::= freshFunName(LHS)  [function]
-  //rule freshFunName(L) => replaceLeftmost(L, %fun)
-  //rule freshFunName(L) => L    // << toto nechces lebo ten List obshuje Fun("plus") napr. ale v reali tam uz mas nasubstituovane plusove FunClauses
   rule freshFunName(L) => replaceLeftmost(L, F)  when fresh(F:FunClauses)
 
   syntax Int ::= numReqArgs(FunClauses)  [function]

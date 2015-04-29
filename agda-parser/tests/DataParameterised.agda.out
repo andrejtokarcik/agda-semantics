@@ -5,34 +5,9 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenvRestore>
+    <ctxstack>
         .List
-    </tenvRestore>
-    <metadata>
-        <range>
-            .K
-        </range>
-    </metadata>
-    <con>
-        (Data ( "List" ) Var ( "A" )) |-> l ( ListItem(Con ( "nil" )) 
-          ListItem(Con ( "cons" )) )
-        Data ( "Bool" ) |-> l ( ListItem(Con ( "false" )) ListItem(Con ( 
-          "true" )) )
-        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
-          ) )
-    </con>
-    <metavars>
-        .Map
-    </metavars>
-    <fenv>
-        Fun ( "null" ) |-> FunClauses ( ListItem(((#symFunClauses(24) { 
-          #symExpr(17) }) (Con ( "nil" ) { #symExpr(17) })) = Con ( "true" )) 
-          ListItem(((#symFunClauses(48) { #symExpr(37) }) (((Con ( "cons" ) { 
-          #symExpr(37) }) #symExpr(25)) #symExpr(32))) = Con ( "false" )) )
-    </fenv>
-    <tenv>
-        .Map
-    </tenv>
+    </ctxstack>
     <sig>
         Fun ( "null" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(45) :
            (Data ( "List" ) Var ( "A" )) ) -> Data ( "Bool" )
@@ -50,6 +25,20 @@
         Con ( "true" ) |-> Data ( "Bool" )
         Con ( "zero" ) |-> Data ( "Nat" )
     </sig>
+    <con>
+        (Data ( "List" ) Var ( "A" )) |-> l ( ListItem(Con ( "nil" )) 
+          ListItem(Con ( "cons" )) )
+        Data ( "Bool" ) |-> l ( ListItem(Con ( "false" )) ListItem(Con ( 
+          "true" )) )
+        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
+          ) )
+    </con>
+    <ctx>
+        .Map
+    </ctx>
+    <meta>
+        .Map
+    </meta>
     <ncat>
         Name ( "Bool" ) |-> Data ( "Bool" )
         Name ( "List" ) |-> Data ( "List" )
@@ -62,4 +51,10 @@
         Name ( "true" ) |-> Con ( "true" )
         Name ( "zero" ) |-> Con ( "zero" )
     </ncat>
+    <fun>
+        Fun ( "null" ) |-> FunClauses ( ListItem(((#symFunClauses(24) { 
+          #symExpr(17) }) (Con ( "nil" ) { #symExpr(17) })) = Con ( "true" )) 
+          ListItem(((#symFunClauses(48) { #symExpr(37) }) (((Con ( "cons" ) { 
+          #symExpr(37) }) #symExpr(25)) #symExpr(32))) = Con ( "false" )) )
+    </fun>
 </T>

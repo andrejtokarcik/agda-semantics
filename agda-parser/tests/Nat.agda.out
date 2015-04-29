@@ -5,27 +5,9 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenvRestore>
+    <ctxstack>
         .List
-    </tenvRestore>
-    <metadata>
-        <range>
-            .K
-        </range>
-    </metadata>
-    <con>
-        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
-          ) )
-    </con>
-    <metavars>
-        .Map
-    </metavars>
-    <fenv>
-        Fun ( "one" ) |-> (Con ( "suc" ) Con ( "zero" ))
-    </fenv>
-    <tenv>
-        .Map
-    </tenv>
+    </ctxstack>
     <sig>
         Fun ( "one" ) |-> Data ( "Nat" )
         Data ( "Nat" ) |-> Set ( 0 )
@@ -33,10 +15,23 @@
            )
         Con ( "zero" ) |-> Data ( "Nat" )
     </sig>
+    <con>
+        Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
+          ) )
+    </con>
+    <ctx>
+        .Map
+    </ctx>
+    <meta>
+        .Map
+    </meta>
     <ncat>
         Name ( "Nat" ) |-> Data ( "Nat" )
         Name ( "one" ) |-> Fun ( "one" )
         Name ( "suc" ) |-> Con ( "suc" )
         Name ( "zero" ) |-> Con ( "zero" )
     </ncat>
+    <fun>
+        Fun ( "one" ) |-> (Con ( "suc" ) Con ( "zero" ))
+    </fun>
 </T>

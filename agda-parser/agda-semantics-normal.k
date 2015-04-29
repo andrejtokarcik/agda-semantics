@@ -81,8 +81,8 @@ module AGDA-SEMANTICS-NORMAL
   //rule whnf(E => chich ~> E) when cond3(E)
 
   rule <k> whnf(N => Nc) ...</k>  <ncat>... N |-> Nc ...</ncat>
-  rule <k> whnf(F => E) ...</k>   <fenv>... F |-> E ...</fenv>  when cond3(F) =/=K true
-  rule <k> whnf(F => E) ...</k>   <fenv>... F |-> E ...</fenv>  when cond3(F)
+  rule <k> whnf(F => E) ...</k>   <fun>... F |-> E ...</fun>  when cond3(F) =/=K true
+  rule <k> whnf(F => E) ...</k>   <fun>... F |-> E ...</fun>  when cond3(F)
 
 
   rule whnf((\ (X : _) -> E1) E2 => E1[E2/X])

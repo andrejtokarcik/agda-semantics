@@ -56,10 +56,10 @@ module AGDA-SEMANTICS-UNIFICATION
   rule R:KResult ~> unifyConf => unifyConf ~> R  [structural]
   rule <k> unifyConf => . ...</k>
        <sig> Sigma => applyMgu(Theta, Sigma) </sig>
-       <tenv> Gamma => applyMgu/*Keys*/(Theta, Gamma) </tenv>
-       <tenvRestore> TEnvR => applyMguL/*KeysL*/(Theta, TEnvR) </tenvRestore>
-       <fenv> Rho => applyMgu(Theta, Rho) </fenv>
-       <metavars> Meta => extendMeta(applyMgu(Theta, Meta)) </metavars>
+       <ctx> Gamma => applyMgu/*Keys*/(Theta, Gamma) </ctx>
+       <ctxstack> GammaS => applyMguL/*KeysL*/(Theta, GammaS) </ctxstack>
+       <fun> Rho => applyMgu(Theta, Rho) </fun>
+       <meta> Meta => extendMeta(applyMgu(Theta, Meta)) </meta>
        //<metavars> Meta => applyMgu(Theta, Meta) </metavars>
        <mgu> Theta => .Mgu </mgu>
 
@@ -125,7 +125,7 @@ module AGDA-SEMANTICS-UNIFICATION
   syntax KItem ::= renameVariablesConf(K) | #renameVarsConf(K, K)
   rule renameVariablesConf(K) => #renameVarsConf(getAlpha(K), K)
   rule <k> #renameVarsConf(Alpha, K) => applySubst(Alpha, K) ...</k>
-       <tenv> Gamma => Gamma[#renameVarsCtx(Gamma, Alpha)] </tenv>
+       <ctx> Gamma => Gamma[#renameVarsCtx(Gamma, Alpha)] </ctx>
   syntax Map ::= #renameVarsCtx(Map, K)  [function]
   rule #renameVarsCtx(_, subst(.KList)) => .Map
   rule #renameVarsCtx(_ (K |-> V), subst((eqn(K,,X) => .KList),,_)) (.Map => X |-> V)
@@ -134,12 +134,12 @@ module AGDA-SEMANTICS-UNIFICATION
 
   syntax List ::= applyMguL(Mgu, List)   [function]
   rule applyMguL(Theta, .List) => .List
-  rule applyMguL(Theta, _ (ListItem(m(TEnv)) => .List)) (.List => ListItem(m(applyMgu(Theta, TEnv))))
+  rule applyMguL(Theta, _ (ListItem(m(Gamma)) => .List)) (.List => ListItem(m(applyMgu(Theta, Gamma))))
 
 
   syntax List ::= applyMguKeysL(Mgu, List)   [function]
   rule applyMguKeysL(Theta, .List) => .List
-  rule applyMguKeysL(Theta, _ (ListItem(m(TEnv)) => .List)) (.List => ListItem(m(applyMguKeys(Theta, TEnv))))
+  rule applyMguKeysL(Theta, _ (ListItem(m(Gamma)) => .List)) (.List => ListItem(m(applyMguKeys(Theta, Gamma))))
 
   syntax Map ::= applyMguKeys(Mgu, Map)  [function]
   rule applyMguKeys(_, .Map) => .Map

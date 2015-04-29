@@ -5,38 +5,9 @@
     <mgu>
         subst(.KList)
     </mgu>
-    <tenvRestore>
+    <ctxstack>
         .List
-    </tenvRestore>
-    <metadata>
-        <range>
-            .K
-        </range>
-    </metadata>
-    <con>
-        Data ( "Bool" ) |-> l ( ListItem(Con ( "True" )) ListItem(Con ( 
-          "False" )) )
-        Data ( "T" ) |-> l ( ListItem(Con ( "E" )) )
-    </con>
-    <metavars>
-        .Map
-    </metavars>
-    <fenv>
-        Fun ( "f" ) |-> \ ( Var ( "x" ) : (Fun ( "s" ) Con ( "True" )) ) -> 
-          Var ( "x" )
-        Fun ( "f2" ) |-> \ ( Var ( "x" ) : Data ( "Bool" ) ) -> \ ( Var ( "y" 
-          ) : (Fun ( "s" ) Var ( "x" )) ) -> Var ( "y" )
-        Fun ( "g" ) |-> (Fun ( "f" ) Con ( "True" ))
-        Fun ( "h" ) |-> ((Fun ( "f2" ) Con ( "False" )) Con ( "E" ))
-        Fun ( "i" ) |-> (Fun ( "f2" ) Con ( "True" ))
-        Fun ( "j" ) |-> (Fun ( "f2" ) Con ( "False" ))
-        Fun ( "s" ) |-> FunClauses ( ListItem((#symFunClauses(5) Con ( "True" 
-          )) = Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) =
-           Data ( "T" )) )
-    </fenv>
-    <tenv>
-        .Map
-    </tenv>
+    </ctxstack>
     <sig>
         Fun ( "f" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
         Fun ( "f2" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> ( Var ( "y" ) : 
@@ -57,6 +28,17 @@
         Con ( "False" ) |-> Data ( "Bool" )
         Con ( "True" ) |-> Data ( "Bool" )
     </sig>
+    <con>
+        Data ( "Bool" ) |-> l ( ListItem(Con ( "True" )) ListItem(Con ( 
+          "False" )) )
+        Data ( "T" ) |-> l ( ListItem(Con ( "E" )) )
+    </con>
+    <ctx>
+        .Map
+    </ctx>
+    <meta>
+        .Map
+    </meta>
     <ncat>
         Name ( "Bool" ) |-> Data ( "Bool" )
         Name ( "E" ) |-> Con ( "E" )
@@ -71,4 +53,17 @@
         Name ( "j" ) |-> Fun ( "j" )
         Name ( "s" ) |-> Fun ( "s" )
     </ncat>
+    <fun>
+        Fun ( "f" ) |-> \ ( Var ( "x" ) : (Fun ( "s" ) Con ( "True" )) ) -> 
+          Var ( "x" )
+        Fun ( "f2" ) |-> \ ( Var ( "x" ) : Data ( "Bool" ) ) -> \ ( Var ( "y" 
+          ) : (Fun ( "s" ) Var ( "x" )) ) -> Var ( "y" )
+        Fun ( "g" ) |-> (Fun ( "f" ) Con ( "True" ))
+        Fun ( "h" ) |-> ((Fun ( "f2" ) Con ( "False" )) Con ( "E" ))
+        Fun ( "i" ) |-> (Fun ( "f2" ) Con ( "True" ))
+        Fun ( "j" ) |-> (Fun ( "f2" ) Con ( "False" ))
+        Fun ( "s" ) |-> FunClauses ( ListItem((#symFunClauses(5) Con ( "True" 
+          )) = Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) =
+           Data ( "T" )) )
+    </fun>
 </T>
