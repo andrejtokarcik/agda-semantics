@@ -45,6 +45,5 @@ module AGDA
                   <metadata>                    // <md> [?]
                     <range> .K </range>
                   </metadata>
-                  <funtenvs> .Map </funtenvs>   // <fctx>  (mozno spravit <fun> <env>..</env> <ctx>..</ctx> </fun> ?)
                 </T>
 endmodule

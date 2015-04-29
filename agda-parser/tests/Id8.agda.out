@@ -16,9 +16,6 @@
     <con>
         .Map
     </con>
-    <funtenvs>
-        Fun ( "id8" ) |-> m ( #symVariable(8) |-> Set ( 0 ) )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>

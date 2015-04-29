@@ -22,11 +22,6 @@
         Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
           ) )
     </con>
-    <funtenvs>
-        Fun ( "map" ) |-> m ( Var ( "f" ) |-> ( #symVariable(149) : #symExpr(
-          155) ) -> #symExpr(153) Var ( "x" ) |-> #symExpr(155) Var ( "xs" )
-           |-> (Data ( "List" ) #symExpr(155)) )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>

@@ -17,11 +17,6 @@
         (Data ( "List" ) Var ( "a" )) |-> l ( ListItem(Con ( "nil" )) 
           ListItem(Con ( "_::_" )) )
     </con>
-    <funtenvs>
-        Fun ( "map" ) |-> m ( Var ( "f" ) |-> ( #symVariable(87) : #symExpr(93
-          ) ) -> #symExpr(91) Var ( "x" ) |-> #symExpr(93) Var ( "xs" ) |-> (
-          Data ( "List" ) #symExpr(93)) )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>

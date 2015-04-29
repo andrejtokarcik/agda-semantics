@@ -17,10 +17,6 @@
         Data ( "Bool" ) |-> l ( ListItem(Con ( "true" )) ListItem(Con ( 
           "false" )) )
     </con>
-    <funtenvs>
-        Fun ( "if_then_else_" ) |-> m ( Var ( "x" ) |-> #symExpr(30) Var ( "y"
-           ) |-> #symExpr(30) )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>

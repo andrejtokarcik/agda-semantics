@@ -16,9 +16,6 @@
     <con>
         .Map
     </con>
-    <funtenvs>
-        Fun ( "t" ) |-> m ( Var ( "x" ) |-> Set ( 0 ) )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>

@@ -27,18 +27,6 @@
         Data ( "One" ) |-> l ( ListItem(Con ( "unit" )) )
         Data ( "Zero" ) |-> l ( .List )
     </con>
-    <funtenvs>
-        Fun ( "coS" ) |-> m ( Var ( "l2m" ) |-> ((FunClauses ( ListItem(((
-          #symFunClauses(156) Con ( "zero" )) Var ( "X" )) = Data ( "One" )) 
-          ListItem(((#symFunClauses(180) (Con ( "suc" ) Var ( "n" ))) Var ( 
-          "X" )) = ((Data ( "_*_" ) Var ( "X" )) ((Fun ( "Vec" ) Var ( "n" )) 
-          Var ( "X" )))) ) #symExpr(2068)) (Data ( "Tm" ) #symExpr(2061))) Var
-           ( "m2n" ) |-> ((FunClauses ( ListItem(((#symFunClauses(156) Con ( 
-          "zero" )) Var ( "X" )) = Data ( "One" )) ListItem(((#symFunClauses(
-          180) (Con ( "suc" ) Var ( "n" ))) Var ( "X" )) = ((Data ( "_*_" ) 
-          Var ( "X" )) ((Fun ( "Vec" ) Var ( "n" )) Var ( "X" )))) ) #symExpr(
-          2061)) (Data ( "Tm" ) #symExpr(2063))) )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>

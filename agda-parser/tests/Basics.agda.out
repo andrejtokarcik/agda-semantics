@@ -21,9 +21,6 @@
           ) )
         Data ( "True" ) |-> l ( ListItem(Con ( "tt" )) )
     </con>
-    <funtenvs>
-        Fun ( "thmPlusZero'" ) |-> m ( Var ( "n" ) |-> Data ( "Nat" ) )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>

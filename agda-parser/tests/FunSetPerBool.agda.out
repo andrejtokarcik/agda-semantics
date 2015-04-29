@@ -18,9 +18,6 @@
           "False" )) )
         Data ( "T" ) |-> l ( ListItem(Con ( "E" )) )
     </con>
-    <funtenvs>
-        Fun ( "j" ) |-> m ( .Map )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>

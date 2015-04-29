@@ -17,9 +17,6 @@
         Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
           ) )
     </con>
-    <funtenvs>
-        Fun ( "zero4" ) |-> m ( .Map )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>

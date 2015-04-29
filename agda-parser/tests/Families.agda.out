@@ -24,10 +24,6 @@
         Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )
           ) )
     </con>
-    <funtenvs>
-        Fun ( "_8800_" ) |-> m ( Var ( "x" ) |-> #symExpr(366) Var ( "y" )
-           |-> #symExpr(366) )
-    </funtenvs>
     <metavars>
         #symExpr(372) |-> t ( Data ( "Bool" ) , Set ( 0 ) )
     </metavars>

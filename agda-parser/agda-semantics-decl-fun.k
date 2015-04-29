@@ -30,12 +30,6 @@ module AGDA-SEMANTICS-DECL-FUN
 
   rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> restoreTEnv ...</k>
        <tenv> Gamma </tenv>
-       <funtenvs> GammaF </funtenvs>
-    when notBool (funName(L) in keys(GammaF))
-  rule <k> L = R => saveTEnv(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> restoreTEnv ...</k>
-       <tenv> Gamma => unm(GammaF(funName(L))) </tenv>
-       <funtenvs> GammaF </funtenvs>
-    when funName(L) in keys(GammaF)
 
   syntax Bool ::= cond2(Expr)  [function]
   rule cond2(Name("thmPlusZero") _) => true
@@ -65,7 +59,6 @@ module AGDA-SEMANTICS-DECL-FUN
             => Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
-       <funtenvs> GammaF => funName(L) |-> m(Gamma) </funtenvs>   // TODO: don't save #symExpr's & co. [side effect of separating tenv and meta]
        <metavars> _ => .Map </metavars>   // these metas shouldn't be needed any more, clean-up for speed-up
     when condz(L, R) =/=K true
   rule <k> (autotyped! => .) ~>
@@ -73,7 +66,6 @@ module AGDA-SEMANTICS-DECL-FUN
             => chich ~> Tl == Tr ~> unifyConf ~>
                addFunClause(funName(L), L, R)) ...</k>
        <tenv> Gamma </tenv>
-       <funtenvs> _ => funName(L) |-> m(Gamma) </funtenvs>
        <metavars> _ => .Map </metavars>
     when condz(L, R) ==K true
 

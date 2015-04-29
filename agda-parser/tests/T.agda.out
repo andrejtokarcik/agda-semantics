@@ -16,9 +16,6 @@
     <con>
         .Map
     </con>
-    <funtenvs>
-        Fun ( "e" ) |-> m ( .Map )
-    </funtenvs>
     <metavars>
         .Map
     </metavars>
