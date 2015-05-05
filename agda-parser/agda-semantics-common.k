@@ -9,7 +9,7 @@ module AGDA-SEMANTICS-COMMON
 
   syntax KItem ::= "chich"
 
-  syntax TypedExpr ::= t(Expr, Expr)    [latex(\langle{#1}\downarrow{#2}\rangle)]    // the down arrow would indicate a type-*inference* result
+  syntax TypedExpr ::= t(Expr, Expr)    [latex(\ktyped{#1}{#2})]    // the down arrow would indicate a type-*inference* result
   syntax Expr ::= TypedExpr
 
   syntax Name ::= Data(Identifier) | Con(Identifier) | Fun(Identifier)

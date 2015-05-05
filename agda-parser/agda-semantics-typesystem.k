@@ -38,12 +38,11 @@ module AGDA-SEMANTICS-TYPESYSTEM
   // XXX: what about putting all the Pi-related rules into a separate module?
   // ... as suggested in the funkons paper
 
-  context (X : (HOLE => checkSetType(HOLE))) -> _  [infer-pi-arg1, result(SetTypedExpr)]
+  context (_ : (HOLE => checkSetType(HOLE))) -> _  [infer-pi-arg1, result(SetTypedExpr)]
   rule [bind-pi]:
        <k> (. => saveCtx(Gamma) ~> bound!) ~> (X : t(T1, Set(_))) -> _ ~>
            (. => loadCtx) ...</k>
        <ctx> Gamma => Gamma[T1/X] </ctx>
-    when fresh(I1:Int)
   context bound! ~> (_ : _) -> (HOLE => checkSetType(HOLE))    [infer-pi-arg2, result(SetTypedExpr)]
   rule [infer-pi]:
            (bound! => .) ~>
@@ -55,7 +54,6 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <k> (. => saveCtx(Gamma) ~> bound!) ~> {X : t(T1, Set(_))} -> _ ~>
            (. => loadCtx) ...</k>
        <ctx> Gamma => Gamma[T1/X] </ctx>
-    when fresh(I1:Int)
   context bound! ~> {_ : _} -> (HOLE => checkSetType(HOLE))    [result(SetTypedExpr)]
   rule
            (bound! => .) ~>
