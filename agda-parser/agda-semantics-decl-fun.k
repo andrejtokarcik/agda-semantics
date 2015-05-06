@@ -3,13 +3,6 @@ require "agda-semantics-common.k"
 module AGDA-SEMANTICS-DECL-FUN
   imports AGDA-SEMANTICS-COMMON
 
-  context _ : (HOLE => checkSetType(HOLE))   [infer-type-sig, result(SetTypedExpr)]
-  rule [process-type-sig]:
-       <k> Name(F) : t(E, Set(_)) => . ...</k>
-       <ncat> NCat (. => Name(F) |-> Fun(F)) </ncat>
-       <sig>... . => Fun(F) |-> E ...</sig>
-    when notBool (Name(F) in keys(NCat))
-
   // for now, an absurd pattern causes its respective clause (consisting only of the LHS)
   // to be discarded with no checks  (FIXME, should verify that there really are
   // no suitable constructors.)
@@ -24,8 +17,18 @@ module AGDA-SEMANTICS-DECL-FUN
   rule freshArgs(L) => L  [owise]
   */
 
-  rule <k> L = R => saveCtx(Gamma) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> loadCtx ...</k>
+  rule <k> L = R => saveCtx(Gamma) ~> updateFunName(funName(L)) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> loadCtx ...</k>
        <ctx> Gamma </ctx>
+
+  syntax KItem ::= updateFunName(Name)
+  rule <k> updateFunName(Name(N)) => . ...</k>
+       <ncat> NCat (. => Name(N) |-> Fun(N)) </ncat>
+       <sig>... (Name(N) => Fun(N)) |-> _ ...</sig>
+    when notBool N in keys(NCat)
+  rule <k> updateFunName(Name(N)) => . ...</k>
+       <ncat>... Name(N) |-> Fun(N) ...</ncat>
+       <sig>... Fun(N) |-> _ ...</sig>
+  rule updateFunName(Fun(_)) => .
 
   context autotyped! ~> (HOLE => whnfType(HOLE)) = _  [result(WhnfTypedExpr)]
 
@@ -79,6 +82,9 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax Name ::= funName(LHS)  [function]
   rule funName(L) => leftmost(L)
+  //rule funName(Name(F)) => Fun(F)
+  //rule funName(Fun(F))  => Fun(F)
+  //rule funName(L => leftmost(L))    [owise]
 
   syntax Expr ::= freshFunName(LHS)  [function]
   rule freshFunName(L) => replaceLeftmost(L, F)  when fresh(F:FunClauses)

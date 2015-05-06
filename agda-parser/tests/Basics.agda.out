@@ -8,7 +8,9 @@
     .List
 </ctxstack>
 <sig>
-    Fun ( "N" ) |-> Set ( 0 )
+    Name ( "N" ) |-> Set ( 0 )
+    Name ( "s" ) |-> ( #symVariable(1) : Name ( "N" ) ) -> Name ( "N" )
+    Name ( "z" ) |-> Name ( "N" )
     Fun ( "_==_" ) |-> ( #symVariable(169) : Data ( "Nat" ) ) -> ( 
       #symVariable(172) : Data ( "Nat" ) ) -> Set ( 0 )
     Fun ( "even" ) |-> ( #symVariable(63) : Data ( "Nat" ) ) -> Data ( "Bool" 
@@ -19,12 +21,10 @@
     Fun ( "one" ) |-> Data ( "Nat" )
     Fun ( "plus" ) |-> ( #symVariable(163) : Data ( "Nat" ) ) -> ( 
       #symVariable(180) : Data ( "Nat" ) ) -> Data ( "Nat" )
-    Fun ( "s" ) |-> ( #symVariable(1) : Fun ( "N" ) ) -> Fun ( "N" )
     Fun ( "thmPlusZero" ) |-> ( Var ( "n" ) : Data ( "Nat" ) ) -> ((Fun ( 
       "_==_" ) ((Fun ( "plus" ) Var ( "n" )) Con ( "zero" ))) Var ( "n" ))
     Fun ( "thmPlusZero'" ) |-> ( Var ( "n" ) : Data ( "Nat" ) ) -> ((Fun ( 
       "_==_" ) ((Fun ( "plus" ) Con ( "zero" )) Var ( "n" ))) Var ( "n" ))
-    Fun ( "z" ) |-> Fun ( "N" )
     Data ( "Bool" ) |-> Set ( 0 )
     Data ( "False" ) |-> Set ( 0 )
     Data ( "Nat" ) |-> Set ( 0 )
@@ -51,7 +51,6 @@
 <ncat>
     Name ( "Bool" ) |-> Data ( "Bool" )
     Name ( "False" ) |-> Data ( "False" )
-    Name ( "N" ) |-> Fun ( "N" )
     Name ( "Nat" ) |-> Data ( "Nat" )
     Name ( "True" ) |-> Data ( "True" )
     Name ( "_==_" ) |-> Fun ( "_==_" )
@@ -61,13 +60,11 @@
     Name ( "odd" ) |-> Fun ( "odd" )
     Name ( "one" ) |-> Fun ( "one" )
     Name ( "plus" ) |-> Fun ( "plus" )
-    Name ( "s" ) |-> Fun ( "s" )
     Name ( "suc" ) |-> Con ( "suc" )
     Name ( "thmPlusZero" ) |-> Fun ( "thmPlusZero" )
     Name ( "thmPlusZero'" ) |-> Fun ( "thmPlusZero'" )
     Name ( "true" ) |-> Con ( "true" )
     Name ( "tt" ) |-> Con ( "tt" )
-    Name ( "z" ) |-> Fun ( "z" )
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>
 <fun>
@@ -79,8 +76,8 @@
       Var ( "n" ))) (Con ( "suc" ) Var ( "m" ))) = ((Fun ( "_==_" ) Var ( "n" 
       )) Var ( "m" ))) )
     Fun ( "even" ) |-> FunClauses ( ListItem((#symFunClauses(47) (Con ( "suc" 
-      ) Var ( "n" ))) = (Fun ( "odd" ) Var ( "n" ))) ListItem((#symFunClauses(
-      51) Con ( "zero" )) = Con ( "true" )) )
+      ) Var ( "n" ))) = (Name ( "odd" ) Var ( "n" ))) ListItem((#symFunClauses
+      (51) Con ( "zero" )) = Con ( "true" )) )
     Fun ( "id" ) |-> FunClauses ( ListItem(((#symFunClauses(75) #symExpr(74)) 
       Var ( "x" )) = Var ( "x" )) )
     Fun ( "odd" ) |-> FunClauses ( ListItem((#symFunClauses(55) Con ( "zero" )

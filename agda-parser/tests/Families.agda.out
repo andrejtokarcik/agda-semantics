@@ -8,6 +8,9 @@
     .List
 </ctxstack>
 <sig>
+    Name ( "true8800false" ) |-> ( #symVariable(16) : (((Data ( "_==_" ) { 
+      Data ( "Bool" ) }) Con ( "true" )) Con ( "false" )) ) -> Data ( "False" 
+      )
     Fun ( "_*_" ) |-> ( #symVariable(68) : Data ( "Nat" ) ) -> ( #symVariable(
       71) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Fun ( "_++_" ) |-> { #symExpr(343) : Set ( 0 ) } -> { Var ( "n" ) : Data (
@@ -27,8 +30,6 @@
       #symVariable(209) : #symExpr(343) ) -> Var ( "B" ) ) -> ( #symVariable(
       224) : ((Data ( "Vec" ) #symExpr(343)) Var ( "n" )) ) -> ((Data ( "Vec" 
       ) Var ( "B" )) Var ( "n" ))
-    Fun ( "true8800false" ) |-> ( #symVariable(16) : (((Data ( "_==_" ) { Data
-       ( "Bool" ) }) Con ( "true" )) Con ( "false" )) ) -> Data ( "False" )
     Fun ( "z_" ) |-> ( #symVariable(368) : Set ( 0 ) ) -> Set ( 0 )
     Data ( "Bool" ) |-> Set ( 0 )
     Data ( "False" ) |-> Set ( 0 )
@@ -85,7 +86,6 @@
     Name ( "refl" ) |-> Con ( "refl" )
     Name ( "suc" ) |-> Con ( "suc" )
     Name ( "true" ) |-> Con ( "true" )
-    Name ( "true8800false" ) |-> Fun ( "true8800false" )
     Name ( "z_" ) |-> Fun ( "z_" )
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>

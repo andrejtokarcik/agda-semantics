@@ -8,10 +8,10 @@
     .List
 </ctxstack>
 <sig>
+    Name ( "elim-False" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(11
+      ) : Data ( "False" ) ) -> Var ( "A" )
     Fun ( "_+_" ) |-> ( #symVariable(43) : Data ( "Nat" ) ) -> ( #symVariable(
       46) : Data ( "Nat" ) ) -> Data ( "Nat" )
-    Fun ( "elim-False" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(11)
-       : Data ( "False" ) ) -> Var ( "A" )
     Fun ( "if_then_else_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(
       71) : Data ( "Bool" ) ) -> ( #symVariable(74) : Var ( "A" ) ) -> ( 
       #symVariable(77) : Var ( "A" ) ) -> Var ( "A" )
@@ -58,7 +58,6 @@
     Name ( "[]" ) |-> Con ( "[]" )
     Name ( "_+_" ) |-> Fun ( "_+_" )
     Name ( "_::_" ) |-> Con ( "_::_" )
-    Name ( "elim-False" ) |-> Fun ( "elim-False" )
     Name ( "false" ) |-> Con ( "false" )
     Name ( "if_then_else_" ) |-> Fun ( "if_then_else_" )
     Name ( "map" ) |-> Fun ( "map" )

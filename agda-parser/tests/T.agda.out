@@ -8,10 +8,10 @@
     .List
 </ctxstack>
 <sig>
+    Name ( "p" ) |-> ( #symVariable(2) : Set ( 0 ) ) -> Set ( 0 )
+    Name ( "x" ) |-> Set ( 0 )
+    Name ( "y" ) |-> Set ( 0 )
     Fun ( "e" ) |-> Set ( 0 )
-    Fun ( "p" ) |-> ( #symVariable(2) : Set ( 0 ) ) -> Set ( 0 )
-    Fun ( "x" ) |-> Set ( 0 )
-    Fun ( "y" ) |-> Set ( 0 )
 </sig>
 <con>
     .Map
@@ -24,10 +24,7 @@
 </meta>
 <ncat>
     Name ( "e" ) |-> Fun ( "e" )
-    Name ( "p" ) |-> Fun ( "p" )
-    Name ( "x" ) |-> Fun ( "x" )
-    Name ( "y" ) |-> Fun ( "y" )
 </ncat>
 <fun>
-    Fun ( "e" ) |-> (Fun ( "p" ) Fun ( "y" ))
+    Fun ( "e" ) |-> (Name ( "p" ) Name ( "y" ))
 </fun>
