@@ -132,10 +132,12 @@ module AGDA-SYNTAX
 
   syntax LHS ::= Pattern
   syntax RHS ::= Expr
-               | "AbsurdRHS"                         [klabel('AbsurdRHS)]
-  syntax FunClause ::= LHS "=" RHS                   [binder, klabel('FunClause)]
+               | "AbsurdRHS"                             [klabel('AbsurdRHS)]
+  syntax FunClause ::= LHS "=" RHS                       [binder]
+                     | LHS "=" RHS "where" Declarations  [binder, klabel('FunClause)]
                      | Absurd(LHS)
-  rule L:LHS = AbsurdRHS => Absurd(L)       [macro]
+  rule L:LHS = R:RHS where .Declarations => L = R        [macro]
+  rule L:LHS = AbsurdRHS => Absurd(L)                    [macro]
 
   syntax DataDeclaration ::= Data(Name, LamBindings, Expr, TypeSignatures)  [klabel('Data)]
                            | "data" Name Telescope ":" Expr "where" TypeSignatures
