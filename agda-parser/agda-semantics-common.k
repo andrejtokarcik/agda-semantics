@@ -12,7 +12,7 @@ module AGDA-SEMANTICS-COMMON
   syntax TypedExpr ::= t(Expr, Expr)    [latex(\ktyped{#1}{#2})]    // the down arrow would indicate a type-*inference* result
   syntax Expr ::= TypedExpr
 
-  syntax Name ::= Data(Identifier) | Con(Identifier) | Fun(Identifier)
+  syntax Name ::= Data(Identifier) | Con(Identifier) | Fun(Identifier) | Postulate(Identifier)
 
   syntax CtxLoader
   rule isCtxLoader(_:KResult) => true
@@ -34,6 +34,10 @@ module AGDA-SEMANTICS-COMMON
   syntax GuardPass
   rule isGuardPass(true) => true
   rule _:GuardPass ~> pass? => .
+
+  syntax KItem ::= "cleanMetas"
+  rule <k> cleanMetas => . ...</k>
+       <meta> _ => .Map </meta>
 
   // perform unification in order to obtain a universe type
   syntax KItem ::= checkSetType(Expr)  [strict(all(context('whnfType))), context(result(SetTypedExpr))]
@@ -62,10 +66,10 @@ module AGDA-SEMANTICS-COMMON
 
   syntax Bool ::= all(KLabel, List)  [function]
   rule all(Pred, .List) => true      [structural]
-  rule all(Pred, ListItem(K) L) => Pred(K) andBool all(Pred, L)  [structural]
+  rule all(Pred, ListItem(K) L) => Pred(K) ==K true andBool all(Pred, L)  [structural]
   syntax Bool ::= any(KLabel, List)  [function]
   rule any(Pred, .List) => false     [structural]
-  rule any(Pred, ListItem(K) L) => Pred(K) orBool any(Pred, L)   [structural]
+  rule any(Pred, ListItem(K) L) => Pred(K) ==K true orBool any(Pred, L)   [structural]
 
   // if length of the given list is less than the desired number,
   // the whole list is returned

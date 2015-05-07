@@ -20,7 +20,7 @@
     Fun ( "i" ) |-> ( Var ( "y" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
     Fun ( "j" ) |-> ( Var ( "y" ) : (Fun ( "s" ) Con ( "False" )) ) -> (Fun ( 
       "s" ) Con ( "False" ))
-    Fun ( "s" ) |-> ( #symVariable(51) : Data ( "Bool" ) ) -> Set ( 0 )
+    Fun ( "s" ) |-> ( #symVariable(64) : Data ( "Bool" ) ) -> Set ( 0 )
     Data ( "Bool" ) |-> Set ( 0 )
     Data ( "T" ) |-> Set ( 0 )
     Con ( "E" ) |-> Data ( "T" )

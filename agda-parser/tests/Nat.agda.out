@@ -10,7 +10,7 @@
 <sig>
     Fun ( "one" ) |-> Data ( "Nat" )
     Data ( "Nat" ) |-> Set ( 0 )
-    Con ( "suc" ) |-> ( #symVariable(2) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "suc" ) |-> ( #symVariable(5) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Con ( "zero" ) |-> Data ( "Nat" )
 </sig>
 <con>

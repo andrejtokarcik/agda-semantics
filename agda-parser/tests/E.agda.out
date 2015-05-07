@@ -23,6 +23,5 @@
     Name ( "t" ) |-> Fun ( "t" )
 </ncat>
 <fun>
-    Fun ( "t" ) |-> FunClauses ( ListItem((#symFunClauses(6) Var ( "x" )) = 
-      Var ( "x" )) )
+    Fun ( "t" ) |-> \ ( Var ( "x" ) : #symExpr(6) ) -> Var ( "x" )
 </fun>

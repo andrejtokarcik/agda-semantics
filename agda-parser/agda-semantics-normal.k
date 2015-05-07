@@ -9,9 +9,10 @@ module AGDA-SEMANTICS-NORMAL
 
   syntax Neut
   rule isNeut(_:Variable) => true
-  // most notably, Fun's are not accepted
+  // note that Fun's are not accepted
   rule isNeut(Data(_)) => true
   rule isNeut(Con(_)) => true
+  rule isNeut(Postulate(_)) => true
   rule isNeut(_:Neut _:Nf) => true
   syntax Nf ::= "(" Nf ")"  [bracket]
               | Neut
@@ -69,6 +70,10 @@ module AGDA-SEMANTICS-NORMAL
   context whnf((HOLE => whnf(HOLE)) _)   [result(Whnf)]
 
   rule <k> whnf(N => Nc) ...</k>  <ncat>... N |-> Nc ...</ncat>
+  rule <k> whnf(Name(N)) ...</k>
+       <ncat> NCat (. => Name(N) |-> Postulate(N)) </ncat>
+       <sig>... (Name(N) => Postulate(N)) |-> _ ...</sig>
+    when notBool Name(N) in keys(NCat)
   rule <k> whnf(F => E) ...</k>   <fun>... F |-> E ...</fun>
 
   rule whnf((\ (X : _) -> E1) E2 => E1[E2/X])

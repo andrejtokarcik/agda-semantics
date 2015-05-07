@@ -18,10 +18,5 @@ module AGDA-SEMANTICS
        <k> postulate N : t(E, Set(_)) => . ...</k>
        //<ncat> NCat (. => Name(F) |-> Fun(F)) </ncat>
        <sig> Sigma (. => N |-> E) </sig>
-    when notBool (N in keys(Sigma)) andBool isUniverse(E) =/=K true
-    //when notBool (Name(F) in keys(NCat))
-  rule <k> postulate Name(N) : t(E, Set(_)) => . ...</k>
-       <ncat> NCat (. => Name(N) |-> Data(N)) </ncat>
-       <sig>... . => Data(N) |-> E ...</sig>
-    when notBool (Name(N) in keys(NCat)) andBool isUniverse(E) ==K true
+    when notBool (N in keys(Sigma))
 endmodule

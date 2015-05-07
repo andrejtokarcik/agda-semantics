@@ -5,6 +5,9 @@ module AGDA-SYNTAX
   rule castTelescope(LamBind(Relevant, Hidden, X:Variable) Bs:LamBindings) => {X : %meta} castTelescope(Bs)  [structural]
   rule castTelescope(B:TypedBinding Bs:LamBindings) => B castTelescope(Bs)  [structural]
   rule castTelescope(.LamBindings) => .Telescope   [structural]
+  syntax Telescope ::= castTelescope(List)  [function, notInPrograms]
+  rule castTelescope(ListItem(X) Xs) => (X : %meta) castTelescope(Xs)  [structural]
+  rule castTelescope(.List) => .Telescope   [structural]
 
 
   // nechcem operovat priamo na klabels v pripade tych pomocnych wrapperov?

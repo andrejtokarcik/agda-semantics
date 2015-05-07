@@ -24,6 +24,6 @@
     Name ( "id" ) |-> Fun ( "id" )
 </ncat>
 <fun>
-    Fun ( "id" ) |-> FunClauses ( ListItem(((#symFunClauses(10) #symExpr(9)) 
-      Var ( "x" )) = Var ( "x" )) )
+    Fun ( "id" ) |-> \ ( #symExpr(9) : #symExpr(10) ) -> \ ( Var ( "x" ) : 
+      #symExpr(13) ) -> Var ( "x" )
 </fun>

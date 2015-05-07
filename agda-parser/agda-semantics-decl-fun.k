@@ -10,42 +10,34 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax KItem ::= "autotyped!"
 
-  /*
-  syntax LHS ::= freshArgs(LHS)  [function]
-  rule freshArgs(L {_}) => freshArgs(L) {%meta}
-  rule freshArgs(L A) => freshArgs(L) %meta  when isImplicit(A) =/=K true
-  rule freshArgs(L) => L  [owise]
-  */
+  rule <k> L = R => saveCtx(Gamma) ~> updateFunName(funName(L)) ~> autotype(L) ~> autotyped! ~> L = R ~> loadCtx ...</k>
+       <ctx> Gamma </ctx>
 
-  rule <k> L = R => saveCtx(Gamma) ~> updateFunName(funName(L)) ~> autotype(L) ~> autotyped! ~> /*freshArgs(L)*/ L = R ~> loadCtx ...</k>
+  context autotyped! ~> (HOLE => whnfType(HOLE)) = _  [result(WhnfTypedExpr)]
+  context autotyped! ~> _::WhnfTypedExpr = (HOLE => whnfType(HOLE))  [result(WhnfTypedExpr)]
+
+  // insert implicit metavariables at the end of the {left,right}-hand side of function clauses as appropriate
+  rule autotyped! ~> (t(L, Tl) => L {%meta}) = t(_, Tr)  when isImplicitPi(Tl) andBool isImplicitPi(Tr) =/=K true
+  rule autotyped! ~> t(_, Tl) = (t(R, Tr) => R {%meta})  when isImplicitPi(Tl) =/=K true andBool isImplicitPi(Tr)
+  rule autotyped! ~> t(L, Tl) = t(R, Tr) => L {X} = R {X}   // NOTE: this gives a different behaviour from offic Agda, cf. Id8 test case
+    when isImplicitPi(Tl) andBool isImplicitPi(Tr) andBool fresh(X:Variable)
+
+  rule <k> (autotyped! => .) ~>
+           (t(L, Tl) = t(R, Tr)
+            => Tl == Tr ~> unifyConf ~>
+               addFunClause(funName(L), L, R) ~>
+               cleanMetas) ...</k>  // Vec will take ages without this
        <ctx> Gamma </ctx>
 
   syntax KItem ::= updateFunName(Name)
   rule <k> updateFunName(Name(N)) => . ...</k>
        <ncat> NCat (. => Name(N) |-> Fun(N)) </ncat>
        <sig>... (Name(N) => Fun(N)) |-> _ ...</sig>
-    when notBool N in keys(NCat)
+    when notBool Name(N) in keys(NCat)
   rule <k> updateFunName(Name(N)) => . ...</k>
        <ncat>... Name(N) |-> Fun(N) ...</ncat>
        <sig>... Fun(N) |-> _ ...</sig>
   rule updateFunName(Fun(_)) => .
-
-  context autotyped! ~> (HOLE => whnfType(HOLE)) = _  [result(WhnfTypedExpr)]
-
-  context autotyped! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE))  [result(WhnfTypedExpr)]
-
-  // insert implicit metavariables at the end of the {left,right}-hand side of function clauses as appropriate
-  rule autotyped! ~> (t(L, Tl) => L {%meta}) = t(_, Tr)  when isImplicitPi(Tl) andBool isImplicitPi(Tr) =/=K true
-  rule autotyped! ~> t(_, Tl) = (t(R, Tr) => R {%meta})  when isImplicitPi(Tl) =/=K true andBool isImplicitPi(Tr)
-  rule autotyped! ~> t(L, Tl) = t(R, Tr) => L {X} = R {X}   // NOTE: this gives a different behaviour as offic Agda, cf. Id8 test case
-    when isImplicitPi(Tl) andBool isImplicitPi(Tr) andBool fresh(X:Variable)
-
-  rule <k> (autotyped! => .) ~>
-           (t(L, Tl) = t(R, Tr)
-            => Tl == Tr ~> unifyConf ~>
-               addFunClause(funName(L), L, R)) ...</k>
-       <ctx> Gamma </ctx>
-       <meta> _ => .Map </meta>   // these metas shouldn't be needed any more, clean-up for speed-up
 
   syntax KItem ::= autotype(LHS)
   rule autotype(P1 P2) => autotype(P1) ~> autotype(P2)
@@ -62,18 +54,21 @@ module AGDA-SEMANTICS-DECL-FUN
   syntax FunClauses ::= FunClauses(List)
   syntax Expr ::= FunClauses
 
+  syntax KItem ::= addFunLambda(Name, Expr)  [strict(2)]   // strict to expand metas
+  rule <k> addFunLambda(F, t(E, _)) => . ...</k>
+       <fun> Rho (. => F |-> E) </fun>
+    when notBool (F in keys(Rho))
+
   syntax KItem ::= addFunClause(Name, LHS, RHS)
+  rule addFunClause(F, L, R) => addFunLambda(F, Lam(castTelescope(args(L)), R))
+    when all(isVariable, args(L))
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fun> Rho
-              (. => F |-> FunClauses(ListItem(freshFunName(L) = R))) </fun>
-    when notBool (F in keys(Rho))
+             (. => F |-> FunClauses(ListItem(freshFunName(L) = R))) </fun>
+    when notBool (F in keys(Rho)) andBool notBool all(isVariable, args(L))
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fun>... F |-> FunClauses(Cs (. => ListItem(freshFunName(L) = R))) ...</fun>
     when lengthList(args(L)) ==Int numReqArgs(FunClauses(Cs))   // check the arities are equal
-
-  rule FunClauses(ListItem(L = R)) => R
-    when lengthList(args(L)) ==Int 0   // i.e., when numReqArgs for the FunClauses is zero
-    [structural, anywhere]
 
   // XXX hack for typing FunClauses
   rule <k> F:FunClauses => t(F, T) ...</k>

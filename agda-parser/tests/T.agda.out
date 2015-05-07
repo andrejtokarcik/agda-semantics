@@ -8,7 +8,7 @@
     .List
 </ctxstack>
 <sig>
-    Name ( "p" ) |-> ( #symVariable(2) : Set ( 0 ) ) -> Set ( 0 )
+    Name ( "p" ) |-> ( #symVariable(5) : Set ( 0 ) ) -> Set ( 0 )
     Name ( "x" ) |-> Set ( 0 )
     Name ( "y" ) |-> Set ( 0 )
     Fun ( "e" ) |-> Set ( 0 )
