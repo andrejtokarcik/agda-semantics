@@ -60,8 +60,9 @@ module AGDA-SEMANTICS-DECL-FUN
     when notBool (F in keys(Rho))
 
   syntax KItem ::= addFunClause(Name, LHS, RHS)
-  rule addFunClause(F, L, R) => addFunLambda(F, Lam(castTelescope(args(L)), R))
-    when all(isVariable, args(L))
+  rule <k> addFunClause(F, L, R) => addFunLambda(F, Lam(castTelescope(args(L)), R)) ...</k>
+       <fun> Rho </fun>
+    when notBool (F in keys(Rho)) andBool all(isVariable, args(L))
   rule <k> addFunClause(F, L, R) => . ...</k>
        <fun> Rho
              (. => F |-> FunClauses(ListItem(freshFunName(L) = R))) </fun>

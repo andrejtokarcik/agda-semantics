@@ -1,11 +1,13 @@
 require "modules/substitution.k"
 require "agda-semantics-common.k"
+require "agda-semantics-unification.k"
+require "agda-semantics-decl-fun.k"
 
 module AGDA-SEMANTICS-NORMAL
-  imports AGDA-SEMANTICS-DECL-FUN  // for debug
-
   imports SUBSTITUTION
   imports AGDA-SEMANTICS-COMMON
+  imports AGDA-SEMANTICS-UNIFICATION
+  imports AGDA-SEMANTICS-DECL-FUN
 
   syntax Neut
   rule isNeut(_:Variable) => true
@@ -85,7 +87,7 @@ module AGDA-SEMANTICS-NORMAL
     when isFunClauses(leftmost(HOLE)) andBool lengthList(args(HOLE)) <=Int numReqArgs(leftmost(HOLE))  [result(Nf)]
 
   rule whnf(E => matchClause(leftmost(E), E))
-    when isFunClauses(leftmost(E)) andBool lengthList(args(E)) ==Int numReqArgs(leftmost(E)) andBool matches(leftmost(E), E) 
+    when isFunClauses(leftmost(E)) andBool lengthList(args(E)) ==Int numReqArgs(leftmost(E)) andBool matches(leftmost(E), E)
 
   // you don't want FunClauses as WhNeut:
   // isWhnf(E:Expr) would generate a sort memebership check,
@@ -95,9 +97,12 @@ module AGDA-SEMANTICS-NORMAL
   rule isNf(E) => true
     when isFunClauses(leftmost(E)) andBool all(isNf, args(E)) andBool notBool matches(leftmost(E), E)
 
+  // We must distinguish between a mismatch and inconclusive matching.
+  // --- by attempting to unify
   syntax Bool ::= matches(FunClauses, Expr)  [function]
   rule matches(FunClauses(.List), _) => false
-  rule matches(FunClauses(ListItem(L = _) _), E) => true  when isMatching(L, E)
+  rule matches(FunClauses(ListItem(L = _) _), E) => true   when isMatching(L, E)
+  rule matches(FunClauses(ListItem(L = _) _), E) => false  when notBool isMatching(L, E) andBool canUnify(L, E)
   rule matches(FunClauses(_ Cs:List => Cs), _)  [owise]
 
   syntax Expr ::= matchClause(FunClauses, Expr)  [function]
