@@ -1,0 +1,39 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "A2" ) |-> Set ( 0 )
+    Fun ( "A3" ) |-> Set ( 0 )
+    Fun ( "a2" ) |-> Fun ( "A2" )
+    Fun ( "a3" ) |-> Fun ( "A3" )
+    'Postulate("A") |-> Set ( 0 )
+</sig>
+<con>
+    .Map
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "A" ) |-> 'Postulate("A")
+    Name ( "A2" ) |-> Fun ( "A2" )
+    Name ( "A3" ) |-> Fun ( "A3" )
+    Name ( "a2" ) |-> Fun ( "a2" )
+    Name ( "a3" ) |-> Fun ( "a3" )
+</ncat>
+<fun>
+    Fun ( "A2" ) |-> ( Var ( "x" ) : Name ( "A" ) ) -> Name ( "A" )
+    Fun ( "A3" ) |-> ( Var ( "x" ) : Fun ( "A2" ) ) -> Fun ( "A2" )
+    Fun ( "a2" ) |-> \ ( Var ( "x" ) : Postulate ( "A" ) ) -> Var ( "x" )
+    Fun ( "a3" ) |-> \ ( Var ( "x" ) : ( Var ( "x" ) : Postulate ( "A" ) ) -> 
+      Postulate ( "A" ) ) -> Var ( "x" )
+</fun>

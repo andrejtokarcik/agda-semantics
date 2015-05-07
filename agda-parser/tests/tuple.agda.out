@@ -1,0 +1,82 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "Tuple" ) |-> ( #symVariable(88) : Set ( 0 ) ) -> ( #symVariable(91)
+       : Data ( "8469" ) ) -> Set ( 0 )
+    Fun ( "_+_" ) |-> ( #symVariable(151) : Data ( "8469" ) ) -> ( 
+      #symVariable(154) : Data ( "8469" ) ) -> Data ( "8469" )
+    Fun ( "sum8469Tuple" ) |-> { #symExpr(160) : Data ( "8469" ) } -> ( 
+      #symVariable(162) : ((Fun ( "Tuple" ) Data ( "8469" )) #symExpr(160)) ) 
+      -> ( #symVariable(165) : ((Fun ( "Tuple" ) Data ( "8469" )) #symExpr(160
+      )) ) -> ((Fun ( "Tuple" ) Data ( "8469" )) #symExpr(160))
+    Data ( "8469" ) |-> Set ( 0 )
+    Data ( "Cons" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( Var ( "B" ) : Set ( 0
+       ) ) -> Set ( 0 )
+    Data ( "Nil" ) |-> Set ( 0 )
+    Con ( "S" ) |-> ( #symVariable(154) : Data ( "8469" ) ) -> Data ( "8469" )
+    Con ( "Z" ) |-> Data ( "8469" )
+    Con ( "[]" ) |-> Data ( "Nil" )
+    Con ( "_::_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "B" ) : Set ( 0 
+      ) } -> ( #symVariable(157) : Var ( "A" ) ) -> ( #symVariable(168) : Var 
+      ( "B" ) ) -> ((Data ( "Cons" ) Var ( "A" )) Var ( "B" ))
+</sig>
+<con>
+    ((Data ( "Cons" ) Var ( "A" )) Var ( "B" )) |-> l ( ListItem(Con ( "_::_" 
+      )) )
+    Data ( "8469" ) |-> l ( ListItem(Con ( "Z" )) ListItem(Con ( "S" )) )
+    Data ( "Nil" ) |-> l ( ListItem(Con ( "[]" )) )
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "8469" ) |-> Data ( "8469" )
+    Name ( "Cons" ) |-> Data ( "Cons" )
+    Name ( "Nil" ) |-> Data ( "Nil" )
+    Name ( "S" ) |-> Con ( "S" )
+    Name ( "Tuple" ) |-> Fun ( "Tuple" )
+    Name ( "Z" ) |-> Con ( "Z" )
+    Name ( "[]" ) |-> Con ( "[]" )
+    Name ( "_+_" ) |-> Fun ( "_+_" )
+    Name ( "_::_" ) |-> Con ( "_::_" )
+    Name ( "sum8469Tuple" ) |-> Fun ( "sum8469Tuple" )
+</ncat>
+<fun>
+    Fun ( "Tuple" ) |-> FunClauses ( ListItem(((#symFunClauses(51) Var ( "A" )
+      ) Con ( "Z" )) = Data ( "Nil" )) ListItem(((#symFunClauses(75) Var ( "A"
+       )) (Con ( "S" ) Var ( "n" ))) = ((Data ( "Cons" ) Var ( "A" )) ((Fun ( 
+      "Tuple" ) Var ( "A" )) Var ( "n" )))) )
+    Fun ( "_+_" ) |-> FunClauses ( ListItem(((#symFunClauses(16) Var ( "n" )) 
+      Con ( "Z" )) = Var ( "n" )) ListItem(((#symFunClauses(37) Var ( "n" )) (
+      Con ( "S" ) Var ( "m" ))) = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) 
+      Var ( "m" )))) )
+    Fun ( "sum8469Tuple" ) |-> FunClauses ( ListItem((((#symFunClauses(100) { 
+      Con ( "Z" ) }) Con ( "[]" )) Con ( "[]" )) = Con ( "[]" )) ListItem((((
+      #symFunClauses(171) { (Con ( "S" ) Var ( "n" )) }) ((((Con ( "_::_" ) { 
+      Data ( "8469" ) }) { ((FunClauses ( ListItem(((#symFunClauses(51) Var ( 
+      "A" )) Con ( "Z" )) = Data ( "Nil" )) ListItem(((#symFunClauses(75) Var 
+      ( "A" )) (Con ( "S" ) Var ( "n" ))) = ((Data ( "Cons" ) Var ( "A" )) ((
+      Fun ( "Tuple" ) Var ( "A" )) Var ( "n" )))) ) Data ( "8469" )) Var ( "n"
+       )) }) Var ( "m" )) Var ( "l" ))) ((((Con ( "_::_" ) { Data ( "8469" ) }
+      ) { ((FunClauses ( ListItem(((#symFunClauses(51) Var ( "A" )) Con ( "Z" 
+      )) = Data ( "Nil" )) ListItem(((#symFunClauses(75) Var ( "A" )) (Con ( 
+      "S" ) Var ( "n" ))) = ((Data ( "Cons" ) Var ( "A" )) ((Fun ( "Tuple" ) 
+      Var ( "A" )) Var ( "n" )))) ) Data ( "8469" )) Var ( "n" )) }) Var ( 
+      "m'" )) Var ( "l'" ))) = ((((Con ( "_::_" ) { Data ( "8469" ) }) { ((
+      FunClauses ( ListItem(((#symFunClauses(51) Var ( "A" )) Con ( "Z" )) = 
+      Data ( "Nil" )) ListItem(((#symFunClauses(75) Var ( "A" )) (Con ( "S" ) 
+      Var ( "n" ))) = ((Data ( "Cons" ) Var ( "A" )) ((Fun ( "Tuple" ) Var ( 
+      "A" )) Var ( "n" )))) ) Data ( "8469" )) #symExpr(160)) }) ((Fun ( "_+_"
+       ) Var ( "m" )) Var ( "m'" ))) (((Fun ( "sum8469Tuple" ) { #symExpr(160)
+       }) Var ( "l" )) Var ( "l'" )))) )
+</fun>

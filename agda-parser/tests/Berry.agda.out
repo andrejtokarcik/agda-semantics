@@ -1,0 +1,41 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "maj" ) |-> ( #symVariable(47) : Data ( "Bool" ) ) -> ( #symVariable
+      (50) : Data ( "Bool" ) ) -> ( #symVariable(53) : Data ( "Bool" ) ) -> 
+      Data ( "Bool" )
+    Data ( "Bool" ) |-> Set ( 0 )
+    Con ( "ff" ) |-> Data ( "Bool" )
+    Con ( "tt" ) |-> Data ( "Bool" )
+</sig>
+<con>
+    Data ( "Bool" ) |-> l ( ListItem(Con ( "tt" )) ListItem(Con ( "ff" )) )
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Bool" ) |-> Data ( "Bool" )
+    Name ( "ff" ) |-> Con ( "ff" )
+    Name ( "maj" ) |-> Fun ( "maj" )
+    Name ( "tt" ) |-> Con ( "tt" )
+</ncat>
+<fun>
+    Fun ( "maj" ) |-> FunClauses ( ListItem((((#symFunClauses(13) Con ( "tt" )
+      ) Con ( "tt" )) Con ( "tt" )) = Con ( "tt" )) ListItem((((#symFunClauses
+      (24) Con ( "tt" )) Con ( "ff" )) Var ( "x" )) = Var ( "x" )) ListItem(((
+      (#symFunClauses(35) Con ( "ff" )) Var ( "x" )) Con ( "tt" )) = Var ( "x"
+       )) ListItem((((#symFunClauses(46) Var ( "x" )) Con ( "tt" )) Con ( "ff"
+       )) = Var ( "x" )) ListItem((((#symFunClauses(56) Con ( "ff" )) Con ( 
+      "ff" )) Con ( "ff" )) = Con ( "ff" )) )
+</fun>

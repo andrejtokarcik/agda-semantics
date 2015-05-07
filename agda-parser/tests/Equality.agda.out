@@ -1,0 +1,75 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "3things" ) |-> ((Data ( "Vec" ) Data ( "Nat" )) Fun ( "three" ))
+    Fun ( "3things'" ) |-> ((Data ( "Vec" ) Data ( "Nat" )) ((Fun ( "_+_" ) 
+      Fun ( "one" )) Fun ( "two" )))
+    Fun ( "3things''" ) |-> ((Data ( "Vec" ) Data ( "Nat" )) ((Fun ( "_+_" ) 
+      Fun ( "two" )) Fun ( "one" )))
+    Fun ( "_+_" ) |-> ( #symVariable(175) : Data ( "Nat" ) ) -> ( #symVariable
+      (178) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Fun ( "one" ) |-> Data ( "Nat" )
+    Fun ( "three" ) |-> Data ( "Nat" )
+    Fun ( "two" ) |-> Data ( "Nat" )
+    Data ( "Nat" ) |-> Set ( 0 )
+    Data ( "Vec" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(181) : 
+      Data ( "Nat" ) ) -> Set ( 0 )
+    Con ( "[]" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ((Data ( "Vec" ) Var ( "A"
+       )) Con ( "zero" ))
+    Con ( "_::_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "n" ) : Data ( 
+      "Nat" ) } -> ( #symVariable(148) : Var ( "A" ) ) -> ( #symVariable(151) 
+      : ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) Var (
+       "A" )) (Con ( "suc" ) Var ( "n" )))
+    Con ( "suc" ) |-> ( #symVariable(178) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "zero" ) |-> Data ( "Nat" )
+</sig>
+<con>
+    (Data ( "Vec" ) Var ( "A" )) |-> l ( ListItem(Con ( "[]" )) ListItem(Con (
+       "_::_" )) )
+    Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )) )
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "3things" ) |-> Fun ( "3things" )
+    Name ( "3things'" ) |-> Fun ( "3things'" )
+    Name ( "3things''" ) |-> Fun ( "3things''" )
+    Name ( "Nat" ) |-> Data ( "Nat" )
+    Name ( "Vec" ) |-> Data ( "Vec" )
+    Name ( "[]" ) |-> Con ( "[]" )
+    Name ( "_+_" ) |-> Fun ( "_+_" )
+    Name ( "_::_" ) |-> Con ( "_::_" )
+    Name ( "one" ) |-> Fun ( "one" )
+    Name ( "suc" ) |-> Con ( "suc" )
+    Name ( "three" ) |-> Fun ( "three" )
+    Name ( "two" ) |-> Fun ( "two" )
+    Name ( "zero" ) |-> Con ( "zero" )
+</ncat>
+<fun>
+    Fun ( "3things" ) |-> ((((Con ( "_::_" ) { Data ( "Nat" ) }) { (Con ( 
+      "suc" ) (Con ( "suc" ) Con ( "zero" ))) }) Con ( "zero" )) ((((Con ( 
+      "_::_" ) { Data ( "Nat" ) }) { (Con ( "suc" ) Con ( "zero" )) }) Fun ( 
+      "one" )) ((((Con ( "_::_" ) { Data ( "Nat" ) }) { Con ( "zero" ) }) Con 
+      ( "zero" )) (Con ( "[]" ) { Data ( "Nat" ) }))))
+    Fun ( "3things'" ) |-> Fun ( "3things" )
+    Fun ( "3things''" ) |-> Fun ( "3things'" )
+    Fun ( "_+_" ) |-> FunClauses ( ListItem(((#symFunClauses(13) Con ( "zero" 
+      )) Var ( "m" )) = Var ( "m" )) ListItem(((#symFunClauses(34) (Con ( 
+      "suc" ) Var ( "n" ))) Var ( "m" )) = (Con ( "suc" ) ((Fun ( "_+_" ) Var 
+      ( "n" )) Var ( "m" )))) )
+    Fun ( "one" ) |-> (Con ( "suc" ) Con ( "zero" ))
+    Fun ( "three" ) |-> (Con ( "suc" ) (Con ( "suc" ) (Con ( "suc" ) Con ( 
+      "zero" ))))
+    Fun ( "two" ) |-> (Con ( "suc" ) (Con ( "suc" ) Con ( "zero" )))
+</fun>

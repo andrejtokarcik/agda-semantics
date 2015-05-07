@@ -1,0 +1,67 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "PlantsInGroup" ) |-> ( #symVariable(12) : Data ( "PlantGroup" ) ) 
+      -> Set ( 0 )
+    Fun ( "f" ) |-> ( #symVariable(23) : Data ( "Plant" ) ) -> Data ( 
+      "PlantGroup" )
+    Data ( "Flower" ) |-> Set ( 0 )
+    Data ( "Plant" ) |-> Set ( 0 )
+    Data ( "PlantGroup" ) |-> Set ( 0 )
+    Data ( "Tree" ) |-> Set ( 0 )
+    Con ( "flower" ) |-> Data ( "PlantGroup" )
+    Con ( "lily" ) |-> Data ( "Flower" )
+    Con ( "oak" ) |-> Data ( "Tree" )
+    Con ( "pine" ) |-> Data ( "Tree" )
+    Con ( "plant" ) |-> ( Var ( "g" ) : Data ( "PlantGroup" ) ) -> ( 
+      #symVariable(20) : (Fun ( "PlantsInGroup" ) Var ( "g" )) ) -> Data ( 
+      "Plant" )
+    Con ( "rose" ) |-> Data ( "Flower" )
+    Con ( "spruce" ) |-> Data ( "Tree" )
+    Con ( "tree" ) |-> Data ( "PlantGroup" )
+</sig>
+<con>
+    Data ( "Flower" ) |-> l ( ListItem(Con ( "rose" )) ListItem(Con ( "lily" )
+      ) )
+    Data ( "Plant" ) |-> l ( ListItem(Con ( "plant" )) )
+    Data ( "PlantGroup" ) |-> l ( ListItem(Con ( "tree" )) ListItem(Con ( 
+      "flower" )) )
+    Data ( "Tree" ) |-> l ( ListItem(Con ( "oak" )) ListItem(Con ( "pine" )) 
+      ListItem(Con ( "spruce" )) )
+</con>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Flower" ) |-> Data ( "Flower" )
+    Name ( "Plant" ) |-> Data ( "Plant" )
+    Name ( "PlantGroup" ) |-> Data ( "PlantGroup" )
+    Name ( "PlantsInGroup" ) |-> Fun ( "PlantsInGroup" )
+    Name ( "Tree" ) |-> Data ( "Tree" )
+    Name ( "f" ) |-> Fun ( "f" )
+    Name ( "flower" ) |-> Con ( "flower" )
+    Name ( "lily" ) |-> Con ( "lily" )
+    Name ( "oak" ) |-> Con ( "oak" )
+    Name ( "pine" ) |-> Con ( "pine" )
+    Name ( "plant" ) |-> Con ( "plant" )
+    Name ( "rose" ) |-> Con ( "rose" )
+    Name ( "spruce" ) |-> Con ( "spruce" )
+    Name ( "tree" ) |-> Con ( "tree" )
+</ncat>
+<fun>
+    Fun ( "PlantsInGroup" ) |-> FunClauses ( ListItem((#symFunClauses(7) Con (
+       "tree" )) = Data ( "Tree" )) ListItem((#symFunClauses(11) Con ( 
+      "flower" )) = Data ( "Flower" )) )
+    Fun ( "f" ) |-> FunClauses ( ListItem((#symFunClauses(26) ((Con ( "plant" 
+      ) Var ( "g" )) Var ( "pg" ))) = Var ( "g" )) )
+</fun>
