@@ -9,11 +9,18 @@ module AGDA-SEMANTICS
 
   syntax KResult ::= TypedExpr
 
+  // sequentialise any whitespace-separated list that gets on top
+  // (don't I want to deal with declaration lists *only*?)
+  rule 'Cons(D,, Ds) => D ~> Ds           [structural]
+  rule '.List`{""`}(.KList) => .          [structural]
+
   rule module N Tel where Decls => Decls
   //rule postulate Sig => Sig
 
   // TODO: attributes: s/type-sig/postulate/ ?
   context postulate _ : (HOLE => checkSetType(HOLE))   [infer-type-sig, result(SetTypedExpr)]
+  // TODO SOM PRAVE VYTVORIL ALE BASICS CYCKLI MOZNO KVOLI TOMU
+  context postulate _ : t(HOLE => whnf(HOLE), _)       [result(Whnf)]
   rule [process-type-sig]:
        <k> postulate N : t(E, Set(_)) => . ...</k>
        //<ncat> NCat (. => Name(F) |-> Fun(F)) </ncat>

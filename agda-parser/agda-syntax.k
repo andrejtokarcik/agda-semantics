@@ -24,7 +24,7 @@ module AGDA-SYNTAX
   syntax Variables ::= List{Variable, ""}            [klabel('Cons)]
   syntax Name ::= Name(Identifier)                   [klabel('Name)]
   // See c-semantics/cil-semantics/cil-syntax.k for Char syntax, including EscapeString.
-  syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" //| QName
+  //syntax Literal ::= Int | Float | "\""String"\"" | "'"Char"'" | QName
 
   syntax Relevance ::= "Relevant"
   syntax Hiding ::= "Hidden" | "NotHidden"
@@ -71,10 +71,10 @@ module AGDA-SYNTAX
   rule Lam({X:Variable : T:Expr} Bs:Telescope, E:Expr) => \ {X : T} -> Lam(Bs, E)  [macro]
   rule Lam(.LamBindings, E:Expr) => E                                              [macro]
 
-  syntax Arg ::= Expr
-               | Arg(Hiding, Expr)  [klabel('Arg)]
-  rule Arg(NotHidden, E:Expr) => E  [macro]
-  rule Arg(Hidden, E:Expr) => {E}   [macro]
+  //syntax Arg ::= Expr
+  syntax Arg ::= Arg(Hiding, K)  [klabel('Arg)]
+  rule Arg(NotHidden, K:K) => K  [macro]
+  rule Arg(Hidden, K:K) => {K}   [macro]
   syntax Args ::= List{Arg, ""}     [klabel('Cons), notInRules]
                 | Telescope
   syntax App ::= "(" App ")"        [bracket]
@@ -88,10 +88,11 @@ module AGDA-SYNTAX
   rule App(A:Arg, (X : _) Tel) => App(A X, Tel)  [macro]
   rule App(A:Arg, {X : _} Tel) => App(A {X}, Tel) [macro]
 
-  syntax Universe ::= Set(Int)     [klabel('SetN), latex(\terminal{Set}_{#1})]
+  syntax Universe ::= Set(Int)     [klabel('SetN), latex(\KSet_{#1})]
                     | "Set"        [klabel('Set), notInRules]
   rule 'Set(.KList) => Set(0)  [macro]
 
+  syntax Arg ::= Expr
   syntax Meta ::= "%meta"      [klabel('Underscore)]
   syntax Implicit ::= "{" Expr "}"
   syntax Expr ::= "(" Expr ")" [bracket]
@@ -108,11 +109,23 @@ module AGDA-SYNTAX
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
   syntax TypeSignatures ::= List{TypeSignature, ""}    [klabel('Cons)]
 
-
-  syntax Absurd ::= "%absurd"            [klabel('AbsurdP)]
+  // ta syntax patterns vs expr by sa mozno zisla lepsie rozdelit
+  //syntax Absurd ::= "%absurd"            [klabel('AbsurdP)]
+  //syntax Arg ::= Absurd
+  //             | Arg(Hiding, Absurd) [klabel('Arg)]
+  //rule Arg(NotHidden, %absurd) => %absurd     [macro]
+  //syntax Wildcard ::= "%wild"      [klabel('WildP)]
+  //syntax Arg ::= Wildcard
+  //             | Arg(Hiding, Wildcard)  [klabel('Arg)]
+  //rule Arg(Hidden, %wild) => {%wild}     [macro]
+  //rule Arg(NotHidden, %wild) => %wild    [macro]
+  //syntax Arg ::= DotP(Expr)    [klabel('DotP)]
+  syntax Absurd ::= "%absurd"     [klabel('AbsurdP)]
+  syntax Wildcard ::=  "%wild"       [klabel('WildP)]
+  syntax InaccessiblePattern ::= DotP(Pattern)    [klabel('DotP)]   // %dot
   syntax Arg ::= Absurd
-               | Arg(Hiding, Absurd) [klabel('Arg)]
-  rule Arg(NotHidden, %absurd) => %absurd     [macro]
+               | Wildcard
+               | InaccessiblePattern
   syntax App ::= AppP(Arg, Arg)     [klabel('AppP)]
                | OpAppP(Arg, Args)  [klabel('OpAppP)]
   rule AppP(A:Arg, A':Arg) => App(A, A')  [macro]
@@ -120,8 +133,8 @@ module AGDA-SYNTAX
   syntax Pattern ::= "(" Pattern ")" [bracket]
     | Arg
     | App
-    | "%wild"     [klabel('WildP)]
-  // XXX this seems to cause troubles -- X may get expanded into the *same* Variable
+
+  // XXX this seems to cause troubles -- distinct wildcards may get expanded into the same variable
   // (as though the macro expansion executed in parallel)
   // this isn't a great problem with Fun above as the variables do not occur in the expression.
   // here, though, if two distinct wild patterns get replaced with the same 'fresh' variable
@@ -133,8 +146,8 @@ module AGDA-SYNTAX
   syntax LHS ::= Pattern
   syntax RHS ::= Expr
                | "AbsurdRHS"                             [klabel('AbsurdRHS)]
-  syntax FunClause ::= LHS "=" RHS                       [binder]
-                     | LHS "=" RHS "where" Declarations  [binder, klabel('FunClause)]
+  syntax FunClause ::= LHS "=" RHS                       //[binder]
+                     | LHS "=" RHS "where" Declarations  [klabel('FunClause)]  //[binder, klabel('FunClause)]
                      | Absurd(LHS)
   rule L:LHS = R:RHS where .Declarations => L = R        [macro]
   rule L:LHS = AbsurdRHS => Absurd(L)                    [macro]

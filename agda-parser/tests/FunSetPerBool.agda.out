@@ -1,43 +1,46 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
     Fun ( "f" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
-    Fun ( "f2" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> ( Var ( "y" ) : (
-      FunClauses ( ListItem((#symFunClauses(5) Con ( "True" )) = Data ( "Bool"
-       )) ListItem((#symFunClauses(9) Con ( "False" )) = Data ( "T" )) ) Var (
-       "x" )) ) -> (FunClauses ( ListItem((#symFunClauses(5) Con ( "True" )) =
-       Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) = Data ( 
-      "T" )) ) Var ( "x" ))
+    Fun ( "f2" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> ( Var ( "eh" ) : (
+      'FunClauses((#symFunClauses(250) Con ( "True" )) = Data ( "Bool" ),, (
+      #symFunClauses(251) Con ( "False" )) = Data ( "T" )) Var ( "x" )) ) -> (
+      'FunClauses((#symFunClauses(286) Con ( "True" )) = Data ( "Bool" ),, (
+      #symFunClauses(287) Con ( "False" )) = Data ( "T" )) Var ( "x" ))
     Fun ( "g" ) |-> Data ( "Bool" )
     Fun ( "h" ) |-> Data ( "T" )
-    Fun ( "i" ) |-> ( Var ( "y" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
-    Fun ( "j" ) |-> ( Var ( "y" ) : (Fun ( "s" ) Con ( "False" )) ) -> (Fun ( 
-      "s" ) Con ( "False" ))
-    Fun ( "s" ) |-> ( #symVariable(64) : Data ( "Bool" ) ) -> Set ( 0 )
+    Fun ( "i" ) |-> ( Var ( "eh" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
+    Fun ( "j" ) |-> ( Var ( "eh" ) : (Fun ( "s" ) Con ( "False" )) ) -> (Fun (
+       "s" ) Con ( "False" ))
+    Fun ( "s" ) |-> ( #symVariable(518) : Data ( "Bool" ) ) -> Set ( 0 )
     Data ( "Bool" ) |-> Set ( 0 )
     Data ( "T" ) |-> Set ( 0 )
     Con ( "E" ) |-> Data ( "T" )
     Con ( "False" ) |-> Data ( "Bool" )
     Con ( "True" ) |-> Data ( "Bool" )
 </sig>
-<con>
-    Data ( "Bool" ) |-> l ( ListItem(Con ( "True" )) ListItem(Con ( "False" ))
-       )
-    Data ( "T" ) |-> l ( ListItem(Con ( "E" )) )
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "Bool" ) |-> Data ( "Bool" )
     Name ( "E" ) |-> Con ( "E" )
@@ -55,13 +58,12 @@
 <fun>
     Fun ( "f" ) |-> \ ( Var ( "x" ) : (Fun ( "s" ) Con ( "True" )) ) -> Var ( 
       "x" )
-    Fun ( "f2" ) |-> \ ( Var ( "x" ) : Data ( "Bool" ) ) -> \ ( Var ( "y" ) : 
-      (Fun ( "s" ) Var ( "x" )) ) -> Var ( "y" )
+    Fun ( "f2" ) |-> \ ( Var ( "x" ) : Data ( "Bool" ) ) -> \ ( Var ( "eh" ) :
+       (Fun ( "s" ) Var ( "x" )) ) -> Var ( "eh" )
     Fun ( "g" ) |-> (Fun ( "f" ) Con ( "True" ))
     Fun ( "h" ) |-> ((Fun ( "f2" ) Con ( "False" )) Con ( "E" ))
     Fun ( "i" ) |-> (Fun ( "f2" ) Con ( "True" ))
     Fun ( "j" ) |-> (Fun ( "f2" ) Con ( "False" ))
-    Fun ( "s" ) |-> FunClauses ( ListItem((#symFunClauses(5) Con ( "True" )) =
-       Data ( "Bool" )) ListItem((#symFunClauses(9) Con ( "False" )) = Data ( 
-      "T" )) )
+    Fun ( "s" ) |-> 'FunClauses((#symFunClauses(6) Con ( "True" )) = Data ( 
+      "Bool" ),, (#symFunClauses(11) Con ( "False" )) = Data ( "T" ))
 </fun>

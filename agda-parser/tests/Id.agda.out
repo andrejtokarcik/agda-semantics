@@ -1,29 +1,40 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
-    Fun ( "id" ) |-> ( #symExpr(9) : Set ( 0 ) ) -> ( #symVariable(7) : 
-      #symExpr(9) ) -> #symExpr(9)
+    Fun ( "id" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(39) : Var (
+       "A" ) ) -> Var ( "A" )
+    Fun ( "idd" ) |-> ( #symVariable("local",, 1) : #symExpr(25) ) -> #symExpr
+      (25)
 </sig>
-<con>
-    .Map
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "id" ) |-> Fun ( "id" )
+    Name ( "idd" ) |-> Fun ( "idd" )
 </ncat>
 <fun>
-    Fun ( "id" ) |-> \ ( #symExpr(9) : #symExpr(10) ) -> \ ( Var ( "x" ) : 
-      #symExpr(13) ) -> Var ( "x" )
+    Fun ( "id" ) |-> 'FunClauses(((#symFunClauses(13) { #symExpr(10) }) Var ( 
+      "x" )) = Var ( "x" ))
+    Fun ( "idd" ) |-> ((Fun ( "id" ) { ( #symVariable(39) : #symExpr(25) ) -> 
+      #symExpr(25) }) (Fun ( "id" ) { #symExpr(25) }))
 </fun>

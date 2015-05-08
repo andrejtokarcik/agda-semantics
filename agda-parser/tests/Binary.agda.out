@@ -1,99 +1,116 @@
 <k>
-    Name ( "_8853_" ) ~> whnfType ( HOLE ) ~> (HOLE (Name ( "peano" ) Var ( 
-      "n" ))) ~> whnfType ( HOLE ) ~> (HOLE Var ( "m" )) ~> whnfType ( HOLE )
-       ~> autotyped! ~> t ( ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" )) , Data (
-       "Pos" ) ) = HOLE ~> loadCtx ~> data Name ( "_==_" ) { Var ( "A" ) : Set
-       ( 0 ) } ( Var ( "x" ) : Var ( "A" ) ) : ( #symVariable(8) : Var ( "A" )
-       ) -> Set ( 0 ) where Name ( "refl" ) : ((Name ( "_==_" ) Var ( "x" )) 
-      Var ( "x" )); (postulate Name ( "test" ) : ((Name ( "_==_" ) ((Name ( 
-      "_9667_" ) ((Name ( "_9667_" ) ((Name ( "_9667_" ) ((Name ( "_9667_" ) 
-      Name ( "9667I" )) Name ( "I" ))) Name ( "O" ))) Name ( "O" ))) Name ( 
-      "O" ))) ((Name ( "_+_" ) ((Name ( "_9667_" ) ((Name ( "_9667_" ) ((Name 
-      ( "_9667_" ) Name ( "9667I" )) Name ( "I" ))) Name ( "O" ))) Name ( "I" 
-      ))) ((Name ( "_9667_" ) ((Name ( "_9667_" ) ((Name ( "_9667_" ) Name ( 
-      "9667I" )) Name ( "O" ))) Name ( "I" ))) Name ( "I" ))))); Name ( "test"
-       ) = Name ( "refl" ) ~> .List{""} ~> .List{""}
+    nf ( ((Con ( "_<<_" ) Con ( "<<I" )) Con ( "I" )) )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
-    ListItem(m ( .Map ))
+    .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
-    Fun ( "_+_" ) |-> ( #symVariable(200) : Data ( "Pos" ) ) -> ( #symVariable
-      (203) : Data ( "Pos" ) ) -> Data ( "Pos" )
-    Fun ( "bsuc" ) |-> ( #symVariable(62) : Data ( "Pos" ) ) -> Data ( "Pos" )
-    Fun ( "pdouble" ) |-> { #symExpr(156) : Data ( "Pos" ) } -> ( #symVariable
-      (191) : (Data ( "Peano" ) #symExpr(156)) ) -> (Data ( "Peano" ) ((Con ( 
-      "_9667_" ) #symExpr(156)) Con ( "O" )))
-    Fun ( "peano" ) |-> ( #symExpr(156) : Data ( "Pos" ) ) -> (Data ( "Peano" 
-      ) #symExpr(156))
+    Fun ( "_+_" ) |-> ( #symVariable(2402) : Data ( "Pos" ) ) -> ( 
+      #symVariable(2405) : Data ( "Pos" ) ) -> Data ( "Pos" )
+    Fun ( "bsuc" ) |-> ( #symVariable(2295) : Data ( "Pos" ) ) -> Data ( "Pos"
+       )
+    Fun ( "pdouble" ) |-> { Var ( "n" ) : Data ( "Pos" ) } -> ( #symVariable(
+      1833) : (Data ( "Peano" ) Var ( "n" )) ) -> (Data ( "Peano" ) ((Con ( 
+      "_<<_" ) Var ( "n" )) Con ( "O" )))
+    Fun ( "peano" ) |-> ( Var ( "n" ) : Data ( "Pos" ) ) -> (Data ( "Peano" ) 
+      Var ( "n" ))
+    Fun ( "t1" ) |-> Data ( "Pos" )
+    Fun ( "t2" ) |-> (((Data ( "_==_" ) { Data ( "Pos" ) }) ((Fun ( "_+_" ) 
+      Con ( "<<I" )) Con ( "<<I" ))) ((Fun ( "_+_" ) Con ( "<<I" )) Con ( 
+      "<<I" )))
     Data ( "Bit" ) |-> Set ( 0 )
-    Data ( "Peano" ) |-> ( #symVariable(136) : Data ( "Pos" ) ) -> Set ( 0 )
+    Data ( "Peano" ) |-> ( #symVariable(1965) : Data ( "Pos" ) ) -> Set ( 0 )
     Data ( "Pos" ) |-> Set ( 0 )
-    Con ( "9667I" ) |-> Data ( "Pos" )
+    Data ( "_==_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "x" ) : Var ( 
+      "A" ) ) -> ( #symVariable(2408) : Var ( "A" ) ) -> Set ( 0 )
+    Con ( "<<I" ) |-> Data ( "Pos" )
     Con ( "I" ) |-> Data ( "Bit" )
     Con ( "O" ) |-> Data ( "Bit" )
-    Con ( "_9667_" ) |-> ( #symVariable(166) : Data ( "Pos" ) ) -> ( 
-      #symVariable(169) : Data ( "Bit" ) ) -> Data ( "Pos" )
-    Con ( "pI" ) |-> (Data ( "Peano" ) Con ( "9667I" ))
-    Con ( "psuc" ) |-> { #symExpr(156) : Data ( "Pos" ) } -> ( #symVariable(
-      194) : (Data ( "Peano" ) #symExpr(156)) ) -> (Data ( "Peano" ) (Fun ( 
-      "bsuc" ) #symExpr(156)))
+    Con ( "_<<_" ) |-> ( #symVariable(2373) : Data ( "Pos" ) ) -> ( 
+      #symVariable(2376) : Data ( "Bit" ) ) -> Data ( "Pos" )
+    Con ( "pI" ) |-> (Data ( "Peano" ) Con ( "<<I" ))
+    Con ( "psuc" ) |-> { Var ( "n" ) : Data ( "Pos" ) } -> ( #symVariable(2263
+      ) : (Data ( "Peano" ) Var ( "n" )) ) -> (Data ( "Peano" ) (Fun ( "bsuc" 
+      ) Var ( "n" )))
+    Con ( "refl" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "x" ) : Var ( 
+      "A" ) } -> (((Data ( "_==_" ) { Var ( "A" ) }) Var ( "x" )) Var ( "x" ))
 </sig>
-<con>
-    Data ( "Bit" ) |-> l ( ListItem(Con ( "O" )) ListItem(Con ( "I" )) )
-    Data ( "Peano" ) |-> l ( ListItem(Con ( "pI" )) ListItem(Con ( "psuc" )) )
-    Data ( "Pos" ) |-> l ( ListItem(Con ( "9667I" )) ListItem(Con ( "_9667_" )
-      ) )
-</con>
 <ctx>
-    Var ( "m" ) |-> Data ( "Pos" )
-    Var ( "n" ) |-> Data ( "Pos" )
+    .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
-    Name ( "9667I" ) |-> Con ( "9667I" )
+    Name ( "<<I" ) |-> Con ( "<<I" )
     Name ( "Bit" ) |-> Data ( "Bit" )
     Name ( "I" ) |-> Con ( "I" )
     Name ( "O" ) |-> Con ( "O" )
     Name ( "Peano" ) |-> Data ( "Peano" )
     Name ( "Pos" ) |-> Data ( "Pos" )
     Name ( "_+_" ) |-> Fun ( "_+_" )
-    Name ( "_9667_" ) |-> Con ( "_9667_" )
+    Name ( "_<<_" ) |-> Con ( "_<<_" )
+    Name ( "_==_" ) |-> Data ( "_==_" )
     Name ( "bsuc" ) |-> Fun ( "bsuc" )
     Name ( "pI" ) |-> Con ( "pI" )
     Name ( "pdouble" ) |-> Fun ( "pdouble" )
     Name ( "peano" ) |-> Fun ( "peano" )
     Name ( "psuc" ) |-> Con ( "psuc" )
+    Name ( "refl" ) |-> Con ( "refl" )
+    Name ( "t1" ) |-> Fun ( "t1" )
+    Name ( "t2" ) |-> Fun ( "t2" )
 </ncat>
 <fun>
-    Fun ( "bsuc" ) |-> FunClauses ( ListItem((#symFunClauses(18) Con ( "9667I"
-       )) = ((Con ( "_9667_" ) Con ( "9667I" )) Con ( "O" ))) ListItem((
-      #symFunClauses(35) ((Con ( "_9667_" ) Var ( "n" )) Con ( "O" ))) = ((Con
-       ( "_9667_" ) Var ( "n" )) Con ( "I" ))) ListItem((#symFunClauses(55) ((
-      Con ( "_9667_" ) Var ( "n" )) Con ( "I" ))) = ((Con ( "_9667_" ) (Fun ( 
-      "bsuc" ) Var ( "n" ))) Con ( "O" ))) )
-    Fun ( "pdouble" ) |-> FunClauses ( ListItem(((#symFunClauses(90) { Con ( 
-      "9667I" ) }) Con ( "pI" )) = ((Con ( "psuc" ) { Con ( "9667I" ) }) Con (
-       "pI" ))) ListItem(((#symFunClauses(135) { (FunClauses ( ListItem((
-      #symFunClauses(18) Con ( "9667I" )) = ((Con ( "_9667_" ) Con ( "9667I" )
-      ) Con ( "O" ))) ListItem((#symFunClauses(35) ((Con ( "_9667_" ) Var ( 
-      "n" )) Con ( "O" ))) = ((Con ( "_9667_" ) Var ( "n" )) Con ( "I" ))) 
-      ListItem((#symFunClauses(55) ((Con ( "_9667_" ) Var ( "n" )) Con ( "I" )
-      )) = ((Con ( "_9667_" ) (Fun ( "bsuc" ) Var ( "n" ))) Con ( "O" ))) ) 
-      #symExpr(92)) }) ((Con ( "psuc" ) { #symExpr(92) }) Var ( "p" ))) = ((
-      Con ( "psuc" ) { ((Con ( "_9667_" ) #symExpr(105)) Con ( "I" )) }) ((Con
-       ( "psuc" ) { ((Con ( "_9667_" ) #symExpr(105)) Con ( "O" )) }) ((Fun ( 
-      "pdouble" ) { #symExpr(105) }) Var ( "p" ))))) )
-    Fun ( "peano" ) |-> FunClauses ( ListItem((#symFunClauses(142) Con ( 
-      "9667I" )) = Con ( "pI" )) ListItem((#symFunClauses(164) ((Con ( 
-      "_9667_" ) Var ( "n" )) Con ( "O" ))) = ((Fun ( "pdouble" ) { #symExpr(
-      156) }) (Fun ( "peano" ) #symExpr(156)))) ListItem((#symFunClauses(197) 
-      ((Con ( "_9667_" ) Var ( "n" )) Con ( "I" ))) = ((Con ( "psuc" ) { ((Con
-       ( "_9667_" ) #symExpr(178)) Con ( "O" )) }) ((Fun ( "pdouble" ) { 
-      #symExpr(178) }) (Fun ( "peano" ) #symExpr(178))))) )
+    Fun ( "_+_" ) |-> \ ( Var ( "n" ) : #symExpr(2329) ) -> \ ( Var ( "m" ) : 
+      #symExpr(2332) ) -> (((Fun ( "_<+>_" ) @ Fun ( "_<+>_" ) |-> 'FunClauses
+      ((((#symFunClauses(1986) { Con ( "<<I" ) }) Con ( "pI" )) Var ( "m" )) =
+       (Fun ( "bsuc" ) Var ( "m" )),, (((#symFunClauses(2301) { ('FunClauses((
+      #symFunClauses(2137) Con ( "<<I" )) = ((Con ( "_<<_" ) Con ( "<<I" )) 
+      Con ( "O" )),, (#symFunClauses(2138) ((Con ( "_<<_" ) #symVariable(2139)
+      ) Con ( "O" ))) = ((Con ( "_<<_" ) #symVariable(2139)) Con ( "I" )),, (
+      #symFunClauses(2140) ((Con ( "_<<_" ) #symVariable(2141)) Con ( "I" ))) 
+      = ((Con ( "_<<_" ) (Fun ( "bsuc" ) #symVariable(2141))) Con ( "O" ))) 
+      'DotP(#symExpr(1989))) }) ((Con ( "psuc" ) { #symExpr(1989) }) Var ( "p"
+       ))) Var ( "m" )) = (Fun ( "bsuc" ) (((Fun ( "_<+>_" ) { #symExpr(2284) 
+      }) Var ( "p" )) Var ( "m" )))) { Var ( "n" ) }) (Fun ( "peano" ) Var ( 
+      "n" ))) Var ( "m" ))
+    Fun ( "bsuc" ) |-> 'FunClauses((#symFunClauses(20) Con ( "<<I" )) = ((Con 
+      ( "_<<_" ) Con ( "<<I" )) Con ( "O" )),, (#symFunClauses(38) ((Con ( 
+      "_<<_" ) Var ( "n" )) Con ( "O" ))) = ((Con ( "_<<_" ) Var ( "n" )) Con 
+      ( "I" )),, (#symFunClauses(59) ((Con ( "_<<_" ) Var ( "n" )) Con ( "I" )
+      )) = ((Con ( "_<<_" ) (Fun ( "bsuc" ) Var ( "n" ))) Con ( "O" )))
+    Fun ( "pdouble" ) |-> 'FunClauses(((#symFunClauses(278) { Con ( "<<I" ) })
+       Con ( "pI" )) = ((Con ( "psuc" ) { Con ( "<<I" ) }) Con ( "pI" )),, ((
+      #symFunClauses(1637) { ('FunClauses((#symFunClauses(428) Con ( "<<I" )) 
+      = ((Con ( "_<<_" ) Con ( "<<I" )) Con ( "O" )),, (#symFunClauses(429) ((
+      Con ( "_<<_" ) #symVariable(430)) Con ( "O" ))) = ((Con ( "_<<_" ) 
+      #symVariable(430)) Con ( "I" )),, (#symFunClauses(431) ((Con ( "_<<_" ) 
+      #symVariable(432)) Con ( "I" ))) = ((Con ( "_<<_" ) (Fun ( "bsuc" ) 
+      #symVariable(432))) Con ( "O" ))) 'DotP(#symExpr(280))) }) ((Con ( 
+      "psuc" ) { #symExpr(280) }) Var ( "p" ))) = ((Con ( "psuc" ) { ((Con ( 
+      "_<<_" ) #symExpr(572)) Con ( "I" )) }) ((Con ( "psuc" ) { ((Con ( 
+      "_<<_" ) #symExpr(572)) Con ( "O" )) }) ((Fun ( "pdouble" ) { #symExpr(
+      572) }) Var ( "p" )))))
+    Fun ( "peano" ) |-> 'FunClauses((#symFunClauses(1645) Con ( "<<I" )) = Con
+       ( "pI" ),, (#symFunClauses(1671) ((Con ( "_<<_" ) Var ( "n" )) Con ( 
+      "O" ))) = ((Fun ( "pdouble" ) { Var ( "n" ) }) (Fun ( "peano" ) Var ( 
+      "n" ))),, (#symFunClauses(1964) ((Con ( "_<<_" ) Var ( "n" )) Con ( "I" 
+      ))) = ((Con ( "psuc" ) { ((Con ( "_<<_" ) Var ( "n" )) Con ( "O" )) }) (
+      (Fun ( "pdouble" ) { Var ( "n" ) }) (Fun ( "peano" ) Var ( "n" )))))
+    Fun ( "t1" ) |-> ((Fun ( "_+_" ) Con ( "<<I" )) ((Con ( "_<<_" ) Con ( 
+      "<<I" )) Con ( "O" )))
+    Fun ( "t2" ) |-> ((Con ( "refl" ) { Data ( "Pos" ) }) { ((Con ( "_<<_" ) 
+      Con ( "<<I" )) Con ( "O" )) })
 </fun>

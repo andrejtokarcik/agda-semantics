@@ -24,5 +24,7 @@ idImp : {A : Set} -> A -> A
 idImp = \ {A} x -> x
 -}
 
-id : (A : Set) -> A -> A
-id A x = x
+id : {A : Set} -> A -> A
+id x = x
+
+idd = id id

@@ -1,30 +1,35 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
     Fun ( "if_then_else_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(
-      22) : Data ( "Bool" ) ) -> ( #symVariable(25) : Var ( "A" ) ) -> ( 
-      #symVariable(28) : Var ( "A" ) ) -> Var ( "A" )
+      32) : Data ( "Bool" ) ) -> ( #symVariable(35) : Var ( "A" ) ) -> ( 
+      #symVariable(38) : Var ( "A" ) ) -> Var ( "A" )
     Data ( "Bool" ) |-> Set ( 0 )
     Con ( "false" ) |-> Data ( "Bool" )
     Con ( "true" ) |-> Data ( "Bool" )
 </sig>
-<con>
-    Data ( "Bool" ) |-> l ( ListItem(Con ( "true" )) ListItem(Con ( "false" ))
-       )
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "Bool" ) |-> Data ( "Bool" )
     Name ( "false" ) |-> Con ( "false" )
@@ -32,8 +37,8 @@
     Name ( "true" ) |-> Con ( "true" )
 </ncat>
 <fun>
-    Fun ( "if_then_else_" ) |-> FunClauses ( ListItem(((((#symFunClauses(17) {
-       #symExpr(16) }) Con ( "true" )) Var ( "x" )) Var ( "y" )) = Var ( "x" )
-      ) ListItem(((((#symFunClauses(31) { #symExpr(30) }) Con ( "false" )) Var
-       ( "x" )) Var ( "y" )) = Var ( "y" )) )
+    Fun ( "if_then_else_" ) |-> 'FunClauses(((((#symFunClauses(24) { #symExpr(
+      19) }) Con ( "true" )) Var ( "x" )) Var ( "y" )) = Var ( "x" ),, ((((
+      #symFunClauses(45) { #symExpr(40) }) Con ( "false" )) Var ( "x" )) Var (
+       "y" )) = Var ( "y" ))
 </fun>

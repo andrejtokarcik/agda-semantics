@@ -11,8 +11,8 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
   rule <k> N:Name => Nc ...</k>  <ncat>... N |-> Nc ...</ncat>
   rule [infer-name]:
-       <k> Nc:Name => t(Nc, T) ...</k>
-       <sig>... Nc |-> T ...</sig>
+       <k> N:Name => t(N, T) ...</k>
+       <sig>... N |-> T ...</sig>
 
   rule [infer-universe]:
        Set(Alpha) => t(Set(Alpha), Set(Alpha +Int 1))
@@ -31,6 +31,11 @@ module AGDA-SEMANTICS-TYPESYSTEM
   context {HOLE}
   rule {t(E, T)} => t({E}, {T})
 
+  // inaccessible patterns
+  syntax Expr ::= DotP(Pattern)
+  //rule DotP(E) => Dot(E)
+  context DotP(HOLE)
+  rule DotP(t(E, T)) => t(DotP(E), T)
 
   // for the binders' semantics
   syntax KItem ::= "bound!"
@@ -84,18 +89,78 @@ module AGDA-SEMANTICS-TYPESYSTEM
 
 
   context (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
-  context _::WhnfTypedExpr HOLE
+  context chich ~> (HOLE::Expr => whnfType(HOLE)) _   [result(WhnfTypedExpr)]
+
+
+  syntax Bool ::= condz(Expr)   [function]
+  rule condz(t(E, _)) => condz(E)
+  rule condz(Fun("map") _ _ _) => true
+
+  context W::WhnfTypedExpr HOLE  when condz(W) =/=K true
+  context W::WhnfTypedExpr (HOLE => HOLE)  when condz(W) ==K true
+
+
+  /*
+  syntax Bool ::= needDot(Variable, Expr)  [function]
+  rule needDot(X, T) => X in freeVariables(T)
+  */
 
   // insert an implicit metavariable in front of an explicit arg when needed
+  /*
   rule [insert-implicit1]:
-       t(E1, ({_ : _} -> _)) t(E2, _) => (E1 {%meta}) E2  when isImplicit(E2) =/=K true
+       <k> t(E1, ({X : T1} -> T1')) t(E2, T2) => (E1 #if needDot(X, T1') #then Dot({X}) #else {%meta} #fi) E2 ...</k>
+       <ctx>... . => X |-> T1 ...</ctx>  // check whether X not already in keys?
+    when isImplicit(T2) =/=K true
   rule [insert-implicit2]:
-       t(E1, _) t(E2, ({_ : _} -> _)) => E1 (E2 {%meta})  when isImplicit(E2) =/=K true
+       <k> t(E1:Expr, _) t(E2, {X : T2} -> T2') => E1 (E2 #if needDot(X, T2') #then Dot({X}) #else {%meta} #fi) ...</k>
+       <ctx>... . => X |-> T2 ...</ctx>
+    //when isImplicit(E2) =/=K true
+  */
+  rule [insert-implicit1]:
+       t(E1, ({X : T1} -> T1')) t(E2, T2) => (E1 {%meta}) E2
+    when isImplicit(T2) =/=K true
+  rule [insert-implicit2]:
+       t(E1:Expr, _) t(E2, {X : T2} -> T2') => E1 (E2 {%meta})
+    //when isImplicit(E2) =/=K true
 
   rule [infer-app-implicit]:
-       t(E1, ({X : T} -> T')) t({E2}, {T2}) => T2 == T ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> E2) ~> unifyConf
+       t(E1, T1) t({E2}, {T2}) => T1 == {X : T} -> T' ~> T2 == T ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> dedot(E2)) ~> unifyConf ~> killMgu
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
+    andBool condz(E1) =/=K true
+       //t(E1, {X : T} -> T') t(E2, {T2}) => T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf ~> killMgu
+  rule [infer-app-implicit]:
+       t(E1, T1) t({E2}, {T2}) => chich ~> T1 == {X : T} -> T' ~> T2 == T ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> dedot(E2)) ~> unifyConf ~> killMgu
+    when fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
+    andBool condz(E1) ==K true
 
   rule [infer-app-explicit]:
-       t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf
+       t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> dedot(E2)) ~> unifyConf ~> killMgu
+    when isImplicitPi(T1) =/=K true andBool isImplicit(T2) =/=K true andBool
+         fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
+         andBool condz(E1) =/=K true
+
+  rule [infer-app-explicit]:
+       t(E1:Expr, T1) t(E2:Expr, T2) => T1 == (X : T) -> T' ~> T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> dedot(E2)) ~> unifyConf ~> killMgu //~> chich
+    when isImplicitPi(T1) =/=K true andBool isImplicit(T2) =/=K true andBool
+         fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
+         andBool condz(E1) ==K true
+
+  syntax Expr ::= dedot(Expr)  [function]
+  rule dedot(E1 E2) => dedot(E1) dedot(E2)
+  rule dedot(DotP(E)) => E
+  rule dedot(E) => E   [owise]
+
+  // TODO: reformulate the above condition with canUnify?
+
+  /*
+  rule [infer-inaccessible]:
+       <k> (. => E == V) ~> t(_, _) t(Dot(E) => E, _) ...</k>
+       <dot>... E |-> V ...</dot>
+  */
+
+  /*
+  rule [infer-app-explicit]:
+       t(E1:Expr, T1) t(waa E2:Expr, T2) => chich ~> T1 == (X : T) -> T' ~> T2 == T ~> unify(t(E1 E2, T')) ~> tsubst(X |-> E2) ~> unifyConf ~> killMgu
     when isImplicit(T2) =/=K true andBool fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
+  */
 endmodule

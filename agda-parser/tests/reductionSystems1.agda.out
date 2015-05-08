@@ -1,30 +1,36 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
-    Fun ( "_*_" ) |-> ( #symVariable(51) : Data ( "8469" ) ) -> ( #symVariable
-      (54) : Data ( "8469" ) ) -> Data ( "8469" )
-    Fun ( "_+_" ) |-> ( #symVariable(57) : Data ( "8469" ) ) -> ( #symVariable
+    Fun ( "_*_" ) |-> ( #symVariable(57) : Data ( "8469" ) ) -> ( #symVariable
       (60) : Data ( "8469" ) ) -> Data ( "8469" )
+    Fun ( "_+_" ) |-> ( #symVariable(63) : Data ( "8469" ) ) -> ( #symVariable
+      (66) : Data ( "8469" ) ) -> Data ( "8469" )
     Data ( "8469" ) |-> Set ( 0 )
-    Con ( "S" ) |-> ( #symVariable(60) : Data ( "8469" ) ) -> Data ( "8469" )
+    Con ( "S" ) |-> ( #symVariable(66) : Data ( "8469" ) ) -> Data ( "8469" )
     Con ( "Z" ) |-> Data ( "8469" )
 </sig>
-<con>
-    Data ( "8469" ) |-> l ( ListItem(Con ( "Z" )) ListItem(Con ( "S" )) )
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "8469" ) |-> Data ( "8469" )
     Name ( "S" ) |-> Con ( "S" )
@@ -33,12 +39,11 @@
     Name ( "_+_" ) |-> Fun ( "_+_" )
 </ncat>
 <fun>
-    Fun ( "_*_" ) |-> FunClauses ( ListItem(((#symFunClauses(39) Var ( "n" )) 
-      Con ( "Z" )) = Con ( "Z" )) ListItem(((#symFunClauses(63) Var ( "n" )) (
-      Con ( "S" ) Var ( "m" ))) = ((Fun ( "_+_" ) ((Fun ( "_*_" ) Var ( "n" ))
-       Var ( "m" ))) Var ( "n" ))) )
-    Fun ( "_+_" ) |-> FunClauses ( ListItem(((#symFunClauses(10) Var ( "n" )) 
-      Con ( "Z" )) = Var ( "n" )) ListItem(((#symFunClauses(31) Var ( "n" )) (
-      Con ( "S" ) Var ( "m" ))) = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) 
-      Var ( "m" )))) )
+    Fun ( "_*_" ) |-> 'FunClauses(((#symFunClauses(45) Var ( "n" )) Con ( "Z" 
+      )) = Con ( "Z" ),, ((#symFunClauses(71) Var ( "n" )) (Con ( "S" ) Var ( 
+      "m" ))) = ((Fun ( "_+_" ) ((Fun ( "_*_" ) Var ( "n" )) Var ( "m" ))) Var
+       ( "n" )))
+    Fun ( "_+_" ) |-> 'FunClauses(((#symFunClauses(12) Var ( "n" )) Con ( "Z" 
+      )) = Var ( "n" ),, ((#symFunClauses(35) Var ( "n" )) (Con ( "S" ) Var ( 
+      "m" ))) = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
 </fun>

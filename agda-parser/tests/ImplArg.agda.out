@@ -1,38 +1,46 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
     Fun ( "Cons" ) |-> Set ( 1 )
-    Fun ( "cons" ) |-> Fun ( "Cons" )
+    Fun ( "cons" ) |-> { #symVariable(72) : Set ( 0 ) } -> ( #symVariable(75) 
+      : #symVariable(72) ) -> { #symVariable(80) : Data ( "Nat" ) } -> ( 
+      #symVariable("local",, 1) : ((Data ( "Vec" ) #symVariable(72)) 
+      #symVariable(80)) ) -> ((Data ( "Vec" ) #symVariable(72)) (Con ( "suc" )
+       #symVariable(80)))
     Data ( "Nat" ) |-> Set ( 0 )
     Data ( "Vec" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(56) : 
       Data ( "Nat" ) ) -> Set ( 0 )
     Con ( "suc" ) |-> ( #symVariable(53) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Con ( "vcons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "n" ) : Data ( 
-      "Nat" ) } -> ( #symVariable(69) : Var ( "A" ) ) -> ( #symVariable(3) : (
-      (Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) Var ( 
-      "A" )) (Con ( "suc" ) Var ( "n" )))
+      "Nat" ) } -> ( #symVariable(96) : Var ( "A" ) ) -> ( #symVariable(
+      "local",, 1) : ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( 
+      "Vec" ) Var ( "A" )) (Con ( "suc" ) Var ( "n" )))
     Con ( "vnil" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ((Data ( "Vec" ) Var ( 
       "A" )) Con ( "zero" ))
     Con ( "zero" ) |-> Data ( "Nat" )
 </sig>
-<con>
-    (Data ( "Vec" ) Var ( "A" )) |-> l ( ListItem(Con ( "vnil" )) ListItem(Con
-       ( "vcons" )) )
-    Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )) )
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "Cons" ) |-> Fun ( "Cons" )
     Name ( "Nat" ) |-> Data ( "Nat" )
@@ -45,10 +53,10 @@
 </ncat>
 <fun>
     Fun ( "Cons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( Var ( "a" ) : Var ( 
-      "A" ) ) -> { Var ( "n" ) : Data ( "Nat" ) } -> ( #symVariable(3) : ((
-      Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) Var ( "A"
-       )) (Con ( "suc" ) Var ( "n" )))
-    Fun ( "cons" ) |-> FunClauses ( ListItem((((#symFunClauses(77) { #symExpr(
-      73) }) Var ( "a" )) { #symExpr(75) }) = (((Con ( "vcons" ) { #symExpr(70
-      ) }) { #symExpr(67) }) Var ( "a" ))) )
+      "A" ) ) -> { Var ( "n" ) : Data ( "Nat" ) } -> ( #symVariable("local",, 
+      1) : ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) 
+      Var ( "A" )) (Con ( "suc" ) Var ( "n" )))
+    Fun ( "cons" ) |-> 'FunClauses((((#symFunClauses(103) { #symExpr(76) }) 
+      Var ( "a" )) { #symExpr(78) }) = (((Con ( "vcons" ) { #symExpr(97) }) { 
+      #symExpr(91) }) Var ( "a" )))
 </fun>

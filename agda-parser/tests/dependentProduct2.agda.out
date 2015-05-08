@@ -1,15 +1,21 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
     Name ( "b" ) |-> (Postulate ( "B" ) Name ( "a" ))
-    Fun ( "960&0" ) |-> ( #symVariable(55) : Data ( "AB" ) ) -> Postulate ( 
+    Fun ( "960&0" ) |-> ( #symVariable(228) : Data ( "AB" ) ) -> Postulate ( 
       "A" )
     Fun ( "960&1" ) |-> ( Var ( "ab" ) : Data ( "AB" ) ) -> (Postulate ( "B" )
        (Fun ( "960&0" ) Var ( "ab" )))
@@ -18,21 +24,21 @@
     Fun ( "b'" ) |-> (Postulate ( "B" ) Fun ( "a'" ))
     Data ( "AB" ) |-> Set ( 0 )
     'Postulate("A") |-> Set ( 0 )
-    'Postulate("B") |-> ( #symVariable(58) : Name ( "A" ) ) -> Set ( 0 )
+    'Postulate("B") |-> ( #symVariable(231) : Name ( "A" ) ) -> Set ( 0 )
     'Postulate("a") |-> 'Postulate("A")
     'Postulate("ab'") |-> Data ( "AB" )
-    Con ( "p" ) |-> ( Var ( "a" ) : Name ( "A" ) ) -> ( #symVariable(49) : (
+    Con ( "p" ) |-> ( Var ( "a" ) : Name ( "A" ) ) -> ( #symVariable(222) : (
       Name ( "B" ) Var ( "a" )) ) -> Data ( "AB" )
 </sig>
-<con>
-    Data ( "AB" ) |-> l ( ListItem(Con ( "p" )) )
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "960&0" ) |-> Fun ( "960&0" )
     Name ( "960&1" ) |-> Fun ( "960&1" )
@@ -47,10 +53,10 @@
     Name ( "p" ) |-> Con ( "p" )
 </ncat>
 <fun>
-    Fun ( "960&0" ) |-> FunClauses ( ListItem((#symFunClauses(18) ((Con ( "p" 
-      ) Var ( "a" )) Var ( "b" ))) = Var ( "a" )) )
-    Fun ( "960&1" ) |-> FunClauses ( ListItem((#symFunClauses(36) ((Con ( "p" 
-      ) Var ( "a" )) Var ( "b" ))) = Var ( "b" )) )
+    Fun ( "960&0" ) |-> 'FunClauses((#symFunClauses(19) ((Con ( "p" ) Var ( 
+      "a" )) Var ( "b" ))) = Var ( "a" ))
+    Fun ( "960&1" ) |-> 'FunClauses((#symFunClauses(209) ((Con ( "p" ) Var ( 
+      "a" )) Var ( "b" ))) = Var ( "b" ))
     Fun ( "a'" ) |-> (Fun ( "960&0" ) Name ( "ab'" ))
     Fun ( "ab" ) |-> ((Con ( "p" ) Postulate ( "a" )) Name ( "b" ))
     Fun ( "b'" ) |-> (Fun ( "960&1" ) Postulate ( "ab'" ))

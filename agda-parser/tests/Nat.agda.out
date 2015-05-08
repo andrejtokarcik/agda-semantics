@@ -1,27 +1,33 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
     Fun ( "one" ) |-> Data ( "Nat" )
     Data ( "Nat" ) |-> Set ( 0 )
     Con ( "suc" ) |-> ( #symVariable(5) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Con ( "zero" ) |-> Data ( "Nat" )
 </sig>
-<con>
-    Data ( "Nat" ) |-> l ( ListItem(Con ( "zero" )) ListItem(Con ( "suc" )) )
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "Nat" ) |-> Data ( "Nat" )
     Name ( "one" ) |-> Fun ( "one" )

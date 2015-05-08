@@ -1,27 +1,33 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
     Fun ( "t" ) |-> ( #symVariable(3) : Set ( 0 ) ) -> Set ( 0 )
 </sig>
-<con>
-    .Map
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "t" ) |-> Fun ( "t" )
 </ncat>
 <fun>
-    Fun ( "t" ) |-> \ ( Var ( "x" ) : #symExpr(6) ) -> Var ( "x" )
+    Fun ( "t" ) |-> \ ( Var ( "x" ) : #symExpr(7) ) -> Var ( "x" )
 </fun>

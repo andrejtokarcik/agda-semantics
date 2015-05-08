@@ -19,7 +19,7 @@ module AGDA-SEMANTICS-DECL-DATA
   rule [add-type-con]:
        <k> addTypeCon(D, DPs, t(T, Set(Alpha))) => T constructorOf Set(Alpha -Int 1) ~> pass? ...</k>
        <sig>... . => D |-> T ...</sig>
-       <con>... . => DPs |-> l(.List) ...</con>
+       //<con>... . => DPs |-> l(.List) ...</con>
 
   syntax KItem ::= addDataCons(Expr, Telescope, TypeSignatures)
   rule addDataCons(DPs, Ps, .TypeSignatures) => .    [structural]
@@ -31,7 +31,7 @@ module AGDA-SEMANTICS-DECL-DATA
        <k> addDataCon(DPs, Name(C), t(T, Set(_))) => T constructorOf DPs ~> pass? ...</k>
        <ncat> NCat (. => Name(C) |-> Con(C)) </ncat>
        <sig>... . => Con(C) |-> T ...</sig>
-       <con>... DPs |-> l(_ (. => ListItem(Con(C)))) ...</con>
+       //<con>... DPs |-> l(_ (. => ListItem(Con(C)))) ...</con>
     when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the external parser
 
   syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]

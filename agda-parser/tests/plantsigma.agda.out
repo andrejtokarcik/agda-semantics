@@ -1,16 +1,22 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
-    Fun ( "PlantsInGroup" ) |-> ( #symVariable(12) : Data ( "PlantGroup" ) ) 
+    Fun ( "PlantsInGroup" ) |-> ( #symVariable(14) : Data ( "PlantGroup" ) ) 
       -> Set ( 0 )
-    Fun ( "f" ) |-> ( #symVariable(23) : Data ( "Plant" ) ) -> Data ( 
+    Fun ( "f" ) |-> ( #symVariable(69) : Data ( "Plant" ) ) -> Data ( 
       "PlantGroup" )
     Data ( "Flower" ) |-> Set ( 0 )
     Data ( "Plant" ) |-> Set ( 0 )
@@ -21,27 +27,21 @@
     Con ( "oak" ) |-> Data ( "Tree" )
     Con ( "pine" ) |-> Data ( "Tree" )
     Con ( "plant" ) |-> ( Var ( "g" ) : Data ( "PlantGroup" ) ) -> ( 
-      #symVariable(20) : (Fun ( "PlantsInGroup" ) Var ( "g" )) ) -> Data ( 
+      #symVariable(62) : (Fun ( "PlantsInGroup" ) Var ( "g" )) ) -> Data ( 
       "Plant" )
     Con ( "rose" ) |-> Data ( "Flower" )
     Con ( "spruce" ) |-> Data ( "Tree" )
     Con ( "tree" ) |-> Data ( "PlantGroup" )
 </sig>
-<con>
-    Data ( "Flower" ) |-> l ( ListItem(Con ( "rose" )) ListItem(Con ( "lily" )
-      ) )
-    Data ( "Plant" ) |-> l ( ListItem(Con ( "plant" )) )
-    Data ( "PlantGroup" ) |-> l ( ListItem(Con ( "tree" )) ListItem(Con ( 
-      "flower" )) )
-    Data ( "Tree" ) |-> l ( ListItem(Con ( "oak" )) ListItem(Con ( "pine" )) 
-      ListItem(Con ( "spruce" )) )
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "Flower" ) |-> Data ( "Flower" )
     Name ( "Plant" ) |-> Data ( "Plant" )
@@ -59,9 +59,9 @@
     Name ( "tree" ) |-> Con ( "tree" )
 </ncat>
 <fun>
-    Fun ( "PlantsInGroup" ) |-> FunClauses ( ListItem((#symFunClauses(7) Con (
-       "tree" )) = Data ( "Tree" )) ListItem((#symFunClauses(11) Con ( 
-      "flower" )) = Data ( "Flower" )) )
-    Fun ( "f" ) |-> FunClauses ( ListItem((#symFunClauses(26) ((Con ( "plant" 
-      ) Var ( "g" )) Var ( "pg" ))) = Var ( "g" )) )
+    Fun ( "PlantsInGroup" ) |-> 'FunClauses((#symFunClauses(8) Con ( "tree" ))
+       = Data ( "Tree" ),, (#symFunClauses(13) Con ( "flower" )) = Data ( 
+      "Flower" ))
+    Fun ( "f" ) |-> 'FunClauses((#symFunClauses(73) ((Con ( "plant" ) Var ( 
+      "g" )) Var ( "pg" ))) = Var ( "g" ))
 </fun>

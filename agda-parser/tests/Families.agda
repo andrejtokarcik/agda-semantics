@@ -35,7 +35,6 @@ _*_ : Nat -> Nat -> Nat
 zero  * m = zero
 suc n * m = m + n * m
 
-
 -- Think of an inductive family...
 module Vec where
 
@@ -54,6 +53,10 @@ module Vec where
   map f []        = []
   map f (x :: xs) = f x :: map f xs
 
+  t1 : Vec Nat (suc (suc zero))
+  t1 = map (_+_ three) (zero :: suc three :: [])
+     where three = suc (suc (suc zero))
+
   infixr 40 _++_
 
   _++_ : {A : Set}{n m : Nat} -> Vec A n -> Vec A m -> Vec A (n + m)
@@ -68,18 +71,17 @@ module Vec where
 
 -}
 
-{-
-AT FIXME
-
 -- Ok. Let's make the implicit stuff explicit.
+{-
 module WhatsGoingOnHere? where
 
   open Vec using (Vec; []; _::_)
+-}
 
   -- Now what's this funny dot thing?
-  map : {A B : Set}(n : Nat) -> (A -> B) -> Vec A n -> Vec B n
-  map .zero    f []              = []
-  map .(suc _) f (x :: xs) = f x :: map _ f xs
+  map' : {A B : Set}(n : Nat) -> (A -> B) -> Vec A n -> Vec B n
+  map' .zero    f []              = []
+  map' .(suc _) f (x :: xs) = f x :: map' _ f xs
 
   -- Basically the dot means: inside is not a pattern at all but a
   -- term whose value is uniquely determined by type checking
@@ -91,7 +93,6 @@ module WhatsGoingOnHere? where
   -- So, that's what we write.
 
   -- We could spend hours talking about this, but let's move on...
--}
 
 -- Let's do some other interesting families.
 

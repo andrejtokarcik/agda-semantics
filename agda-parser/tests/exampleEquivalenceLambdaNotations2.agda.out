@@ -1,30 +1,36 @@
 <k>
-    .K
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
 </k>
+<dbg>
+    0
+</dbg>
 <mgu>
     subst(.KList)
 </mgu>
 <ctxstack>
     .List
 </ctxstack>
+<fenv-stack>
+    .List
+</fenv-stack>
 <sig>
-    Fun ( "f" ) |-> ( #symVariable(21) : (Name ( "P" ) Fun ( "g" )) ) -> (Name
+    Fun ( "f" ) |-> ( #symVariable(23) : (Name ( "P" ) Fun ( "g" )) ) -> (Name
        ( "P" ) Fun ( "g'" ))
     Fun ( "g" ) |-> ( Var ( "x" ) : Name ( "A" ) ) -> Name ( "A" )
     Fun ( "g'" ) |-> ( Var ( "x" ) : Postulate ( "A" ) ) -> Postulate ( "A" )
     'Postulate("A") |-> Set ( 0 )
-    'Postulate("P") |-> ( #symVariable(17) : ( Var ( "x" ) : Postulate ( "A" )
+    'Postulate("P") |-> ( #symVariable(19) : ( Var ( "x" ) : Postulate ( "A" )
        ) -> Postulate ( "A" ) ) -> Set ( 0 )
 </sig>
-<con>
-    .Map
-</con>
 <ctx>
     .Map
 </ctx>
 <meta>
     .Map
 </meta>
+<fenv>
+    .Map
+</fenv>
 <ncat>
     Name ( "A" ) |-> 'Postulate("A")
     Name ( "P" ) |-> 'Postulate("P")
@@ -33,7 +39,7 @@
     Name ( "g'" ) |-> Fun ( "g'" )
 </ncat>
 <fun>
-    Fun ( "f" ) |-> \ ( Var ( "x" ) : #symExpr(24) ) -> Var ( "x" )
+    Fun ( "f" ) |-> \ ( Var ( "x" ) : #symExpr(34) ) -> Var ( "x" )
     Fun ( "g" ) |-> \ ( Var ( "x" ) : Postulate ( "A" ) ) -> Var ( "x" )
-    Fun ( "g'" ) |-> \ ( Var ( "x" ) : Postulate ( "A" ) ) -> Var ( "x" )
+    Fun ( "g'" ) |-> \ ( Var ( "a" ) : #symExpr(13) ) -> Var ( "a" )
 </fun>
