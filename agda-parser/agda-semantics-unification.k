@@ -88,9 +88,9 @@ module AGDA-SEMANTICS-UNIFICATION
 
   // XXX posledny arg len na debug
   syntax K ::= suitableLHS(Mgu, FunClauses, Expr, Expr)  [function]
-  rule suitableLHS(Theta, 'FunClauses((L = R),, _), T, _) => L
+  rule suitableLHS(Theta, FunClauses(_, 'fc((L = R),, _)), T, _) => L
     when canUnify(Theta, subExpr(lengthList(args(T)), R), T)
-  rule suitableLHS(_, 'FunClauses((_:K => .KList),, _), _, _)  [owise]
+  rule suitableLHS(_, FunClauses(_, 'fc((_ = _ => .KList),, _)), _, _)  [owise]
 
   syntax Bool ::= canUnify(K, K)       [function]
                 | canUnify(Mgu, K, K)  [function]

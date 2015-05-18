@@ -85,8 +85,8 @@
 <fun>
     Fun ( "four" ) |-> ((Fun ( "id" ) { Data ( "Nat" ) }) (Con ( "suc" ) Fun (
        "three" )))
-    Fun ( "id" ) |-> 'FunClauses(((#symFunClauses(68) { #symExpr(65) }) Var ( 
-      "x" )) = Var ( "x" ))
+    Fun ( "id" ) |-> 'fc(((#symFunClauses(68) { #symExpr(65) }) Var ( "x" )) =
+       Var ( "x" ))
     Fun ( "id'" ) |-> \ ( Var ( "A" ) : #symExpr(13) ) -> \ ( Var ( "x" ) : 
       #symExpr(16) ) -> Var ( "x" )
     Fun ( "id0" ) |-> \ ( Var ( "A" ) : #symExpr(120) ) -> \ ( Var ( "x" ) : 
@@ -97,17 +97,17 @@
        "A" ) ) -> Var ( "x" )
     Fun ( "id3" ) |-> \ ( Var ( "A" ) : Set ( 0 ) ) -> \ ( Var ( "x" ) : Var (
        "A" ) ) -> Var ( "x" )
-    Fun ( "id4" ) |-> 'FunClauses(((#symFunClauses(165) { #symExpr(162) }) Var
-       ( "x" )) = Var ( "x" ))
-    Fun ( "id5" ) |-> 'FunClauses(((#symFunClauses(176) { Var ( "A" ) }) Var (
-       "x" )) = Var ( "x" ))
-    Fun ( "id6" ) |-> 'FunClauses((#symFunClauses(187) { #symExpr(177) }) = \ 
-      ( Var ( "x" ) : #symExpr(182) ) -> Var ( "x" ))
+    Fun ( "id4" ) |-> 'fc(((#symFunClauses(165) { #symExpr(162) }) Var ( "x" )
+      ) = Var ( "x" ))
+    Fun ( "id5" ) |-> 'fc(((#symFunClauses(176) { Var ( "A" ) }) Var ( "x" )) 
+      = Var ( "x" ))
+    Fun ( "id6" ) |-> 'fc((#symFunClauses(187) { #symExpr(177) }) = \ ( Var ( 
+      "x" ) : #symExpr(182) ) -> Var ( "x" ))
     Fun ( "id7" ) |-> (\ { Var ( "A" ) : Set ( 0 ) } -> \ ( Var ( "x" ) : Var 
       ( "A" ) ) -> Var ( "x" ) { #symExpr(191) })
-    Fun ( "id8" ) |-> 'FunClauses((#symFunClauses(217) { #symExpr(199) }) = (\
-       { Var ( "A" ) : #symExpr(213) } -> \ ( Var ( "x" ) : #symExpr(207) ) ->
-       Var ( "x" ) { #symExpr(210) }))
+    Fun ( "id8" ) |-> 'fc((#symFunClauses(217) { #symExpr(199) }) = (\ { Var (
+       "A" ) : #symExpr(213) } -> \ ( Var ( "x" ) : #symExpr(207) ) -> Var ( 
+      "x" ) { #symExpr(210) }))
     Fun ( "one" ) |-> ((Fun ( "id'" ) Data ( "Nat" )) (Con ( "suc" ) Con ( 
       "zero" )))
     Fun ( "three" ) |-> ((Fun ( "id" ) { Data ( "Nat" ) }) (Con ( "suc" ) Fun 

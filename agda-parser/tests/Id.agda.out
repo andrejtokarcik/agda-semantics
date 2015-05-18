@@ -33,8 +33,8 @@
     Name ( "idd" ) |-> Fun ( "idd" )
 </ncat>
 <fun>
-    Fun ( "id" ) |-> 'FunClauses(((#symFunClauses(13) { #symExpr(10) }) Var ( 
-      "x" )) = Var ( "x" ))
+    Fun ( "id" ) |-> 'fc(((#symFunClauses(13) { #symExpr(10) }) Var ( "x" )) =
+       Var ( "x" ))
     Fun ( "idd" ) |-> ((Fun ( "id" ) { ( #symVariable(39) : #symExpr(25) ) -> 
       #symExpr(25) }) (Fun ( "id" ) { #symExpr(25) }))
 </fun>

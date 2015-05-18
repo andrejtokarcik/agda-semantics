@@ -71,7 +71,7 @@ module AGDA-SEMANTICS-NORMAL
   context nf(\ {_ : (HOLE => nf(/*block 10 ~>*/ HOLE))} -> _)  [result(Nf)]
   context nf(\ {_ : _} -> (HOLE => nf(/*block 11 ~>*/ HOLE)))  [result(Nf)]
 
-  context nf('FunClauses(_,,((HOLE => /*block 15 ~>*/ nf(HOLE)) = _),,_))  [result(Nf)]
+  context nf(FunClauses(_, 'fc(_,,((HOLE => /*block 15 ~>*/ nf(HOLE)) = _),,_)))  [result(Nf)]
 
   syntax KItem ::= hold(K) | "xx" LHS
   rule <k> nf(E) => //block 12 ~>
@@ -142,11 +142,11 @@ when I >=Int 50
        <ncat> NCat (. => Name(N) |-> Postulate(N)) </ncat>
        <sig>... (Name(N) => Postulate(N)) |-> _ ...</sig>
     when notBool Name(N) in keys(NCat)
-  rule <k> whnf(F => /*block 1002 ~>*/ replaceInaccessible(E:FunClauses))/*renameVariables(E))*/ ...</k>   <fun>... F |-> E ...</fun>
-    when isFunClauses(E)
+  rule <k> whnf(F => /*block 1002 ~>*/ replaceInaccessible(FunClauses(F, E)))/*renameVariables(E))*/ ...</k>   <fun>... F |-> E ...</fun>
+    when getKLabel(E) ==KLabel 'fc
   // THE RENAME MAY CAUSE CYCLES
   rule <k> whnf(F => /*block 1002 ~>*/ renameVariables(E)) ...</k>   <fun>... F |-> E ...</fun>
-    when isFunClauses(E) =/=K true
+    when getKLabel(E) =/=KLabel 'fc
 
 
   rule <k> whnf(E@Local => /*block 1003 ~>*/ E) ~> (. => localFun(Local)) ...</k>
@@ -184,16 +184,16 @@ when I >=Int 50
   */
 
   syntax FunClausesApp ::= getFunClausesAppPattern(Mgu, FunClauses, Expr)  [function]
-  rule getFunClausesAppPattern(Theta, 'FunClauses((L = _),, _), E) => args(L)(index(isFunClausesApp, args(L)))
+  rule getFunClausesAppPattern(Theta, FunClauses(_, 'fc((L = _),, _)), E) => args(L)(index(isFunClausesApp, args(L)))
     when any(isFunClausesApp, args(L)) andBool
          notBool canUnify(Theta, args(L)(index(isFunClausesApp, args(L))), args(E)(index(isFunClausesApp, args(L))))
-  rule getFunClausesAppPattern(_, 'FunClauses((_:K => .KList),, _), _)  [owise]
+  rule getFunClausesAppPattern(_, FunClauses(_, 'fc((_ = _ => .KList),, _)), _)  [owise]
 
   syntax Int ::= indexOfFunClausesAppPattern(Mgu, FunClauses, Expr)  [function]
-  rule indexOfFunClausesAppPattern(Theta, 'FunClauses((L = _),, _), E) => index(isFunClausesApp, args(L))
+  rule indexOfFunClausesAppPattern(Theta, FunClauses(_, 'fc((L = _),, _)), E) => index(isFunClausesApp, args(L))
     when any(isFunClausesApp, args(L)) andBool
          notBool canUnify(Theta, args(L)(index(isFunClausesApp, args(L))), args(E)(index(isFunClausesApp, args(L))))
-  rule indexOfFunClausesAppPattern(_, 'FunClauses((_:K => .KList),, _), _)  [owise]
+  rule indexOfFunClausesAppPattern(_, FunClauses(_, 'fc((_ = _ => .KList),, _)), _)  [owise]
 
   // you don't want FunClauses as WhNeut:
   // isWhnf(E:Expr) would generate a sort memebership check,
@@ -207,40 +207,40 @@ when I >=Int 50
          //((indexOfFunClausesAppPattern(Theta, leftmost(E), E) >=Int 0) =/=K true orBool  true)
 
   syntax Bool ::= hasNfPatterns(FunClauses)   [function]
-  rule hasNfPatterns('FunClauses(.KList)) => true
-  rule hasNfPatterns('FunClauses(L = _,, Cs)) => all(isNf, args(L)) andBool hasNfPatterns('FunClauses(Cs))
+  rule hasNfPatterns(FunClauses(_, 'fc(.KList))) => true
+  rule hasNfPatterns(FunClauses(F, 'fc(L = _,, Cs))) => all(isNf, args(L)) andBool hasNfPatterns(FunClauses(F, 'fc(Cs)))
 
   // We must distinguish between a mismatch and inconclusive matching.
   // --- by attempting to unify
   syntax Bool ::= matches(FunClauses, Expr)  [function]
   //rule matches(Cs, E) => #matches(replaceInaccessible(Cs), E)
-  rule matches('FunClauses(.KList), _) => false
-  rule matches('FunClauses((L = _),, _), E) => true    when isMatching(L, unhide(E))
-  rule matches('FunClauses((L = _),, Cs), E) => false  when notBool isMatching(L, unhide(E)) andBool canUnify(renameVariables(L), unhide(E)) andBool anotherCanUnify(Cs, unhide(E))
-  rule matches('FunClauses((L = _),, Cs), E) => true   when notBool isMatching(L, unhide(E)) andBool canUnify(renameVariables(L), unhide(E)) andBool notBool anotherCanUnify(Cs, unhide(E))
-  rule matches('FunClauses((_:K => .KList),, _), _)  [owise]
+  rule matches(FunClauses(_, 'fc(.KList)), _) => false
+  rule matches(FunClauses(_, 'fc((L = _),, _)), E) => true    when isMatching(L, unhide(E))
+  rule matches(FunClauses(_, 'fc((L = _),, Cs)), E) => false  when notBool isMatching(L, unhide(E)) andBool canUnify(renameVariables(L), unhide(E)) andBool anotherCanUnify(Cs, unhide(E))
+  rule matches(FunClauses(_, 'fc((L = _),, Cs)), E) => true   when notBool isMatching(L, unhide(E)) andBool canUnify(renameVariables(L), unhide(E)) andBool notBool anotherCanUnify(Cs, unhide(E))
+  rule matches(FunClauses(_, 'fc((_ = _ => .KList),, _)), _)  [owise]
 
   syntax Bool ::= anotherCanUnify(KList, Expr)  [function]
   rule anotherCanUnify(.KList, _) => false
   rule anotherCanUnify(((L = _),, _), E) => true  when canUnify(renameVariables(L), E)
-  rule anotherCanUnify(((_:K => .KList),, _), _)  [owise]
+  rule anotherCanUnify(((_ = _ => .KList),, _), _)  [owise]
 
   syntax Expr ::= matchClause(FunClauses, Expr)   [function]
                 | #unifyClause(K, LHS, Expr, RHS) [function]
   //rule matchClause(Cs, E) => #matchClause(replaceInaccessible(Cs), E)
   //rule matchClause(FunClauses(.KList),, _) => error("nay matchin' cap'n")   // FIXME?
-  rule matchClause('FunClauses((L = R),, _), E) => R[getMatching(L, unhide(E))]  when isMatching(L, unhide(E))
-  rule matchClause('FunClauses((L = R),, _), E) => //applyMgu(updateMgu(.Mgu, L, unhide(E)), R)
+  rule matchClause(FunClauses(_, 'fc((L = R),, _)), E) => R[getMatching(L, unhide(E))]  when isMatching(L, unhide(E))
+  rule matchClause(FunClauses(_, 'fc((L = R),, _)), E) => //applyMgu(updateMgu(.Mgu, L, unhide(E)), R)
         #unifyClause(getAlpha(L), L, unhide(E), R)
     when notBool isMatching(L, unhide(E)) andBool canUnify(renameVariables(L), unhide(E))
-  rule matchClause('FunClauses((_:K => .KList),, _), _)  [owise]
+  rule matchClause(FunClauses(_, 'fc((_ = _ => .KList),, _)), _)  [owise]
   rule #unifyClause(Alpha, L, E, R) => applyMgu(updateMgu(.Mgu, applySubst(Alpha, L), E), applySubst(Alpha, R))
 
 
   syntax FunClauses ::= replaceInaccessible(FunClauses)  [function]
   syntax FunClause ::= replaceInaccessible(FunClause)    [function]
   syntax LHS ::= replaceInaccessible(LHS)                [function]
-  rule replaceInaccessible('FunClauses(Cs):FunClauses) => 'FunClauses(map('replaceInaccessible, Cs))
+  rule replaceInaccessible(FunClauses(F, 'fc(Cs))) => FunClauses(F, 'fc(map('replaceInaccessible, Cs)))
   rule replaceInaccessible(L = R) => renameVariables(replaceInaccessible(L) = R)
   rule replaceInaccessible(L P) => replaceInaccessible(L) replaceInaccessible(P)
   rule replaceInaccessible({P}) => {replaceInaccessible(P)}

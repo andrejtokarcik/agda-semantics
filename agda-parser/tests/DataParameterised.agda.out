@@ -51,8 +51,8 @@
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>
 <fun>
-    Fun ( "null" ) |-> 'FunClauses(((#symFunClauses(35) { (DotP ( #symExpr(17)
-       )) }) (Con ( "nil" ) { #symExpr(17) })) = Con ( "true" ),, ((
-      #symFunClauses(70) { (DotP ( #symExpr(51) )) }) (((Con ( "cons" ) { 
-      #symExpr(51) }) #symExpr(36)) #symExpr(46))) = Con ( "false" ))
+    Fun ( "null" ) |-> 'fc(((#symFunClauses(35) { (DotP ( #symExpr(17) )) }) (
+      Con ( "nil" ) { #symExpr(17) })) = Con ( "true" ),, ((#symFunClauses(70)
+       { (DotP ( #symExpr(51) )) }) (((Con ( "cons" ) { #symExpr(51) }) 
+      #symExpr(36)) #symExpr(46))) = Con ( "false" ))
 </fun>

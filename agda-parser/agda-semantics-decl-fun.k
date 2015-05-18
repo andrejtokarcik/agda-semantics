@@ -41,10 +41,10 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax KItem ::= updateLastFunClause(Name, Map)
   rule <k> updateLastFunClause(F, LocalDefs) => . ...</k>
-       <fun>... F |-> 'FunClauses(_,,(_ = (R => R@LocalDefs))) ...</fun>
+       <fun>... F |-> 'fc(_,,(_ = (R => R@LocalDefs))) ...</fun>
   rule <k> updateLastFunClause(F, LocalDefs) => . ...</k>
        <fun>... F |-> (E => E@LocalDefs) ...</fun>
-    when getKLabel(E) =/=KLabel 'FunClauses
+    when getKLabel(E) =/=KLabel 'fc
 
   syntax KItem ::= local(Set) | localFun(Map)
   rule <k> local(.Set) => . ...</k>
@@ -254,11 +254,8 @@ module AGDA-SEMANTICS-DECL-FUN
        <ctx> Gamma => Gamma[T/X] </ctx>
     when notBool (X in keys(Gamma)) andBool fresh(T:Expr)
 
-  // TODO try to rename the label into "FunClauses" without apostrophe
-  syntax FunClauses
-  syntax KLabel ::= "'FunClauses"
-  rule isFunClauses('FunClauses(_:KList)) => true
-  rule K2Sort('FunClauses(_:KList)) => "FunClauses"    // for unification
+  syntax KLabel ::= "'fc"
+  syntax FunClauses ::= FunClauses(Name, K)
   syntax Expr ::= FunClauses
 
   syntax KItem ::= addFunLambda(Name, Expr)  [strict(2)]   // strict to expand metas
@@ -274,16 +271,11 @@ module AGDA-SEMANTICS-DECL-FUN
     when notBool (F in keys(Rho)) andBool all(isVariable, args(L))
   rule <k> #addFunClause(F, L, R) => . ...</k>
        <fun> Rho
-             (. => F |-> 'FunClauses(freshFunName(L) = R)) </fun>
+             (. => F |-> 'fc(freshFunName(L) = R)) </fun>
     when notBool (F in keys(Rho)) andBool notBool all(isVariable, args(L))
   rule <k> #addFunClause(F, L, R) => . ...</k>
-       <fun>... F |-> 'FunClauses(Cs,,(.KList => freshFunName(L) = R)) ...</fun>
-    when lengthList(args(L)) ==Int numReqArgs('FunClauses(Cs))   // check the arities are equal
-
-  // XXX hack for typing FunClauses  --- asi nebude fungovat ked replacujem dot patterns
-  rule <k> F:FunClauses => t(F, T) ...</k>
-       <fun>... N |-> F ...</fun>
-       <sig>... N |-> T ...</sig>
+       <fun>... F |-> 'fc(Cs,, (.KList => freshFunName(L) = R)) ...</fun>
+    when lengthList(args(L)) ==Int numReqArgs('fc(Cs))   // check the arities are equal
 
   syntax Name ::= funName(LHS)  [function]
   //rule funName(L) => leftmost(L)
@@ -317,7 +309,9 @@ module AGDA-SEMANTICS-DECL-FUN
   */
 
   syntax Int ::= numReqArgs(FunClauses)  [function]
-  rule numReqArgs('FunClauses((L = _),,_)) => lengthList(args(L))
+               | numReqArgs(K)           [function]
+  rule numReqArgs(FunClauses(_, 'fc(Cs)) => 'fc(Cs))
+  rule numReqArgs('fc((L = _),,_)) => lengthList(args(L))
   //rule numReqArgs(FunClauses(ListItem(L = _) _)) => lengthList(args(L))
 
   //syntax Bool ::= isFunClausesApp(Expr)  [function]

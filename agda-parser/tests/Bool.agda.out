@@ -37,8 +37,8 @@
     Name ( "true" ) |-> Con ( "true" )
 </ncat>
 <fun>
-    Fun ( "if_then_else_" ) |-> 'FunClauses(((((#symFunClauses(24) { #symExpr(
-      19) }) Con ( "true" )) Var ( "x" )) Var ( "y" )) = Var ( "x" ),, ((((
+    Fun ( "if_then_else_" ) |-> 'fc(((((#symFunClauses(24) { #symExpr(19) }) 
+      Con ( "true" )) Var ( "x" )) Var ( "y" )) = Var ( "x" ),, ((((
       #symFunClauses(45) { #symExpr(40) }) Con ( "false" )) Var ( "x" )) Var (
        "y" )) = Var ( "y" ))
 </fun>

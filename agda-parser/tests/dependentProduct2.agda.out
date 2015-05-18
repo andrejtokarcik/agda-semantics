@@ -53,10 +53,10 @@
     Name ( "p" ) |-> Con ( "p" )
 </ncat>
 <fun>
-    Fun ( "960&0" ) |-> 'FunClauses((#symFunClauses(19) ((Con ( "p" ) Var ( 
-      "a" )) Var ( "b" ))) = Var ( "a" ))
-    Fun ( "960&1" ) |-> 'FunClauses((#symFunClauses(209) ((Con ( "p" ) Var ( 
-      "a" )) Var ( "b" ))) = Var ( "b" ))
+    Fun ( "960&0" ) |-> 'fc((#symFunClauses(19) ((Con ( "p" ) Var ( "a" )) Var
+       ( "b" ))) = Var ( "a" ))
+    Fun ( "960&1" ) |-> 'fc((#symFunClauses(209) ((Con ( "p" ) Var ( "a" )) 
+      Var ( "b" ))) = Var ( "b" ))
     Fun ( "a'" ) |-> (Fun ( "960&0" ) Name ( "ab'" ))
     Fun ( "ab" ) |-> ((Con ( "p" ) Postulate ( "a" )) Name ( "b" ))
     Fun ( "b'" ) |-> (Fun ( "960&1" ) Postulate ( "ab'" ))

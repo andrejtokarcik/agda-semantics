@@ -59,9 +59,8 @@
     Name ( "tree" ) |-> Con ( "tree" )
 </ncat>
 <fun>
-    Fun ( "PlantsInGroup" ) |-> 'FunClauses((#symFunClauses(8) Con ( "tree" ))
-       = Data ( "Tree" ),, (#symFunClauses(13) Con ( "flower" )) = Data ( 
-      "Flower" ))
-    Fun ( "f" ) |-> 'FunClauses((#symFunClauses(73) ((Con ( "plant" ) Var ( 
-      "g" )) Var ( "pg" ))) = Var ( "g" ))
+    Fun ( "PlantsInGroup" ) |-> 'fc((#symFunClauses(8) Con ( "tree" )) = Data 
+      ( "Tree" ),, (#symFunClauses(13) Con ( "flower" )) = Data ( "Flower" ))
+    Fun ( "f" ) |-> 'fc((#symFunClauses(73) ((Con ( "plant" ) Var ( "g" )) Var
+       ( "pg" ))) = Var ( "g" ))
 </fun>

@@ -56,31 +56,32 @@
     Name ( "sum8469Tuple" ) |-> Fun ( "sum8469Tuple" )
 </ncat>
 <fun>
-    Fun ( "Tuple" ) |-> 'FunClauses(((#symFunClauses(57) Var ( "A" )) Con ( 
-      "Z" )) = Data ( "Nil" ),, ((#symFunClauses(83) Var ( "A" )) (Con ( "S" )
-       Var ( "n" ))) = ((Data ( "Cons" ) Var ( "A" )) ((Fun ( "Tuple" ) Var ( 
-      "A" )) Var ( "n" ))))
-    Fun ( "_+_" ) |-> 'FunClauses(((#symFunClauses(18) Var ( "n" )) Con ( "Z" 
-      )) = Var ( "n" ),, ((#symFunClauses(41) Var ( "n" )) (Con ( "S" ) Var ( 
-      "m" ))) = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
-    Fun ( "sum8469Tuple" ) |-> 'FunClauses((((#symFunClauses(850) { Con ( "Z" 
-      ) }) Con ( "[]" )) Con ( "[]" )) = Con ( "[]" ),, (((#symFunClauses(3236
-      ) { (Con ( "S" ) Var ( "n" )) }) ((((Con ( "_::_" ) { Data ( "8469" ) })
-       { (('FunClauses(((#symFunClauses(1413) #symVariable(1414)) Con ( "Z" ))
-       = Data ( "Nil" ),, ((#symFunClauses(1415) #symVariable(1416)) (Con ( 
-      "S" ) #symVariable(1417))) = ((Data ( "Cons" ) #symVariable(1416)) ((Fun
-       ( "Tuple" ) #symVariable(1416)) #symVariable(1417)))) Data ( "8469" )) 
-      Var ( "n" )) }) Var ( "m" )) Var ( "l" ))) ((((Con ( "_::_" ) { Data ( 
-      "8469" ) }) { (('FunClauses(((#symFunClauses(1657) #symVariable(1658)) 
-      Con ( "Z" )) = Data ( "Nil" ),, ((#symFunClauses(1659) #symVariable(1660
-      )) (Con ( "S" ) #symVariable(1661))) = ((Data ( "Cons" ) #symVariable(
-      1660)) ((Fun ( "Tuple" ) #symVariable(1660)) #symVariable(1661)))) Data 
-      ( "8469" )) Var ( "n" )) }) Var ( "m'" )) Var ( "l'" ))) = ((((Con ( 
-      "_::_" ) { Data ( "8469" ) }) { (('FunClauses(((#symFunClauses(2402) 
-      #symVariable(2403)) Con ( "Z" )) = Data ( "Nil" ),, ((#symFunClauses(
-      2404) #symVariable(2405)) (Con ( "S" ) #symVariable(2406))) = ((Data ( 
-      "Cons" ) #symVariable(2405)) ((Fun ( "Tuple" ) #symVariable(2405)) 
-      #symVariable(2406)))) Data ( "8469" )) Var ( "n" )) }) ((Fun ( "_+_" ) 
-      Var ( "m" )) Var ( "m'" ))) (((Fun ( "sum8469Tuple" ) { Var ( "n" ) }) 
-      Var ( "l" )) Var ( "l'" ))))
+    Fun ( "Tuple" ) |-> 'fc(((#symFunClauses(57) Var ( "A" )) Con ( "Z" )) = 
+      Data ( "Nil" ),, ((#symFunClauses(83) Var ( "A" )) (Con ( "S" ) Var ( 
+      "n" ))) = ((Data ( "Cons" ) Var ( "A" )) ((Fun ( "Tuple" ) Var ( "A" )) 
+      Var ( "n" ))))
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(18) Var ( "n" )) Con ( "Z" )) = Var
+       ( "n" ),, ((#symFunClauses(41) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
+      = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
+    Fun ( "sum8469Tuple" ) |-> 'fc((((#symFunClauses(850) { Con ( "Z" ) }) Con
+       ( "[]" )) Con ( "[]" )) = Con ( "[]" ),, (((#symFunClauses(3236) { (Con
+       ( "S" ) Var ( "n" )) }) ((((Con ( "_::_" ) { Data ( "8469" ) }) { ((
+      FunClauses ( Fun ( "Tuple" ) , 'fc(((#symFunClauses(1413) #symVariable(
+      1414)) Con ( "Z" )) = Data ( "Nil" ),, ((#symFunClauses(1415) 
+      #symVariable(1416)) (Con ( "S" ) #symVariable(1417))) = ((Data ( "Cons" 
+      ) #symVariable(1416)) ((Fun ( "Tuple" ) #symVariable(1416)) #symVariable
+      (1417)))) ) Data ( "8469" )) Var ( "n" )) }) Var ( "m" )) Var ( "l" ))) 
+      ((((Con ( "_::_" ) { Data ( "8469" ) }) { ((FunClauses ( Fun ( "Tuple" )
+       , 'fc(((#symFunClauses(1657) #symVariable(1658)) Con ( "Z" )) = Data ( 
+      "Nil" ),, ((#symFunClauses(1659) #symVariable(1660)) (Con ( "S" ) 
+      #symVariable(1661))) = ((Data ( "Cons" ) #symVariable(1660)) ((Fun ( 
+      "Tuple" ) #symVariable(1660)) #symVariable(1661)))) ) Data ( "8469" )) 
+      Var ( "n" )) }) Var ( "m'" )) Var ( "l'" ))) = ((((Con ( "_::_" ) { Data
+       ( "8469" ) }) { ((FunClauses ( Fun ( "Tuple" ) , 'fc(((#symFunClauses(
+      2402) #symVariable(2403)) Con ( "Z" )) = Data ( "Nil" ),, ((
+      #symFunClauses(2404) #symVariable(2405)) (Con ( "S" ) #symVariable(2406)
+      )) = ((Data ( "Cons" ) #symVariable(2405)) ((Fun ( "Tuple" ) 
+      #symVariable(2405)) #symVariable(2406)))) ) Data ( "8469" )) Var ( "n" )
+      ) }) ((Fun ( "_+_" ) Var ( "m" )) Var ( "m'" ))) (((Fun ( "sum8469Tuple"
+       ) { Var ( "n" ) }) Var ( "l" )) Var ( "l'" ))))
 </fun>

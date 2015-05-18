@@ -69,24 +69,22 @@
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>
 <fun>
-    Fun ( "_+_" ) |-> 'FunClauses(((#symFunClauses(35) Con ( "zero" )) Var ( 
-      "m" )) = Var ( "m" ),, ((#symFunClauses(58) (Con ( "suc" ) Var ( "n" )))
-       Var ( "m" )) = (Con ( "suc" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))
-      ))
-    Fun ( "if_then_else_" ) |-> 'FunClauses(((((#symFunClauses(79) { #symExpr(
-      74) }) Con ( "true" )) Var ( "x" )) Var ( "y" )) = Var ( "x" ),, ((((
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(35) Con ( "zero" )) Var ( "m" )) = 
+      Var ( "m" ),, ((#symFunClauses(58) (Con ( "suc" ) Var ( "n" ))) Var ( 
+      "m" )) = (Con ( "suc" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
+    Fun ( "if_then_else_" ) |-> 'fc(((((#symFunClauses(79) { #symExpr(74) }) 
+      Con ( "true" )) Var ( "x" )) Var ( "y" )) = Var ( "x" ),, ((((
       #symFunClauses(100) { #symExpr(95) }) Con ( "false" )) Var ( "x" )) Var 
       ( "y" )) = Var ( "y" ))
-    Fun ( "map" ) |-> 'FunClauses(((((#symFunClauses(177) { (DotP ( #symExpr(
-      134) )) }) { #symExpr(142) }) Var ( "f" )) (Con ( "[]" ) { #symExpr(134)
-       })) = (Con ( "[]" ) { #symExpr(167) }),, ((((#symFunClauses(252) { (
-      DotP ( #symExpr(181) )) }) { #symExpr(189) }) Var ( "f" )) (((Con ( 
-      "_::_" ) { #symExpr(181) }) Var ( "x" )) Var ( "xs" ))) = (((Con ( 
-      "_::_" ) { #symExpr(223) }) (Var ( "f" ) Var ( "x" ))) ((((Fun ( "map" )
-       { #symExpr(225) }) { #symExpr(223) }) Var ( "f" )) Var ( "xs" ))))
+    Fun ( "map" ) |-> 'fc(((((#symFunClauses(177) { (DotP ( #symExpr(134) )) }
+      ) { #symExpr(142) }) Var ( "f" )) (Con ( "[]" ) { #symExpr(134) })) = (
+      Con ( "[]" ) { #symExpr(167) }),, ((((#symFunClauses(252) { (DotP ( 
+      #symExpr(181) )) }) { #symExpr(189) }) Var ( "f" )) (((Con ( "_::_" ) { 
+      #symExpr(181) }) Var ( "x" )) Var ( "xs" ))) = (((Con ( "_::_" ) { 
+      #symExpr(223) }) (Var ( "f" ) Var ( "x" ))) ((((Fun ( "map" ) { #symExpr
+      (225) }) { #symExpr(223) }) Var ( "f" )) Var ( "xs" ))))
     Fun ( "nil" ) |-> \ ( Var ( "A" ) : #symExpr(121) ) -> (Con ( "[]" ) { Var
        ( "A" ) })
-    Fun ( "pred" ) |-> 'FunClauses((#symFunClauses(16) Con ( "zero" )) = Con (
-       "zero" ),, (#symFunClauses(25) (Con ( "suc" ) Var ( "n" ))) = Var ( "n"
-       ))
+    Fun ( "pred" ) |-> 'fc((#symFunClauses(16) Con ( "zero" )) = Con ( "zero" 
+      ),, (#symFunClauses(25) (Con ( "suc" ) Var ( "n" ))) = Var ( "n" ))
 </fun>

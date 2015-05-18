@@ -69,10 +69,9 @@
       ( "zero" )) (Con ( "[]" ) { Data ( "Nat" ) }))))
     Fun ( "3things'" ) |-> Fun ( "3things" )
     Fun ( "3things''" ) |-> Fun ( "3things'" )
-    Fun ( "_+_" ) |-> 'FunClauses(((#symFunClauses(15) Con ( "zero" )) Var ( 
-      "m" )) = Var ( "m" ),, ((#symFunClauses(38) (Con ( "suc" ) Var ( "n" )))
-       Var ( "m" )) = (Con ( "suc" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))
-      ))
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(15) Con ( "zero" )) Var ( "m" )) = 
+      Var ( "m" ),, ((#symFunClauses(38) (Con ( "suc" ) Var ( "n" ))) Var ( 
+      "m" )) = (Con ( "suc" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
     Fun ( "one" ) |-> (Con ( "suc" ) Con ( "zero" ))
     Fun ( "three" ) |-> (Con ( "suc" ) (Con ( "suc" ) (Con ( "suc" ) Con ( 
       "zero" ))))

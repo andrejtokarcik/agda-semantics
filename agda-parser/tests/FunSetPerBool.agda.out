@@ -16,10 +16,11 @@
 <sig>
     Fun ( "f" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
     Fun ( "f2" ) |-> ( Var ( "x" ) : Data ( "Bool" ) ) -> ( Var ( "eh" ) : (
-      'FunClauses((#symFunClauses(250) Con ( "True" )) = Data ( "Bool" ),, (
-      #symFunClauses(251) Con ( "False" )) = Data ( "T" )) Var ( "x" )) ) -> (
-      'FunClauses((#symFunClauses(286) Con ( "True" )) = Data ( "Bool" ),, (
-      #symFunClauses(287) Con ( "False" )) = Data ( "T" )) Var ( "x" ))
+      FunClauses ( Fun ( "s" ) , 'fc((#symFunClauses(250) Con ( "True" )) = 
+      Data ( "Bool" ),, (#symFunClauses(251) Con ( "False" )) = Data ( "T" )) 
+      ) Var ( "x" )) ) -> (FunClauses ( Fun ( "s" ) , 'fc((#symFunClauses(286)
+       Con ( "True" )) = Data ( "Bool" ),, (#symFunClauses(287) Con ( "False" 
+      )) = Data ( "T" )) ) Var ( "x" ))
     Fun ( "g" ) |-> Data ( "Bool" )
     Fun ( "h" ) |-> Data ( "T" )
     Fun ( "i" ) |-> ( Var ( "eh" ) : Data ( "Bool" ) ) -> Data ( "Bool" )
@@ -64,6 +65,6 @@
     Fun ( "h" ) |-> ((Fun ( "f2" ) Con ( "False" )) Con ( "E" ))
     Fun ( "i" ) |-> (Fun ( "f2" ) Con ( "True" ))
     Fun ( "j" ) |-> (Fun ( "f2" ) Con ( "False" ))
-    Fun ( "s" ) |-> 'FunClauses((#symFunClauses(6) Con ( "True" )) = Data ( 
-      "Bool" ),, (#symFunClauses(11) Con ( "False" )) = Data ( "T" ))
+    Fun ( "s" ) |-> 'fc((#symFunClauses(6) Con ( "True" )) = Data ( "Bool" )
+      ,, (#symFunClauses(11) Con ( "False" )) = Data ( "T" ))
 </fun>

@@ -14,6 +14,9 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <k> N:Name => t(N, T) ...</k>
        <sig>... N |-> T ...</sig>
 
+  rule <k> FunClauses(F, _) => t(F, T) ...</k>
+       <sig>... F |-> T ...</sig>
+
   rule [infer-universe]:
        Set(Alpha) => t(Set(Alpha), Set(Alpha +Int 1))
 
@@ -36,6 +39,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   //rule DotP(E) => Dot(E)
   context DotP(HOLE)
   rule DotP(t(E, T)) => t(DotP(E), T)
+
 
   // for the binders' semantics
   syntax KItem ::= "bound!"

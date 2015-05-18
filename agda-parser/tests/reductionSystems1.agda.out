@@ -39,11 +39,11 @@
     Name ( "_+_" ) |-> Fun ( "_+_" )
 </ncat>
 <fun>
-    Fun ( "_*_" ) |-> 'FunClauses(((#symFunClauses(45) Var ( "n" )) Con ( "Z" 
-      )) = Con ( "Z" ),, ((#symFunClauses(71) Var ( "n" )) (Con ( "S" ) Var ( 
-      "m" ))) = ((Fun ( "_+_" ) ((Fun ( "_*_" ) Var ( "n" )) Var ( "m" ))) Var
-       ( "n" )))
-    Fun ( "_+_" ) |-> 'FunClauses(((#symFunClauses(12) Var ( "n" )) Con ( "Z" 
-      )) = Var ( "n" ),, ((#symFunClauses(35) Var ( "n" )) (Con ( "S" ) Var ( 
-      "m" ))) = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
+    Fun ( "_*_" ) |-> 'fc(((#symFunClauses(45) Var ( "n" )) Con ( "Z" )) = Con
+       ( "Z" ),, ((#symFunClauses(71) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
+      = ((Fun ( "_+_" ) ((Fun ( "_*_" ) Var ( "n" )) Var ( "m" ))) Var ( "n" )
+      ))
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(12) Var ( "n" )) Con ( "Z" )) = Var
+       ( "n" ),, ((#symFunClauses(35) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
+      = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
 </fun>

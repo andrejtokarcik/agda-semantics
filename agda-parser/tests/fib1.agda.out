@@ -41,13 +41,13 @@
     Name ( "one" ) |-> Fun ( "one" )
 </ncat>
 <fun>
-    Fun ( "_+_" ) |-> 'FunClauses(((#symFunClauses(12) Var ( "n" )) Con ( "Z" 
-      )) = Var ( "n" ),, ((#symFunClauses(35) Var ( "n" )) (Con ( "S" ) Var ( 
-      "m" ))) = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
-    Fun ( "fib" ) |-> 'FunClauses((#symFunClauses(46) Con ( "Z" )) = Fun ( 
-      "one" ),, (#symFunClauses(54) (Con ( "S" ) Con ( "Z" ))) = Fun ( "one" )
-      ,, (#symFunClauses(81) (Con ( "S" ) (Con ( "S" ) Var ( "n" )))) = ((Fun 
-      ( "_+_" ) (Fun ( "fib" ) Var ( "n" ))) (Fun ( "fib" ) (Con ( "S" ) Var (
-       "n" )))))
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(12) Var ( "n" )) Con ( "Z" )) = Var
+       ( "n" ),, ((#symFunClauses(35) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
+      = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
+    Fun ( "fib" ) |-> 'fc((#symFunClauses(46) Con ( "Z" )) = Fun ( "one" ),, (
+      #symFunClauses(54) (Con ( "S" ) Con ( "Z" ))) = Fun ( "one" ),, (
+      #symFunClauses(81) (Con ( "S" ) (Con ( "S" ) Var ( "n" )))) = ((Fun ( 
+      "_+_" ) (Fun ( "fib" ) Var ( "n" ))) (Fun ( "fib" ) (Con ( "S" ) Var ( 
+      "n" )))))
     Fun ( "one" ) |-> (Con ( "S" ) Con ( "Z" ))
 </fun>

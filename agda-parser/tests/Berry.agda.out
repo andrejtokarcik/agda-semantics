@@ -37,11 +37,10 @@
     Name ( "tt" ) |-> Con ( "tt" )
 </ncat>
 <fun>
-    Fun ( "maj" ) |-> 'FunClauses((((#symFunClauses(16) Con ( "tt" )) Con ( 
-      "tt" )) Con ( "tt" )) = Con ( "tt" ),, (((#symFunClauses(30) Con ( "tt" 
-      )) Con ( "ff" )) Var ( "x" )) = Var ( "x" ),, (((#symFunClauses(44) Con 
-      ( "ff" )) Var ( "x" )) Con ( "tt" )) = Var ( "x" ),, (((#symFunClauses(
-      58) Var ( "x" )) Con ( "tt" )) Con ( "ff" )) = Var ( "x" ),, (((
-      #symFunClauses(71) Con ( "ff" )) Con ( "ff" )) Con ( "ff" )) = Con ( 
-      "ff" ))
+    Fun ( "maj" ) |-> 'fc((((#symFunClauses(16) Con ( "tt" )) Con ( "tt" )) 
+      Con ( "tt" )) = Con ( "tt" ),, (((#symFunClauses(30) Con ( "tt" )) Con (
+       "ff" )) Var ( "x" )) = Var ( "x" ),, (((#symFunClauses(44) Con ( "ff" )
+      ) Var ( "x" )) Con ( "tt" )) = Var ( "x" ),, (((#symFunClauses(58) Var (
+       "x" )) Con ( "tt" )) Con ( "ff" )) = Var ( "x" ),, (((#symFunClauses(71
+      ) Con ( "ff" )) Con ( "ff" )) Con ( "ff" )) = Con ( "ff" ))
 </fun>

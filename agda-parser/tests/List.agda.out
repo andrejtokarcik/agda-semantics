@@ -46,14 +46,14 @@
     Name ( "tt" ) |-> Fun ( "tt" )
 </ncat>
 <fun>
-    Fun ( "map" ) |-> 'FunClauses(((((#symFunClauses(96) { (DotP ( #symExpr(53
-      ) )) }) { #symExpr(61) }) Var ( "f" )) (Con ( "nil" ) { #symExpr(53) }))
-       = (Con ( "nil" ) { #symExpr(86) }),, ((((#symFunClauses(171) { (DotP ( 
-      #symExpr(100) )) }) { #symExpr(108) }) Var ( "f" )) (((Con ( "_::_" ) { 
-      #symExpr(100) }) Var ( "x" )) Var ( "xs" ))) = (((Con ( "_::_" ) { 
-      #symExpr(142) }) (Var ( "f" ) Var ( "x" ))) ((((Fun ( "map" ) { #symExpr
-      (144) }) { #symExpr(142) }) Var ( "f" )) Var ( "xs" ))))
-    Fun ( "nil2" ) |-> 'FunClauses((#symFunClauses(36) { #symExpr(25) }) = (
-      Con ( "nil" ) { #symExpr(30) }))
+    Fun ( "map" ) |-> 'fc(((((#symFunClauses(96) { (DotP ( #symExpr(53) )) }) 
+      { #symExpr(61) }) Var ( "f" )) (Con ( "nil" ) { #symExpr(53) })) = (Con 
+      ( "nil" ) { #symExpr(86) }),, ((((#symFunClauses(171) { (DotP ( #symExpr
+      (100) )) }) { #symExpr(108) }) Var ( "f" )) (((Con ( "_::_" ) { #symExpr
+      (100) }) Var ( "x" )) Var ( "xs" ))) = (((Con ( "_::_" ) { #symExpr(142)
+       }) (Var ( "f" ) Var ( "x" ))) ((((Fun ( "map" ) { #symExpr(144) }) { 
+      #symExpr(142) }) Var ( "f" )) Var ( "xs" ))))
+    Fun ( "nil2" ) |-> 'fc((#symFunClauses(36) { #symExpr(25) }) = (Con ( 
+      "nil" ) { #symExpr(30) }))
     Fun ( "tt" ) |-> \ ( #symExpr(37) : #symExpr(43) ) -> Set ( 1 )
 </fun>
