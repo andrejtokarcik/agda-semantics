@@ -10,28 +10,23 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Fun ( "Atom" ) |-> ( #symVariable(163) : Data ( "Bool" ) ) -> Set ( 0 )
+    Fun ( "Atom" ) |-> ( #symVariable(99) : Data ( "Bool" ) ) -> Set ( 0 )
     Fun ( "Refl" ) |-> Set ( 0 )
-    Fun ( "_*_" ) |-> ( #symVariable(62) : Data ( "8469" ) ) -> ( #symVariable
-      (65) : Data ( "8469" ) ) -> Data ( "8469" )
-    Fun ( "_+_" ) |-> ( #symVariable(68) : Data ( "8469" ) ) -> ( #symVariable
-      (1619) : Data ( "8469" ) ) -> Data ( "8469" )
-    Fun ( "_==Bool_" ) |-> ( #symVariable(157) : Data ( "8469" ) ) -> ( 
-      #symVariable(160) : Data ( "8469" ) ) -> Data ( "Bool" )
-    Fun ( "_==_" ) |-> ( #symVariable(172) : Data ( "8469" ) ) -> ( 
-      #symVariable(175) : Data ( "8469" ) ) -> Set ( 0 )
-    Fun ( "refl" ) |-> ( #symVariable(2536) : Data ( "8469" ) ) -> ((Fun ( 
-      "_==_" ) #symVariable(2536)) #symVariable(2536))
+    Fun ( "_*_" ) |-> ( #symVariable(52) : Data ( "8469" ) ) -> ( #symVariable
+      (53) : Data ( "8469" ) ) -> Data ( "8469" )
+    Fun ( "_+_" ) |-> ( #symVariable(9) : Data ( "8469" ) ) -> ( #symVariable(
+      10) : Data ( "8469" ) ) -> Data ( "8469" )
+    Fun ( "_==Bool_" ) |-> ( #symVariable(112) : Data ( "8469" ) ) -> ( 
+      #symVariable(113) : Data ( "8469" ) ) -> Data ( "Bool" )
+    Fun ( "_==_" ) |-> ( #symVariable(169) : Data ( "8469" ) ) -> ( 
+      #symVariable(170) : Data ( "8469" ) ) -> Set ( 0 )
+    Fun ( "refl" ) |-> Fun ( "Refl" )
     Data ( "8469" ) |-> Set ( 0 )
     Data ( "8868" ) |-> Set ( 0 )
     Data ( "8869" ) |-> Set ( 0 )
     Data ( "Bool" ) |-> Set ( 0 )
-    Con ( "S" ) |-> ( #symVariable(1619) : Data ( "8469" ) ) -> Data ( "8469" 
-      )
+    Con ( "S" ) |-> ( #symVariable(8) : Data ( "8469" ) ) -> Data ( "8469" )
     Con ( "Z" ) |-> Data ( "8469" )
     Con ( "ff" ) |-> Data ( "Bool" )
     Con ( "true" ) |-> Data ( "8868" )
@@ -43,9 +38,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "8469" ) |-> Data ( "8469" )
     Name ( "8868" ) |-> Data ( "8868" )
@@ -65,25 +57,25 @@
     Name ( "tt" ) |-> Con ( "tt" )
 </ncat>
 <fun>
-    Fun ( "Atom" ) |-> 'fc((#symFunClauses(81) Con ( "tt" )) = Data ( "8868" )
-      ,, (#symFunClauses(86) Con ( "ff" )) = Data ( "8869" ))
-    Fun ( "Refl" ) |-> ( Var ( "n" ) : Data ( "8469" ) ) -> ((Fun ( "_==_" ) 
-      Var ( "n" )) Var ( "n" ))
-    Fun ( "_*_" ) |-> 'fc(((#symFunClauses(50) Var ( "n" )) Con ( "Z" )) = Con
-       ( "Z" ),, ((#symFunClauses(76) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
+    Fun ( "Atom" ) |-> 'fc((#symFunClauses(105) Con ( "tt" )) = Data ( "8868" 
+      ),, (#symFunClauses(111) Con ( "ff" )) = Data ( "8869" ))
+    Fun ( "Refl" ) |-> ( #symVariable(221) : Data ( "8469" ) ) -> ((Fun ( 
+      "_==_" ) #symVariable(221)) #symVariable(221))
+    Fun ( "_*_" ) |-> 'fc(((#symFunClauses(65) Var ( "n" )) Con ( "Z" )) = Con
+       ( "Z" ),, ((#symFunClauses(98) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
       = ((Fun ( "_+_" ) ((Fun ( "_*_" ) Var ( "n" )) Var ( "m" ))) Var ( "n" )
       ))
-    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(17) Var ( "n" )) Con ( "Z" )) = Var
-       ( "n" ),, ((#symFunClauses(40) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(22) Var ( "n" )) Con ( "Z" )) = Var
+       ( "n" ),, ((#symFunClauses(51) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
       = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
-    Fun ( "_==Bool_" ) |-> 'fc(((#symFunClauses(95) Con ( "Z" )) Con ( "Z" )) 
-      = Con ( "tt" ),, ((#symFunClauses(118) (Con ( "S" ) Var ( "n" ))) (Con (
-       "S" ) Var ( "m" ))) = ((Fun ( "_==Bool_" ) Var ( "n" )) Var ( "m" )),, 
-      ((#symFunClauses(131) #symExpr(119)) #symExpr(124)) = Con ( "ff" ))
-    Fun ( "_==_" ) |-> \ ( Var ( "n" ) : #symExpr(151) ) -> \ ( Var ( "m" ) : 
-      #symExpr(154) ) -> (Fun ( "Atom" ) ((Fun ( "_==Bool_" ) Var ( "n" )) Var
+    Fun ( "_==Bool_" ) |-> 'fc(((#symFunClauses(124) Con ( "Z" )) Con ( "Z" ))
+       = Con ( "tt" ),, ((#symFunClauses(153) (Con ( "S" ) Var ( "n" ))) (Con 
+      ( "S" ) Var ( "m" ))) = ((Fun ( "_==Bool_" ) Var ( "n" )) Var ( "m" ))
+      ,, ((#symFunClauses(168) #symExpr(156)) #symExpr(161)) = Con ( "ff" ))
+    Fun ( "_==_" ) |-> \ ( Var ( "n" ) : #symExpr(195) ) -> \ ( Var ( "m" ) : 
+      #symExpr(198) ) -> (Fun ( "Atom" ) ((Fun ( "_==Bool_" ) Var ( "n" )) Var
        ( "m" )))
-    Fun ( "refl" ) |-> 'fc((#symFunClauses(1617) Con ( "Z" )) = Con ( "true" )
-      ,, (#symFunClauses(3813) (Con ( "S" ) Var ( "n" ))) = (Fun ( "refl" ) 
+    Fun ( "refl" ) |-> 'fc((#symFunClauses(1669) Con ( "Z" )) = Con ( "true" )
+      ,, (#symFunClauses(3447) (Con ( "S" ) Var ( "n" ))) = (Fun ( "refl" ) 
       Var ( "n" )))
 </fun>

@@ -1,0 +1,31 @@
+<k>
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
+</k>
+<dbg>
+    0
+</dbg>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "x" ) |-> Set ( 3001 )
+    Fun ( "y" ) |-> Set ( 0 )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "x" ) |-> Fun ( "x" )
+    Name ( "y" ) |-> Fun ( "y" )
+</ncat>
+<fun>
+    Fun ( "x" ) |-> (Fun ( "id" ) @ Fun ( "id" ) |-> \ ( #symVariable(10) : 
+      Set ( 3001 ) ) -> #symVariable(10) Set ( 3000 ))
+    Fun ( "y" ) |-> Data ( "False" )
+</fun>

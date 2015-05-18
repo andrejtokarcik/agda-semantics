@@ -18,7 +18,7 @@ module AGDA-SEMANTICS-DECL-DATA
   // FIXME not sure if the condition is correct: what universe must the datatype fit in?
   rule [add-type-con]:
        <k> addTypeCon(D, DPs, t(T, Set(Alpha))) => T constructorOf Set(Alpha -Int 1) ~> pass? ...</k>
-       <sig>... . => D |-> T ...</sig>
+       <sig>... . => D |-> renameBoundVariables(T) ...</sig>
        //<con>... . => DPs |-> l(.List) ...</con>
 
   syntax KItem ::= addDataCons(Expr, Telescope, TypeSignatures)
@@ -30,7 +30,7 @@ module AGDA-SEMANTICS-DECL-DATA
   rule [add-data-con]:
        <k> addDataCon(DPs, Name(C), t(T, Set(_))) => T constructorOf DPs ~> pass? ...</k>
        <ncat> NCat (. => Name(C) |-> Con(C)) </ncat>
-       <sig>... . => Con(C) |-> T ...</sig>
+       <sig>... . => Con(C) |-> renameBoundVariables(T) ...</sig>
        //<con>... DPs |-> l(_ (. => ListItem(Con(C)))) ...</con>
     when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the external parser
 

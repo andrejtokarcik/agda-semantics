@@ -10,13 +10,10 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
     Fun ( "expr" ) |-> Data ( "Nat" )
     Data ( "Nat" ) |-> Set ( 0 )
-    Con ( "suc" ) |-> ( #symVariable(1) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "suc" ) |-> ( #symVariable(2) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Con ( "zero" ) |-> Data ( "Nat" )
 </sig>
 <ctx>
@@ -25,9 +22,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "Nat" ) |-> Data ( "Nat" )
     Name ( "expr" ) |-> Fun ( "expr" )
@@ -35,6 +29,7 @@
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>
 <fun>
-    Fun ( "expr" ) |-> ((\ ( Var ( "a" ) : Set ( 0 ) ) -> \ ( Var ( "x" ) : 
-      Var ( "a" ) ) -> Var ( "x" ) Data ( "Nat" )) Con ( "zero" ))
+    Fun ( "expr" ) |-> ((\ ( #symVariable(15) : Set ( 0 ) ) -> \ ( 
+      #symVariable(14) : #symVariable(15) ) -> #symVariable(14) Data ( "Nat" )
+      ) Con ( "zero" ))
 </fun>

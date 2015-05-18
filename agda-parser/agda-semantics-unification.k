@@ -8,7 +8,12 @@ module AGDA-SEMANTICS-UNIFICATION
 
   // == ---> ==unif or ==mgu (alebo aj nie)
   syntax KItem ::= Expr "==" Expr | K "#==" K
-  rule E == E' => nf(E) #== nf(E')
+  rule <k> E == E' => E #== E' ...</k>
+       <mgu> Theta </mgu>
+    when canUnify(Theta, E, E')
+  rule <k> E == E' => nf(E) #== nf(E') ...</k>
+       <mgu> Theta </mgu>
+    when notBool canUnify(Theta, E, E')
   rule <k> nf(E) #== E' => nf(applyMgu(Theta, E)) ~> HOLE #== E' ...</k>
        <mgu> Theta </mgu>
   // TODO? dat nf(E:Nf)?
@@ -16,24 +21,27 @@ module AGDA-SEMANTICS-UNIFICATION
   rule <k> E #== nf(E') => nf(applyMgu(Theta, E')) ~> E #== HOLE ...</k>
        <mgu> Theta </mgu>
   rule nf(E') ~> E #== HOLE => E #== E'  when isNf(E')
-  rule L:LHS ~> E #== HOLE => E #== L
+  rule L:LHS ~> E #== HOLE => E #== L    // FIXME?
   rule <k> E:K #== E':K => . ...</k>
-       <mgu> Theta => updateMgu(Theta, E, E') </mgu>
+       <mgu> Theta => updateMguDummy(Theta, E, E') </mgu>
     when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool canUnify(Theta, E, E')
-  // kinda hack because we rely on rename applied to the LHS specifically (rename of RHS/both would cause troubles)
+  // kinda hack because we rely on rename applied to the LHS specifically (rename of RHS/both would cause troubles)  [because of tsubst or why?]
+  // treba pre 'id id' aplikaciu
   rule <k> E:K #== E':K => renameVariables(E) #== E' ...</k>
+  //rule <k> E:K #== E':K => renameBoundVariables(E) #== renameBoundVariables(E') ...</k>
        <mgu> Theta </mgu>
        //<dbg> I => I +Int 1 </dbg>
     when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
-         getKLabel(updateMgu(Theta, E, E')) ==KLabel cycle
+         getKLabel(updateMguDummy(Theta, E, E')) ==KLabel cycle
+         //cycleWithBoundVariables(updateMgu(Theta, E, E'), E E')
     //andBool I <Int 50
   // FIXME tu Theta a updateMgu si viem zistit aj potom v resolveFunClauses, nemusim predavat ako arg
-  rule <k> E:K #== E':K => resolveFunClauses(Theta, updateMgu(Theta, E, E'), ListItem(E), ListItem(E')) ...</k>
+  rule <k> E:K #== E':K => resolveFunClauses(Theta, updateMguDummy(Theta, E, E'), ListItem(E), ListItem(E')) ...</k>
        <mgu> Theta </mgu>
        //<dbg> I => I +Int 1 </dbg>
     when getKLabel(E) =/=KLabel 'nf andBool getKLabel(E') =/=KLabel 'nf andBool
          notBool canUnify(Theta, E, E') andBool
-         troublesomeFunClauses(updateMgu(Theta, E, E'))
+         troublesomeFunClauses(updateMguDummy(Theta, E, E'))
       //andBool I <Int 50
 
   syntax KItem ::= "unifyConf"
@@ -60,6 +68,9 @@ module AGDA-SEMANTICS-UNIFICATION
   rule R:KResult ~> killMgu => killMgu ~> R  [structural]
   rule <k> killMgu => . ...</k>
        <mgu> Theta => .Mgu </mgu>
+
+  syntax Bool ::= cycleWithBoundVariables(Mgu, Expr)  [function]
+  rule cycleWithBoundVariables(cycle(Ks), E) => (Set Ks) <=Set getBoundVariables(E)
 
   syntax Bool ::= troublesomeFunClauses(Mgu)  [function]
   rule troublesomeFunClauses(clash(C1,,C2)) => true
@@ -94,8 +105,16 @@ module AGDA-SEMANTICS-UNIFICATION
 
   syntax Bool ::= canUnify(K, K)       [function]
                 | canUnify(Mgu, K, K)  [function]
+                | #canUnifyImpl(Mgu, K, K)  [function]
   rule canUnify(K:K, K':K) => canUnify(.Mgu, K, K')
-  rule canUnify(Theta, K:K, K':K) => isMguError(updateMgu(Theta, K, K')) =/=K true
+  rule canUnify(Theta, K:K, K':K) => isMguError(updateMguDummy(Theta, K, K')) =/=K true 
+  /*#canUnifyImpl(Theta, K, K')
+  rule #canUnifyImpl(Theta, E => E', E' => E)              when isImplicitPi(E) =/=K true andBool isImplicitPi(E')
+  rule #canUnifyImpl(Theta, E:ImplicitPi => E', E':ImplicitPi => E)              when numPiArgs(E) <Int numPiArgs(E')
+  rule #canUnifyImpl(Theta, E:ImplicitPi, E' => {X : T} -> E)
+    when numPiArgs(E) >Int numPiArgs(E') andBool fresh(X:Variable) andBool fresh(T:Expr)
+  rule #canUnifyImpl(Theta, K, K') => isMguError(updateMgu(Theta, K, K')) =/=K true [owise]
+  */
 
   syntax Expr ::= subExpr(Int, Expr)   [function]
   rule subExpr(I, E) => E when lengthList(args(E)) <=Int I
@@ -183,16 +202,52 @@ module AGDA-SEMANTICS-UNIFICATION
     when getKLabel(K) =/=KLabel #symVariable andBool getKLabel(K) =/=KLabel #symExpr [structural, anywhere]
   rule eqns((eqn(K,,X) => eqn(X,,K)),,_)
     when isVariable(X) ==K true andBool isVariable(K) =/=K true  [structural, anywhere]
+  //rule eqns((eqn(K,,K') => .KList),,_)
+  //  when isUltraDummy(K) ==K true orBool isUltraDummy(K') ==K true  [structural, anywhere]
+  //rule eqns((eqn(#symVariable(_),,#symVariable(_)) => .KList),,_)
+
+
 
   //rule eqns((eqn(#symExpr(Ls),,#symVariable(J)) => eqn(#symVariable(J),,#symExpr(Ls))),,_)  [structural, anywhere]
 
+  // hackity hack: using functions from both substitution and unification module
   rule getVariables(K) => #getVarsFromK(#getVars(K))
+  syntax Set ::= getBoundVariables(K)       [function]
+  rule getBoundVariables(K) => getVariables(K) -Set freeVariables(K)
   syntax K ::= renameBoundVariables(K)      [function]
+  rule renameBoundVariables(K) => applySubst(freshSubst(subst(.KList),, #vars(KList getBoundVariables(K))), K)
+  /*
              | #substituteBoundVars(Set, K) [function]
   rule renameBoundVariables(K) => #substituteBoundVars(getVariables(K) -Set freeVariables(K), K)
   rule #substituteBoundVars(.Set, K) => K
   rule #substituteBoundVars((SetItem(X) => .Set) _, K => K[Y/X])  when fresh(Y:Variable)
+  */
 
   syntax Set ::= freeMetaVariables(K)  [function]
   rule freeMetaVariables(K) => filter(isMetaVariable, freeVariables(K))
+
+  syntax UltraDummy ::= "#dummy"//(Variable)
+  syntax Variable ::= UltraDummy
+
+  syntax K ::= dummyVarsInBinders(K)  [function]
+  //rule dummyVarsInBinders(K) => K
+  rule dummyVarsInBinders((X : T) -> E) => (#dummy : dummyVarsInBinders(T)) -> dummyVarsInBinders(E)
+  rule dummyVarsInBinders({X : T} -> E) => {#dummy : dummyVarsInBinders(T)} -> dummyVarsInBinders(E)
+  rule dummyVarsInBinders(\ (X : T) -> E) => \ (#dummy : dummyVarsInBinders(T)) -> dummyVarsInBinders(E)
+  rule dummyVarsInBinders(\ {X : T} -> E) => \ {#dummy : dummyVarsInBinders(T)} -> dummyVarsInBinders(E)
+  rule dummyVarsInBinders(K:KLabel(Ls:KList)) => K(dummyVarsInBinders(Ls))  [owise]
+  syntax KList ::= dummyVarsInBinders(KList)  [function]
+  rule dummyVarsInBinders(.KList) => .KList
+  rule dummyVarsInBinders(K:K,,Ks:KList) => dummyVarsInBinders(K),,dummyVarsInBinders(Ks)
+
+  syntax Mgu ::= updateMguDummy(Mgu, K, K)  [function]
+  rule updateMguDummy(Mgu, K1, K2) => #if getKLabel(updateMgu(Mgu, dummyVarsInBinders(K1), K2)) =/=KLabel cycle
+                                      #then Mgu
+                                      #else updateMgu(Mgu, K1, K2)
+                                      #fi
+    when getKLabel(updateMgu(Mgu, K1, K2)) ==KLabel cycle
+  rule updateMguDummy(Mgu, K1, K2) => updateMgu(Mgu, K1, K2)    [owise]
+
+  syntax K ::= unifyRightNow(K, K, K)  [function]
+  rule unifyRightNow(K1, K2, K) => applyMgu(updateMguDummy(.Mgu, K1, K2), K)
 endmodule

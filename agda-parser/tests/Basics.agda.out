@@ -10,35 +10,32 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Name ( "s" ) |-> ( #symVariable(1) : Postulate ( "N" ) ) -> Postulate ( 
-      "N" )
-    Name ( "z" ) |-> 'Postulate("N")
-    Fun ( "_==_" ) |-> ( #symVariable(7174) : Data ( "Nat" ) ) -> ( 
-      #symVariable(7177) : Data ( "Nat" ) ) -> Set ( 0 )
-    Fun ( "even" ) |-> ( #symVariable(70) : Data ( "Nat" ) ) -> Data ( "Bool" 
+    Name ( "N" ) |-> Set ( 0 )
+    Name ( "s" ) |-> ( #symVariable(8) : Name ( "N" ) ) -> Name ( "N" )
+    Name ( "z" ) |-> Name ( "N" )
+    Fun ( "_==_" ) |-> ( #symVariable(141) : Data ( "Nat" ) ) -> ( 
+      #symVariable(142) : Data ( "Nat" ) ) -> Set ( 0 )
+    Fun ( "even" ) |-> ( #symVariable(54) : Data ( "Nat" ) ) -> Data ( "Bool" 
       )
-    Fun ( "id" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(106) : Var 
-      ( "A" ) ) -> Var ( "A" )
-    Fun ( "odd" ) |-> ( #symVariable(70) : Data ( "Nat" ) ) -> Data ( "Bool" )
+    Fun ( "id" ) |-> ( #symVariable(98) : Set ( 0 ) ) -> ( #symVariable(97) : 
+      #symVariable(98) ) -> #symVariable(98)
+    Fun ( "odd" ) |-> ( #symVariable(53) : Data ( "Nat" ) ) -> Data ( "Bool" )
     Fun ( "one" ) |-> Data ( "Nat" )
-    Fun ( "plus" ) |-> ( #symVariable(7168) : Data ( "Nat" ) ) -> ( 
-      #symVariable(8567) : Data ( "Nat" ) ) -> Data ( "Nat" )
-    Fun ( "thmPlusZero" ) |-> ( Var ( "n" ) : Data ( "Nat" ) ) -> ((Fun ( 
-      "_==_" ) ((Fun ( "plus" ) Var ( "n" )) Con ( "zero" ))) Var ( "n" ))
-    Fun ( "thmPlusZero'" ) |-> ( Var ( "n" ) : Data ( "Nat" ) ) -> ((Fun ( 
-      "_==_" ) ((Fun ( "plus" ) Con ( "zero" )) Var ( "n" ))) Var ( "n" ))
+    Fun ( "plus" ) |-> ( #symVariable(10) : Data ( "Nat" ) ) -> ( #symVariable
+      (11) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Fun ( "thmPlusZero" ) |-> ( #symVariable(231) : Data ( "Nat" ) ) -> ((Fun 
+      ( "_==_" ) ((Fun ( "plus" ) #symVariable(231)) Con ( "zero" ))) 
+      #symVariable(231))
+    Fun ( "thmPlusZero'" ) |-> ( #symVariable(5777) : Data ( "Nat" ) ) -> ((
+      Fun ( "_==_" ) ((Fun ( "plus" ) Con ( "zero" )) #symVariable(5777))) 
+      #symVariable(5777))
     Data ( "Bool" ) |-> Set ( 0 )
     Data ( "False" ) |-> Set ( 0 )
     Data ( "Nat" ) |-> Set ( 0 )
     Data ( "True" ) |-> Set ( 0 )
-    'Postulate("N") |-> Set ( 0 )
     Con ( "false" ) |-> Data ( "Bool" )
-    Con ( "suc" ) |-> ( #symVariable(8567) : Data ( "Nat" ) ) -> Data ( "Nat" 
-      )
+    Con ( "suc" ) |-> ( #symVariable(9) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Con ( "true" ) |-> Data ( "Bool" )
     Con ( "tt" ) |-> Data ( "True" )
     Con ( "zero" ) |-> Data ( "Nat" )
@@ -49,13 +46,9 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "Bool" ) |-> Data ( "Bool" )
     Name ( "False" ) |-> Data ( "False" )
-    Name ( "N" ) |-> 'Postulate("N")
     Name ( "Nat" ) |-> Data ( "Nat" )
     Name ( "True" ) |-> Data ( "True" )
     Name ( "_==_" ) |-> Fun ( "_==_" )
@@ -73,29 +66,29 @@
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>
 <fun>
-    Fun ( "_==_" ) |-> 'fc(((#symFunClauses(117) Con ( "zero" )) Con ( "zero" 
-      )) = Data ( "True" ),, ((#symFunClauses(130) Con ( "zero" )) (Con ( 
-      "suc" ) Var ( "m" ))) = Data ( "False" ),, ((#symFunClauses(143) (Con ( 
+    Fun ( "_==_" ) |-> 'fc(((#symFunClauses(153) Con ( "zero" )) Con ( "zero" 
+      )) = Data ( "True" ),, ((#symFunClauses(169) Con ( "zero" )) (Con ( 
+      "suc" ) Var ( "m" ))) = Data ( "False" ),, ((#symFunClauses(185) (Con ( 
       "suc" ) Var ( "n" ))) Con ( "zero" )) = Data ( "False" ),, ((
-      #symFunClauses(166) (Con ( "suc" ) Var ( "n" ))) (Con ( "suc" ) Var ( 
+      #symFunClauses(214) (Con ( "suc" ) Var ( "n" ))) (Con ( "suc" ) Var ( 
       "m" ))) = ((Fun ( "_==_" ) Var ( "n" )) Var ( "m" )))
-    Fun ( "even" ) |-> 'fc((#symFunClauses(52) (Con ( "suc" ) Var ( "n" ))) = 
-      (Name ( "odd" ) Var ( "n" )),, (#symFunClauses(57) Con ( "zero" )) = Con
+    Fun ( "even" ) |-> 'fc((#symFunClauses(69) (Con ( "suc" ) Var ( "n" ))) = 
+      (Name ( "odd" ) Var ( "n" )),, (#symFunClauses(75) Con ( "zero" )) = Con
        ( "true" ))
-    Fun ( "id" ) |-> \ ( Var ( "A" ) : #symExpr(85) ) -> \ ( Var ( "x" ) : 
-      #symExpr(88) ) -> Var ( "x" )
-    Fun ( "odd" ) |-> 'fc((#symFunClauses(62) Con ( "zero" )) = Con ( "false" 
-      ),, (#symFunClauses(74) (Con ( "suc" ) Var ( "n" ))) = (Fun ( "even" ) 
+    Fun ( "id" ) |-> \ ( Var ( "A" ) : #symExpr(111) ) -> \ ( Var ( "x" ) : 
+      #symExpr(114) ) -> Var ( "x" )
+    Fun ( "odd" ) |-> 'fc((#symFunClauses(81) Con ( "zero" )) = Con ( "false" 
+      ),, (#symFunClauses(96) (Con ( "suc" ) Var ( "n" ))) = (Fun ( "even" ) 
       Var ( "n" )))
     Fun ( "one" ) |-> ((Fun ( "id" ) Data ( "Nat" )) (Con ( "suc" ) Con ( 
       "zero" )))
-    Fun ( "plus" ) |-> 'fc(((#symFunClauses(17) Con ( "zero" )) Var ( "m" )) =
-       Var ( "m" ),, ((#symFunClauses(40) (Con ( "suc" ) Var ( "n" ))) Var ( 
+    Fun ( "plus" ) |-> 'fc(((#symFunClauses(23) Con ( "zero" )) Var ( "m" )) =
+       Var ( "m" ),, ((#symFunClauses(52) (Con ( "suc" ) Var ( "n" ))) Var ( 
       "m" )) = (Con ( "suc" ) ((Fun ( "plus" ) Var ( "n" )) Var ( "m" ))))
-    Fun ( "thmPlusZero" ) |-> 'fc((#symFunClauses(2964) Con ( "zero" )) = Con 
-      ( "tt" ),, (#symFunClauses(7167) (Con ( "suc" ) Var ( "n" ))) = (Fun ( 
+    Fun ( "thmPlusZero" ) |-> 'fc((#symFunClauses(2365) Con ( "zero" )) = Con 
+      ( "tt" ),, (#symFunClauses(5760) (Con ( "suc" ) Var ( "n" ))) = (Fun ( 
       "thmPlusZero" ) Var ( "n" )))
-    Fun ( "thmPlusZero'" ) |-> 'fc((#symFunClauses(8565) Con ( "zero" )) = Con
-       ( "tt" ),, (#symFunClauses(10812) (Con ( "suc" ) Var ( "n" ))) = (Fun (
-       "thmPlusZero'" ) Var ( "n" )))
+    Fun ( "thmPlusZero'" ) |-> 'fc((#symFunClauses(7332) Con ( "zero" )) = Con
+       ( "tt" ),, (#symFunClauses(9798) (Con ( "suc" ) Var ( "n" ))) = (Fun ( 
+      "thmPlusZero'" ) Var ( "n" )))
 </fun>

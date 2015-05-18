@@ -10,17 +10,14 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Fun ( "_+_" ) |-> ( #symVariable(68) : Data ( "8469" ) ) -> ( #symVariable
-      (71) : Data ( "8469" ) ) -> Data ( "8469" )
-    Fun ( "fib" ) |-> ( #symVariable(74) : Data ( "8469" ) ) -> Data ( "8469" 
+    Fun ( "_+_" ) |-> ( #symVariable(4) : Data ( "8469" ) ) -> ( #symVariable(
+      5) : Data ( "8469" ) ) -> Data ( "8469" )
+    Fun ( "fib" ) |-> ( #symVariable(55) : Data ( "8469" ) ) -> Data ( "8469" 
       )
     Fun ( "one" ) |-> Data ( "8469" )
     Data ( "8469" ) |-> Set ( 0 )
-    Con ( "S" ) |-> ( #symVariable(71) : Data ( "8469" ) ) -> Data ( "8469" )
+    Con ( "S" ) |-> ( #symVariable(3) : Data ( "8469" ) ) -> Data ( "8469" )
     Con ( "Z" ) |-> Data ( "8469" )
 </sig>
 <ctx>
@@ -29,9 +26,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "8469" ) |-> Data ( "8469" )
     Name ( "S" ) |-> Con ( "S" )
@@ -41,12 +35,12 @@
     Name ( "one" ) |-> Fun ( "one" )
 </ncat>
 <fun>
-    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(12) Var ( "n" )) Con ( "Z" )) = Var
-       ( "n" ),, ((#symFunClauses(35) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(17) Var ( "n" )) Con ( "Z" )) = Var
+       ( "n" ),, ((#symFunClauses(46) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
       = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
-    Fun ( "fib" ) |-> 'fc((#symFunClauses(46) Con ( "Z" )) = Fun ( "one" ),, (
-      #symFunClauses(54) (Con ( "S" ) Con ( "Z" ))) = Fun ( "one" ),, (
-      #symFunClauses(81) (Con ( "S" ) (Con ( "S" ) Var ( "n" )))) = ((Fun ( 
+    Fun ( "fib" ) |-> 'fc((#symFunClauses(61) Con ( "Z" )) = Fun ( "one" ),, (
+      #symFunClauses(71) (Con ( "S" ) Con ( "Z" ))) = Fun ( "one" ),, (
+      #symFunClauses(106) (Con ( "S" ) (Con ( "S" ) Var ( "n" )))) = ((Fun ( 
       "_+_" ) (Fun ( "fib" ) Var ( "n" ))) (Fun ( "fib" ) (Con ( "S" ) Var ( 
       "n" )))))
     Fun ( "one" ) |-> (Con ( "S" ) Con ( "Z" ))

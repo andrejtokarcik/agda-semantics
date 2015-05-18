@@ -29,6 +29,27 @@ module AGDA
   syntax K ::= l(List)
   configuration //<T>
                   <k>
+                  /*
+hold(dummyVarsInBinders({ 
+      #symVariable(675) : #symExpr(190) } -> ( #symVariable(678) : (Var ( "b" 
+      ) (Con ( "suc" ) #symVariable(675))) ) -> ( #symVariable(677) : #symExpr
+      (651) ) -> (Var ( "b" ) (Con ( "suc" ) (Con ( "suc" ) #symVariable(675))
+      )))) ~> 
+
+updateMgu(.Mgu,
+  { 
+      #symVariable(675) : #symExpr(190) } -> ( #symVariable(678) : (Var ( "b" 
+      ) (Con ( "suc" ) #symVariable(675))) ) -> ( #symVariable(677) : #symExpr
+      (651) ) -> (Var ( "b" ) (Con ( "suc" ) (Con ( "suc" ) #symVariable(675))
+      )) ,
+      
+     
+	dummyVarsInBinders({ #symVariable(71111) 
+      : #symExpr(190) } -> ( #symVariable(707) : (Var ( "b" ) #symVariable(709
+      )) ) -> ( #symVariable(708) : #symExpr(410) ) -> (Var ( "b" ) (Con ( 
+      "suc" ) #symVariable(709)))) ) ~>
+
+      */
                   $PGM:Program  //</k>
                   ~> nf(Fun("t1")) </k>
                   //<br />
@@ -49,8 +70,7 @@ module AGDA
                   // obsa sa meni
                   <ctx> .Map </ctx>
                   <ctxstack> .List </ctxstack>    // <ctx-stack> a podobne aj ostatne
-                  <fenv> .Map </fenv>
-                  <fenv-stack> .List </fenv-stack>
+                  //<mgu-stack> .List </mgu-stack>
                   <mgu> .Mgu </mgu>
                   <dbg> 0 </dbg>
                   /*

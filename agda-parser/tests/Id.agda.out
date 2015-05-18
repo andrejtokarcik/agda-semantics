@@ -1,5 +1,11 @@
 <k>
-    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
+    (t ( Fun ( "id" ) , { #symVariable(39) : Set ( 0 ) } -> ( #symVariable(40)
+       : #symVariable(39) ) -> #symVariable(39) ) t ( { { #symVariable(34) : 
+      Set ( 0 ) } -> ( #symVariable(35) : #symVariable(34) ) -> #symVariable(
+      34) } , { Set ( 1 ) } )) ~> whnfType ( HOLE ) ~> (HOLE Fun ( "id" )) ~> 
+      whnfType ( HOLE ) ~> (HOLE { %meta }) ~> whnfType ( HOLE ) ~> prepared!
+       ~> t ( Fun ( "idd" ) , #symExpr(20) ) = HOLE ~> loadCtx ~> .List{""}
+       ~> .List{""} ~> .List{""} ~> nf ( Fun ( "t1" ) )
 </k>
 <dbg>
     0
@@ -8,33 +14,26 @@
     subst(.KList)
 </mgu>
 <ctxstack>
-    .List
+    ListItem(#map ( .Map ))
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Fun ( "id" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(39) : Var (
-       "A" ) ) -> Var ( "A" )
-    Fun ( "idd" ) |-> ( #symVariable("local",, 1) : #symExpr(25) ) -> #symExpr
-      (25)
+    Fun ( "id" ) |-> { #symVariable(3) : Set ( 0 ) } -> ( #symVariable(2) : 
+      #symVariable(3) ) -> #symVariable(3)
+    Fun ( "idd" ) |-> #symExpr(20)
 </sig>
 <ctx>
     .Map
 </ctx>
 <meta>
-    .Map
+    #symExpr(20) |-> t ( #symExpr(20) , Set ( #symInt(22) ) )
+    #symExpr(29) |-> t ( { #symVariable(34) : Set ( 0 ) } -> ( #symVariable(35
+      ) : #symVariable(34) ) -> #symVariable(34) , Set ( 0 ) )
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "id" ) |-> Fun ( "id" )
     Name ( "idd" ) |-> Fun ( "idd" )
 </ncat>
 <fun>
-    Fun ( "id" ) |-> 'fc(((#symFunClauses(13) { #symExpr(10) }) Var ( "x" )) =
-       Var ( "x" ))
-    Fun ( "idd" ) |-> ((Fun ( "id" ) { ( #symVariable(39) : #symExpr(25) ) -> 
-      #symExpr(25) }) (Fun ( "id" ) { #symExpr(25) }))
+    Fun ( "id" ) |-> 'fc(((#symFunClauses(19) { #symVariable(17) }) Var ( "x" 
+      )) = Var ( "x" ))
 </fun>

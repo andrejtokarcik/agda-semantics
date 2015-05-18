@@ -1,6 +1,6 @@
 <k>
-    Set ( 0 ) #== Set ( 1 ) ~> Set ( 1 ) == Set ( 0 ) ~> unifyConf ~> killMgu
-       ~> addFunClause ( Fun ( "y" ) , Fun ( "y" ) , Name ( "x" ) ) ~> 
+    Set ( 0 ) #== Set ( 1 ) ~> Set ( 1 ) == Set ( 0 ) ~> addFunClause ( Fun ( 
+      "y" ) , Fun ( "y" ) , Name ( "x" ) ) ~> unifyConf ~> killMgu ~> 
       cleanMetas ~> loadCtx ~> .List{""} ~> .List{""} ~> .List{""} ~> nf ( Fun
        ( "t1" ) )
 </k>
@@ -13,9 +13,6 @@
 <ctxstack>
     ListItem(#map ( .Map ))
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
     Name ( "x" ) |-> Set ( 0 )
     Fun ( "y" ) |-> Set ( 1 )
@@ -26,9 +23,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "y" ) |-> Fun ( "y" )
 </ncat>

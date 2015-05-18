@@ -1,0 +1,41 @@
+<k>
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
+</k>
+<dbg>
+    0
+</dbg>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Name ( "Vec" ) |-> ( #symVariable(9) : Set ( 0 ) ) -> ( #symVariable(10) :
+       Data ( "Nat" ) ) -> Set ( 0 )
+    Name ( "_X_" ) |-> ( #symVariable(11) : Set ( 0 ) ) -> ( #symVariable(12) 
+      : Set ( 0 ) ) -> Set ( 0 )
+    Name ( "zip" ) |-> { #symVariable(49) : Set ( 0 ) } -> { #symVariable(48) 
+      : Set ( 0 ) } -> ( #symVariable(47) : Data ( "Nat" ) ) -> ( #symVariable
+      (45) : ((Name ( "Vec" ) #symVariable(49)) #symVariable(47)) ) -> ( 
+      #symVariable(46) : ((Name ( "Vec" ) #symVariable(48)) #symVariable(47)) 
+      ) -> ((Name ( "Vec" ) ((Name ( "_X_" ) #symVariable(49)) #symVariable(48
+      ))) #symVariable(47))
+    Data ( "Nat" ) |-> Set ( 0 )
+    Con ( "succ" ) |-> ( #symVariable(8) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "zero" ) |-> Data ( "Nat" )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Nat" ) |-> Data ( "Nat" )
+    Name ( "succ" ) |-> Con ( "succ" )
+    Name ( "zero" ) |-> Con ( "zero" )
+</ncat>
+<fun>
+    .Map
+</fun>

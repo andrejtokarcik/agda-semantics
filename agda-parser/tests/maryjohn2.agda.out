@@ -10,25 +10,20 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Name ( "implication" ) |-> ( #symVariable(22) : (Postulate ( "IsStudent" )
-       Name ( "mary" )) ) -> (Postulate ( "IsStudent" ) Name ( "john" ))
-    Name ( "maryIsStudent" ) |-> (Postulate ( "IsStudent" ) Name ( "mary" ))
+    Name ( "Person" ) |-> Set ( 0 )
+    Name ( "implication" ) |-> ( #symVariable(17) : (Name ( "IsStudent" ) Name
+       ( "mary" )) ) -> (Name ( "IsStudent" ) Name ( "john" ))
+    Name ( "mary" ) |-> Name ( "Person" )
+    Name ( "maryIsStudent" ) |-> (Name ( "IsStudent" ) Name ( "mary" ))
     Fun ( "Lemma1" ) |-> Set ( 0 )
     Fun ( "Lemma2" ) |-> Set ( 0 )
-    Fun ( "proof-lemma1" ) |-> (Postulate ( "IsStudent" ) Name ( "john" ))
-    Fun ( "proof-lemma2" ) |-> ( Var ( "x" ) : (Postulate ( "IsStudent" ) 
-      Postulate ( "john" )) ) -> (Postulate ( "IsStudent" ) Name ( "barbara" )
-      )
-    'Postulate("IsStudent") |-> ( #symVariable(44) : Postulate ( "Person" ) ) 
-      -> Set ( 0 )
-    'Postulate("Person") |-> Set ( 0 )
-    'Postulate("barbara") |-> 'Postulate("Person")
-    'Postulate("john") |-> 'Postulate("Person")
-    'Postulate("mary") |-> 'Postulate("Person")
+    Fun ( "proof-lemma1" ) |-> Fun ( "Lemma1" )
+    Fun ( "proof-lemma2" ) |-> Fun ( "Lemma2" )
+    'Postulate("IsStudent") |-> ( #symVariable(4) : Name ( "Person" ) ) -> Set
+       ( 0 )
+    'Postulate("barbara") |-> Name ( "Person" )
+    'Postulate("john") |-> Name ( "Person" )
 </sig>
 <ctx>
     .Map
@@ -36,27 +31,22 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "IsStudent" ) |-> 'Postulate("IsStudent")
     Name ( "Lemma1" ) |-> Fun ( "Lemma1" )
     Name ( "Lemma2" ) |-> Fun ( "Lemma2" )
-    Name ( "Person" ) |-> 'Postulate("Person")
     Name ( "barbara" ) |-> 'Postulate("barbara")
     Name ( "john" ) |-> 'Postulate("john")
-    Name ( "mary" ) |-> 'Postulate("mary")
     Name ( "proof-lemma1" ) |-> Fun ( "proof-lemma1" )
     Name ( "proof-lemma2" ) |-> Fun ( "proof-lemma2" )
 </ncat>
 <fun>
-    Fun ( "Lemma1" ) |-> (Postulate ( "IsStudent" ) Name ( "john" ))
-    Fun ( "Lemma2" ) |-> ( #symVariable(3) : (Postulate ( "IsStudent" ) 
+    Fun ( "Lemma1" ) |-> (Name ( "IsStudent" ) Name ( "john" ))
+    Fun ( "Lemma2" ) |-> ( #symVariable(42) : (Postulate ( "IsStudent" ) 
       Postulate ( "john" )) ) -> (Postulate ( "IsStudent" ) Name ( "barbara" )
       )
     Fun ( "proof-lemma1" ) |-> (Name ( "implication" ) Name ( "maryIsStudent" 
       ))
-    Fun ( "proof-lemma2" ) |-> \ ( Var ( "x" ) : (Postulate ( "IsStudent" ) 
-      Postulate ( "john" )) ) -> #symExpr(41)
+    Fun ( "proof-lemma2" ) |-> \ ( #symVariable(58) : (Postulate ( "IsStudent"
+       ) Postulate ( "john" )) ) -> #symExpr(56)
 </fun>

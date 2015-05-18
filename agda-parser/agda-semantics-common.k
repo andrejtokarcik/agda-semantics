@@ -54,15 +54,17 @@ module AGDA-SEMANTICS-COMMON
   rule .Declarations@_ => .Declarations
   */
 
-  syntax KItem ::= "saveFEnv" | "loadFEnv" | "cleanFEnv"
-  rule <k> saveFEnv => . ...</k>
-       <fenv> FEnv </fenv>
-       <fenv-stack> (.List => ListItem(#map(FEnv))) _ </fenv-stack>   // TODO replace m() with <ctx /> cell  -- doesn't work
-  rule <k> loadFEnv => . ...</k>
-       <fenv> _ => FEnv </fenv>
-       <fenv-stack> (ListItem(#map(FEnv)) => .List) _ </fenv-stack>
-  rule <k> cleanFEnv => . ...</k>
-       <fenv> _ => .Map </fenv>
+  /*
+  syntax KItem ::= "saveMgu" | "loadMgu" | "cleanMgu"
+  rule <k> saveMgu => . ...</k>
+       <mgu> Mgu </mgu>
+       <mgu-stack> (.List => ListItem(Mgu)) _ </mgu-stack>   // TODO replace m() with <ctx /> cell  -- doesn't work
+  rule <k> loadMgu => . ...</k>
+       <mgu> _ => Mgu </mgu>
+       <mgu-stack> (ListItem(Mgu) => .List) _ </mgu-stack>
+  rule <k> cleanMgu => . ...</k>
+       <mgu> _ => .Mgu </mgu>
+  */
 
 
   syntax KItem ::= saveCtx(Map) | "loadCtx"      // TODO no arg for saveCtx
@@ -122,6 +124,13 @@ module AGDA-SEMANTICS-COMMON
   rule args(E E' => E) (.List => ListItem(E'))
   rule args(_) => .List [owise]
 
+  syntax Int ::= numPiArgs(Pi)   [function]
+               | #numPiArgs(Pi, Int)  [function]
+  rule numPiArgs(E) => #numPiArgs(E, 0)
+  rule #numPiArgs((_ : _) -> E => E, I => I +Int 1)
+  rule #numPiArgs({_ : _} -> E => E, I => I +Int 1)
+  rule #numPiArgs(_, I) => I   [owise]
+
   syntax List ::= "List" KList  [function]
   rule List .KList => .List
   rule List K,,Ks => ListItem(K) (List Ks)
@@ -138,7 +147,11 @@ module AGDA-SEMANTICS-COMMON
   rule Set .List => .Set
   rule Set (_ (ListItem(K) => .List)) (.Set => SetItem(K))
 
+  syntax KList ::= "KList" Set [function]
+  rule KList S:Set => KList (List S)
 
+  syntax Set ::= "Set" KList [function]
+  rule Set Ks:KList => Set (List Ks)
 
 
   syntax Bool ::= all(KLabel, List)  [function]

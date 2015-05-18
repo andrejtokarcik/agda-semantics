@@ -19,11 +19,11 @@ module AGDA-SEMANTICS
 
   // TODO: attributes: s/type-sig/postulate/ ?
   context postulate _ : (HOLE => checkSetType(HOLE))   [infer-type-sig, result(SetTypedExpr)]
-  // TODO SOM PRAVE VYTVORIL ALE BASICS CYCKLI MOZNO KVOLI TOMU
-  context postulate _ : t(HOLE => whnf(HOLE), _)       [result(Whnf)]
+  //context postulate _ : t(HOLE => whnf(HOLE), _)       [result(Whnf)]
   rule [process-type-sig]:
        <k> postulate N : t(E, Set(_)) => . ...</k>
+       //<k> (. => block 3000) ~> postulate N : t(E, Set(_)) ...</k>
        //<ncat> NCat (. => Name(F) |-> Fun(F)) </ncat>
-       <sig> Sigma (. => N |-> E) </sig>
+       <sig> Sigma (. => N |-> renameBoundVariables(E)) </sig>
     when notBool (N in keys(Sigma))
 endmodule

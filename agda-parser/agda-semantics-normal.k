@@ -234,7 +234,7 @@ when I >=Int 50
         #unifyClause(getAlpha(L), L, unhide(E), R)
     when notBool isMatching(L, unhide(E)) andBool canUnify(renameVariables(L), unhide(E))
   rule matchClause(FunClauses(_, 'fc((_ = _ => .KList),, _)), _)  [owise]
-  rule #unifyClause(Alpha, L, E, R) => applyMgu(updateMgu(.Mgu, applySubst(Alpha, L), E), applySubst(Alpha, R))
+  rule #unifyClause(Alpha, L, E, R) => unifyRightNow(applySubst(Alpha, L), E, applySubst(Alpha, R))
 
 
   syntax FunClauses ::= replaceInaccessible(FunClauses)  [function]

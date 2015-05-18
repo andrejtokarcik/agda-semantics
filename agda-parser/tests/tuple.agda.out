@@ -10,29 +10,27 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Fun ( "Tuple" ) |-> ( #symVariable(96) : Set ( 0 ) ) -> ( #symVariable(99)
+    Fun ( "Tuple" ) |-> ( #symVariable(67) : Set ( 0 ) ) -> ( #symVariable(68)
        : Data ( "8469" ) ) -> Set ( 0 )
-    Fun ( "_+_" ) |-> ( #symVariable(2134) : Data ( "8469" ) ) -> ( 
-      #symVariable(2137) : Data ( "8469" ) ) -> Data ( "8469" )
-    Fun ( "sum8469Tuple" ) |-> { Var ( "n" ) : Data ( "8469" ) } -> ( 
-      #symVariable(2589) : ((Fun ( "Tuple" ) Data ( "8469" )) Var ( "n" )) ) 
-      -> ( #symVariable(2617) : ((Fun ( "Tuple" ) Data ( "8469" )) Var ( "n" )
-      ) ) -> ((Fun ( "Tuple" ) Data ( "8469" )) Var ( "n" ))
+    Fun ( "_+_" ) |-> ( #symVariable(10) : Data ( "8469" ) ) -> ( #symVariable
+      (11) : Data ( "8469" ) ) -> Data ( "8469" )
+    Fun ( "sum8469Tuple" ) |-> { #symVariable(140) : Data ( "8469" ) } -> ( 
+      #symVariable(138) : ((Fun ( "Tuple" ) Data ( "8469" )) #symVariable(140)
+      ) ) -> ( #symVariable(139) : ((Fun ( "Tuple" ) Data ( "8469" )) 
+      #symVariable(140)) ) -> ((Fun ( "Tuple" ) Data ( "8469" )) #symVariable(
+      140))
     Data ( "8469" ) |-> Set ( 0 )
-    Data ( "Cons" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( Var ( "B" ) : Set ( 0
-       ) ) -> Set ( 0 )
+    Data ( "Cons" ) |-> ( #symVariable(54) : Set ( 0 ) ) -> ( #symVariable(53)
+       : Set ( 0 ) ) -> Set ( 0 )
     Data ( "Nil" ) |-> Set ( 0 )
-    Con ( "S" ) |-> ( #symVariable(2137) : Data ( "8469" ) ) -> Data ( "8469" 
-      )
+    Con ( "S" ) |-> ( #symVariable(9) : Data ( "8469" ) ) -> Data ( "8469" )
     Con ( "Z" ) |-> Data ( "8469" )
     Con ( "[]" ) |-> Data ( "Nil" )
-    Con ( "_::_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "B" ) : Set ( 0 
-      ) } -> ( #symVariable(2140) : Var ( "A" ) ) -> ( #symVariable(2640) : 
-      Var ( "B" ) ) -> ((Data ( "Cons" ) Var ( "A" )) Var ( "B" ))
+    Con ( "_::_" ) |-> { #symVariable(66) : Set ( 0 ) } -> { #symVariable(65) 
+      : Set ( 0 ) } -> ( #symVariable(63) : #symVariable(66) ) -> ( 
+      #symVariable(64) : #symVariable(65) ) -> ((Data ( "Cons" ) #symVariable(
+      66)) #symVariable(65))
 </sig>
 <ctx>
     .Map
@@ -40,9 +38,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "8469" ) |-> Data ( "8469" )
     Name ( "Cons" ) |-> Data ( "Cons" )
@@ -56,32 +51,28 @@
     Name ( "sum8469Tuple" ) |-> Fun ( "sum8469Tuple" )
 </ncat>
 <fun>
-    Fun ( "Tuple" ) |-> 'fc(((#symFunClauses(57) Var ( "A" )) Con ( "Z" )) = 
-      Data ( "Nil" ),, ((#symFunClauses(83) Var ( "A" )) (Con ( "S" ) Var ( 
+    Fun ( "Tuple" ) |-> 'fc(((#symFunClauses(80) Var ( "A" )) Con ( "Z" )) = 
+      Data ( "Nil" ),, ((#symFunClauses(113) Var ( "A" )) (Con ( "S" ) Var ( 
       "n" ))) = ((Data ( "Cons" ) Var ( "A" )) ((Fun ( "Tuple" ) Var ( "A" )) 
       Var ( "n" ))))
-    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(18) Var ( "n" )) Con ( "Z" )) = Var
-       ( "n" ),, ((#symFunClauses(41) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(23) Var ( "n" )) Con ( "Z" )) = Var
+       ( "n" ),, ((#symFunClauses(52) Var ( "n" )) (Con ( "S" ) Var ( "m" ))) 
       = (Con ( "S" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
-    Fun ( "sum8469Tuple" ) |-> 'fc((((#symFunClauses(850) { Con ( "Z" ) }) Con
-       ( "[]" )) Con ( "[]" )) = Con ( "[]" ),, (((#symFunClauses(3236) { (Con
+    Fun ( "sum8469Tuple" ) |-> 'fc((((#symFunClauses(728) { Con ( "Z" ) }) Con
+       ( "[]" )) Con ( "[]" )) = Con ( "[]" ),, (((#symFunClauses(2515) { (Con
        ( "S" ) Var ( "n" )) }) ((((Con ( "_::_" ) { Data ( "8469" ) }) { ((
-      FunClauses ( Fun ( "Tuple" ) , 'fc(((#symFunClauses(1413) #symVariable(
-      1414)) Con ( "Z" )) = Data ( "Nil" ),, ((#symFunClauses(1415) 
-      #symVariable(1416)) (Con ( "S" ) #symVariable(1417))) = ((Data ( "Cons" 
-      ) #symVariable(1416)) ((Fun ( "Tuple" ) #symVariable(1416)) #symVariable
-      (1417)))) ) Data ( "8469" )) Var ( "n" )) }) Var ( "m" )) Var ( "l" ))) 
-      ((((Con ( "_::_" ) { Data ( "8469" ) }) { ((FunClauses ( Fun ( "Tuple" )
-       , 'fc(((#symFunClauses(1657) #symVariable(1658)) Con ( "Z" )) = Data ( 
-      "Nil" ),, ((#symFunClauses(1659) #symVariable(1660)) (Con ( "S" ) 
-      #symVariable(1661))) = ((Data ( "Cons" ) #symVariable(1660)) ((Fun ( 
-      "Tuple" ) #symVariable(1660)) #symVariable(1661)))) ) Data ( "8469" )) 
-      Var ( "n" )) }) Var ( "m'" )) Var ( "l'" ))) = ((((Con ( "_::_" ) { Data
-       ( "8469" ) }) { ((FunClauses ( Fun ( "Tuple" ) , 'fc(((#symFunClauses(
-      2402) #symVariable(2403)) Con ( "Z" )) = Data ( "Nil" ),, ((
-      #symFunClauses(2404) #symVariable(2405)) (Con ( "S" ) #symVariable(2406)
-      )) = ((Data ( "Cons" ) #symVariable(2405)) ((Fun ( "Tuple" ) 
-      #symVariable(2405)) #symVariable(2406)))) ) Data ( "8469" )) Var ( "n" )
-      ) }) ((Fun ( "_+_" ) Var ( "m" )) Var ( "m'" ))) (((Fun ( "sum8469Tuple"
-       ) { Var ( "n" ) }) Var ( "l" )) Var ( "l'" ))))
+      FunClauses ( Fun ( "Tuple" ) , 'fc(((#symFunClauses(927) #symVariable(
+      928)) Con ( "Z" )) = Data ( "Nil" ),, ((#symFunClauses(929) #symVariable
+      (930)) (Con ( "S" ) #symVariable(931))) = ((Data ( "Cons" ) #symVariable
+      (930)) ((Fun ( "Tuple" ) #symVariable(930)) #symVariable(931)))) ) Data 
+      ( "8469" )) Var ( "n" )) }) Var ( "m" )) Var ( "l" ))) ((((Con ( "_::_" 
+      ) { Data ( "8469" ) }) { ((FunClauses ( Fun ( "Tuple" ) , 'fc(((
+      #symFunClauses(1229) #symVariable(1230)) Con ( "Z" )) = Data ( "Nil" )
+      ,, ((#symFunClauses(1231) #symVariable(1232)) (Con ( "S" ) #symVariable(
+      1233))) = ((Data ( "Cons" ) #symVariable(1232)) ((Fun ( "Tuple" ) 
+      #symVariable(1232)) #symVariable(1233)))) ) Data ( "8469" )) Var ( "n" )
+      ) }) Var ( "m'" )) Var ( "l'" ))) = ((((Con ( "_::_" ) { Data ( "8469" )
+       }) { ((Fun ( "Tuple" ) Data ( "8469" )) Var ( "n" )) }) ((Fun ( "_+_" )
+       Var ( "m" )) Var ( "m'" ))) (((Fun ( "sum8469Tuple" ) { Var ( "n" ) }) 
+      Var ( "l" )) Var ( "l'" ))))
 </fun>

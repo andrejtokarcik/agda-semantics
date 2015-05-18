@@ -148,10 +148,12 @@ module AGDA-SEMANTICS-DECL-FUN
     when isImplicitPi(T) =/=K true andBool funcond(F) ==K true
   */
 
-  syntax Expr ::= target(Int, Pi)  [function]
-  rule target(I => I -Int 1, {_ : _} -> T => T)   when I >Int 0
-  rule target(I => I -Int 1, (_ : _) -> T => T)   when I >Int 0
-  rule target(_, T) => T    [owise]
+  syntax Expr ::= piTarget(Int, Pi)  [strict(2(context('nf)))]
+  rule piTarget(I => I -Int 1, {_ : _} -> T => T)   when I >Int 0
+  rule piTarget(I => I -Int 1, (_ : _) -> T => T)   when I >Int 0
+  //rule piTarget(_, T) => T    [owise]
+
+  rule (piTarget(I, E2) => .) ~> E1 == (HOLE => E2)  when I ==Int 0 //orBool isPi(E2) =/=K true
 
   syntax LHS ::= mkLHS(LHS, List)  [function]
   rule mkLHS(F => F A, _ (ListItem(A) => .List))
@@ -183,11 +185,17 @@ module AGDA-SEMANTICS-DECL-FUN
   //context prepared! ~> (HOLE => chich ~> whnfType(chich ~> HOLE)) = _        when cond0(HOLE) ==K true          [result(WhnfTypedExpr)]
 
   syntax Bool ::= cond0(LHS)  [function]
+  /*
   rule cond0(L) => true when leftmost(L) ==K Fun("'map")
   rule cond0(L) => true when leftmost(L) ==K Name("'map")
   rule cond0(L) => true when L ==K Fun("thmPlusZero") (Con("suc") Var("n"))
+  */
+  /*
   rule cond0(L) => true when leftmost(L) ==K Name("thmPlusZero")
   rule cond0(L) => true when leftmost(L) ==K Fun("thmPlusZero")
+  */
+
+  rule cond0(L) => true when leftmost(L) ==K Fun ( "[a->b]->[zzzb->za]" )
 
 
   context prepared! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE))   //when cond0(L) =/=K true
@@ -207,16 +215,26 @@ module AGDA-SEMANTICS-DECL-FUN
 
   rule <k> (prepared! => .) ~>
            (t(L, Tl) = t(R, Tr)
-            => /*nf(Tl) ~> nf(target(lengthList(args(L)), renameBoundVariables(Sigma(funName(L))))) ~>*/ Tl == target(lengthList(args(L)), renameBoundVariables(Sigma(funName(L))))/*[FEnv]*/ ~> Tr == target(lengthList(args(L)), renameBoundVariables(Sigma(funName(L))))/*[FEnv]*/ ~> Tl == Tr ~> unifyConf ~> killMgu ~>
+            =>
+            piTarget(lengthList(args(L)), renameBoundVariables(Sigma(funName(L)))) ~>
+            Tl == HOLE ~>
+            piTarget(lengthList(args(L)), renameBoundVariables(Sigma(funName(L)))) ~>
+            Tr == HOLE ~> Tl == Tr ~>
                addFunClause(funName(L), insertDots(L), R) ~>
+               unifyConf ~> killMgu ~>
                cleanMetas) ...</k>  // tests/Vec will take ages without this
        <sig> Sigma </sig>
        //<fenv> FEnv </fenv> //=> .Map </fenv>
     when cond0(L) ==K true
   rule <k> (prepared! => .) ~>
            (t(L, Tl) = t(R, Tr)
-            => Tl == target(lengthList(args(L)), renameBoundVariables(Sigma(funName(L))))/*[FEnv]*/ ~> Tr == target(lengthList(args(L)), renameBoundVariables(Sigma(funName(L))))/*[FEnv]*/ ~> Tl == Tr ~> unifyConf ~> killMgu ~>
-               addFunClause(funName(L), insertDots(L), R) ~>
+            =>
+            piTarget(lengthList(args(L)), renameBoundVariables(Sigma(funName(L)))) ~>
+            Tl == HOLE ~>
+            piTarget(lengthList(args(L)), renameBoundVariables(Sigma(funName(L)))) ~>
+            Tr == HOLE ~> Tl == Tr ~>
+               addFunClause(funName(L), renameBoundVariables(insertDots(L)), renameBoundVariables(R)) ~>
+               unifyConf ~> killMgu ~>
                cleanMetas) ...</k>  // tests/Vec will take ages without this
        <sig> Sigma </sig>
        //<fenv> FEnv => .Map </fenv>
@@ -252,7 +270,10 @@ module AGDA-SEMANTICS-DECL-FUN
     when X in keys(Gamma)
   rule <k> autotype(X:Variable) => . ...</k>
        <ctx> Gamma => Gamma[T/X] </ctx>
-    when notBool (X in keys(Gamma)) andBool fresh(T:Expr)
+    when notBool (X in keys(Gamma)) andBool fresh(T:Expr) andBool X =/=K Var ( "_8853_" ) orBool true
+  rule <k> autotype(X:Variable) => block -2321 ...</k>
+       <ctx> Gamma => Gamma[T/X] </ctx>
+    when notBool (X in keys(Gamma)) andBool fresh(T:Expr) andBool X ==K Var ( "_8853_" ) andBool false
 
   syntax KLabel ::= "'fc"
   syntax FunClauses ::= FunClauses(Name, K)

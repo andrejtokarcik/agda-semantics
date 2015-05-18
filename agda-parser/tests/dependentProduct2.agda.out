@@ -10,25 +10,21 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
     Name ( "b" ) |-> (Postulate ( "B" ) Name ( "a" ))
-    Fun ( "960&0" ) |-> ( #symVariable(228) : Data ( "AB" ) ) -> Postulate ( 
-      "A" )
-    Fun ( "960&1" ) |-> ( Var ( "ab" ) : Data ( "AB" ) ) -> (Postulate ( "B" )
-       (Fun ( "960&0" ) Var ( "ab" )))
+    Fun ( "960&0" ) |-> ( #symVariable(11) : Data ( "AB" ) ) -> Name ( "A" )
+    Fun ( "960&1" ) |-> ( #symVariable(36) : Data ( "AB" ) ) -> (Name ( "B" ) 
+      (Fun ( "960&0" ) #symVariable(36)))
     Fun ( "a'" ) |-> 'Postulate("A")
     Fun ( "ab" ) |-> Data ( "AB" )
     Fun ( "b'" ) |-> (Postulate ( "B" ) Fun ( "a'" ))
     Data ( "AB" ) |-> Set ( 0 )
     'Postulate("A") |-> Set ( 0 )
-    'Postulate("B") |-> ( #symVariable(231) : Name ( "A" ) ) -> Set ( 0 )
+    'Postulate("B") |-> ( #symVariable(4) : Name ( "A" ) ) -> Set ( 0 )
     'Postulate("a") |-> 'Postulate("A")
     'Postulate("ab'") |-> Data ( "AB" )
-    Con ( "p" ) |-> ( Var ( "a" ) : Name ( "A" ) ) -> ( #symVariable(222) : (
-      Name ( "B" ) Var ( "a" )) ) -> Data ( "AB" )
+    Con ( "p" ) |-> ( #symVariable(10) : Name ( "A" ) ) -> ( #symVariable(9) :
+       (Name ( "B" ) #symVariable(10)) ) -> Data ( "AB" )
 </sig>
 <ctx>
     .Map
@@ -36,9 +32,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "960&0" ) |-> Fun ( "960&0" )
     Name ( "960&1" ) |-> Fun ( "960&1" )
@@ -53,9 +46,9 @@
     Name ( "p" ) |-> Con ( "p" )
 </ncat>
 <fun>
-    Fun ( "960&0" ) |-> 'fc((#symFunClauses(19) ((Con ( "p" ) Var ( "a" )) Var
+    Fun ( "960&0" ) |-> 'fc((#symFunClauses(27) ((Con ( "p" ) Var ( "a" )) Var
        ( "b" ))) = Var ( "a" ))
-    Fun ( "960&1" ) |-> 'fc((#symFunClauses(209) ((Con ( "p" ) Var ( "a" )) 
+    Fun ( "960&1" ) |-> 'fc((#symFunClauses(232) ((Con ( "p" ) Var ( "a" )) 
       Var ( "b" ))) = Var ( "b" ))
     Fun ( "a'" ) |-> (Fun ( "960&0" ) Name ( "ab'" ))
     Fun ( "ab" ) |-> ((Con ( "p" ) Postulate ( "a" )) Name ( "b" ))

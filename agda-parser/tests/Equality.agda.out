@@ -10,31 +10,28 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
     Fun ( "3things" ) |-> ((Data ( "Vec" ) Data ( "Nat" )) Fun ( "three" ))
     Fun ( "3things'" ) |-> ((Data ( "Vec" ) Data ( "Nat" )) ((Fun ( "_+_" ) 
       Fun ( "one" )) Fun ( "two" )))
     Fun ( "3things''" ) |-> ((Data ( "Vec" ) Data ( "Nat" )) ((Fun ( "_+_" ) 
       Fun ( "two" )) Fun ( "one" )))
-    Fun ( "_+_" ) |-> ( #symVariable(1300) : Data ( "Nat" ) ) -> ( 
-      #symVariable(1303) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Fun ( "_+_" ) |-> ( #symVariable(7) : Data ( "Nat" ) ) -> ( #symVariable(8
+      ) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Fun ( "one" ) |-> Data ( "Nat" )
     Fun ( "three" ) |-> Data ( "Nat" )
     Fun ( "two" ) |-> Data ( "Nat" )
     Data ( "Nat" ) |-> Set ( 0 )
-    Data ( "Vec" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( #symVariable(1306) : 
-      Data ( "Nat" ) ) -> Set ( 0 )
-    Con ( "[]" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ((Data ( "Vec" ) Var ( "A"
-       )) Con ( "zero" ))
-    Con ( "_::_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> { Var ( "n" ) : Data ( 
-      "Nat" ) } -> ( #symVariable(206) : Var ( "A" ) ) -> ( #symVariable(212) 
-      : ((Data ( "Vec" ) Var ( "A" )) Var ( "n" )) ) -> ((Data ( "Vec" ) Var (
-       "A" )) (Con ( "suc" ) Var ( "n" )))
-    Con ( "suc" ) |-> ( #symVariable(1303) : Data ( "Nat" ) ) -> Data ( "Nat" 
+    Data ( "Vec" ) |-> ( #symVariable(51) : Set ( 0 ) ) -> ( #symVariable(50) 
+      : Data ( "Nat" ) ) -> Set ( 0 )
+    Con ( "[]" ) |-> { #symVariable(60) : Set ( 0 ) } -> ((Data ( "Vec" ) 
+      #symVariable(60)) Con ( "zero" ))
+    Con ( "_::_" ) |-> { #symVariable(84) : Set ( 0 ) } -> { #symVariable(83) 
+      : Data ( "Nat" ) } -> ( #symVariable(81) : #symVariable(84) ) -> ( 
+      #symVariable(82) : ((Data ( "Vec" ) #symVariable(84)) #symVariable(83)) 
+      ) -> ((Data ( "Vec" ) #symVariable(84)) (Con ( "suc" ) #symVariable(83))
       )
+    Con ( "suc" ) |-> ( #symVariable(6) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Con ( "zero" ) |-> Data ( "Nat" )
 </sig>
 <ctx>
@@ -43,9 +40,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "3things" ) |-> Fun ( "3things" )
     Name ( "3things'" ) |-> Fun ( "3things'" )
@@ -69,8 +63,8 @@
       ( "zero" )) (Con ( "[]" ) { Data ( "Nat" ) }))))
     Fun ( "3things'" ) |-> Fun ( "3things" )
     Fun ( "3things''" ) |-> Fun ( "3things'" )
-    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(15) Con ( "zero" )) Var ( "m" )) = 
-      Var ( "m" ),, ((#symFunClauses(38) (Con ( "suc" ) Var ( "n" ))) Var ( 
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(20) Con ( "zero" )) Var ( "m" )) = 
+      Var ( "m" ),, ((#symFunClauses(49) (Con ( "suc" ) Var ( "n" ))) Var ( 
       "m" )) = (Con ( "suc" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
     Fun ( "one" ) |-> (Con ( "suc" ) Con ( "zero" ))
     Fun ( "three" ) |-> (Con ( "suc" ) (Con ( "suc" ) (Con ( "suc" ) Con ( 

@@ -10,13 +10,10 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Fun ( "PlantsInGroup" ) |-> ( #symVariable(14) : Data ( "PlantGroup" ) ) 
-      -> Set ( 0 )
-    Fun ( "f" ) |-> ( #symVariable(69) : Data ( "Plant" ) ) -> Data ( 
+    Fun ( "PlantsInGroup" ) |-> ( #symVariable(4) : Data ( "PlantGroup" ) ) ->
+       Set ( 0 )
+    Fun ( "f" ) |-> ( #symVariable(23) : Data ( "Plant" ) ) -> Data ( 
       "PlantGroup" )
     Data ( "Flower" ) |-> Set ( 0 )
     Data ( "Plant" ) |-> Set ( 0 )
@@ -26,9 +23,9 @@
     Con ( "lily" ) |-> Data ( "Flower" )
     Con ( "oak" ) |-> Data ( "Tree" )
     Con ( "pine" ) |-> Data ( "Tree" )
-    Con ( "plant" ) |-> ( Var ( "g" ) : Data ( "PlantGroup" ) ) -> ( 
-      #symVariable(62) : (Fun ( "PlantsInGroup" ) Var ( "g" )) ) -> Data ( 
-      "Plant" )
+    Con ( "plant" ) |-> ( #symVariable(22) : Data ( "PlantGroup" ) ) -> ( 
+      #symVariable(21) : (Fun ( "PlantsInGroup" ) #symVariable(22)) ) -> Data 
+      ( "Plant" )
     Con ( "rose" ) |-> Data ( "Flower" )
     Con ( "spruce" ) |-> Data ( "Tree" )
     Con ( "tree" ) |-> Data ( "PlantGroup" )
@@ -39,9 +36,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "Flower" ) |-> Data ( "Flower" )
     Name ( "Plant" ) |-> Data ( "Plant" )
@@ -59,8 +53,8 @@
     Name ( "tree" ) |-> Con ( "tree" )
 </ncat>
 <fun>
-    Fun ( "PlantsInGroup" ) |-> 'fc((#symFunClauses(8) Con ( "tree" )) = Data 
-      ( "Tree" ),, (#symFunClauses(13) Con ( "flower" )) = Data ( "Flower" ))
-    Fun ( "f" ) |-> 'fc((#symFunClauses(73) ((Con ( "plant" ) Var ( "g" )) Var
+    Fun ( "PlantsInGroup" ) |-> 'fc((#symFunClauses(10) Con ( "tree" )) = Data
+       ( "Tree" ),, (#symFunClauses(16) Con ( "flower" )) = Data ( "Flower" ))
+    Fun ( "f" ) |-> 'fc((#symFunClauses(39) ((Con ( "plant" ) Var ( "g" )) Var
        ( "pg" ))) = Var ( "g" ))
 </fun>

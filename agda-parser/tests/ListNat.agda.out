@@ -1,0 +1,46 @@
+<k>
+    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
+</k>
+<dbg>
+    0
+</dbg>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctxstack>
+    .List
+</ctxstack>
+<sig>
+    Fun ( "[1,0,2]" ) |-> (Data ( "List" ) Data ( "Nat" ))
+    Data ( "List" ) |-> ( #symVariable(5) : Set ( 0 ) ) -> Set ( 0 )
+    Data ( "Nat" ) |-> Set ( 0 )
+    Con ( "[]" ) |-> { #symVariable(10) : Set ( 0 ) } -> (Data ( "List" ) 
+      #symVariable(10))
+    Con ( "_::_" ) |-> { #symVariable(21) : Set ( 0 ) } -> ( #symVariable(19) 
+      : #symVariable(21) ) -> ( #symVariable(20) : (Data ( "List" ) 
+      #symVariable(21)) ) -> (Data ( "List" ) #symVariable(21))
+    Con ( "succ" ) |-> ( #symVariable(4) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "zero" ) |-> Data ( "Nat" )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "List" ) |-> Data ( "List" )
+    Name ( "Nat" ) |-> Data ( "Nat" )
+    Name ( "[1,0,2]" ) |-> Fun ( "[1,0,2]" )
+    Name ( "[]" ) |-> Con ( "[]" )
+    Name ( "_::_" ) |-> Con ( "_::_" )
+    Name ( "succ" ) |-> Con ( "succ" )
+    Name ( "zero" ) |-> Con ( "zero" )
+</ncat>
+<fun>
+    Fun ( "[1,0,2]" ) |-> (((Con ( "_::_" ) { Data ( "Nat" ) }) Fun ( "one" ) 
+      @ Fun ( "one" ) |-> (Con ( "succ" ) Con ( "zero" ))) (((Con ( "_::_" ) {
+       Data ( "Nat" ) }) Con ( "zero" )) (((Con ( "_::_" ) { Data ( "Nat" ) })
+       (Con ( "succ" ) Fun ( "one" ) @ Fun ( "one" ) |-> (Con ( "succ" ) Con (
+       "zero" )))) (Con ( "[]" ) { Data ( "Nat" ) }))))
+</fun>

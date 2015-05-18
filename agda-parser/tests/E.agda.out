@@ -10,11 +10,8 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Fun ( "t" ) |-> ( #symVariable(3) : Set ( 0 ) ) -> Set ( 0 )
+    Fun ( "t" ) |-> ( #symVariable(2) : Set ( 0 ) ) -> Set ( 0 )
 </sig>
 <ctx>
     .Map
@@ -22,12 +19,9 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "t" ) |-> Fun ( "t" )
 </ncat>
 <fun>
-    Fun ( "t" ) |-> \ ( Var ( "x" ) : #symExpr(7) ) -> Var ( "x" )
+    Fun ( "t" ) |-> \ ( Var ( "x" ) : #symExpr(9) ) -> Var ( "x" )
 </fun>

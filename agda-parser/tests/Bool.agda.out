@@ -10,13 +10,10 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Fun ( "if_then_else_" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(
-      32) : Data ( "Bool" ) ) -> ( #symVariable(35) : Var ( "A" ) ) -> ( 
-      #symVariable(38) : Var ( "A" ) ) -> Var ( "A" )
+    Fun ( "if_then_else_" ) |-> { #symVariable(7) : Set ( 0 ) } -> ( 
+      #symVariable(4) : Data ( "Bool" ) ) -> ( #symVariable(5) : #symVariable(
+      7) ) -> ( #symVariable(6) : #symVariable(7) ) -> #symVariable(7)
     Data ( "Bool" ) |-> Set ( 0 )
     Con ( "false" ) |-> Data ( "Bool" )
     Con ( "true" ) |-> Data ( "Bool" )
@@ -27,9 +24,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "Bool" ) |-> Data ( "Bool" )
     Name ( "false" ) |-> Con ( "false" )
@@ -37,8 +31,8 @@
     Name ( "true" ) |-> Con ( "true" )
 </ncat>
 <fun>
-    Fun ( "if_then_else_" ) |-> 'fc(((((#symFunClauses(24) { #symExpr(19) }) 
-      Con ( "true" )) Var ( "x" )) Var ( "y" )) = Var ( "x" ),, ((((
-      #symFunClauses(45) { #symExpr(40) }) Con ( "false" )) Var ( "x" )) Var (
-       "y" )) = Var ( "y" ))
+    Fun ( "if_then_else_" ) |-> 'fc(((((#symFunClauses(36) { #symVariable(32) 
+      }) Con ( "true" )) Var ( "x" )) Var ( "y" )) = Var ( "x" ),, ((((
+      #symFunClauses(65) { #symVariable(61) }) Con ( "false" )) Var ( "x" )) 
+      Var ( "y" )) = Var ( "y" ))
 </fun>

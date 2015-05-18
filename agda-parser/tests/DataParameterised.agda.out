@@ -10,22 +10,19 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
-    Fun ( "null" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(65) : (
-      Data ( "List" ) Var ( "A" )) ) -> Data ( "Bool" )
+    Fun ( "null" ) |-> { #symVariable(28) : Set ( 0 ) } -> ( #symVariable(27) 
+      : (Data ( "List" ) #symVariable(28)) ) -> Data ( "Bool" )
     Data ( "Bool" ) |-> Set ( 0 )
-    Data ( "List" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> Set ( 0 )
+    Data ( "List" ) |-> ( #symVariable(6) : Set ( 0 ) ) -> Set ( 0 )
     Data ( "Nat" ) |-> Set ( 0 )
-    Con ( "cons" ) |-> { Var ( "A" ) : Set ( 0 ) } -> ( #symVariable(59) : Var
-       ( "A" ) ) -> ( #symVariable(62) : (Data ( "List" ) Var ( "A" )) ) -> (
-      Data ( "List" ) Var ( "A" ))
+    Con ( "cons" ) |-> { #symVariable(22) : Set ( 0 ) } -> ( #symVariable(20) 
+      : #symVariable(22) ) -> ( #symVariable(21) : (Data ( "List" ) 
+      #symVariable(22)) ) -> (Data ( "List" ) #symVariable(22))
     Con ( "false" ) |-> Data ( "Bool" )
-    Con ( "nil" ) |-> { Var ( "A" ) : Set ( 0 ) } -> (Data ( "List" ) Var ( 
-      "A" ))
-    Con ( "suc" ) |-> ( #symVariable(1) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "nil" ) |-> { #symVariable(11) : Set ( 0 ) } -> (Data ( "List" ) 
+      #symVariable(11))
+    Con ( "suc" ) |-> ( #symVariable(5) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Con ( "true" ) |-> Data ( "Bool" )
     Con ( "zero" ) |-> Data ( "Nat" )
 </sig>
@@ -35,9 +32,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "Bool" ) |-> Data ( "Bool" )
     Name ( "List" ) |-> Data ( "List" )
@@ -51,8 +45,8 @@
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>
 <fun>
-    Fun ( "null" ) |-> 'fc(((#symFunClauses(35) { (DotP ( #symExpr(17) )) }) (
-      Con ( "nil" ) { #symExpr(17) })) = Con ( "true" ),, ((#symFunClauses(70)
-       { (DotP ( #symExpr(51) )) }) (((Con ( "cons" ) { #symExpr(51) }) 
-      #symExpr(36)) #symExpr(46))) = Con ( "false" ))
+    Fun ( "null" ) |-> 'fc(((#symFunClauses(56) { (DotP ( #symExpr(46) )) }) (
+      Con ( "nil" ) { #symExpr(46) })) = Con ( "true" ),, ((#symFunClauses(104
+      ) { (DotP ( #symExpr(63) )) }) (((Con ( "cons" ) { #symExpr(63) }) 
+      #symExpr(62)) #symExpr(75))) = Con ( "false" ))
 </fun>

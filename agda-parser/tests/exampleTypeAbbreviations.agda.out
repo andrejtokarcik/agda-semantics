@@ -10,14 +10,11 @@
 <ctxstack>
     .List
 </ctxstack>
-<fenv-stack>
-    .List
-</fenv-stack>
 <sig>
     Fun ( "A2" ) |-> Set ( 0 )
     Fun ( "A3" ) |-> Set ( 0 )
-    Fun ( "a2" ) |-> ( Var ( "x" ) : Name ( "A" ) ) -> Name ( "A" )
-    Fun ( "a3" ) |-> ( Var ( "x" ) : Fun ( "A2" ) ) -> Fun ( "A2" )
+    Fun ( "a2" ) |-> Fun ( "A2" )
+    Fun ( "a3" ) |-> Fun ( "A3" )
     'Postulate("A") |-> Set ( 0 )
 </sig>
 <ctx>
@@ -26,9 +23,6 @@
 <meta>
     .Map
 </meta>
-<fenv>
-    .Map
-</fenv>
 <ncat>
     Name ( "A" ) |-> 'Postulate("A")
     Name ( "A2" ) |-> Fun ( "A2" )
@@ -37,9 +31,10 @@
     Name ( "a3" ) |-> Fun ( "a3" )
 </ncat>
 <fun>
-    Fun ( "A2" ) |-> ( #symVariable(1) : Name ( "A" ) ) -> Name ( "A" )
-    Fun ( "A3" ) |-> ( #symVariable(2) : Fun ( "A2" ) ) -> Fun ( "A2" )
-    Fun ( "a2" ) |-> \ ( Var ( "x" ) : Postulate ( "A" ) ) -> Var ( "x" )
-    Fun ( "a3" ) |-> \ ( Var ( "x" ) : ( #symVariable(18) : Postulate ( "A" ) 
-      ) -> Postulate ( "A" ) ) -> Var ( "x" )
+    Fun ( "A2" ) |-> ( #symVariable(3) : Name ( "A" ) ) -> Name ( "A" )
+    Fun ( "A3" ) |-> ( #symVariable(4) : Fun ( "A2" ) ) -> Fun ( "A2" )
+    Fun ( "a2" ) |-> \ ( #symVariable(9) : Postulate ( "A" ) ) -> #symVariable
+      (9)
+    Fun ( "a3" ) |-> \ ( #symVariable(16) : ( #symVariable(24) : Postulate ( 
+      "A" ) ) -> Postulate ( "A" ) ) -> #symVariable(16)
 </fun>
