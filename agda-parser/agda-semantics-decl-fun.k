@@ -32,8 +32,8 @@ module AGDA-SEMANTICS-DECL-FUN
 
   //rule L = R where Ds => sandbox(L = R, Ds)
 
-  syntax KItem ::= global(Name, Set)
-  rule <k> (. => Ds) ~> L = _ where (Ds => .Declarations) ~> (. => global(funName(L), SetItem(funName(L)) keys(Sigma))) ...</k>
+  syntax KItem ::= global(Set) | global(Name, Set)
+  rule <k> L = R where Ds => Ds ~> L = R ~> global(funName(L), SetItem(funName(L)) keys(Sigma)) ...</k>
        <sig> Sigma </sig>
   rule <k> global(F, GlobalKeys) => updateLastFunClause(F, Rho(keys(Rho) -Set GlobalKeys)) ~> local(keys(Sigma) -Set GlobalKeys) ...</k>
        <fun> Rho </fun>
@@ -48,20 +48,17 @@ module AGDA-SEMANTICS-DECL-FUN
 
   syntax KItem ::= local(Set) | localFun(Map)
   rule <k> local(.Set) => . ...</k>
-  rule <k> local((SetItem(N) => .Set) _) ...</k>
+  rule <k> local(SetItem(N) _) ...</k>
        <ncat>... _ |-> N => . ...</ncat>
+  rule <k> local(SetItem(N) _) ...</k>
        <sig>... N |-> _ => . ...</sig>
+  rule <k> local(SetItem(N) _) ...</k>
        <fun>... N |-> _ => . ...</fun>
   rule <k> local((SetItem(N) => .Set) _) ...</k>
-       <ncat>... _ |-> N => . ...</ncat>
-       <sig>... N |-> _ => . ...</sig>
-       <fun> Rho </fun>
-    when notBool (N in keys(Rho))
-  rule <k> local((SetItem(N) => .Set) _) ...</k>
-       <fun>... N |-> _ => . ...</fun>
        <ncat> NCat </ncat>
        <sig> Sigma </sig>
-    when notBool (N in keys(Sigma)) andBool notBool (N in keys(NCat))
+       <fun> Rho </fun>
+    when notBool ((N in keys(NCat)) orBool (N in keys(Sigma)) orBool (N in keys(Rho)))
 
 
   syntax KItem ::= "prepared!"
@@ -213,6 +210,7 @@ module AGDA-SEMANTICS-DECL-FUN
   //rule prepared! ~> t(L, Tl) = t(R, Tr) => L {W} = R {W}   // NOTE: this gives a different behaviour from offic Agda, cf. Id8 test case
   //  when isImplicitPi(Tl) andBool isImplicitPi(Tr) andBool fresh(W:Expr)
 
+  // TODO check for alpha-equality instead of unification?
   rule <k> (prepared! => .) ~>
            (t(L, Tl) = t(R, Tr)
             =>

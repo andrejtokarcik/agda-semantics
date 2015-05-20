@@ -95,6 +95,8 @@ module AGDA-SYNTAX
   syntax Arg ::= Expr
   syntax Meta ::= "%meta"      [klabel('Underscore)]
   syntax Implicit ::= "{" Expr "}"
+  syntax Let ::= "let" Declarations "in" Expr   [klabel('Let)]
+
   syntax Expr ::= "(" Expr ")" [bracket]
     | Variable
     | Name
@@ -104,10 +106,11 @@ module AGDA-SYNTAX
     | App
     | Meta
     | Implicit
+    | Let
   syntax Exprs ::= List{Expr, ""}    [klabel('Cons), notInRules]
 
   syntax TypeSignature ::= Name ":" Expr  [klabel('TypeSig)]
-  syntax TypeSignatures ::= List{TypeSignature, ""}    [klabel('Cons)]
+  syntax TypeSignatures ::= List{TypeSignature, ";"}    [klabel('Cons)]
 
   // ta syntax patterns vs expr by sa mozno zisla lepsie rozdelit
   //syntax Absurd ::= "%absurd"            [klabel('AbsurdP)]
@@ -164,7 +167,7 @@ module AGDA-SYNTAX
     | DataDeclaration
     | "postulate" TypeSignatures                     [klabel('Postulate)]
     | "module" /*Q*/Name Telescope "where" Declarations   [klabel('Module)]
-  syntax Declarations ::= List{Declaration, ";"}    [klabel('Cons)]
+  syntax Declarations ::= List{Declaration, ";"}     [klabel('Cons)]
 
   syntax Program ::= Declarations
 

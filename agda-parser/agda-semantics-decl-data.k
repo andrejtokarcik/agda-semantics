@@ -23,7 +23,7 @@ module AGDA-SEMANTICS-DECL-DATA
 
   syntax KItem ::= addDataCons(Expr, Telescope, TypeSignatures)
   rule addDataCons(DPs, Ps, .TypeSignatures) => .    [structural]
-  rule addDataCons(DPs, Ps, (C : T) Cons) => addDataCon(DPs, C, Pi(makeHidden(Ps), T)) ~> addDataCons(DPs, Ps, Cons)  [structural]
+  rule addDataCons(DPs, Ps, C : T ; Cons) => addDataCon(DPs, C, Pi(makeHidden(Ps), T)) ~> addDataCons(DPs, Ps, Cons)  [structural]
 
   syntax KItem ::= addDataCon(Expr, Name, Expr)  [strict(3(context('checkSetType)))]
   // TODO: check the constructor's universe whether it fits into the datatype's

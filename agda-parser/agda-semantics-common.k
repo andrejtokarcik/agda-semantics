@@ -75,6 +75,7 @@ module AGDA-SEMANTICS-COMMON
        <ctxstack> ListItem(#map(Gamma)) L => L </ctxstack>
   rule (. => loadCtx) ~> R:KResult ~> (loadCtx => .)  [structural]
 
+  // TODO get rid of this?
   syntax KItem ::= "pass?" | error(String)
   syntax GuardPass
   rule isGuardPass(true) => true

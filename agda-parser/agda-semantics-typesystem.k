@@ -5,34 +5,50 @@ module AGDA-SEMANTICS-TYPESYSTEM
   imports AGDA-SEMANTICS-COMMON
   imports AGDA-SEMANTICS-UNIFICATION
 
+  // TODO move to -common or elsewhere?
   // The offic typechecker reports a variable identifier
   // with underscores as a [function] name in some cases,
   // e.g., in LibVec.agda, foldr's _⊕_.
   rule <k> Name(S) => Var(S) ...</k>  <ctx> Gamma </ctx>  <ncat> NCat </ncat>
     when notBool (Name(S) in keys(NCat)) andBool Var(S) in keys(Gamma)
+
+  // And vice versa for let-bindings...
+  rule <k> Var(S) => Name(S) ...</k>  <ctx> Gamma </ctx>  <ncat> NCat </ncat>
+    when Name(S) in keys(NCat) andBool notBool (Var(S) in keys(Gamma))
+
+  rule <k> N:Name => Nc ...</k>  <ncat>... N |-> Nc ...</ncat>
+
+  rule <k> %meta => E ...</k>
+       <meta>... . => E |-> t(E, T) ...</meta>
+    when fresh(E:Expr) andBool fresh(T:Expr)
+
+  rule <k> let Ds in E => Ds ~> E ~> global(keys(Sigma)) ...</k>
+       <sig> Sigma </sig>
+  rule <k> t(E, T) ~> global(GlobalKeys) => local(keys(Sigma) -Set GlobalKeys) ~> t(E, T)@Sigma(keys(Sigma) -Set GlobalKeys) ...</k>
+       <sig> Sigma </sig>
+
+  rule <k> (E@Local => E) ~> (. => localFun(Local)) ...</k>
+       <sig> Sigma => Sigma[Local] </sig>
+  rule (. => local(keys(Local))) ~> (t(E, T) => t(E, T)@Local) ~> (localFun(Local) => .)  [structural]
+
+  /////////
+
+  rule [infer-universe]:
+       Set(Alpha) => t(Set(Alpha), Set(Alpha +Int 1))
+
   rule [infer-variable]:
        <k> X:Variable => t(X, renameBoundVariables(T)) ...</k>
        <ctx>... X |-> T ...</ctx>
 
-  rule <k> N:Name => Nc ...</k>  <ncat>... N |-> Nc ...</ncat>
   rule [infer-name]:
        <k> N:Name => t(N, renameBoundVariables(T)) ...</k>
        <sig>... N |-> T ...</sig>
   rule <k> FunClauses(F, _) => t(F, renameBoundVariables(T)) ...</k>
        <sig>... F |-> T ...</sig>
 
-  rule [infer-universe]:
-       Set(Alpha) => t(Set(Alpha), Set(Alpha +Int 1))
-
-  rule [infer-meta]:
-       <k> %meta => E ...</k>
-       <meta>... . => E |-> t(E, T) ...</meta>
-    when fresh(E:Expr) andBool fresh(T:Expr)
-    //ensures isMetaVariable(E)
   rule [infer-meta]:
        <k> X:MetaVariable => t(E, renameBoundVariables(T)) ...</k>
        <meta>... X |-> t(E, T) ...</meta>
-
 
   // implicit args
   context {HOLE}
