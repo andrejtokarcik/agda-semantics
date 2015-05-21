@@ -65,11 +65,11 @@ updateMgu(.Mgu,
                   <sig> .Map </sig>
                   <meta> .Map </meta>
                   <fun> .Map </fun>  // ak to spravim <funs> a bude obsahovat <fun> a v tom List tak sa zbavim FunClauses (vid cil-semantics funs)
-                  <ncat> .Map </ncat>   // <defs>?
+                  <ncat> .Map </ncat>
                   //<br />
                   // obsa sa meni
                   <ctx> .Map </ctx>
-                  <ctxstack> .List </ctxstack>    // <ctx-stack> a podobne aj ostatne
+                  <ctx-stack> .List </ctx-stack>    // <ctx-stack> a podobne aj ostatne
                   //<mgu-stack> .List </mgu-stack>
                   <mgu> .Mgu </mgu>
                   <dbg> 0 </dbg>

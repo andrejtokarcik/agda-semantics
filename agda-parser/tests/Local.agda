@@ -21,6 +21,9 @@ module Local where
            h m = succ (succ m)
         in h zero + h (succ zero)
 
+  t1 : Nat
+  t1 = f
+
   h : Nat -> Nat
   h n = let add2 : Nat
             add2 = succ (succ n)

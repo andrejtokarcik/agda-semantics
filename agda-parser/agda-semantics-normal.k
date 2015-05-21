@@ -12,7 +12,7 @@ module AGDA-SEMANTICS-NORMAL
   syntax Neut
   rule isNeut(_:Variable) => true
   rule isNeut(_:MetaVariable) => true
-  // note that Fun's are not accepted
+  // note that Fun's are not listed among the neutral terms
   rule isNeut(Data(_)) => true
   rule isNeut(Con(_)) => true
   rule isNeut(Postlt(_)) => true

@@ -49,7 +49,7 @@ module AGDA-SEMANTICS-UNIFICATION
   rule <k> unifyConf => . ...</k>
        <sig> Sigma => applyMgu(Theta, Sigma) </sig>
        <ctx> Gamma => applyMgu/*Keys*/(Theta, Gamma) </ctx>
-       <ctxstack> Gammas => applyMguL/*KeysL*/(Theta, Gammas) </ctxstack>
+       <ctx-stack> Gammas => applyMguL/*KeysL*/(Theta, Gammas) </ctx-stack>
        <fun> Rho => applyMgu(Theta, Rho) </fun>
        <meta> Meta => extendMeta(applyMgu(Theta, Meta)) </meta>
        <mgu> Theta </mgu>

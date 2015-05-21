@@ -19,9 +19,11 @@ module AGDA-SEMANTICS-COMMON
   syntax Name ::= Name "@" Map
 
   /*
-  syntax Name ::= ncatLookup(Map, Name)  [function]
-  rule ncatLookup((N |-> Nc) _, N) => Nc
-  rule ncatLookup(_, N) => N  [owise]
+  syntax Bool ::= nameDefined(Identifier, Map) [function]
+  rule nameDefined(N, M) => getKLabel(nameLookup(N, M)) =/=KLabel 'nameLookup
+
+  syntax Name ::= nameLookup(Identifier, Map)  [function]
+  rule nameLookup(N, _ (L:KLabel(N) |-> _) _) => L(N)  when L =/=KLabel 'Name
   */
   /*
   syntax K ::= ncatReplace(Map, K)     [function]
@@ -67,12 +69,12 @@ module AGDA-SEMANTICS-COMMON
   */
 
 
-  syntax KItem ::= saveCtx(Map) | "loadCtx"      // TODO no arg for saveCtx
+  syntax KItem ::= saveCtx(Map) | "loadCtx"
   rule <k> saveCtx(Gamma) => . ...</k>
-       <ctxstack> L => ListItem(#map(Gamma)) L </ctxstack>   // TODO replace m() with <ctx /> cell  -- doesn't work
+       <ctx-stack> L => ListItem(#map(Gamma)) L </ctx-stack>
   rule <k> loadCtx => . ...</k>
        <ctx> _ => Gamma </ctx>
-       <ctxstack> ListItem(#map(Gamma)) L => L </ctxstack>
+       <ctx-stack> ListItem(#map(Gamma)) L => L </ctx-stack>
   rule (. => loadCtx) ~> R:KResult ~> (loadCtx => .)  [structural]
 
   // TODO get rid of this?
