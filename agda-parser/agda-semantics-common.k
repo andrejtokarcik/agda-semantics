@@ -15,7 +15,7 @@ module AGDA-SEMANTICS-COMMON
 
   //syntax Expr ::= Dot(Expr)
 
-  syntax Name ::= Data(Identifier) | Con(Identifier) | Fun(Identifier) | Postulate(Identifier)
+  syntax Name ::= Data(Identifier) | Con(Identifier) | Fun(Identifier) | Postlt(Identifier)
   syntax Name ::= Name "@" Map
 
   /*

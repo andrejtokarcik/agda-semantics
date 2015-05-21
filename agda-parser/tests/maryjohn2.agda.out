@@ -20,10 +20,10 @@
     Fun ( "Lemma2" ) |-> Set ( 0 )
     Fun ( "proof-lemma1" ) |-> Fun ( "Lemma1" )
     Fun ( "proof-lemma2" ) |-> Fun ( "Lemma2" )
-    'Postulate("IsStudent") |-> ( #symVariable(4) : Name ( "Person" ) ) -> Set
-       ( 0 )
-    'Postulate("barbara") |-> Name ( "Person" )
-    'Postulate("john") |-> Name ( "Person" )
+    Postlt ( "IsStudent" ) |-> ( #symVariable(4) : Name ( "Person" ) ) -> Set 
+      ( 0 )
+    Postlt ( "barbara" ) |-> Name ( "Person" )
+    Postlt ( "john" ) |-> Name ( "Person" )
 </sig>
 <ctx>
     .Map
@@ -32,21 +32,20 @@
     .Map
 </meta>
 <ncat>
-    Name ( "IsStudent" ) |-> 'Postulate("IsStudent")
+    Name ( "IsStudent" ) |-> Postlt ( "IsStudent" )
     Name ( "Lemma1" ) |-> Fun ( "Lemma1" )
     Name ( "Lemma2" ) |-> Fun ( "Lemma2" )
-    Name ( "barbara" ) |-> 'Postulate("barbara")
-    Name ( "john" ) |-> 'Postulate("john")
+    Name ( "barbara" ) |-> Postlt ( "barbara" )
+    Name ( "john" ) |-> Postlt ( "john" )
     Name ( "proof-lemma1" ) |-> Fun ( "proof-lemma1" )
     Name ( "proof-lemma2" ) |-> Fun ( "proof-lemma2" )
 </ncat>
 <fun>
     Fun ( "Lemma1" ) |-> (Name ( "IsStudent" ) Name ( "john" ))
-    Fun ( "Lemma2" ) |-> ( #symVariable(42) : (Postulate ( "IsStudent" ) 
-      Postulate ( "john" )) ) -> (Postulate ( "IsStudent" ) Name ( "barbara" )
-      )
+    Fun ( "Lemma2" ) |-> ( #symVariable(3) : (Postlt ( "IsStudent" ) Postlt ( 
+      "john" )) ) -> (Postlt ( "IsStudent" ) Name ( "barbara" ))
     Fun ( "proof-lemma1" ) |-> (Name ( "implication" ) Name ( "maryIsStudent" 
       ))
-    Fun ( "proof-lemma2" ) |-> \ ( #symVariable(58) : (Postulate ( "IsStudent"
-       ) Postulate ( "john" )) ) -> #symExpr(56)
+    Fun ( "proof-lemma2" ) |-> \ ( #symVariable(57) : (Postlt ( "IsStudent" ) 
+      Postlt ( "john" )) ) -> #symExpr(55)
 </fun>

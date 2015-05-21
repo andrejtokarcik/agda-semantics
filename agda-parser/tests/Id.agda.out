@@ -4,8 +4,8 @@
       Set ( 0 ) } -> ( #symVariable(35) : #symVariable(34) ) -> #symVariable(
       34) } , { Set ( 1 ) } )) ~> whnfType ( HOLE ) ~> (HOLE Fun ( "id" )) ~> 
       whnfType ( HOLE ) ~> (HOLE { %meta }) ~> whnfType ( HOLE ) ~> prepared!
-       ~> t ( Fun ( "idd" ) , #symExpr(20) ) = HOLE ~> loadCtx ~> .List{""}
-       ~> .List{""} ~> .List{""} ~> nf ( Fun ( "t1" ) )
+       ~> t ( Fun ( "idd" ) , #symExpr(20) ) = HOLE ~> loadCtx ~> .List{";"}
+       ~> .List{";"} ~> .List{""} ~> nf ( Fun ( "t1" ) )
 </k>
 <dbg>
     0

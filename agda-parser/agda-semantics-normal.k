@@ -15,7 +15,7 @@ module AGDA-SEMANTICS-NORMAL
   // note that Fun's are not accepted
   rule isNeut(Data(_)) => true
   rule isNeut(Con(_)) => true
-  rule isNeut(Postulate(_)) => true
+  rule isNeut(Postlt(_)) => true
   rule isNeut(_:Neut _:Nf) => true
   syntax Nf ::= "(" Nf ")"  [bracket]
               | Neut
@@ -139,8 +139,8 @@ when I >=Int 50
 
   rule <k> whnf(N => Nc) ...</k>  <ncat>... N |-> Nc ...</ncat>
   rule <k> whnf(Name(N)) ...</k>
-       <ncat> NCat (. => Name(N) |-> Postulate(N)) </ncat>
-       <sig>... (Name(N) => Postulate(N)) |-> _ ...</sig>
+       <ncat> NCat (. => Name(N) |-> Postlt(N)) </ncat>
+       <sig>... (Name(N) => Postlt(N)) |-> _ ...</sig>
     when notBool Name(N) in keys(NCat)
   rule <k> whnf(F => /*block 1002 ~>*/ replaceInaccessible(FunClauses(F, E)))/*renameVariables(E))*/ ...</k>   <fun>... F |-> E ...</fun>
     when getKLabel(E) ==KLabel 'fc

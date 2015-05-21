@@ -1,8 +1,8 @@
 <k>
     Set ( 0 ) #== Set ( 1 ) ~> Set ( 1 ) == Set ( 0 ) ~> addFunClause ( Fun ( 
       "y" ) , Fun ( "y" ) , Name ( "x" ) ) ~> unifyConf ~> killMgu ~> 
-      cleanMetas ~> loadCtx ~> .List{""} ~> .List{""} ~> .List{""} ~> nf ( Fun
-       ( "t1" ) )
+      cleanMetas ~> loadCtx ~> .List{";"} ~> .List{";"} ~> .List{""} ~> nf ( 
+      Fun ( "t1" ) )
 </k>
 <dbg>
     0

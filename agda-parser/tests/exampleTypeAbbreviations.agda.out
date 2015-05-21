@@ -15,7 +15,7 @@
     Fun ( "A3" ) |-> Set ( 0 )
     Fun ( "a2" ) |-> Fun ( "A2" )
     Fun ( "a3" ) |-> Fun ( "A3" )
-    'Postulate("A") |-> Set ( 0 )
+    Postlt ( "A" ) |-> Set ( 0 )
 </sig>
 <ctx>
     .Map
@@ -24,7 +24,7 @@
     .Map
 </meta>
 <ncat>
-    Name ( "A" ) |-> 'Postulate("A")
+    Name ( "A" ) |-> Postlt ( "A" )
     Name ( "A2" ) |-> Fun ( "A2" )
     Name ( "A3" ) |-> Fun ( "A3" )
     Name ( "a2" ) |-> Fun ( "a2" )
@@ -33,8 +33,7 @@
 <fun>
     Fun ( "A2" ) |-> ( #symVariable(3) : Name ( "A" ) ) -> Name ( "A" )
     Fun ( "A3" ) |-> ( #symVariable(4) : Fun ( "A2" ) ) -> Fun ( "A2" )
-    Fun ( "a2" ) |-> \ ( #symVariable(9) : Postulate ( "A" ) ) -> #symVariable
-      (9)
-    Fun ( "a3" ) |-> \ ( #symVariable(16) : ( #symVariable(24) : Postulate ( 
-      "A" ) ) -> Postulate ( "A" ) ) -> #symVariable(16)
+    Fun ( "a2" ) |-> \ ( #symVariable(9) : Postlt ( "A" ) ) -> #symVariable(9)
+    Fun ( "a3" ) |-> \ ( #symVariable(16) : ( #symVariable(24) : Postlt ( "A" 
+      ) ) -> Postlt ( "A" ) ) -> #symVariable(16)
 </fun>

@@ -171,6 +171,19 @@ module AGDA-SEMANTICS-DECL-FUN
            (. => loadCtx) ...</k>
        <ctx> Gamma </ctx>
        <ncat> NCat </ncat>
+    when cond0(L) ==K true
+
+  //rule <k> L = R => saveCtx(Gamma) ~> updateFunName(funName(L)) ~> autotype(L) ~> prepared! ~> L = R ~> loadCtx ...</k>
+  rule <k> (. => updateFunName(L) ~> saveCtx(Gamma) ~> autotype(L) ~> prepared!) ~>
+  //checkPatterns(funName(L), args(/*renameVariables*/ncatReplace(NCat, wildReplace(L))))) ~>
+           //(L => HOLE) = _ ~>
+           L = _ ~>
+           (. => loadCtx) ...</k>
+       <ctx> Gamma </ctx>
+       <ncat> NCat </ncat>
+    when cond0(L) =/=K true
+
+
 
   //rule (. => prepared!) ~> (L:LHS ~> HOLE = R => L = R)  //when cond0(L) ==K true
   //rule L:LHS ~> HOLE = R => prepared! ~> L = R  when cond0(L) =/=K true
@@ -191,8 +204,9 @@ module AGDA-SEMANTICS-DECL-FUN
   rule cond0(L) => true when leftmost(L) ==K Name("thmPlusZero")
   rule cond0(L) => true when leftmost(L) ==K Fun("thmPlusZero")
   */
+  rule cond0(L) => true when leftmost(L) ==K Fun ( "Lemma2" )
+  rule cond0(L) => true when leftmost(L) ==K Name ( "Lemma2" )
 
-  rule cond0(L) => true when leftmost(L) ==K Fun ( "[a->b]->[zzzb->za]" )
 
 
   context prepared! ~> L::WhnfTypedExpr = (HOLE => whnfType(HOLE))   //when cond0(L) =/=K true
