@@ -7,9 +7,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     .List
-</ctxstack>
+</ctx-stack>
 <sig>
     Fun ( "Tuple" ) |-> ( #symVariable(67) : Set ( 0 ) ) -> ( #symVariable(68)
        : Data ( "8469" ) ) -> Set ( 0 )

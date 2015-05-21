@@ -7,9 +7,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     .List
-</ctxstack>
+</ctx-stack>
 <sig>
     Fun ( "3things" ) |-> ((Data ( "Vec" ) Data ( "Nat" )) Fun ( "three" ))
     Fun ( "3things'" ) |-> ((Data ( "Vec" ) Data ( "Nat" )) ((Fun ( "_+_" ) 

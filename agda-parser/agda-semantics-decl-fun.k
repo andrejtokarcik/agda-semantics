@@ -32,29 +32,30 @@ module AGDA-SEMANTICS-DECL-FUN
 
   //rule L = R where Ds => sandbox(L = R, Ds)
 
-  syntax KItem ::= global(Set) | global(Name, Set)
-  rule <k> L = R where Ds => Ds ~> L = R ~> global(funName(L), SetItem(funName(L)) keys(Sigma)) ...</k>
+  syntax KItem ::= globalNames(Set) | globalNames(Name, Set)
+  rule <k> L = R where Ds => Ds ~> L = R ~> globalNames(funName(L), SetItem(funName(L)) keys(Sigma)) ...</k>
        <sig> Sigma </sig>
-  rule <k> global(F, GlobalKeys) => updateLastFunClause(F, Rho(keys(Rho) -Set GlobalKeys)) ~> local(keys(Sigma) -Set GlobalKeys) ...</k>
+  rule <k> globalNames(F, GlobalKeys) => updateLastFunClause(F, Sigma(keys(Sigma) -Set GlobalKeys), Rho(keys(Rho) -Set GlobalKeys)) ~>
+                                         localNames(keys(Sigma) -Set GlobalKeys) ...</k>
+       <sig> Sigma </sig>
        <fun> Rho </fun>
-       <sig> Sigma </sig>
 
-  syntax KItem ::= updateLastFunClause(Name, Map)
-  rule <k> updateLastFunClause(F, LocalDefs) => . ...</k>
-       <fun>... F |-> 'fc(_,,(_ = (R => R@LocalDefs))) ...</fun>
-  rule <k> updateLastFunClause(F, LocalDefs) => . ...</k>
-       <fun>... F |-> (E => E@LocalDefs) ...</fun>
+  syntax KItem ::= updateLastFunClause(Name, Map, Map)
+  rule <k> updateLastFunClause(F, LocalSigs, LocalFuns) => . ...</k>
+       <fun>... F |-> 'fc(_,,(_ = (R => <R, LocalSigs, LocalFuns>))) ...</fun>
+  rule <k> updateLastFunClause(F, LocalSigs, LocalFuns) => . ...</k>
+       <fun>... F |-> (E => <E, LocalSigs, LocalFuns>) ...</fun>
     when getKLabel(E) =/=KLabel 'fc
 
-  syntax KItem ::= local(Set) | localFun(Map)
-  rule <k> local(.Set) => . ...</k>
-  rule <k> local(SetItem(N) _) ...</k>
+  syntax KItem ::= localNames(Set) | localData(Map, Map)
+  rule <k> localNames(.Set) => . ...</k>
+  rule <k> localNames(SetItem(N) _) ...</k>
        <ncat>... _ |-> N => . ...</ncat>
-  rule <k> local(SetItem(N) _) ...</k>
+  rule <k> localNames(SetItem(N) _) ...</k>
        <sig>... N |-> _ => . ...</sig>
-  rule <k> local(SetItem(N) _) ...</k>
+  rule <k> localNames(SetItem(N) _) ...</k>
        <fun>... N |-> _ => . ...</fun>
-  rule <k> local((SetItem(N) => .Set) _) ...</k>
+  rule <k> localNames((SetItem(N) => .Set) _) ...</k>
        <ncat> NCat </ncat>
        <sig> Sigma </sig>
        <fun> Rho </fun>

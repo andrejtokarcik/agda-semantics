@@ -149,9 +149,9 @@ when I >=Int 50
     when getKLabel(E) =/=KLabel 'fc
 
 
-  rule <k> whnf(E@Local => /*block 1003 ~>*/ E) ~> (. => localFun(Local)) ...</k>
-       <fun> Rho => Rho[Local] </fun>
-  rule (. => local(keys(Local))) ~> whnf(W:Whnf => /*block 1004 ~>*/ W@Local) ~> (localFun(Local) => .)  [structural]
+  rule <k> whnf(<E, LocalSigs, LocalFuns> => /*block 1003 ~>*/ E) ~> (. => localData(LocalSigs, LocalFuns)) ...</k>
+       <fun> Rho => Rho[LocalFuns] </fun>
+  rule (. => localNames(keys(LocalSigs))) ~> whnf(W:Whnf => /*block 1004 ~>*/ <W, LocalSigs, LocalFuns>) ~> (localData(LocalSigs, LocalFuns) => .)  [structural]
 
   //rule isWhnf(_:Whnf@_) => true
 

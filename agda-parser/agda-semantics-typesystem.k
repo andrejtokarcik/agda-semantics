@@ -22,14 +22,15 @@ module AGDA-SEMANTICS-TYPESYSTEM
        <meta>... . => E |-> t(E, T) ...</meta>
     when fresh(E:Expr) andBool fresh(T:Expr)
 
-  rule <k> let Ds in E => Ds ~> E ~> global(keys(Sigma)) ...</k>
+  rule <k> let Ds in E => Ds ~> E ~> globalNames(keys(Sigma)) ...</k>
        <sig> Sigma </sig>
-  rule <k> t(E, T) ~> global(GlobalKeys) => local(keys(Sigma) -Set GlobalKeys) ~> t(E, T)@Sigma(keys(Sigma) -Set GlobalKeys) ...</k>
+  rule <k> t(E, T) ~> globalNames(GlobalKeys) => localNames(keys(Sigma) -Set GlobalKeys) ~> <t(E, T), Sigma(keys(Sigma) -Set GlobalKeys), Rho(keys(Rho) -Set GlobalKeys)>...</k>
        <sig> Sigma </sig>
+       <fun> Rho </fun>
 
-  rule <k> (E@Local => E) ~> (. => localFun(Local)) ...</k>
-       <sig> Sigma => Sigma[Local] </sig>
-  rule (. => local(keys(Local))) ~> (t(E, T) => t(E, T)@Local) ~> (localFun(Local) => .)  [structural]
+  rule <k> (<E, LocalSigs, LocalFuns> => E) ~> (. => localData(LocalSigs, LocalFuns)) ...</k>
+       <sig> Sigma => Sigma[LocalSigs] </sig>
+  rule (. => localNames(keys(LocalSigs))) ~> (t(E, T) => <t(E, T), LocalSigs, LocalFuns>) ~> (localData(LocalSigs, LocalFuns) => .)  [structural]
 
   /////////
 

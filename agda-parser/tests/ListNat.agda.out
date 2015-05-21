@@ -7,9 +7,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     .List
-</ctxstack>
+</ctx-stack>
 <sig>
     Fun ( "[1,0,2]" ) |-> (Data ( "List" ) Data ( "Nat" ))
     Data ( "List" ) |-> ( #symVariable(5) : Set ( 0 ) ) -> Set ( 0 )
@@ -38,9 +38,10 @@
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>
 <fun>
-    Fun ( "[1,0,2]" ) |-> (((Con ( "_::_" ) { Data ( "Nat" ) }) Fun ( "one" ) 
-      @ Fun ( "one" ) |-> (Con ( "succ" ) Con ( "zero" ))) (((Con ( "_::_" ) {
-       Data ( "Nat" ) }) Con ( "zero" )) (((Con ( "_::_" ) { Data ( "Nat" ) })
-       (Con ( "succ" ) Fun ( "one" ) @ Fun ( "one" ) |-> (Con ( "succ" ) Con (
-       "zero" )))) (Con ( "[]" ) { Data ( "Nat" ) }))))
+    Fun ( "[1,0,2]" ) |-> (((Con ( "_::_" ) { Data ( "Nat" ) }) < Fun ( "one" 
+      ) , Fun ( "one" ) |-> Data ( "Nat" ) , Fun ( "one" ) |-> (Con ( "succ" )
+       Con ( "zero" )) >) (((Con ( "_::_" ) { Data ( "Nat" ) }) Con ( "zero" )
+      ) (((Con ( "_::_" ) { Data ( "Nat" ) }) (Con ( "succ" ) < Fun ( "one" ) 
+      , Fun ( "one" ) |-> Data ( "Nat" ) , Fun ( "one" ) |-> (Con ( "succ" ) 
+      Con ( "zero" )) >)) (Con ( "[]" ) { Data ( "Nat" ) }))))
 </fun>

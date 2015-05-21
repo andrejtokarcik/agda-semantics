@@ -7,9 +7,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     .List
-</ctxstack>
+</ctx-stack>
 <sig>
     Fun ( "[_]" ) |-> { #symVariable(50) : Set ( 0 ) } -> ( #symVariable(49) :
        #symVariable(50) ) -> (Data ( "List" ) #symVariable(50))

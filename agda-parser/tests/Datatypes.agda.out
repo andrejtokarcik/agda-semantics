@@ -7,9 +7,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     .List
-</ctxstack>
+</ctx-stack>
 <sig>
     Name ( "elim-False" ) |-> { #symVariable(381) : Set ( 0 ) } -> ( 
       #symVariable(380) : Data ( "False" ) ) -> #symVariable(381)

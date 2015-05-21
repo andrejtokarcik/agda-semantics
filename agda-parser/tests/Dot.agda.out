@@ -7,9 +7,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     .List
-</ctxstack>
+</ctx-stack>
 <sig>
     Name ( "h" ) |-> Set ( 0 )
     Fun ( "f" ) |-> ( #symVariable(3) : Set ( 0 ) ) -> ( #symVariable(4) : Set

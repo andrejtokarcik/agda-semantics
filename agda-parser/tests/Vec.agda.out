@@ -40,9 +40,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     ListItem(#map ( .Map ))
-</ctxstack>
+</ctx-stack>
 <sig>
     Fun ( "Fin" ) |-> ( #symVariable(11487) : Data ( "Nat" ) ) -> Set ( 0 )
     Fun ( "Ren" ) |-> ( #symVariable(15339) : Data ( "Nat" ) ) -> ( 

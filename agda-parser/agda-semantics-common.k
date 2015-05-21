@@ -16,7 +16,7 @@ module AGDA-SEMANTICS-COMMON
   //syntax Expr ::= Dot(Expr)
 
   syntax Name ::= Data(Identifier) | Con(Identifier) | Fun(Identifier) | Postlt(Identifier)
-  syntax Name ::= Name "@" Map
+  syntax Name ::= "<" Name "," Map "," Map ">"    // <N, Sigma, Rho>
 
   /*
   syntax Bool ::= nameDefined(Identifier, Map) [function]
@@ -37,13 +37,13 @@ module AGDA-SEMANTICS-COMMON
   */
 
   // XXX move to a better location?
-  syntax K ::= K "@" Map
-  rule L:KLabel(Ks:KList)@Fs => L(Ks@Fs)  when isName(L(Ks)) =/=K true  [structural, anywhere]
-  rule N:Name@Fs => N  when notBool N in keys(Fs)  [structural, anywhere]
+  syntax K ::= "<" K "," Map "," Map ">"
+  rule <L:KLabel(Ks:KList), Ts, Fs> => L(<Ks, Ts, Fs>)  when isName(L(Ks)) =/=K true  [structural, anywhere]
+  rule <N:Name, Ts, _> => N  when notBool N in keys(Ts)  [structural, anywhere]
   //rule K@_ => K    [owise]
-  syntax KList ::= KList "@" Map  //[function]
-  rule .KList@_ => .KList  [structural, anywhere]
-  rule (K,,Ks:KList)@Fs => (K@Fs),,(Ks@Fs)   [structural, anywhere]
+  syntax KList ::= "<" KList "," Map "," Map ">"
+  rule <.KList, _, _> => .KList  [structural, anywhere]
+  rule <K,,Ks:KList, Ts, Fs> => <K, Ts, Fs>,,<Ks, Ts, Fs>   [structural, anywhere]
 
 
 

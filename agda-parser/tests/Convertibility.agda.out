@@ -10,9 +10,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     ListItem(#map ( .Map ))
-</ctxstack>
+</ctx-stack>
 <sig>
     Name ( "x" ) |-> Set ( 0 )
     Fun ( "y" ) |-> Set ( 1 )

@@ -7,9 +7,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     .List
-</ctxstack>
+</ctx-stack>
 <sig>
     Fun ( "if_then_else_" ) |-> { #symVariable(7) : Set ( 0 ) } -> ( 
       #symVariable(4) : Data ( "Bool" ) ) -> ( #symVariable(5) : #symVariable(

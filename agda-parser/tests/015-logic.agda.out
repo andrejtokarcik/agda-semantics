@@ -7,9 +7,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     .List
-</ctxstack>
+</ctx-stack>
 <sig>
     Fun ( "[a->b]->[zb->za]" ) |-> { #symVariable(4162) : #symExpr(4177) } -> 
       { #symVariable(4161) : #symExpr(4190) } -> ( #symVariable(4158) : ( 

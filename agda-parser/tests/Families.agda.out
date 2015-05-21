@@ -12,9 +12,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     .List
-</ctxstack>
+</ctx-stack>
 <sig>
     Name ( "true8800false" ) |-> ( #symVariable(2674) : (((Data ( "_==_" ) { 
       Data ( "Bool" ) }) Con ( "true" )) Con ( "false" )) ) -> Data ( "False" 
@@ -146,13 +146,14 @@
       Var ( "f" ) Var ( "x" ))) (((((Fun ( "map'" ) { #symExpr(2396) }) { 
       #symVariable(2570) }) #symExpr(2469)) Var ( "f" )) Var ( "xs" ))))
     Fun ( "t1" ) |-> (((((Fun ( "map" ) { Data ( "Nat" ) }) { Data ( "Nat" ) }
-      ) { (Con ( "suc" ) (Con ( "suc" ) Con ( "zero" ))) }) (Fun ( "_+_" ) Fun
-       ( "three" ) @ Fun ( "three" ) |-> (Con ( "suc" ) (Con ( "suc" ) (Con ( 
-      "suc" ) Con ( "zero" )))))) ((((Con ( "_::_" ) { Data ( "Nat" ) }) { (
-      Con ( "suc" ) Con ( "zero" )) }) Con ( "zero" )) ((((Con ( "_::_" ) { 
-      Data ( "Nat" ) }) { Con ( "zero" ) }) (Con ( "suc" ) Fun ( "three" ) @ 
-      Fun ( "three" ) |-> (Con ( "suc" ) (Con ( "suc" ) (Con ( "suc" ) Con ( 
-      "zero" )))))) (Con ( "[]" ) { Data ( "Nat" ) }))))
+      ) { (Con ( "suc" ) (Con ( "suc" ) Con ( "zero" ))) }) (Fun ( "_+_" ) < 
+      Fun ( "three" ) , Fun ( "three" ) |-> Data ( "Nat" ) , Fun ( "three" )
+       |-> (Con ( "suc" ) (Con ( "suc" ) (Con ( "suc" ) Con ( "zero" )))) >)) 
+      ((((Con ( "_::_" ) { Data ( "Nat" ) }) { (Con ( "suc" ) Con ( "zero" )) 
+      }) Con ( "zero" )) ((((Con ( "_::_" ) { Data ( "Nat" ) }) { Con ( "zero"
+       ) }) (Con ( "suc" ) < Fun ( "three" ) , Fun ( "three" ) |-> Data ( 
+      "Nat" ) , Fun ( "three" ) |-> (Con ( "suc" ) (Con ( "suc" ) (Con ( "suc"
+       ) Con ( "zero" )))) >)) (Con ( "[]" ) { Data ( "Nat" ) }))))
     Fun ( "z_" ) |-> \ ( Var ( "A" ) : #symExpr(2606) ) -> ( #symVariable(2605
       ) : Var ( "A" ) ) -> Data ( "False" )
 </fun>

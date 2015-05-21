@@ -13,9 +13,9 @@
 <mgu>
     subst(.KList)
 </mgu>
-<ctxstack>
+<ctx-stack>
     ListItem(#map ( .Map ))
-</ctxstack>
+</ctx-stack>
 <sig>
     Fun ( "id" ) |-> { #symVariable(3) : Set ( 0 ) } -> ( #symVariable(2) : 
       #symVariable(3) ) -> #symVariable(3)
