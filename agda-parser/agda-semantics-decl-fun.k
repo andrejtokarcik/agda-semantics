@@ -219,7 +219,7 @@ module AGDA-SEMANTICS-DECL-FUN
   // already done in #checkPatterns for LHS
   //rule prepared! ~> (t(L, Tl) => L {W}) = t(_, Tr)
   //  when isImplicitPi(Tl) andBool isImplicitPi(Tr) =/=K true andBool fresh(W:Expr)
-  rule prepared! ~> (t(L, {_ : _} -> _) => L {%meta}) = _
+  rule prepared! ~> (t(L, {_ : _} -> _) => L {%wild}) = _
   rule prepared! ~> _ = (t(R, {_ : _} -> _) => R {%meta})
     //when /*isImplicitPi(Tl) =/=K true andBool* isImplicitPi(Tr) andBool*/ fresh(W:Expr)
   //rule prepared! ~> t(L, Tl) = t(R, Tr) => L {W} = R {W}   // NOTE: this gives a different behaviour from offic Agda, cf. Id8 test case

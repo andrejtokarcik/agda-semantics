@@ -17,9 +17,10 @@ module AGDA-SEMANTICS-DECL-DATA
   syntax KItem ::= addTypeCon(Name, Expr, Expr)              [strict(3(context('checkSetType)))]
   // FIXME not sure if the condition is correct: what universe must the datatype fit in?
   rule [add-type-con]:
-       <k> addTypeCon(D, DPs, t(T, Set(Alpha))) => T constructorOf Set(Alpha -Int 1) ~> pass? ...</k>
+       <k> addTypeCon(D, DPs, t(T, Set(Alpha))) => . ...</k>
        <sig>... . => D |-> renameBoundVariables(T) ...</sig>
        //<con>... . => DPs |-> l(.List) ...</con>
+    when T constructorOf Set(Alpha -Int 1)
 
   syntax KItem ::= addDataCons(Expr, Telescope, TypeSignatures)
   rule addDataCons(DPs, Ps, .TypeSignatures) => .    [structural]
@@ -28,11 +29,12 @@ module AGDA-SEMANTICS-DECL-DATA
   syntax KItem ::= addDataCon(Expr, Name, Expr)  [strict(3(context('checkSetType)))]
   // TODO: check the constructor's universe whether it fits into the datatype's
   rule [add-data-con]:
-       <k> addDataCon(DPs, Name(C), t(T, Set(_))) => T constructorOf DPs ~> pass? ...</k>
+       <k> addDataCon(DPs, Name(C), t(T, Set(_))) => . ...</k>
        <ncat> NCat (. => Name(C) |-> Con(C)) </ncat>
        <sig>... . => Con(C) |-> renameBoundVariables(T) ...</sig>
        //<con>... DPs |-> l(_ (. => ListItem(Con(C)))) ...</con>
-    when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the external parser
+    when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the scope analyser
+         andBool T constructorOf DPs
 
   syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
   rule ((_ : _) -> T => T) constructorOf _

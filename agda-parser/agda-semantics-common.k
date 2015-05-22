@@ -77,11 +77,13 @@ module AGDA-SEMANTICS-COMMON
        <ctx-stack> ListItem(#map(Gamma)) L => L </ctx-stack>
   rule (. => loadCtx) ~> R:KResult ~> (loadCtx => .)  [structural]
 
+  /*
   // TODO get rid of this?
   syntax KItem ::= "pass?" | error(String)
   syntax GuardPass
   rule isGuardPass(true) => true
   rule _:GuardPass ~> pass? => .
+  */
 
   syntax KItem ::= "cleanMetas"
   rule <k> cleanMetas => . ...</k>
