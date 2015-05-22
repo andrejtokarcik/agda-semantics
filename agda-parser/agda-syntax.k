@@ -1,13 +1,13 @@
 module AGDA-SYNTAX
   // TODO: agda-syntax-utils.k    -- presunut tam aj makra?
   syntax Telescope ::= castTelescope(LamBindings)  [function, notInPrograms]
-  rule castTelescope(LamBind(Relevant, NotHidden, X:Variable) Bs:LamBindings) => (X : %meta) castTelescope(Bs)  [structural]
-  rule castTelescope(LamBind(Relevant, Hidden, X:Variable) Bs:LamBindings) => {X : %meta} castTelescope(Bs)  [structural]
-  rule castTelescope(B:TypedBinding Bs:LamBindings) => B castTelescope(Bs)  [structural]
-  rule castTelescope(.LamBindings) => .Telescope   [structural]
+  rule castTelescope(LamBind(Relevant, NotHidden, X:Variable) Bs:LamBindings) => (X : %meta) castTelescope(Bs)
+  rule castTelescope(LamBind(Relevant, Hidden, X:Variable) Bs:LamBindings) => {X : %meta} castTelescope(Bs)
+  rule castTelescope(B:TypedBinding Bs:LamBindings) => B castTelescope(Bs)
+  rule castTelescope(.LamBindings) => .Telescope
   syntax Telescope ::= castTelescope(List)  [function, notInPrograms]
-  rule castTelescope(ListItem(X) Xs) => (X : %meta) castTelescope(Xs)  [structural]
-  rule castTelescope(.List) => .Telescope   [structural]
+  rule castTelescope(ListItem(X) Xs) => (X : %meta) castTelescope(Xs)
+  rule castTelescope(.List) => .Telescope
 
 
   // nechcem operovat priamo na klabels v pripade tych pomocnych wrapperov?

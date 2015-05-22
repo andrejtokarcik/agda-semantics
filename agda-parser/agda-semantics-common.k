@@ -116,9 +116,9 @@ module AGDA-SEMANTICS-COMMON
   rule unhide(E) => E   [owise]
 
   syntax K ::= leftmost(Expr)  [function]
-  rule leftmost({E} => E) [structural]     // FIXME
-  rule leftmost(E _ => E) [structural]
-  rule leftmost(E) => E   [owise, structural]
+  rule leftmost({E} => E) // FIXME
+  rule leftmost(E _ => E)
+  rule leftmost(E) => E   [owise]
 
   syntax Expr ::= replaceLeftmost(Expr, Expr)  [function]
   rule replaceLeftmost(E E', R) => replaceLeftmost(E, R) E'
@@ -160,11 +160,11 @@ module AGDA-SEMANTICS-COMMON
 
 
   syntax Bool ::= all(KLabel, List)  [function]
-  rule all(_, .List) => true      [structural]
-  rule all(Pred, ListItem(K) L) => Pred(K) ==K true andBool all(Pred, L)  [structural]
+  rule all(_, .List) => true
+  rule all(Pred, ListItem(K) L) => Pred(K) ==K true andBool all(Pred, L)
   syntax Bool ::= any(KLabel, List)  [function]
-  rule any(_, .List) => false     [structural]
-  rule any(Pred, ListItem(K) L) => Pred(K) ==K true orBool any(Pred, L)   [structural]
+  rule any(_, .List) => false
+  rule any(Pred, ListItem(K) L) => Pred(K) ==K true orBool any(Pred, L)
 
   syntax List ::= filter(KLabel, List)  [function]
   rule filter(_, .List) => .List
