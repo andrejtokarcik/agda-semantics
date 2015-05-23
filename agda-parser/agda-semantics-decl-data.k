@@ -15,6 +15,7 @@ module AGDA-SEMANTICS-DECL-DATA
     when notBool (Name(N) in keys(NCat))     // this may be already guaranteed by the external parser
 
   syntax KItem ::= addTypeCon(Name, Expr, Expr)              [strict(3(context('checkSetType)))]
+  context addTypeCon(_, _, t(HOLE => whnf(HOLE), _))         [result(Whnf)]
   // FIXME not sure if the condition is correct: what universe must the datatype fit in?
   rule [add-type-con]:
        <k> addTypeCon(D, DPs, t(T, Set(Alpha))) => . ...</k>
@@ -26,7 +27,8 @@ module AGDA-SEMANTICS-DECL-DATA
   rule addDataCons(DPs, Ps, .TypeSignatures) => .    [structural]
   rule addDataCons(DPs, Ps, C : T ; Cons) => addDataCon(DPs, C, Pi(makeHidden(Ps), T)) ~> addDataCons(DPs, Ps, Cons)  [structural]
 
-  syntax KItem ::= addDataCon(Expr, Name, Expr)  [strict(3(context('checkSetType)))]
+  syntax KItem ::= addDataCon(Expr, Name, Expr)              [strict(3(context('checkSetType)))]
+  context addDataCon(_, _, t(HOLE => whnf(HOLE), _))         [result(Whnf)]
   // TODO: check the constructor's universe whether it fits into the datatype's
   rule [add-data-con]:
        <k> addDataCon(DPs, Name(C), t(T, Set(_))) => . ...</k>
@@ -36,7 +38,7 @@ module AGDA-SEMANTICS-DECL-DATA
     when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the scope analyser
          andBool T constructorOf DPs
 
-  syntax KItem ::= Expr "constructorOf" Expr          [strict(all(context('whnf)))]
+  syntax KItem ::= Expr "constructorOf" Expr         [function] //[strict(all(context('whnf)))]
   rule ((_ : _) -> T => T) constructorOf _
   rule ({_ : _} -> T => T) constructorOf _
   rule D:Name constructorOf D => true

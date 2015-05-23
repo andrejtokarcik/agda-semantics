@@ -93,7 +93,7 @@ xx suitableLHS(Theta,
            //~> chich
            ...</k>
        <mgu> Theta </mgu>
-       <dbg> I => I +Int 1 </dbg>
+       //<dbg> I => I +Int 1 </dbg>
     when isFunClausesApp(E) andBool lengthList(args(E)) ==Int numReqArgs(leftmost(E)) andBool notBool matches(leftmost(E), E) andBool
          indexOfFunClausesAppPattern(Theta, leftmost(E), E) >=Int 0 andBool
 
@@ -103,8 +103,9 @@ isVariable(unhide(args(E)(indexOfFunClausesAppPattern(Theta, leftmost(E), E)))) 
 //args(getFunClausesAppPattern(Theta, leftmost(E), E))(indexOfFunClausesAppPattern(Theta, leftmost(E), E)) =/=K args(lhs2expr(suitableLHS(Theta, leftmost(getFunClausesAppPattern(Theta, leftmost(E), E)), unhide(args(E)(indexOfFunClausesAppPattern(Theta, leftmost(E), E))), Set(0))))(indexOfFunClausesAppPattern(Theta, leftmost(E), E)) andBool
          getKLabel(suitableLHS(Theta,
   leftmost(getFunClausesAppPattern(Theta, leftmost(E), E)), unhide(args(E)(indexOfFunClausesAppPattern(Theta, leftmost(E), E))), Set(0))) =/=KLabel 'suitableLHS
-  andBool I <Int 50
+  //andBool I <Int 50
 
+/*
 syntax KItem ::= l(List)
   rule <k> nf(E) => chich ~> 
 args(getFunClausesAppPattern(Theta, leftmost(E), E))(indexOfFunClausesAppPattern(Theta, leftmost(E), E))  ~>
@@ -126,7 +127,7 @@ xx suitableLHS(Theta,
        <mgu> Theta </mgu>
        <dbg> I </dbg>
 when I >=Int 50
-
+*/
 
 
   syntax KItem ::= whnfType(Expr)  [strict, context(result(WhnfTypedExpr))]

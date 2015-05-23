@@ -12,7 +12,7 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule <k> Name(S) => Var(S) ...</k>  <ctx> Gamma </ctx>  <ncat> NCat </ncat>
     when notBool (Name(S) in keys(NCat)) andBool Var(S) in keys(Gamma)
 
-  // And vice versa for let-bindings...
+  // A dual problem occurs with let-bindings...
   rule <k> Var(S) => Name(S) ...</k>  <ctx> Gamma </ctx>  <ncat> NCat </ncat>
     when Name(S) in keys(NCat) andBool notBool (Var(S) in keys(Gamma))
 
@@ -56,7 +56,8 @@ module AGDA-SEMANTICS-TYPESYSTEM
   rule {t(E, T)} => t({E}, {T})
 
   // inaccessible patterns
-  syntax Expr ::= DotP(Pattern)
+  syntax InaccessiblePattern ::= DotP(Expr)    [klabel('DotP)]
+  syntax Expr ::= InaccessiblePattern
   //rule DotP(E) => Dot(E)
   context DotP(HOLE)::Expr
   rule DotP(t(E, T))::Expr => t(DotP(E), T)

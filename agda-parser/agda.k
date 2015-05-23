@@ -50,8 +50,8 @@ updateMgu(.Mgu,
       "suc" ) #symVariable(709)))) ) ~>
 
       */
-                  $PGM:Program  //</k>
-                  ~> nf(Fun("t1")) </k>
+                  $PGM:Program  </k>
+                  //~> nf(Fun("t1")) </k>
                   //<br />
                   /*
                   <mods>
@@ -63,16 +63,16 @@ updateMgu(.Mgu,
                   */
                   // obsah nasledujucich je staly
                   <sig> .Map </sig>
-                  <meta> .Map </meta>
-                  <fun> .Map </fun>  // ak to spravim <funs> a bude obsahovat <fun> a v tom List tak sa zbavim FunClauses (vid cil-semantics funs)
-                  <ncat> .Map </ncat>
                   //<br />
-                  // obsa sa meni
+                  // obsah sa meni
                   <ctx> .Map </ctx>
                   <ctx-stack> .List </ctx-stack>    // <ctx-stack> a podobne aj ostatne
+                  <fun> .Map </fun>  // ak to spravim <funs> a bude obsahovat <fun> a v tom List tak sa zbavim FunClauses (vid cil-semantics funs)
+                  <meta> .Map </meta>
                   //<mgu-stack> .List </mgu-stack>
                   <mgu> .Mgu </mgu>
-                  <dbg> 0 </dbg>
+                  //<dbg> 0 </dbg>
+                  <ncat> .Map </ncat>
                   /*
                   <md>                    // <md> [?]
                     <range> .K </range>
