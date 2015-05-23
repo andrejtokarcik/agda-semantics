@@ -227,18 +227,22 @@ module AGDA-SEMANTICS-TYPESYSTEM
 //
 
 
-  rule t(E1, T1) t({E2}, {T2}) => T1 == {X : T} -> T' ~> unify(t(E1, T1) t(E2, T2)) ~> unifyConf ~> killMgu
+  rule [infer-function-implicit]:
+       t(E1, T1) t({E2}, {T2}) => T1 == {X : T} -> T' ~> unify(t(E1, T1) t(E2, T2)) ~> unifyConf ~> killMgu
     when isImplicitPi(T1) =/=K true andBool canUnify(T1, {X : T} -> T') andBool
          fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
 
-  rule t(E1, {X : T} -> T') t({E2}, {T2}) => T == T2 ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> dedot(E2)) ~> unifyConf ~> killMgu
+  rule [infer-app-implicit]:
+       t(E1, {X : T} -> T') t({E2}, {T2}) => T == T2 ~> unify(t(E1 {E2}, T')) ~> tsubst(X |-> dedot(E2)) ~> unifyConf ~> killMgu
     when canUnify(T, T2)
 
-  rule t(E1, T1) t(E2, T2) => T1 == (X : T) -> T' ~> unify(t(E1, T1) t(E2, T2)) ~> unifyConf ~> killMgu
+  rule [unify-function-explicit]:
+       t(E1, T1) t(E2, T2) => T1 == (X : T) -> T' ~> unify(t(E1, T1) t(E2, T2)) ~> unifyConf ~> killMgu
     when isPi(T1) =/=K true andBool isImplicit(T2) =/=K true andBool canUnify(T1, (X : T) -> T') andBool
          fresh(X:Variable) andBool fresh(T:Expr) andBool fresh(T':Expr)
 
-  rule t(E1, (X : T) -> T') t(E2, T2) => T == T2 ~> unify(t(E1 E2, T')) ~> tsubst(X |-> dedot(E2)) ~> unifyConf ~> killMgu
+  rule [infer-app-explicit]:
+       t(E1, (X : T) -> T') t(E2, T2) => T == T2 ~> unify(t(E1 E2, T')) ~> tsubst(X |-> dedot(E2)) ~> unifyConf ~> killMgu
      when isImplicit(T2) =/=K true andBool canUnify(T, T2)
 
 

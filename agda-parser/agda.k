@@ -70,9 +70,9 @@ updateMgu(.Mgu,
                   <fun> .Map </fun>  // ak to spravim <funs> a bude obsahovat <fun> a v tom List tak sa zbavim FunClauses (vid cil-semantics funs)
                   <meta> .Map </meta>
                   //<mgu-stack> .List </mgu-stack>
-                  <mgu> .Mgu </mgu>
                   //<dbg> 0 </dbg>
                   <ncat> .Map </ncat>
+                  <mgu> .Mgu </mgu>
                   /*
                   <md>                    // <md> [?]
                     <range> .K </range>
