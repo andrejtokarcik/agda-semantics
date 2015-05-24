@@ -1,5 +1,0 @@
-data Nat : Set 0 where
-  Zero : Nat,
-  Succ : Pi x Nat Nat
-
-; expr = (Lambda a (Set 0) (Lambda x a x)) ? Zero

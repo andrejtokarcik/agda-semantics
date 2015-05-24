@@ -1,1 +1,0 @@
-expr = (Lambda x Set 1 x) ((Lambda y Set 2 Set 0) Set 1)

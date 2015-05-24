@@ -1,2 +1,0 @@
-expr = (Lambda y Set 6 ((Lambda x Set 9 Set 2) Set 8)) Set 5
-//((Lambda x Set 9 Set 2) Set 8)
