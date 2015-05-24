@@ -1,26 +1,19 @@
-require "agda-semantics-common.k"
-
-module AGDA-SEMANTICS-DECL-DATA
+module AGDA-SEMANTICS-DECLARATIONS-DATATYPES
   imports AGDA-SEMANTICS-COMMON
 
-  //syntax KItem ::= "params!"
-  //rule (. => params!) ~> data _ Ps : (T => Pi(Ps, T)) where _   [structural]    // << note that this isn't valid Agda syntax
-  //context params! ~> data _ _ : (HOLE => checkSetType(HOLE)) where _   [result(SetTypedExpr)]
   rule [process-data-decl]:
        <k> data Name(N) Ps : T where Cons
-           => //I >=Int 1 ~> pass? ~>        // << FIXME   (the `-Int 1' guard below is sufficient?)
-              addTypeCon(Data(N), App(Data(N), Ps), Pi(Ps, T)) ~>
+           => addTypeCon(Data(N), App(Data(N), Ps), Pi(Ps, T)) ~>
               addDataCons(App(Data(N), Ps), Ps, Cons) ...</k>
        <ncat> NCat (. => Name(N) |-> Data(N)) </ncat>
-    when notBool (Name(N) in keys(NCat))     // this may be already guaranteed by the external parser
+    when notBool (Name(N) in keys(NCat))
 
   syntax KItem ::= addTypeCon(Name, Expr, Expr)              [strict(3(context('checkSetType)))]
   context addTypeCon(_, _, t(HOLE => whnf(HOLE), _))         [result(Whnf)]
-  // FIXME not sure if the condition is correct: what universe must the datatype fit in?
+  // not sure if the condition is correct: what universe must the datatype fit in?
   rule [add-type-con]:
        <k> addTypeCon(D, DPs, t(T, Set(Alpha))) => . ...</k>
        <sig>... . => D |-> renameBoundVariables(T) ...</sig>
-       //<con>... . => DPs |-> l(.List) ...</con>
     when T constructorOf Set(Alpha -Int 1)
 
   syntax KItem ::= addDataCons(Expr, Telescope, TypeSignatures)
@@ -29,16 +22,14 @@ module AGDA-SEMANTICS-DECL-DATA
 
   syntax KItem ::= addDataCon(Expr, Name, Expr)              [strict(3(context('checkSetType)))]
   context addDataCon(_, _, t(HOLE => whnf(HOLE), _))         [result(Whnf)]
-  // TODO: check the constructor's universe whether it fits into the datatype's
+  // TODO check the constructor's universe whether it fits into the datatype's
   rule [add-data-con]:
        <k> addDataCon(DPs, Name(C), t(T, Set(_))) => . ...</k>
        <ncat> NCat (. => Name(C) |-> Con(C)) </ncat>
        <sig>... . => Con(C) |-> renameBoundVariables(T) ...</sig>
-       //<con>... DPs |-> l(_ (. => ListItem(Con(C)))) ...</con>
-    when notBool (Name(C) in keys(NCat))     // this may be already guaranteed by the scope analyser
-         andBool T constructorOf DPs
+    when notBool (Name(C) in keys(NCat)) andBool T constructorOf DPs
 
-  syntax KItem ::= Expr "constructorOf" Expr         [function] //[strict(all(context('whnf)))]
+  syntax KItem ::= Expr "constructorOf" Expr  [function]
   rule ((_ : _) -> T => T) constructorOf _
   rule ({_ : _} -> T => T) constructorOf _
   rule D:Name constructorOf D => true
@@ -52,11 +43,4 @@ module AGDA-SEMANTICS-DECL-DATA
   rule makeHidden(.Telescope) => .Telescope
   rule makeHidden((X : T) Tel) => {X : T} makeHidden(Tel)
   rule makeHidden({X : T} Tel) => {X : T} makeHidden(Tel)
-
-  /*
-  syntax Expr ::= applyParams(Expr, Telescope) [function]
-  rule applyParams(E, .Telescope) => E
-  rule applyParams(E => E X, (X:Variable : _:Expr) Ps:Telescope => Ps)
-  // TODO: hidden bindings
-  */
 endmodule
