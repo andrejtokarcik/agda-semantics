@@ -1,10 +1,6 @@
 <k>
-    nf ( (Con ( "succ" ) (Con ( "succ" ) (Con ( "succ" ) (Con ( "succ" ) (Con 
-      ( "succ" ) Con ( "zero" )))))) )
+    .K
 </k>
-<dbg>
-    0
-</dbg>
 <mgu>
     subst(.KList)
 </mgu>
@@ -18,6 +14,7 @@
       ) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Fun ( "f" ) |-> Data ( "Nat" )
     Fun ( "g" ) |-> ( #symVariable(215) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Fun ( "h" ) |-> ( #symVariable(158) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Fun ( "k" ) |-> ( #symVariable(355) : Data ( "Nat" ) ) -> Data ( "Nat" )
     Fun ( "t1" ) |-> Data ( "Nat" )
     Data ( "Nat" ) |-> Set ( 0 )
@@ -36,6 +33,7 @@
     Name ( "_+_" ) |-> Fun ( "_+_" )
     Name ( "f" ) |-> Fun ( "f" )
     Name ( "g" ) |-> Fun ( "g" )
+    Name ( "h" ) |-> Fun ( "h" )
     Name ( "k" ) |-> Fun ( "k" )
     Name ( "succ" ) |-> Con ( "succ" )
     Name ( "t1" ) |-> Fun ( "t1" )
@@ -79,6 +77,16 @@
       #symFunClauses(275) (Con ( "succ" ) (Con ( "succ" ) Var ( "n" )))) = ((
       Fun ( "_+_" ) (Fun ( "fib" ) (Con ( "succ" ) Var ( "n" )))) (Fun ( "fib"
        ) Var ( "n" )))) > Var ( "n" )))
+    Fun ( "h" ) |-> \ ( Var ( "n" ) : #symExpr(208) ) -> (< Fun ( "twice" ) , 
+      Fun ( "add2" ) |-> Data ( "Nat" ) Fun ( "twice" ) |-> ( #symVariable(180
+      ) : Data ( "Nat" ) ) -> Data ( "Nat" ) , Fun ( "add2" ) |-> (Con ( 
+      "succ" ) (Con ( "succ" ) Var ( "n" ))) Fun ( "twice" ) |-> \ ( 
+      #symVariable(194) : Data ( "Nat" ) ) -> ((Fun ( "_*_" ) #symVariable(194
+      )) #symVariable(194)) > < Fun ( "add2" ) , Fun ( "add2" ) |-> Data ( 
+      "Nat" ) Fun ( "twice" ) |-> ( #symVariable(180) : Data ( "Nat" ) ) -> 
+      Data ( "Nat" ) , Fun ( "add2" ) |-> (Con ( "succ" ) (Con ( "succ" ) Var 
+      ( "n" ))) Fun ( "twice" ) |-> \ ( #symVariable(194) : Data ( "Nat" ) ) 
+      -> ((Fun ( "_*_" ) #symVariable(194)) #symVariable(194)) >)
     Fun ( "k" ) |-> \ ( Var ( "n" ) : #symExpr(435) ) -> (< Fun ( "aux" ) , 
       Fun ( "aux" ) |-> ( #symVariable(379) : Data ( "Nat" ) ) -> Data ( "Nat"
        ) , Fun ( "aux" ) |-> \ ( #symVariable(405) : Data ( "Nat" ) ) -> ((Fun

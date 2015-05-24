@@ -1,9 +1,6 @@
 <k>
-    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
+    .K
 </k>
-<dbg>
-    0
-</dbg>
 <mgu>
     subst(.KList)
 </mgu>
@@ -25,6 +22,6 @@
     Name ( "f" ) |-> Fun ( "f" )
 </ncat>
 <fun>
-    Fun ( "f" ) |-> 'fc(((#symFunClauses(16) 'DotP(Var ( "n" ))) Var ( "n" )) 
-      = Name ( "h" ))
+    Fun ( "f" ) |-> 'fc(((#symFunClauses(16) DotP ( Var ( "n" ) )) Var ( "n" )
+      ) = Name ( "h" ))
 </fun>

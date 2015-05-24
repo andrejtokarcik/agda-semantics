@@ -1,9 +1,6 @@
 <k>
-    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
+    .K
 </k>
-<dbg>
-    0
-</dbg>
 <mgu>
     subst(.KList)
 </mgu>
@@ -40,14 +37,13 @@
     Name ( "tt" ) |-> Fun ( "tt" )
 </ncat>
 <fun>
-    Fun ( "map" ) |-> 'fc(((((#symFunClauses(147) { (DotP ( #symExpr(127) )) }
-      ) { #symVariable(143) }) Var ( "f" )) (Con ( "nil" ) { #symExpr(127) }))
-       = (Con ( "nil" ) { #symVariable(143) }),, ((((#symFunClauses(269) { (
-      DotP ( #symExpr(149) )) }) { #symVariable(265) }) Var ( "f" )) (((Con ( 
-      "_::_" ) { #symExpr(149) }) Var ( "x" )) Var ( "xs" ))) = (((Con ( 
-      "_::_" ) { #symVariable(265) }) (Var ( "f" ) Var ( "x" ))) ((((Fun ( 
-      "map" ) { #symExpr(149) }) { #symVariable(265) }) Var ( "f" )) Var ( 
-      "xs" ))))
+    Fun ( "map" ) |-> 'fc(((((#symFunClauses(147) { DotP ( #symExpr(127) ) }) 
+      { #symVariable(143) }) Var ( "f" )) (Con ( "nil" ) { #symExpr(127) })) =
+       (Con ( "nil" ) { #symVariable(143) }),, ((((#symFunClauses(269) { DotP 
+      ( #symExpr(149) ) }) { #symVariable(265) }) Var ( "f" )) (((Con ( "_::_"
+       ) { #symExpr(149) }) Var ( "x" )) Var ( "xs" ))) = (((Con ( "_::_" ) { 
+      #symVariable(265) }) (Var ( "f" ) Var ( "x" ))) ((((Fun ( "map" ) { 
+      #symExpr(149) }) { #symVariable(265) }) Var ( "f" )) Var ( "xs" ))))
     Fun ( "nil2" ) |-> 'fc((#symFunClauses(53) { #symVariable(51) }) = (Con ( 
       "nil" ) { #symVariable(51) }))
     Fun ( "tt" ) |-> \ ( #symExpr(56) : #symExpr(62) ) -> Set ( 1 )

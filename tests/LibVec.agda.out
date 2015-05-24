@@ -1,9 +1,6 @@
 <k>
-    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
+    .K
 </k>
-<dbg>
-    0
-</dbg>
 <mgu>
     subst(.KList)
 </mgu>
@@ -224,98 +221,98 @@
       Var ( "n" )) = ((Fun ( "_+_" ) Var ( "n" )) ((Fun ( "_*_" ) Var ( "m" ))
        Var ( "n" ))))
     Fun ( "_++_" ) |-> 'fc((((((#symFunClauses(2060) { Con ( "zero" ) }) { 
-      #symVariable(1823) }) { (DotP ( #symVariable(1821) )) }) (Con ( "<>" ) {
-       #symVariable(1821) })) Var ( "ys" )) = Var ( "ys" ),, (((((
-      #symFunClauses(3141) { (Con ( "suc" ) 'DotP(#symExpr(2089))) }) { 
-      #symVariable(2276) }) { (DotP ( #symVariable(2274) )) }) ((((Con ( "_,_"
-       ) { #symVariable(2274) }) { #symExpr(2089) }) Var ( "x" )) Var ( "xs" )
-      )) Var ( "ys" )) = ((((Con ( "_,_" ) { #symVariable(2274) }) { ((Fun ( 
+      #symVariable(1823) }) { DotP ( #symVariable(1821) ) }) (Con ( "<>" ) { 
+      #symVariable(1821) })) Var ( "ys" )) = Var ( "ys" ),, (((((
+      #symFunClauses(3141) { (Con ( "suc" ) DotP ( #symExpr(2089) )) }) { 
+      #symVariable(2276) }) { DotP ( #symVariable(2274) ) }) ((((Con ( "_,_" )
+       { #symVariable(2274) }) { #symExpr(2089) }) Var ( "x" )) Var ( "xs" )))
+       Var ( "ys" )) = ((((Con ( "_,_" ) { #symVariable(2274) }) { ((Fun ( 
       "_+_" ) #symExpr(2089)) #symVariable(2276)) }) Var ( "x" )) (((((Fun ( 
       "_++_" ) { #symExpr(2089) }) { #symVariable(2276) }) { #symVariable(2274
       ) }) Var ( "xs" )) Var ( "ys" ))))
     Fun ( "_+_" ) |-> 'fc(((#symFunClauses(82) Con ( "zero" )) Var ( "n" )) = 
       Var ( "n" ),, ((#symFunClauses(111) (Con ( "suc" ) Var ( "m" ))) Var ( 
       "n" )) = (Con ( "suc" ) ((Fun ( "_+_" ) Var ( "m" )) Var ( "n" ))))
-    Fun ( "_,0691_" ) |-> 'fc(((((#symFunClauses(5721) { Con ( "zero" ) }) { (
-      DotP ( #symVariable(5717) )) }) (Con ( "<>" ) { #symVariable(5717) })) 
+    Fun ( "_,0691_" ) |-> 'fc(((((#symFunClauses(5721) { Con ( "zero" ) }) { 
+      DotP ( #symVariable(5717) ) }) (Con ( "<>" ) { #symVariable(5717) })) 
       Var ( "y" )) = ((Fun ( "<_>" ) { #symVariable(5717) }) Var ( "y" )),, ((
-      ((#symFunClauses(5885) { (Con ( "suc" ) 'DotP(#symExpr(5749))) }) { (
-      DotP ( #symVariable(5881) )) }) ((((Con ( "_,_" ) { #symVariable(5881) }
-      ) { #symExpr(5749) }) Var ( "x" )) Var ( "xs" ))) Var ( "y" )) = ((((Con
-       ( "_,_" ) { #symVariable(5881) }) { (Con ( "suc" ) #symExpr(5749)) }) 
+      ((#symFunClauses(5885) { (Con ( "suc" ) DotP ( #symExpr(5749) )) }) { 
+      DotP ( #symVariable(5881) ) }) ((((Con ( "_,_" ) { #symVariable(5881) })
+       { #symExpr(5749) }) Var ( "x" )) Var ( "xs" ))) Var ( "y" )) = ((((Con 
+      ( "_,_" ) { #symVariable(5881) }) { (Con ( "suc" ) #symExpr(5749)) }) 
       Var ( "x" )) ((((Fun ( "_,0691_" ) { #symExpr(5749) }) { #symVariable(
       5881) }) Var ( "xs" )) Var ( "y" ))))
     Fun ( "_8859_" ) |-> 'fc(((((((#symFunClauses(3305) { #symExpr(3194) }) { 
-      Con ( "zero" ) }) { (DotP ( #symExpr(3229) )) }) { (DotP ( #symVariable(
-      3298) )) }) (Con ( "<>" ) { ( #symVariable(3304) : #symExpr(3229) ) -> 
+      Con ( "zero" ) }) { DotP ( #symExpr(3229) ) }) { DotP ( #symVariable(
+      3298) ) }) (Con ( "<>" ) { ( #symVariable(3304) : #symExpr(3229) ) -> 
       #symVariable(3298) })) #symExpr(3285)) = (Con ( "<>" ) { #symVariable(
       3298) }),, ((((((#symFunClauses(3650) { #symExpr(3355) }) { (Con ( "suc"
-       ) 'DotP(#symExpr(3501))) }) { (DotP ( #symExpr(3308) )) }) { (DotP ( 
-      #symVariable(3643) )) }) ((((Con ( "_,_" ) { ( #symVariable(3649) : 
-      #symExpr(3308) ) -> #symVariable(3643) }) { (DotP ( #symExpr(3501) )) })
-       Var ( "f" )) Var ( "fs" ))) ((((Con ( "_,_" ) { #symExpr(3308) }) { 
+       ) DotP ( #symExpr(3501) )) }) { DotP ( #symExpr(3308) ) }) { DotP ( 
+      #symVariable(3643) ) }) ((((Con ( "_,_" ) { ( #symVariable(3649) : 
+      #symExpr(3308) ) -> #symVariable(3643) }) { DotP ( #symExpr(3501) ) }) 
+      Var ( "f" )) Var ( "fs" ))) ((((Con ( "_,_" ) { #symExpr(3308) }) { 
       #symExpr(3501) }) Var ( "x" )) Var ( "xs" ))) = ((((Con ( "_,_" ) { 
       #symVariable(3643) }) { #symExpr(3501) }) (Var ( "f" ) Var ( "x" ))) (((
       (((Fun ( "_8859_" ) { #symExpr(3570) }) { #symExpr(3501) }) { #symExpr(
       3308) }) { #symVariable(3643) }) Var ( "fs" )) Var ( "xs" ))))
     Fun ( "_[_]8788_" ) |-> 'fc(((((((#symFunClauses(6451) { #symExpr(6276) })
-       { (Con ( "suc" ) 'DotP(#symExpr(6403))) }) { (DotP ( #symVariable(6445)
-       )) }) ((((Con ( "_,_" ) { #symVariable(6445) }) { (DotP ( #symExpr(6403
-      ) )) }) Var ( "x" )) Var ( "xs" ))) (Con ( "fzero" ) { #symExpr(6403) })
-      ) Var ( "y" )) = ((((Con ( "_,_" ) { #symVariable(6445) }) { #symExpr(
-      6403) }) Var ( "y" )) Var ( "xs" )),, ((((((#symFunClauses(6698) { 
-      #symExpr(6499) }) { (Con ( "suc" ) 'DotP(#symExpr(6590))) }) { (DotP ( 
-      #symVariable(6692) )) }) ((((Con ( "_,_" ) { #symVariable(6692) }) { (
-      DotP ( #symExpr(6590) )) }) Var ( "x" )) Var ( "xs" ))) ((Con ( "fsuc" )
-       { #symExpr(6590) }) Var ( "i" ))) Var ( "y" )) = ((((Con ( "_,_" ) { 
+       { (Con ( "suc" ) DotP ( #symExpr(6403) )) }) { DotP ( #symVariable(6445
+      ) ) }) ((((Con ( "_,_" ) { #symVariable(6445) }) { DotP ( #symExpr(6403)
+       ) }) Var ( "x" )) Var ( "xs" ))) (Con ( "fzero" ) { #symExpr(6403) })) 
+      Var ( "y" )) = ((((Con ( "_,_" ) { #symVariable(6445) }) { #symExpr(6403
+      ) }) Var ( "y" )) Var ( "xs" )),, ((((((#symFunClauses(6698) { #symExpr(
+      6499) }) { (Con ( "suc" ) DotP ( #symExpr(6590) )) }) { DotP ( 
+      #symVariable(6692) ) }) ((((Con ( "_,_" ) { #symVariable(6692) }) { DotP
+       ( #symExpr(6590) ) }) Var ( "x" )) Var ( "xs" ))) ((Con ( "fsuc" ) { 
+      #symExpr(6590) }) Var ( "i" ))) Var ( "y" )) = ((((Con ( "_,_" ) { 
       #symVariable(6692) }) { #symExpr(6590) }) Var ( "x" )) ((((((Fun ( 
       "_[_]8788_" ) { #symExpr(6644) }) { #symExpr(6590) }) { #symVariable(
       6692) }) Var ( "xs" )) Var ( "i" )) Var ( "y" ))))
     Fun ( "foldl" ) |-> 'fc(((((((((#symFunClauses(440) { #symExpr(294) }) { 
-      #symExpr(314) }) { (DotP ( #symExpr(420) )) }) Var ( "b" )) { Con ( 
-      "zero" ) }) Var ( "_FAILER_" )) Var ( "n" )) (Con ( "<>" ) { #symExpr(
-      420) })) = Var ( "n" ),, ((((((((#symFunClauses(788) { #symExpr(470) }) 
-      { #symExpr(490) }) { (DotP ( #symExpr(444) )) }) Var ( "b" )) { (Con ( 
-      "suc" ) 'DotP(#symExpr(577))) }) Var ( "_FAILER_" )) Var ( "n" )) ((((
-      Con ( "_,_" ) { #symExpr(444) }) { #symExpr(577) }) Var ( "x" )) Var ( 
-      "xs" ))) = ((((((((Fun ( "foldl" ) { #symExpr(626) }) { #symExpr(654) })
-       { #symExpr(444) }) \ ( Var ( "n" ) : Data ( "8469" ) ) -> (Var ( "b" ) 
-      (Con ( "suc" ) Var ( "n" )))) { #symExpr(577) }) Var ( "_FAILER_" )) (((
+      #symExpr(314) }) { DotP ( #symExpr(420) ) }) Var ( "b" )) { Con ( "zero"
+       ) }) Var ( "_FAILER_" )) Var ( "n" )) (Con ( "<>" ) { #symExpr(420) }))
+       = Var ( "n" ),, ((((((((#symFunClauses(788) { #symExpr(470) }) { 
+      #symExpr(490) }) { DotP ( #symExpr(444) ) }) Var ( "b" )) { (Con ( "suc"
+       ) DotP ( #symExpr(577) )) }) Var ( "_FAILER_" )) Var ( "n" )) ((((Con (
+       "_,_" ) { #symExpr(444) }) { #symExpr(577) }) Var ( "x" )) Var ( "xs" )
+      )) = ((((((((Fun ( "foldl" ) { #symExpr(626) }) { #symExpr(654) }) { 
+      #symExpr(444) }) \ ( Var ( "n" ) : Data ( "8469" ) ) -> (Var ( "b" ) (
+      Con ( "suc" ) Var ( "n" )))) { #symExpr(577) }) Var ( "_FAILER_" )) (((
       Var ( "_FAILER_" ) { Con ( "zero" ) }) Var ( "n" )) Var ( "x" ))) Var ( 
       "xs" )))
     Fun ( "foldr" ) |-> 'fc(((((((((#symFunClauses(4804) { #symExpr(4658) }) {
-       #symExpr(4678) }) { (DotP ( #symExpr(4784) )) }) Var ( "b" )) { Con ( 
+       #symExpr(4678) }) { DotP ( #symExpr(4784) ) }) Var ( "b" )) { Con ( 
       "zero" ) }) Var ( "_8853_" )) Var ( "n" )) (Con ( "<>" ) { #symExpr(4784
       ) })) = Var ( "n" ),, ((((((((#symFunClauses(5108) { #symExpr(4834) }) {
-       #symExpr(4854) }) { (DotP ( #symExpr(4808) )) }) Var ( "b" )) { (Con ( 
-      "suc" ) 'DotP(#symExpr(4941))) }) Var ( "_8853_" )) Var ( "n" )) ((((Con
-       ( "_,_" ) { #symExpr(4808) }) { #symExpr(4941) }) Var ( "x" )) Var ( 
-      "xs" ))) = (((Var ( "_8853_" ) { #symExpr(4941) }) Var ( "x" )) ((((((((
-      Fun ( "foldr" ) { #symExpr(4994) }) { #symExpr(5015) }) { #symExpr(4808)
-       }) Var ( "b" )) { #symExpr(4941) }) Var ( "_8853_" )) Var ( "n" )) Var 
-      ( "xs" ))))
-    Fun ( "foldr8321" ) |-> 'fc(((((#symFunClauses(5226) { (DotP ( 
-      #symVariable(5220) )) }) { Con ( "zero" ) }) Var ( "_8853_" )) ((((Con (
-       "_,_" ) { (DotP ( #symVariable(5220) )) }) { Con ( "zero" ) }) Var ( 
-      "x" )) (Con ( "<>" ) { #symVariable(5220) }))) = Var ( "x" ),, ((((
-      #symFunClauses(5418) { (DotP ( #symVariable(5412) )) }) { (Con ( "suc" )
-       'DotP(#symExpr(5313))) }) Var ( "_8853_" )) ((((Con ( "_,_" ) { (DotP (
-       #symVariable(5412) )) }) { (Con ( "suc" ) 'DotP(#symExpr(5313))) }) Var
-       ( "x" )) ((((Con ( "_,_" ) { #symVariable(5412) }) { #symExpr(5313) }) 
-      Var ( "y" )) Var ( "ys" )))) = ((Var ( "_8853_" ) Var ( "x" )) ((((Fun (
-       "foldr8321" ) { #symVariable(5412) }) { #symExpr(5313) }) Var ( 
-      "_8853_" )) ((((Con ( "_,_" ) { #symVariable(5412) }) { #symExpr(5313) }
-      ) Var ( "y" )) Var ( "ys" )))))
-    Fun ( "head" ) |-> 'fc((((#symFunClauses(1501) { (DotP ( #symExpr(1433) ))
-       }) { (DotP ( #symVariable(1498) )) }) ((((Con ( "_,_" ) { #symVariable(
-      1498) }) { #symExpr(1433) }) Var ( "x" )) Var ( "xs" ))) = Var ( "x" ))
+       #symExpr(4854) }) { DotP ( #symExpr(4808) ) }) Var ( "b" )) { (Con ( 
+      "suc" ) DotP ( #symExpr(4941) )) }) Var ( "_8853_" )) Var ( "n" )) ((((
+      Con ( "_,_" ) { #symExpr(4808) }) { #symExpr(4941) }) Var ( "x" )) Var (
+       "xs" ))) = (((Var ( "_8853_" ) { #symExpr(4941) }) Var ( "x" )) (((((((
+      (Fun ( "foldr" ) { #symExpr(4994) }) { #symExpr(5015) }) { #symExpr(4808
+      ) }) Var ( "b" )) { #symExpr(4941) }) Var ( "_8853_" )) Var ( "n" )) Var
+       ( "xs" ))))
+    Fun ( "foldr8321" ) |-> 'fc(((((#symFunClauses(5226) { DotP ( #symVariable
+      (5220) ) }) { Con ( "zero" ) }) Var ( "_8853_" )) ((((Con ( "_,_" ) { 
+      DotP ( #symVariable(5220) ) }) { Con ( "zero" ) }) Var ( "x" )) (Con ( 
+      "<>" ) { #symVariable(5220) }))) = Var ( "x" ),, ((((#symFunClauses(5418
+      ) { DotP ( #symVariable(5412) ) }) { (Con ( "suc" ) DotP ( #symExpr(5313
+      ) )) }) Var ( "_8853_" )) ((((Con ( "_,_" ) { DotP ( #symVariable(5412) 
+      ) }) { (Con ( "suc" ) DotP ( #symExpr(5313) )) }) Var ( "x" )) ((((Con (
+       "_,_" ) { #symVariable(5412) }) { #symExpr(5313) }) Var ( "y" )) Var ( 
+      "ys" )))) = ((Var ( "_8853_" ) Var ( "x" )) ((((Fun ( "foldr8321" ) { 
+      #symVariable(5412) }) { #symExpr(5313) }) Var ( "_8853_" )) ((((Con ( 
+      "_,_" ) { #symVariable(5412) }) { #symExpr(5313) }) Var ( "y" )) Var ( 
+      "ys" )))))
+    Fun ( "head" ) |-> 'fc((((#symFunClauses(1501) { DotP ( #symExpr(1433) ) }
+      ) { DotP ( #symVariable(1498) ) }) ((((Con ( "_,_" ) { #symVariable(1498
+      ) }) { #symExpr(1433) }) Var ( "x" )) Var ( "xs" ))) = Var ( "x" ))
     Fun ( "lookup" ) |-> 'fc((((((#symFunClauses(6021) { #symExpr(5922) }) { (
-      Con ( "suc" ) 'DotP(#symExpr(6002))) }) { (DotP ( #symVariable(6016) )) 
-      }) (Con ( "fzero" ) { (DotP ( #symExpr(6002) )) })) ((((Con ( "_,_" ) { 
+      Con ( "suc" ) DotP ( #symExpr(6002) )) }) { DotP ( #symVariable(6016) ) 
+      }) (Con ( "fzero" ) { DotP ( #symExpr(6002) ) })) ((((Con ( "_,_" ) { 
       #symVariable(6016) }) { #symExpr(6002) }) Var ( "x" )) Var ( "xs" ))) = 
       Var ( "x" ),, (((((#symFunClauses(6197) { #symExpr(6047) }) { (Con ( 
-      "suc" ) 'DotP(#symExpr(6128))) }) { (DotP ( #symVariable(6192) )) }) ((
-      Con ( "fsuc" ) { (DotP ( #symExpr(6128) )) }) Var ( "i" ))) ((((Con ( 
+      "suc" ) DotP ( #symExpr(6128) )) }) { DotP ( #symVariable(6192) ) }) ((
+      Con ( "fsuc" ) { DotP ( #symExpr(6128) ) }) Var ( "i" ))) ((((Con ( 
       "_,_" ) { #symVariable(6192) }) { #symExpr(6128) }) Var ( "x" )) Var ( 
       "xs" ))) = (((((Fun ( "lookup" ) { #symExpr(6152) }) { #symExpr(6128) })
        { #symVariable(6192) }) Var ( "i" )) Var ( "xs" )))
@@ -331,18 +328,18 @@
       #symVariable(3783) }) Var ( "x" )) = ((((Con ( "_,_" ) { #symVariable(
       3783) }) { Var ( "n" ) }) Var ( "x" )) (((Fun ( "replicate" ) { Var ( 
       "n" ) }) { #symVariable(3783) }) Var ( "x" ))))
-    Fun ( "tail" ) |-> 'fc((((#symFunClauses(1621) { (DotP ( #symVariable(1619
-      ) )) }) { (DotP ( #symVariable(1618) )) }) ((((Con ( "_,_" ) { 
-      #symVariable(1618) }) { #symVariable(1619) }) Var ( "x" )) Var ( "xs" ))
-      ) = Var ( "xs" ))
-    Fun ( "toList" ) |-> 'fc((((#symFunClauses(5490) { Con ( "zero" ) }) { (
-      DotP ( #symVariable(5487) )) }) (Con ( "<>" ) { #symVariable(5487) })) =
-       (Con ( "[]" ) { #symVariable(5487) }),, (((#symFunClauses(5626) { (Con 
-      ( "suc" ) 'DotP(#symExpr(5516))) }) { (DotP ( #symVariable(5623) )) }) (
-      (((Con ( "_,_" ) { #symVariable(5623) }) { #symExpr(5516) }) Var ( "x" )
-      ) Var ( "xs" ))) = (((Con ( "_8759_" ) { #symVariable(5623) }) Var ( "x"
-       )) (((Fun ( "toList" ) { #symExpr(5516) }) { #symVariable(5623) }) Var 
-      ( "xs" ))))
+    Fun ( "tail" ) |-> 'fc((((#symFunClauses(1621) { DotP ( #symVariable(1619)
+       ) }) { DotP ( #symVariable(1618) ) }) ((((Con ( "_,_" ) { #symVariable(
+      1618) }) { #symVariable(1619) }) Var ( "x" )) Var ( "xs" ))) = Var ( 
+      "xs" ))
+    Fun ( "toList" ) |-> 'fc((((#symFunClauses(5490) { Con ( "zero" ) }) { 
+      DotP ( #symVariable(5487) ) }) (Con ( "<>" ) { #symVariable(5487) })) = 
+      (Con ( "[]" ) { #symVariable(5487) }),, (((#symFunClauses(5626) { (Con (
+       "suc" ) DotP ( #symExpr(5516) )) }) { DotP ( #symVariable(5623) ) }) ((
+      ((Con ( "_,_" ) { #symVariable(5623) }) { #symExpr(5516) }) Var ( "x" ))
+       Var ( "xs" ))) = (((Con ( "_8759_" ) { #symVariable(5623) }) Var ( "x" 
+      )) (((Fun ( "toList" ) { #symExpr(5516) }) { #symVariable(5623) }) Var (
+       "xs" ))))
     Fun ( "zipWith" ) |-> 'fc((((((((#symFunClauses(4578) { #symVariable(4570)
        }) { #symExpr(4109) }) { #symExpr(4129) }) { #symVariable(4569) }) Var 
       ( "_8853_" )) Var ( "xs" )) Var ( "ys" )) = ((((((Fun ( "_8859_" ) { 

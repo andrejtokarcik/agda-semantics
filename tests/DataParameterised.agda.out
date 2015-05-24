@@ -1,9 +1,6 @@
 <k>
-    whnf ( Fun ( "t1" ) ) ~> nf ( HOLE )
+    .K
 </k>
-<dbg>
-    0
-</dbg>
 <mgu>
     subst(.KList)
 </mgu>
@@ -45,8 +42,8 @@
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>
 <fun>
-    Fun ( "null" ) |-> 'fc(((#symFunClauses(56) { (DotP ( #symExpr(46) )) }) (
+    Fun ( "null" ) |-> 'fc(((#symFunClauses(56) { DotP ( #symExpr(46) ) }) (
       Con ( "nil" ) { #symExpr(46) })) = Con ( "true" ),, ((#symFunClauses(104
-      ) { (DotP ( #symExpr(63) )) }) (((Con ( "cons" ) { #symExpr(63) }) 
+      ) { DotP ( #symExpr(63) ) }) (((Con ( "cons" ) { #symExpr(63) }) 
       #symExpr(62)) #symExpr(75))) = Con ( "false" ))
 </fun>

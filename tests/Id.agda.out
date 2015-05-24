@@ -5,11 +5,8 @@
       34) } , { Set ( 1 ) } )) ~> whnfType ( HOLE ) ~> (HOLE Fun ( "id" )) ~> 
       whnfType ( HOLE ) ~> (HOLE { %meta }) ~> whnfType ( HOLE ) ~> prepared!
        ~> t ( Fun ( "idd" ) , #symExpr(20) ) = HOLE ~> loadCtx ~> .List{";"}
-       ~> .List{";"} ~> .List{""} ~> nf ( Fun ( "t1" ) )
+       ~> .List{";"} ~> .List{""}
 </k>
-<dbg>
-    0
-</dbg>
 <mgu>
     subst(.KList)
 </mgu>

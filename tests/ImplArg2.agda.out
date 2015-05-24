@@ -8,8 +8,11 @@
     .List
 </ctx-stack>
 <sig>
-    Fun ( "Cons" ) |-> Set ( 1 )
-    Fun ( "cons" ) |-> Fun ( "Cons" )
+    Fun ( "cons" ) |-> { #symVariable(64) : Set ( 0 ) } -> ( #symVariable(63) 
+      : #symVariable(64) ) -> { #symVariable(62) : Data ( "Nat" ) } -> ( 
+      #symVariable(61) : ((Data ( "Vec" ) #symVariable(64)) #symVariable(62)) 
+      ) -> ((Data ( "Vec" ) #symVariable(64)) (Con ( "suc" ) #symVariable(62))
+      )
     Data ( "Nat" ) |-> Set ( 0 )
     Data ( "Vec" ) |-> ( #symVariable(7) : Set ( 0 ) ) -> ( #symVariable(6) : 
       Data ( "Nat" ) ) -> Set ( 0 )
@@ -30,7 +33,6 @@
     .Map
 </meta>
 <ncat>
-    Name ( "Cons" ) |-> Fun ( "Cons" )
     Name ( "Nat" ) |-> Data ( "Nat" )
     Name ( "Vec" ) |-> Data ( "Vec" )
     Name ( "cons" ) |-> Fun ( "cons" )
@@ -40,12 +42,7 @@
     Name ( "zero" ) |-> Con ( "zero" )
 </ncat>
 <fun>
-    Fun ( "Cons" ) |-> { #symVariable(67) : Set ( 0 ) } -> ( #symVariable(66) 
-      : #symVariable(67) ) -> { #symVariable(65) : Data ( "Nat" ) } -> ( 
-      #symVariable(64) : ((Data ( "Vec" ) #symVariable(67)) #symVariable(65)) 
-      ) -> ((Data ( "Vec" ) #symVariable(67)) (Con ( "suc" ) #symVariable(65))
-      )
-    Fun ( "cons" ) |-> 'fc((((#symFunClauses(156) { #symVariable(152) }) Var (
-       "a" )) { #symVariable(154) }) = (((Con ( "vcons" ) { #symVariable(152) 
-      }) { #symVariable(154) }) Var ( "a" )))
+    Fun ( "cons" ) |-> 'fc((((#symFunClauses(129) { #symVariable(125) }) Var (
+       "a" )) { #symVariable(127) }) = (((Con ( "vcons" ) { #symVariable(125) 
+      }) { #symVariable(127) }) Var ( "a" )))
 </fun>
