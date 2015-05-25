@@ -1,4 +1,4 @@
-module Convertibility where
+module SetClash where
 
 postulate x : Set
 
