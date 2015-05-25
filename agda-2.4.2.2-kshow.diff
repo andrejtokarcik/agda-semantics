@@ -1,0 +1,493 @@
+diff -Naur agda-2.4.2.2/Agda.cabal agda-2.4.2.2-kshow/Agda.cabal
+--- agda-2.4.2.2/Agda.cabal	2014-11-26 03:46:21.000000000 +0100
++++ agda-2.4.2.2-kshow/Agda.cabal	2015-05-23 23:44:08.295665104 +0200
+@@ -134,6 +134,7 @@
+     , happy >= 1.19.3 && < 2
+ 
+   exposed-modules:  Agda.Main
++                    Agda.KShow
+                     Agda.ImpossibleTest
+                     Agda.Interaction.BasicOps
+                     Agda.Interaction.EmacsTop
+@@ -196,6 +197,7 @@
+                     Agda.Syntax.Concrete.Operators.Parser
+                     Agda.Syntax.Concrete.Operators
+                     Agda.Syntax.Concrete.Pretty
++                    Agda.Syntax.Concrete.KShow
+                     Agda.Syntax.Concrete
+                     Agda.Syntax.Fixity
+                     Agda.Syntax.Info
+@@ -438,7 +440,7 @@
+ 
+   ghc-prof-options: -auto-all
+ 
+-executable agda
++executable agda-kshow
+   hs-source-dirs: src/main
+   main-is:        Main.hs
+   build-depends:
+diff -Naur agda-2.4.2.2/src/full/Agda/Interaction/Imports.hs agda-2.4.2.2-kshow/src/full/Agda/Interaction/Imports.hs
+--- agda-2.4.2.2/src/full/Agda/Interaction/Imports.hs	2014-11-26 03:46:21.000000000 +0100
++++ agda-2.4.2.2-kshow/src/full/Agda/Interaction/Imports.hs	2015-05-22 22:39:45.018375448 +0200
+@@ -25,9 +25,14 @@
+ 
+ import System.Directory (doesFileExist, getModificationTime, removeFile)
+ import System.FilePath ((</>))
++import System.Exit (exitSuccess)
+ 
+ import qualified Text.PrettyPrint.Boxes as Boxes
+ 
++import Agda.KShow
++import Agda.Syntax.Concrete.KShow
++import Agda.Syntax.Translation.AbstractToConcrete (abstractToConcrete_)
++
+ import Paths_Agda (getDataFileName)
+ 
+ import qualified Agda.Syntax.Abstract as A
+@@ -547,6 +552,11 @@
+ 
+     let ds = topLevelDecls topLevel
+ 
++    -- Print the scope analysis result as a K AST for KAgda.
++    when (not $ "Agda" `elem` C.moduleNameParts mname) $ do  -- don't exit on Agda.Primitive & co.
++      mapM abstractToConcrete_ ds >>= \x -> liftIO $ putStrLn (kshow x)
++      liftIO exitSuccess
++
+     -- Highlighting from scope checker.
+     billTop Bench.Highlighting $ do
+       ifTopLevelAndHighlightingLevelIs NonInteractive $ do
+diff -Naur agda-2.4.2.2/src/full/Agda/KShow.hs agda-2.4.2.2-kshow/src/full/Agda/KShow.hs
+--- agda-2.4.2.2/src/full/Agda/KShow.hs	1970-01-01 01:00:00.000000000 +0100
++++ agda-2.4.2.2-kshow/src/full/Agda/KShow.hs	2015-05-23 02:12:25.264348818 +0200
+@@ -0,0 +1,56 @@
++{-# LANGUAGE FlexibleInstances #-}
++{-# LANGUAGE OverlappingInstances #-}
++{-# LANGUAGE TemplateHaskell #-}
++
++{-| AST generator for KAgda.
++-}
++module Agda.KShow (KShow (..), toKAST, kshowList, kshowNotSupported) where
++
++import Data.List
++import Data.Char (toLower)
++import Language.Haskell.TH
++
++class KShow a where
++  kshow :: a -> String
++
++instance KShow Int where
++    kshow x = toKAST ("# " ++ show x) []
++
++instance KShow Integer where
++    kshow x = toKAST ("# " ++ show x) []
++
++instance KShow Double where
++    kshow x = toKAST ("# " ++ show x) []
++
++instance KShow Char where
++    kshow x = toKAST ("# " ++ show x) []
++
++instance KShow String where
++    kshow x = toKAST ("# " ++ show x) []
++
++kshowList :: (KShow a) => String -> [a] -> String
++kshowList = ksl
++        where ksl sep [] = "'.List`{\"" ++ bktick sep ++ "\"`}(.KList)"
++              ksl sep (x:xs) | (not . null . kshow) x = "'Cons(" ++ kshow x ++ ",," ++ ksl sep xs ++ ")"
++                             | (null . kshow) x       = ksl sep xs
++
++              bktick [] = ""
++              bktick (c:s) | c `elem` [','] = '`' : c : bktick s
++                           | otherwise      = c : bktick s
++
++instance (KShow a) => KShow [a] where
++    kshow = kshowList ""
++
++toKAST :: String -> [String] -> String
++toKAST op args = prefix op ++ ksargs args
++    where
++      prefix :: String -> String
++      prefix s@(c:_) | c `elem` ['\'', '#'] = s
++      prefix s = '\'' : s
++
++      ksargs :: [String] -> String
++      ksargs [] = "(.KList)"
++      ksargs as = "(" ++ intercalate ",," as ++ ")"
++
++kshowNotSupported :: String -> a
++kshowNotSupported = error . ("AST generator for KAgda does not support: " ++)
+diff -Naur agda-2.4.2.2/src/full/Agda/Syntax/Concrete/KShow.hs agda-2.4.2.2-kshow/src/full/Agda/Syntax/Concrete/KShow.hs
+--- agda-2.4.2.2/src/full/Agda/Syntax/Concrete/KShow.hs	1970-01-01 01:00:00.000000000 +0100
++++ agda-2.4.2.2-kshow/src/full/Agda/Syntax/Concrete/KShow.hs	2015-05-22 23:36:36.080403456 +0200
+@@ -0,0 +1,204 @@
++{-# LANGUAGE FlexibleInstances #-}
++{-# LANGUAGE OverlappingInstances #-}
++{-# LANGUAGE TemplateHaskell #-}
++
++{-| KAgda AST generator for the concrete syntax.
++-}
++module Agda.Syntax.Concrete.KShow where
++
++import Data.List (intercalate)
++
++import Agda.KShow
++
++import qualified Agda.Syntax.Common as Common
++import Agda.Syntax.Common hiding (Arg, Dom, NamedArg, ArgInfo)
++import Agda.Syntax.Concrete
++import Agda.Syntax.Concrete.Name (kshowVar, kshowVarQ, kshowName, kshowNameQ)
++import Agda.Syntax.Concrete.Pretty (Tel(..), smashTel)
++
++instance KShow (OpApp Expr) where
++    kshow (Ordinary e) = kshow e
++    kshow (SyntaxBindingLambda r bs e) = kshow (Lam r bs e)
++
++instance KShow Expr where
++    kshow e =
++        case e of
++            Ident x          -> kshowNotSupported "Ident"
++            IdentVar x       -> kshowVarQ x
++            IdentName x      -> kshowNameQ x
++            Lit l            -> kshowNotSupported "Lit"
++            QuestionMark _ n -> kshowNotSupported "QuestionMark"
++            Underscore _ Nothing -> toKAST "'Underscore" []
++            Underscore _ (Just _)   -> kshowNotSupported "Underscore"
++            App _ _ _        ->
++                case appView e of
++                    AppView e1 args     ->
++                        toKAST "'App" [kshow e1, kshow args]
++            RawApp _ es   -> kshowNotSupported "RawApp"
++            OpApp _ q es -> toKAST "'OpApp" [kshowNameQ q, kshow es]
++            WithApp _ e es -> kshowNotSupported "WithApp"
++            HiddenArg _ e -> kshowNotSupported "HiddenArg"
++            InstanceArg _ e -> kshowNotSupported "InstanceArg"
++            Lam _ bs e -> toKAST "'Lam"
++                    [ kshow bs
++                    , kshow e
++                    ]
++            AbsurdLam _ _ -> kshowNotSupported "AbsurdLam"
++            ExtendedLam _ pes -> kshowNotSupported "ExtendedLam"
++            Fun _ e1 e2 -> toKAST "'Fun" [kshow e1, kshow e2]
++            Pi tel e -> toKAST "'Pi"
++                    [ kshow (Tel $ smashTel tel)
++                    , kshow e
++                    ]
++            Set r   -> toKAST "'Set" []
++            Prop _  -> kshowNotSupported "Prop"
++            SetN _ n    -> toKAST "'SetN" [kshow n]
++            Let _ ds e  -> toKAST "'Let" [kshow ds, kshow e]
++            Paren _ e -> kshow e
++            As _ x e  -> kshowNotSupported "As"
++            Dot _ e   -> kshowNotSupported "Dot"
++            Absurd _  -> kshowNotSupported "Absurd"
++            Rec _ xs  -> kshowNotSupported "Rec"
++            RecUpdate _ e xs -> kshowNotSupported "RecUpdate"
++            ETel _  -> kshowNotSupported "ETel"
++            QuoteGoal _ x e -> kshowNotSupported "QuoteGoal"
++            QuoteContext _ _ _ -> kshowNotSupported "QuoteContext"
++            Quote _ -> kshowNotSupported "Quote"
++            QuoteTerm _ -> kshowNotSupported "QuoteTerm"
++            Unquote _ -> kshowNotSupported "Unquote"
++            Tactic _ t es -> kshowNotSupported "Tactic"
++            DontCare e -> kshowNotSupported "DontCare"
++            Equal _ a b -> kshowNotSupported "Equal"
++
++instance KShow BoundName where
++    kshow BName{ boundName = x, boundLabel = l }
++        | x == l    = kshowVar x
++        | otherwise = kshowNotSupported "BName [otherwise]"
++
++instance KShow Hiding where
++    kshow Hidden = toKAST "'Hidden" []
++    kshow NotHidden = toKAST "'NotHidden" []
++    kshow Instance = kshowNotSupported "Instance"
++
++instance KShow Relevance where
++    kshow Relevant = toKAST "'Relevant" []
++    kshow _ = kshowNotSupported "a constructor of Relevance"
++
++instance KShow LamBinding where
++    kshow (DomainFree i x) = toKAST "'LamBind" [kshow $ argInfoRelevance i, kshow $ getHiding i, kshow x]
++    kshow (DomainFull b)   = kshow b
++
++instance KShow TypedBindings where
++    kshow (TypedBindings _ a) =
++        toKAST "'TBind" [kshow $ argInfoRelevance i, kshow $ getHiding i, ks $ unArg a]
++          where i = argInfo a
++                ks (TBind _ xs e) = intercalate ",," [kshow xs, kshow e]
++                ks (TLet _ ds) = kshowNotSupported "TLet"
++
++instance KShow Tel where
++    kshow (Tel tel) = kshow tel
++
++instance KShow RHS where
++    kshow (RHS e) = kshow e
++    kshow AbsurdRHS = toKAST "'AbsurdRHS" []
++
++instance KShow WhereClause where
++    kshow  NoWhere      = kshow ([] :: [Declaration])
++    kshow (AnyWhere ds) = kshow ds
++
++instance KShow LHS where
++    kshow (LHS p _ _ _) = kshow p
++    kshow (Ellipsis _ _ _ _) = kshowNotSupported "Ellipsis"
++
++instance KShow [Declaration] where
++    kshow = kshowList ";"
++
++instance KShow Declaration where
++    kshow d =
++        case d of
++            TypeSig i x e -> toKAST "'TypeSig"
++                    [ kshowName x
++                    , kshow e
++                    ]
++            Field x (Common.Arg i e) -> kshowNotSupported "Field"
++            FunClause lhs rhs wh -> toKAST "'FunClause"
++                    [ kshow lhs
++                    , kshow rhs
++                    , kshow wh
++                    ]
++            Data _ ind x tel (Just e) cs -> toKAST "'Data"
++                            [ -- kshow ind
++                              kshowName x
++                            , kshow tel
++                            , kshow e
++                            , kshow cs
++                            ]
++            DataSig _ ind x tel e -> toKAST "'DataSig"
++                            [ -- kshow ind
++                              kshowName x
++                            , kshow tel
++                            , kshow e
++                            ]
++            Data _ ind x tel Nothing cs -> toKAST "'DataCons"
++                            [ --kshow ind
++                              kshowName x
++                            , kshow tel
++                            , kshow cs
++                            ]
++            RecordSig _ x tel e -> kshowNotSupported "RecordSig"
++            Record _ x ind con tel Nothing cs -> toKAST "'Record"
++                            [ --kshow ind
++                              kshowName x
++                              --, kshowName con
++                            , kshow tel
++                            , kshow cs
++                            ]
++            Record _ x ind con tel (Just _) cs -> kshowNotSupported "Record [Just]"
++            Infix f xs      -> ""     -- XXX
++            Syntax n xs     -> ""     -- XXX
++            PatternSyn _ n as p -> kshowNotSupported "PatternSyn"
++            Mutual _ ds     -> kshowNotSupported "Mutual"
++            Abstract _ ds   -> kshowNotSupported "Abstract"
++            Private _ ds    -> kshowNotSupported "Private"
++            InstanceB _ ds  -> kshowNotSupported "InstanceB"
++            Postulate _ ds  -> toKAST "'Postulate" [kshow ds]
++            Primitive _ ds  -> kshowNotSupported "Primitive"
++            Module r x tel ds -> toKAST "'Module"
++                     [ kshowNameQ x
++                     , kshow tel
++                     , kshow ds
++                     ]
++            ModuleMacro _ x (SectionApp _ [] e) DoOpen i | isNoName x -> kshowNotSupported "ModuleMacro"
++            ModuleMacro _ x (SectionApp _ tel e) open i -> kshowNotSupported "ModuleMacro"
++            ModuleMacro _ x (RecordModuleIFS _ rec) open i -> kshowNotSupported "ModuleMacro"
++            Open _ x i      -> kshowNotSupported "Open"
++            Import _ x rn open i -> kshowNotSupported "Import"
++            UnquoteDecl _ x t -> kshowNotSupported "UnquoteDecl"
++            Pragma pr       -> kshowNotSupported "Pragma"
++
++instance KShow e => KShow (Arg e) where
++    kshow a = toKAST "'Arg" [kshow $ getHiding a, kshow $ unArg a]
++
++instance KShow e => KShow (Named_ e) where
++    kshow (Named Nothing e) = kshow e
++    kshow (Named (Just s) e) = kshowNotSupported "Named_ [Just]"
++
++instance KShow Pattern where
++    kshow p =
++        case p of
++            IdentP x      -> kshowNotSupported "IdentP"
++            IdentVarP x   -> kshowVarQ x
++            IdentNameP x  -> kshowNameQ x
++            AppP p1 p2    -> toKAST "'AppP" [kshow p1, kshow p2]
++            RawAppP _ ps  -> kshowNotSupported "RawAppP"
++            OpAppP _ q ps -> toKAST "'OpAppP" [kshowNameQ q, kshow ps]
++            HiddenP _ p   -> kshowNotSupported "HiddenP"
++            InstanceP _ p -> kshowNotSupported "InstanceP"
++            ParenP _ p    -> kshow p
++            WildP _       -> toKAST "'WildP" []
++            AsP _ x p     -> kshowNotSupported "AsP"
++            DotP _ p      -> toKAST "'DotP" [kshow p]
++            AbsurdP _     -> toKAST "'AbsurdP" []
++            LitP l        -> kshowNotSupported "LitP"
++            QuoteP _      -> kshowNotSupported "QuoteP"
++
+diff -Naur agda-2.4.2.2/src/full/Agda/Syntax/Concrete/Name.hs agda-2.4.2.2-kshow/src/full/Agda/Syntax/Concrete/Name.hs
+--- agda-2.4.2.2/src/full/Agda/Syntax/Concrete/Name.hs	2014-11-26 03:46:21.000000000 +0100
++++ agda-2.4.2.2-kshow/src/full/Agda/Syntax/Concrete/Name.hs	2015-05-22 20:48:22.308473655 +0200
+@@ -9,6 +9,8 @@
+ -}
+ module Agda.Syntax.Concrete.Name where
+ 
++import Agda.KShow
++
+ import Control.DeepSeq
+ import Control.Applicative
+ 
+@@ -279,6 +281,24 @@
+ instance Pretty TopLevelModuleName where
+   pretty (TopLevelModuleName ms) = text $ intercalate "." ms
+ 
++
++kshowVar :: Name -> String
++kshowVar x = toKAST "'Var" [kshow x]
++
++kshowVarQ :: QName -> String
++kshowVarQ (QName x) = kshowVar x
++kshowVarQ (Qual m x) = toKAST "'Qualified" [kshow m, kshowVarQ x]
++
++kshowName :: Name -> String
++kshowName x = toKAST "'Name" [kshow x]
++
++kshowNameQ :: QName -> String
++kshowNameQ (QName x) = kshowName x
++kshowNameQ (Qual m x) = toKAST "'Qualified" [kshow m, kshowNameQ x]
++
++instance KShow Name where
++    kshow = kshow . prettyShow
++
+ ------------------------------------------------------------------------
+ -- * QuickCheck instances
+ ------------------------------------------------------------------------
+diff -Naur agda-2.4.2.2/src/full/Agda/Syntax/Concrete/Pretty.hs agda-2.4.2.2-kshow/src/full/Agda/Syntax/Concrete/Pretty.hs
+--- agda-2.4.2.2/src/full/Agda/Syntax/Concrete/Pretty.hs	2014-11-26 03:46:21.000000000 +0100
++++ agda-2.4.2.2-kshow/src/full/Agda/Syntax/Concrete/Pretty.hs	2015-05-22 23:46:19.169619974 +0200
+@@ -112,6 +112,8 @@
+     pretty e =
+         case e of
+             Ident x          -> pretty x
++            IdentVar x       -> pretty x
++            IdentName x      -> pretty x
+             Lit l            -> pretty l
+             QuestionMark _ n -> text "?" <> maybe empty (text . show) n
+             Underscore _ n   -> maybe underscore text n
+@@ -491,6 +493,8 @@
+     pretty p =
+         case p of
+             IdentP x      -> pretty x
++            IdentVarP x   -> pretty x
++            IdentNameP x  -> pretty x
+             AppP p1 p2    -> sep [ pretty p1, nest 2 $ pretty p2 ]
+             RawAppP _ ps  -> fsep $ map pretty ps
+             OpAppP _ q ps -> fsep $ prettyOpApp q ps
+diff -Naur agda-2.4.2.2/src/full/Agda/Syntax/Concrete.hs agda-2.4.2.2-kshow/src/full/Agda/Syntax/Concrete.hs
+--- agda-2.4.2.2/src/full/Agda/Syntax/Concrete.hs	2014-11-26 03:46:21.000000000 +0100
++++ agda-2.4.2.2-kshow/src/full/Agda/Syntax/Concrete.hs	2015-05-22 23:07:00.495866760 +0200
+@@ -96,6 +96,8 @@
+ -- | Concrete expressions. Should represent exactly what the user wrote.
+ data Expr
+   = Ident QName                                -- ^ ex: @x@
++  | IdentVar QName
++  | IdentName QName
+   | Lit Literal                                -- ^ ex: @1@ or @\"foo\"@
+   | QuestionMark !Range (Maybe Nat)            -- ^ ex: @?@ or @{! ... !}@
+   | Underscore !Range (Maybe String)           -- ^ ex: @_@ or @_A_5@
+@@ -136,6 +138,8 @@
+ -- | Concrete patterns. No literals in patterns at the moment.
+ data Pattern
+   = IdentP QName                            -- ^ @c@ or @x@
++  | IdentVarP QName
++  | IdentNameP QName
+   | QuoteP !Range                           -- ^ @quote@
+   | AppP Pattern (NamedArg Pattern)         -- ^ @p p'@ or @p {x = p'}@
+   | RawAppP !Range [Pattern]                -- ^ @p1..pn@ before parsing operators
+@@ -484,6 +488,8 @@
+   getRange e =
+     case e of
+       Ident x            -> getRange x
++      IdentVar x         -> getRange x
++      IdentName x        -> getRange x
+       Lit x              -> getRange x
+       QuestionMark r _   -> r
+       Underscore r _     -> r
+@@ -616,6 +622,8 @@
+ 
+ instance HasRange Pattern where
+   getRange (IdentP x)         = getRange x
++  getRange (IdentVarP x)      = getRange x
++  getRange (IdentNameP x)     = getRange x
+   getRange (AppP p q)         = fuseRange p q
+   getRange (OpAppP r _ _)     = r
+   getRange (RawAppP r _)      = r
+@@ -661,6 +669,8 @@
+ 
+ instance KillRange Expr where
+   killRange (Ident q)            = killRange1 Ident q
++  killRange (IdentVar q)         = killRange1 IdentVar q
++  killRange (IdentName q)        = killRange1 IdentName q
+   killRange (Lit l)              = killRange1 Lit l
+   killRange (QuestionMark _ n)   = QuestionMark noRange n
+   killRange (Underscore _ n)     = Underscore noRange n
+@@ -721,6 +731,8 @@
+ 
+ instance KillRange Pattern where
+   killRange (IdentP q)      = killRange1 IdentP q
++  killRange (IdentVarP q)   = killRange1 IdentVarP q
++  killRange (IdentNameP q)  = killRange1 IdentNameP q
+   killRange (AppP p n)      = killRange2 AppP p n
+   killRange (RawAppP _ p)   = killRange1 (RawAppP noRange) p
+   killRange (OpAppP _ n p)  = killRange2 (OpAppP noRange) n p
+diff -Naur agda-2.4.2.2/src/full/Agda/Syntax/Translation/AbstractToConcrete.hs agda-2.4.2.2-kshow/src/full/Agda/Syntax/Translation/AbstractToConcrete.hs
+--- agda-2.4.2.2/src/full/Agda/Syntax/Translation/AbstractToConcrete.hs	2014-11-26 03:46:21.000000000 +0100
++++ agda-2.4.2.2-kshow/src/full/Agda/Syntax/Translation/AbstractToConcrete.hs	2015-05-22 20:21:16.331562803 +0200
+@@ -349,10 +349,10 @@
+ -- Expression instance ----------------------------------------------------
+ 
+ instance ToConcrete A.Expr C.Expr where
+-    toConcrete (Var x)            = Ident . C.QName <$> toConcrete x
+-    toConcrete (Def x)            = Ident <$> toConcrete x
+-    toConcrete (Proj x)           = Ident <$> toConcrete x
+-    toConcrete (Con (AmbQ (x:_))) = Ident <$> toConcrete x
++    toConcrete (Var x)            = IdentVar . C.QName <$> toConcrete x
++    toConcrete (Def x)            = IdentName <$> toConcrete x
++    toConcrete (Proj x)           = IdentName <$> toConcrete x
++    toConcrete (Con (AmbQ (x:_))) = IdentName <$> toConcrete x
+     toConcrete (Con (AmbQ []))    = __IMPOSSIBLE__
+         -- for names we have to use the name from the info, since the abstract
+         -- name has been resolved to a fully qualified name (except for
+@@ -568,7 +568,7 @@
+         do (t,(e, [], [], [])) <- toConcrete (t, A.RHS e)
+            info <- toConcrete info
+            ret [ C.TypeSig info x t
+-               , C.FunClause (C.LHS (C.IdentP $ C.QName x) [] [] [])
++               , C.FunClause (C.LHS (C.IdentNameP $ C.QName x) [] [] [])
+                              e C.NoWhere
+                ]
+     -- TODO: bind variables
+@@ -876,7 +876,7 @@
+ 
+ -- TODO: bind variables properly
+ instance ToConcrete A.Pattern C.Pattern where
+-    toConcrete (VarP x)    = toConcrete x >>= return . IdentP . C.QName
++    toConcrete (VarP x)    = toConcrete x >>= return . IdentVarP . C.QName
+     toConcrete (A.WildP i)         =
+         return $ C.WildP (getRange i)
+     toConcrete (ConP i (AmbQ []) args) = __IMPOSSIBLE__
+@@ -885,13 +885,13 @@
+         bracketP_ (appBrackets' args) $ do
+             x <- toConcrete x
+             args <- toConcreteCtx ArgumentCtx (noImplicitArgs args)
+-            return $ foldl AppP (C.IdentP x) args
++            return $ foldl AppP (C.IdentNameP x) args
+     toConcrete p@(DefP i x args) =
+       tryToRecoverOpAppP p $
+         bracketP_ (appBrackets' args) $ do
+             x <- toConcrete x
+             args <- toConcreteCtx ArgumentCtx (noImplicitArgs args)
+-            return $ foldl AppP (C.IdentP x) args
++            return $ foldl AppP (C.IdentNameP x) args
+     toConcrete (A.AsP i x p)   = do
+       (x, p) <- toConcreteCtx ArgumentCtx (x,p)
+       return $ C.AsP (getRange i) x p
