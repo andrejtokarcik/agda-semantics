@@ -1,0 +1,27 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    .List
+</ctx-stack>
+<sig>
+    Name ( "h" ) |-> Set ( 0 )
+    Fun ( "f" ) |-> ( #symVariable(3) : Set ( 0 ) ) -> ( #symVariable(4) : Set
+       ( 0 ) ) -> Set ( 0 )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "f" ) |-> Fun ( "f" )
+</ncat>
+<fun>
+    Fun ( "f" ) |-> 'fc(((#symFunClauses(16) DotP ( Var ( "n" ) )) Var ( 
+      "n" )) = Name ( "h" ))
+</fun>

@@ -1,0 +1,36 @@
+<k>
+    (t ( Fun ( "id" ) , { #symVariable(39) : Set ( 0 ) } -> ( #symVariable
+      (40) : #symVariable(39) ) -> #symVariable(39) ) t ( { { #symVariable(34)
+       : Set ( 0 ) } -> ( #symVariable(35) : #symVariable(34) ) -> 
+      #symVariable(34) } , { Set ( 1 ) } )) ~> whnfType ( HOLE ) ~> (HOLE Fun 
+      ( "id" )) ~> whnfType ( HOLE ) ~> (HOLE { %meta }) ~> whnfType ( HOLE )
+       ~> prepared! ~> t ( Fun ( "idd" ) , #symExpr(20) ) = HOLE ~> loadCtx
+       ~> .List{";"} ~> .List{";"} ~> .List{""}
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    ListItem(#map ( .Map ))
+</ctx-stack>
+<sig>
+    Fun ( "id" ) |-> { #symVariable(3) : Set ( 0 ) } -> ( #symVariable(2) 
+      : #symVariable(3) ) -> #symVariable(3)
+    Fun ( "idd" ) |-> #symExpr(20)
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    #symExpr(20) |-> t ( #symExpr(20) , Set ( #symInt(22) ) )
+    #symExpr(29) |-> t ( { #symVariable(34) : Set ( 0 ) } -> ( #symVariable(35
+      ) : #symVariable(34) ) -> #symVariable(34) , Set ( 0 ) )
+</meta>
+<ncat>
+    Name ( "id" ) |-> Fun ( "id" )
+    Name ( "idd" ) |-> Fun ( "idd" )
+</ncat>
+<fun>
+    Fun ( "id" ) |-> 'fc(((#symFunClauses(19) { #symVariable(17) }) Var ( 
+      "x" )) = Var ( "x" ))
+</fun>

@@ -1,0 +1,35 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    .List
+</ctx-stack>
+<sig>
+    Fun ( "if_then_else_" ) |-> { #symVariable(7) : Set ( 0 ) } -> ( 
+      #symVariable(4) : Data ( "Bool" ) ) -> ( #symVariable(5) : #symVariable(
+      7) ) -> ( #symVariable(6) : #symVariable(7) ) -> #symVariable(7)
+    Data ( "Bool" ) |-> Set ( 0 )
+    Con ( "false" ) |-> Data ( "Bool" )
+    Con ( "true" ) |-> Data ( "Bool" )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Bool" ) |-> Data ( "Bool" )
+    Name ( "false" ) |-> Con ( "false" )
+    Name ( "if_then_else_" ) |-> Fun ( "if_then_else_" )
+    Name ( "true" ) |-> Con ( "true" )
+</ncat>
+<fun>
+    Fun ( "if_then_else_" ) |-> 'fc(((((#symFunClauses(36) { #symVariable(
+      32) }) Con ( "true" )) Var ( "x" )) Var ( "y" )) = Var ( "x" ),, ((((
+      #symFunClauses(65) { #symVariable(61) }) Con ( "false" )) Var ( "x" )) 
+      Var ( "y" )) = Var ( "y" ))
+</fun>

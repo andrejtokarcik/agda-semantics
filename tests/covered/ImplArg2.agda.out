@@ -1,0 +1,48 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    .List
+</ctx-stack>
+<sig>
+    Fun ( "cons" ) |-> { #symVariable(64) : Set ( 0 ) } -> ( #symVariable(
+      63) : #symVariable(64) ) -> { #symVariable(62) : Data ( "Nat" ) } -> ( 
+      #symVariable(61) : ((Data ( "Vec" ) #symVariable(64)) #symVariable(62)) 
+      ) -> ((Data ( "Vec" ) #symVariable(64)) (Con ( "suc" ) #symVariable(62))
+      )
+    Data ( "Nat" ) |-> Set ( 0 )
+    Data ( "Vec" ) |-> ( #symVariable(7) : Set ( 0 ) ) -> ( #symVariable(6) : 
+      Data ( "Nat" ) ) -> Set ( 0 )
+    Con ( "suc" ) |-> ( #symVariable(5) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "vcons" ) |-> { #symVariable(40) : Set ( 0 ) } -> { #symVariable(39)
+       : Data ( "Nat" ) } -> ( #symVariable(37) : #symVariable(40) ) -> ( 
+      #symVariable(38) : ((Data ( "Vec" ) #symVariable(40)) #symVariable(39)) 
+      ) -> ((Data ( "Vec" ) #symVariable(40)) (Con ( "suc" ) #symVariable(39))
+      )
+    Con ( "vnil" ) |-> { #symVariable(16) : Set ( 0 ) } -> ((Data ( "Vec" ) 
+      #symVariable(16)) Con ( "zero" ))
+    Con ( "zero" ) |-> Data ( "Nat" )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Nat" ) |-> Data ( "Nat" )
+    Name ( "Vec" ) |-> Data ( "Vec" )
+    Name ( "cons" ) |-> Fun ( "cons" )
+    Name ( "suc" ) |-> Con ( "suc" )
+    Name ( "vcons" ) |-> Con ( "vcons" )
+    Name ( "vnil" ) |-> Con ( "vnil" )
+    Name ( "zero" ) |-> Con ( "zero" )
+</ncat>
+<fun>
+    Fun ( "cons" ) |-> 'fc((((#symFunClauses(129) { #symVariable(125) }) 
+      Var ( "a" )) { #symVariable(127) }) = (((Con ( "vcons" ) { #symVariable(
+      125) }) { #symVariable(127) }) Var ( "a" )))
+</fun>

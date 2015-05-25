@@ -1,0 +1,91 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    .List
+</ctx-stack>
+<sig>
+    Fun ( "_!!_" ) |-> { #symVariable(425) : Set ( 0 ) } -> ( #symVariable
+      (423) : (Data ( "List" ) #symVariable(425)) ) -> ( #symVariable(424) : 
+      Data ( "8469" ) ) -> (Data ( "Maybe" ) #symVariable(425))
+    Fun ( "_++'_" ) |-> { #symVariable(220) : Set ( 0 ) } -> ( #symVariable(
+      218) : (Data ( "List" ) #symVariable(220)) ) -> ( #symVariable(219) : (
+      Data ( "List" ) #symVariable(220)) ) -> (Data ( "List" ) #symVariable(
+      220))
+    Fun ( "_++_" ) |-> { #symVariable(82) : Set ( 0 ) } -> ( #symVariable(80) 
+      : (Data ( "List" ) #symVariable(82)) ) -> ( #symVariable(81) : (Data ( 
+      "List" ) #symVariable(82)) ) -> (Data ( "List" ) #symVariable(82))
+    Fun ( "_+_" ) |-> ( #symVariable(8) : Data ( "8469" ) ) -> ( #symVariable(
+      9) : Data ( "8469" ) ) -> Data ( "8469" )
+    Fun ( "rev" ) |-> { #symVariable(355) : Set ( 0 ) } -> ( #symVariable(354)
+       : (Data ( "List" ) #symVariable(355)) ) -> (Data ( "List" ) 
+      #symVariable(355))
+    Data ( "8469" ) |-> Set ( 0 )
+    Data ( "List" ) |-> ( #symVariable(51) : Set ( 0 ) ) -> Set ( 0 )
+    Data ( "Maybe" ) |-> ( #symVariable(403) : Set ( 0 ) ) -> Set ( 0 )
+    Con ( "[]" ) |-> { #symVariable(56) : Set ( 0 ) } -> (Data ( "List" ) 
+      #symVariable(56))
+    Con ( "_8759_" ) |-> { #symVariable(67) : Set ( 0 ) } -> ( #symVariable(66
+      ) : #symVariable(67) ) -> ( #symVariable(65) : (Data ( "List" ) 
+      #symVariable(67)) ) -> (Data ( "List" ) #symVariable(67))
+    Con ( "just" ) |-> { #symVariable(409) : Set ( 0 ) } -> ( #symVariable(408
+      ) : #symVariable(409) ) -> (Data ( "Maybe" ) #symVariable(409))
+    Con ( "nothing" ) |-> { #symVariable(414) : Set ( 0 ) } -> (Data ( "Maybe"
+       ) #symVariable(414))
+    Con ( "suc" ) |-> ( #symVariable(7) : Data ( "8469" ) ) -> Data ( "8469" )
+    Con ( "zero" ) |-> Data ( "8469" )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "8469" ) |-> Data ( "8469" )
+    Name ( "List" ) |-> Data ( "List" )
+    Name ( "Maybe" ) |-> Data ( "Maybe" )
+    Name ( "[]" ) |-> Con ( "[]" )
+    Name ( "_!!_" ) |-> Fun ( "_!!_" )
+    Name ( "_++'_" ) |-> Fun ( "_++'_" )
+    Name ( "_++_" ) |-> Fun ( "_++_" )
+    Name ( "_+_" ) |-> Fun ( "_+_" )
+    Name ( "_8759_" ) |-> Con ( "_8759_" )
+    Name ( "just" ) |-> Con ( "just" )
+    Name ( "nothing" ) |-> Con ( "nothing" )
+    Name ( "rev" ) |-> Fun ( "rev" )
+    Name ( "suc" ) |-> Con ( "suc" )
+    Name ( "zero" ) |-> Con ( "zero" )
+</ncat>
+<fun>
+    Fun ( "_!!_" ) |-> 'fc((((#symFunClauses(468) { DotP ( #symVariable(
+      465) ) }) (Con ( "[]" ) { #symVariable(465) })) Var ( "n" )) = (Con ( 
+      "nothing" ) { #symVariable(465) }),, (((#symFunClauses(532) { DotP ( 
+      #symVariable(529) ) }) (((Con ( "_8759_" ) { #symVariable(529) }) Var ( 
+      "a" )) Var ( "as" ))) Con ( "zero" )) = ((Con ( "just" ) { #symVariable(
+      529) }) Var ( "a" )),, (((#symFunClauses(606) { DotP ( #symVariable(603)
+       ) }) (((Con ( "_8759_" ) { #symVariable(603) }) Var ( "a" )) Var ( "as"
+       ))) (Con ( "suc" ) Var ( "n" ))) = (((Fun ( "_!!_" ) { #symVariable(603
+      ) }) Var ( "as" )) Var ( "n" )))
+    Fun ( "_++'_" ) |-> 'fc((((#symFunClauses(258) { DotP ( #symVariable(255) 
+      ) }) Var ( "as" )) (Con ( "[]" ) { #symVariable(255) })) = Var ( "as" )
+      ,, (((#symFunClauses(345) { DotP ( #symVariable(342) ) }) Var ( "as" )) 
+      (((Con ( "_8759_" ) { #symVariable(342) }) Var ( "b" )) Var ( "bs" ))) =
+       (((Fun ( "_++'_" ) { #symVariable(342) }) (((Con ( "_8759_" ) { 
+      #symVariable(342) }) Var ( "b" )) Var ( "as" ))) Var ( "bs" )))
+    Fun ( "_++_" ) |-> 'fc((((#symFunClauses(118) { DotP ( #symVariable(115) )
+       }) (Con ( "[]" ) { #symVariable(115) })) Var ( "bs" )) = Var ( "bs" )
+      ,, (((#symFunClauses(205) { DotP ( #symVariable(202) ) }) (((Con ( 
+      "_8759_" ) { #symVariable(202) }) Var ( "a" )) Var ( "as" ))) Var ( "bs"
+       )) = (((Con ( "_8759_" ) { #symVariable(202) }) Var ( "a" )) (((Fun ( 
+      "_++_" ) { #symVariable(202) }) Var ( "as" )) Var ( "bs" ))))
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(21) Con ( "zero" )) Var ( "n" )) = 
+      Var ( "n" ),, ((#symFunClauses(50) (Con ( "suc" ) Var ( "m" ))) Var ( 
+      "n" )) = (Con ( "suc" ) ((Fun ( "_+_" ) Var ( "m" )) Var ( "n" ))))
+    Fun ( "rev" ) |-> 'fc(((#symFunClauses(402) { #symVariable(400) }) Var ( 
+      "as" )) = (((Fun ( "_++'_" ) { #symVariable(400) }) (Con ( "[]" ) { 
+      #symVariable(400) })) Var ( "as" )))
+</fun>

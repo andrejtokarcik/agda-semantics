@@ -1,0 +1,36 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    .List
+</ctx-stack>
+<sig>
+    Fun ( "f" ) |-> ( #symVariable(40) : (Name ( "P" ) Fun ( "g" )) ) -> (
+      Name ( "P" ) Fun ( "g'" ))
+    Fun ( "g" ) |-> ( #symVariable(4) : Name ( "A" ) ) -> Name ( "A" )
+    Fun ( "g'" ) |-> ( #symVariable(10) : Name ( "A" ) ) -> Name ( "A" )
+    Postlt ( "A" ) |-> Set ( 0 )
+    Postlt ( "P" ) |-> ( #symVariable(20) : ( #symVariable(21) : Postlt ( "A" 
+      ) ) -> Postlt ( "A" ) ) -> Set ( 0 )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "A" ) |-> Postlt ( "A" )
+    Name ( "P" ) |-> Postlt ( "P" )
+    Name ( "f" ) |-> Fun ( "f" )
+    Name ( "g" ) |-> Fun ( "g" )
+    Name ( "g'" ) |-> Fun ( "g'" )
+</ncat>
+<fun>
+    Fun ( "f" ) |-> \ ( Var ( "x" ) : #symExpr(57) ) -> Var ( "x" )
+    Fun ( "g" ) |-> \ ( Var ( "x" ) : Name ( "A" ) ) -> Var ( "x" )
+    Fun ( "g'" ) |-> \ ( Var ( "a" ) : #symExpr(17) ) -> Var ( "a" )
+</fun>

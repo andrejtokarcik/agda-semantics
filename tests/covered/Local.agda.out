@@ -1,0 +1,99 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    .List
+</ctx-stack>
+<sig>
+    Fun ( "_*_" ) |-> ( #symVariable(47) : Data ( "Nat" ) ) -> ( 
+      #symVariable(48) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Fun ( "_+_" ) |-> ( #symVariable(4) : Data ( "Nat" ) ) -> ( #symVariable(5
+      ) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Fun ( "f" ) |-> Data ( "Nat" )
+    Fun ( "g" ) |-> ( #symVariable(213) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Fun ( "h" ) |-> ( #symVariable(157) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Fun ( "k" ) |-> ( #symVariable(353) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Fun ( "t1" ) |-> Data ( "Nat" )
+    Data ( "Nat" ) |-> Set ( 0 )
+    Con ( "succ" ) |-> ( #symVariable(3) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "zero" ) |-> Data ( "Nat" )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Nat" ) |-> Data ( "Nat" )
+    Name ( "_*_" ) |-> Fun ( "_*_" )
+    Name ( "_+_" ) |-> Fun ( "_+_" )
+    Name ( "f" ) |-> Fun ( "f" )
+    Name ( "g" ) |-> Fun ( "g" )
+    Name ( "h" ) |-> Fun ( "h" )
+    Name ( "k" ) |-> Fun ( "k" )
+    Name ( "succ" ) |-> Con ( "succ" )
+    Name ( "t1" ) |-> Fun ( "t1" )
+    Name ( "zero" ) |-> Con ( "zero" )
+</ncat>
+<fun>
+    Fun ( "_*_" ) |-> 'fc(((#symFunClauses(61) Con ( "zero" )) #symExpr(54
+      )) = Con ( "zero" ),, ((#symFunClauses(94) (Con ( "succ" ) Var ( "m" )))
+       Var ( "n" )) = ((Fun ( "_+_" ) Var ( "n" )) ((Fun ( "_*_" ) Var ( "m" )
+      ) Var ( "n" ))))
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(17) Con ( "zero" )) Var ( "n" )) = 
+      Var ( "n" ),, ((#symFunClauses(46) (Con ( "succ" ) Var ( "m" ))) Var ( 
+      "n" )) = (Con ( "succ" ) ((Fun ( "_+_" ) Var ( "m" )) Var ( "n" ))))
+    Fun ( "f" ) |-> ((Fun ( "_+_" ) (< Fun ( "h" ) , Fun ( "h" ) |-> ( 
+      #symVariable(95) : Data ( "Nat" ) ) -> Data ( "Nat" ) , Fun ( "h" ) |-> 
+      \ ( Var ( "m" ) : Data ( "Nat" ) ) -> (Con ( "succ" ) (Con ( "succ" ) 
+      Var ( "m" ))) > Con ( "zero" ))) (< Fun ( "h" ) , Fun ( "h" ) |-> ( 
+      #symVariable(95) : Data ( "Nat" ) ) -> Data ( "Nat" ) , Fun ( "h" ) |-> 
+      \ ( Var ( "m" ) : Data ( "Nat" ) ) -> (Con ( "succ" ) (Con ( "succ" ) 
+      Var ( "m" ))) > (Con ( "succ" ) Con ( "zero" ))))
+    Fun ( "g" ) |-> \ ( Var ( "n" ) : #symExpr(334) ) -> ((Fun ( "_+_" ) (< 
+      Fun ( "fib" ) , Fun ( "fact" ) |-> ( #symVariable(274) : Data ( "Nat" ) 
+      ) -> Data ( "Nat" ) Fun ( "fib" ) |-> ( #symVariable(214) : Data ( "Nat"
+       ) ) -> Data ( "Nat" ) , Fun ( "fact" ) |-> 'fc((#symFunClauses(284) Con
+       ( "zero" )) = (Con ( "succ" ) Con ( "zero" )),, (#symFunClauses(311) (
+      Con ( "succ" ) Var ( "n" ))) = ((Fun ( "_*_" ) (Con ( "succ" ) Var ( "n"
+       ))) (Fun ( "fact" ) Var ( "n" )))) Fun ( "fib" ) |-> 'fc((
+      #symFunClauses(224) Con ( "zero" )) = (Con ( "succ" ) Con ( "zero" )),, 
+      (#symFunClauses(238) (Con ( "succ" ) Con ( "zero" ))) = (Con ( "succ" ) 
+      Con ( "zero" )),, (#symFunClauses(273) (Con ( "succ" ) (Con ( "succ" ) 
+      Var ( "n" )))) = ((Fun ( "_+_" ) (Fun ( "fib" ) (Con ( "succ" ) Var ( 
+      "n" )))) (Fun ( "fib" ) Var ( "n" )))) > Var ( "n" ))) (< Fun ( "fact" )
+       , Fun ( "fact" ) |-> ( #symVariable(274) : Data ( "Nat" ) ) -> Data ( 
+      "Nat" ) Fun ( "fib" ) |-> ( #symVariable(214) : Data ( "Nat" ) ) -> Data
+       ( "Nat" ) , Fun ( "fact" ) |-> 'fc((#symFunClauses(284) Con ( "zero" ))
+       = (Con ( "succ" ) Con ( "zero" )),, (#symFunClauses(311) (Con ( "succ" 
+      ) Var ( "n" ))) = ((Fun ( "_*_" ) (Con ( "succ" ) Var ( "n" ))) (Fun ( 
+      "fact" ) Var ( "n" )))) Fun ( "fib" ) |-> 'fc((#symFunClauses(224) Con (
+       "zero" )) = (Con ( "succ" ) Con ( "zero" )),, (#symFunClauses(238) (Con
+       ( "succ" ) Con ( "zero" ))) = (Con ( "succ" ) Con ( "zero" )),, (
+      #symFunClauses(273) (Con ( "succ" ) (Con ( "succ" ) Var ( "n" )))) = ((
+      Fun ( "_+_" ) (Fun ( "fib" ) (Con ( "succ" ) Var ( "n" )))) (Fun ( "fib"
+       ) Var ( "n" )))) > Var ( "n" )))
+    Fun ( "h" ) |-> \ ( Var ( "n" ) : #symExpr(206) ) -> (< Fun ( "twice" ) , 
+      Fun ( "add2" ) |-> Data ( "Nat" ) Fun ( "twice" ) |-> ( #symVariable(179
+      ) : Data ( "Nat" ) ) -> Data ( "Nat" ) , Fun ( "add2" ) |-> (Con ( 
+      "succ" ) (Con ( "succ" ) Var ( "n" ))) Fun ( "twice" ) |-> \ ( Var ( "m"
+       ) : Data ( "Nat" ) ) -> ((Fun ( "_*_" ) Var ( "m" )) Var ( "m" )) > < 
+      Fun ( "add2" ) , Fun ( "add2" ) |-> Data ( "Nat" ) Fun ( "twice" ) |-> (
+       #symVariable(179) : Data ( "Nat" ) ) -> Data ( "Nat" ) , Fun ( "add2" )
+       |-> (Con ( "succ" ) (Con ( "succ" ) Var ( "n" ))) Fun ( "twice" ) |-> \
+       ( Var ( "m" ) : Data ( "Nat" ) ) -> ((Fun ( "_*_" ) Var ( "m" )) Var ( 
+      "m" )) >)
+    Fun ( "k" ) |-> \ ( Var ( "n" ) : #symExpr(432) ) -> (< Fun ( "aux" ) , 
+      Fun ( "aux" ) |-> ( #symVariable(377) : Data ( "Nat" ) ) -> Data ( "Nat"
+       ) , Fun ( "aux" ) |-> \ ( Var ( "m" ) : Data ( "Nat" ) ) -> ((Fun ( 
+      "_+_" ) (Fun ( "pred" ) (Fun ( "g" ) Var ( "m" )))) (Fun ( "h" ) Var ( 
+      "m" ))) > (< Fun ( "pred" ) , Fun ( "pred" ) |-> ( #symVariable(354) : 
+      Data ( "Nat" ) ) -> Data ( "Nat" ) , Fun ( "pred" ) |-> 'fc((
+      #symFunClauses(360) Con ( "zero" )) = Con ( "zero" ),, (#symFunClauses(
+      371) (Con ( "succ" ) Var ( "m" ))) = Var ( "m" )) > Var ( "n" )))
+    Fun ( "t1" ) |-> Fun ( "f" )
+</fun>

@@ -1,0 +1,27 @@
+<k>
+    Set ( 0 ) #== Set ( 1 ) ~> Set ( 1 ) == Set ( 0 ) ~> addFunClause ( 
+      Fun ( "y" ) , Fun ( "y" ) , Name ( "x" ) ) ~> unifyConf ~> killMgu ~> 
+      cleanMetas ~> loadCtx ~> .List{";"} ~> .List{";"} ~> .List{""}
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    ListItem(#map ( .Map ))
+</ctx-stack>
+<sig>
+    Name ( "x" ) |-> Set ( 0 )
+    Fun ( "y" ) |-> Set ( 1 )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "y" ) |-> Fun ( "y" )
+</ncat>
+<fun>
+    .Map
+</fun>

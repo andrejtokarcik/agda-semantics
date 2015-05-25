@@ -1,0 +1,114 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    .List
+</ctx-stack>
+<sig>
+    Fun ( "four" ) |-> Data ( "Nat" )
+    Fun ( "id" ) |-> { #symVariable(75) : Set ( 0 ) } -> ( #symVariable(74) : 
+      #symVariable(75) ) -> #symVariable(75)
+    Fun ( "id'" ) |-> ( #symVariable(4) : Set ( 0 ) ) -> ( #symVariable(3) : 
+      #symVariable(4) ) -> #symVariable(4)
+    Fun ( "id0" ) |-> ( #symVariable(149) : Set ( 0 ) ) -> ( #symVariable(148)
+       : #symVariable(149) ) -> #symVariable(149)
+    Fun ( "id1" ) |-> ( #symVariable(169) : Set ( 0 ) ) -> ( #symVariable(168)
+       : #symVariable(169) ) -> #symVariable(169)
+    Fun ( "id2" ) |-> ( #symVariable(190) : Set ( 0 ) ) -> ( #symVariable(189)
+       : #symVariable(190) ) -> #symVariable(190)
+    Fun ( "id3" ) |-> ( Var ( "A" ) : Set ( 0 ) ) -> ( Var ( "x" ) : Var ( "A"
+       ) ) -> Var ( "A" )
+    Fun ( "id4" ) |-> { #symVariable(205) : Set ( 0 ) } -> ( #symVariable(204)
+       : #symVariable(205) ) -> #symVariable(205)
+    Fun ( "id5" ) |-> { #symVariable(223) : Set ( 0 ) } -> ( #symVariable(222)
+       : #symVariable(223) ) -> #symVariable(223)
+    Fun ( "id6" ) |-> { #symVariable(238) : Set ( 0 ) } -> ( #symVariable(237)
+       : #symVariable(238) ) -> #symVariable(238)
+    Fun ( "id7" ) |-> ( Var ( "x" ) : #symExpr(257) ) -> #symExpr(257)
+    Fun ( "id8" ) |-> { #symVariable(266) : Set ( 0 ) } -> ( #symVariable(265)
+       : #symVariable(266) ) -> #symVariable(266)
+    Fun ( "one" ) |-> Data ( "Nat" )
+    Fun ( "three" ) |-> Data ( "Nat" )
+    Fun ( "two" ) |-> Data ( "Nat" )
+    Fun ( "zero0" ) |-> Data ( "Nat" )
+    Fun ( "zero1" ) |-> Data ( "Nat" )
+    Fun ( "zero2" ) |-> Data ( "Nat" )
+    Fun ( "zero3" ) |-> Data ( "Nat" )
+    Fun ( "zero4" ) |-> Data ( "Nat" )
+    Data ( "Nat" ) |-> Set ( 0 )
+    Con ( "suc" ) |-> ( #symVariable(23) : Data ( "Nat" ) ) -> Data ( "Nat" )
+    Con ( "zero" ) |-> Data ( "Nat" )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "Nat" ) |-> Data ( "Nat" )
+    Name ( "four" ) |-> Fun ( "four" )
+    Name ( "id" ) |-> Fun ( "id" )
+    Name ( "id'" ) |-> Fun ( "id'" )
+    Name ( "id0" ) |-> Fun ( "id0" )
+    Name ( "id1" ) |-> Fun ( "id1" )
+    Name ( "id2" ) |-> Fun ( "id2" )
+    Name ( "id3" ) |-> Fun ( "id3" )
+    Name ( "id4" ) |-> Fun ( "id4" )
+    Name ( "id5" ) |-> Fun ( "id5" )
+    Name ( "id6" ) |-> Fun ( "id6" )
+    Name ( "id7" ) |-> Fun ( "id7" )
+    Name ( "id8" ) |-> Fun ( "id8" )
+    Name ( "one" ) |-> Fun ( "one" )
+    Name ( "suc" ) |-> Con ( "suc" )
+    Name ( "three" ) |-> Fun ( "three" )
+    Name ( "two" ) |-> Fun ( "two" )
+    Name ( "zero" ) |-> Con ( "zero" )
+    Name ( "zero0" ) |-> Fun ( "zero0" )
+    Name ( "zero1" ) |-> Fun ( "zero1" )
+    Name ( "zero2" ) |-> Fun ( "zero2" )
+    Name ( "zero3" ) |-> Fun ( "zero3" )
+    Name ( "zero4" ) |-> Fun ( "zero4" )
+</ncat>
+<fun>
+    Fun ( "four" ) |-> ((Fun ( "id" ) { Data ( "Nat" ) }) (Con ( "suc" ) 
+      Fun ( "three" )))
+    Fun ( "id" ) |-> 'fc(((#symFunClauses(91) { #symVariable(89) }) Var ( "x" 
+      )) = Var ( "x" ))
+    Fun ( "id'" ) |-> \ ( Var ( "A" ) : #symExpr(17) ) -> \ ( Var ( "x" ) : 
+      #symExpr(20) ) -> Var ( "x" )
+    Fun ( "id0" ) |-> \ ( Var ( "A" ) : #symExpr(162) ) -> \ ( Var ( "x" ) : 
+      #symExpr(165) ) -> Var ( "x" )
+    Fun ( "id1" ) |-> \ ( #symExpr(170) : #symExpr(183) ) -> \ ( Var ( "x" ) :
+       #symExpr(186) ) -> Var ( "x" )
+    Fun ( "id2" ) |-> \ ( Var ( "A" ) : Set ( 0 ) ) -> \ ( Var ( "x" ) : Var (
+       "A" ) ) -> Var ( "x" )
+    Fun ( "id3" ) |-> \ ( Var ( "A" ) : Set ( 0 ) ) -> \ ( Var ( "x" ) : Var (
+       "A" ) ) -> Var ( "x" )
+    Fun ( "id4" ) |-> 'fc(((#symFunClauses(221) { #symVariable(219) }) Var ( 
+      "x" )) = Var ( "x" ))
+    Fun ( "id5" ) |-> 'fc(((#symFunClauses(236) { Var ( "A" ) }) Var ( "x" )) 
+      = Var ( "x" ))
+    Fun ( "id6" ) |-> 'fc((#symFunClauses(253) { #symVariable(251) }) = \ ( 
+      Var ( "x" ) : #symVariable(251) ) -> Var ( "x" ))
+    Fun ( "id7" ) |-> (\ { Var ( "A" ) : Set ( 0 ) } -> \ ( Var ( "x" ) : Var 
+      ( "A" ) ) -> Var ( "x" ) { #symExpr(257) })
+    Fun ( "id8" ) |-> 'fc((#symFunClauses(289) { #symVariable(287) }) = (\ { 
+      Var ( "A" ) : #symExpr(283) } -> \ ( Var ( "x" ) : #symVariable(287) ) 
+      -> Var ( "x" ) { #symExpr(282) }))
+    Fun ( "one" ) |-> ((Fun ( "id'" ) Data ( "Nat" )) (Con ( "suc" ) Con ( 
+      "zero" )))
+    Fun ( "three" ) |-> ((Fun ( "id" ) { Data ( "Nat" ) }) (Con ( "suc" ) Fun 
+      ( "two" )))
+    Fun ( "two" ) |-> ((Fun ( "id'" ) Data ( "Nat" )) (Con ( "suc" ) Fun ( 
+      "one" )))
+    Fun ( "zero0" ) |-> ((Fun ( "id0" ) Data ( "Nat" )) Con ( "zero" ))
+    Fun ( "zero1" ) |-> ((Fun ( "id0" ) Data ( "Nat" )) Con ( "zero" ))
+    Fun ( "zero2" ) |-> ((Fun ( "id4" ) { Data ( "Nat" ) }) Con ( "zero" ))
+    Fun ( "zero3" ) |-> ((Fun ( "id4" ) { Data ( "Nat" ) }) Con ( "zero" ))
+    Fun ( "zero4" ) |-> ((Fun ( "id4" ) { Data ( "Nat" ) }) Con ( "zero" ))
+      
+</fun>

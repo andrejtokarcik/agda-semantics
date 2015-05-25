@@ -1,0 +1,58 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    .List
+</ctx-stack>
+<sig>
+    Fun ( "_+_" ) |-> ( #symVariable(7) : Data ( "8469" ) ) -> ( 
+      #symVariable(8) : Data ( "8469" ) ) -> Data ( "8469" )
+    Fun ( "sym" ) |-> ( #symVariable(136) : #symExpr(137) ) -> ( #symVariable(
+      135) : #symExpr(137) ) -> ( #symVariable(134) : (((Data ( "_==_" ) { 
+      #symExpr(137) }) #symVariable(136)) #symVariable(135)) ) -> (((Data ( 
+      "_==_" ) { #symExpr(137) }) #symVariable(135)) #symVariable(136))
+    Data ( "8469" ) |-> Set ( 0 )
+    Data ( "_8801_" ) |-> { #symVariable(52) : Set ( 0 ) } -> ( #symVariable(
+      51) : #symVariable(52) ) -> ( #symVariable(50) : #symVariable(52) ) -> 
+      Set ( 0 )
+    Data ( "_==_" ) |-> { #symVariable(74) : Set ( 0 ) } -> ( #symVariable(72)
+       : #symVariable(74) ) -> ( #symVariable(73) : #symVariable(74) ) -> Set 
+      ( 0 )
+    Con ( "refl" ) |-> { #symVariable(71) : Set ( 0 ) } -> { #symVariable(70) 
+      : #symVariable(71) } -> (((Data ( "_8801_" ) { #symVariable(71) }) 
+      #symVariable(70)) #symVariable(70))
+    Con ( "refl'" ) |-> { #symVariable(93) : Set ( 0 ) } -> ( #symVariable(92)
+       : #symVariable(93) ) -> (((Data ( "_==_" ) { #symVariable(93) }) 
+      #symVariable(92)) #symVariable(92))
+    Con ( "succ" ) |-> ( #symVariable(6) : Data ( "8469" ) ) -> Data ( "8469" 
+      )
+    Con ( "zero" ) |-> Data ( "8469" )
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "8469" ) |-> Data ( "8469" )
+    Name ( "_+_" ) |-> Fun ( "_+_" )
+    Name ( "_8801_" ) |-> Data ( "_8801_" )
+    Name ( "_==_" ) |-> Data ( "_==_" )
+    Name ( "refl" ) |-> Con ( "refl" )
+    Name ( "refl'" ) |-> Con ( "refl'" )
+    Name ( "succ" ) |-> Con ( "succ" )
+    Name ( "sym" ) |-> Fun ( "sym" )
+    Name ( "zero" ) |-> Con ( "zero" )
+</ncat>
+<fun>
+    Fun ( "_+_" ) |-> 'fc(((#symFunClauses(20) Con ( "zero" )) Var ( "m" )
+      ) = Var ( "m" ),, ((#symFunClauses(49) (Con ( "succ" ) Var ( "n" ))) Var
+       ( "m" )) = (Con ( "succ" ) ((Fun ( "_+_" ) Var ( "n" )) Var ( "m" ))))
+    Fun ( "sym" ) |-> 'fc((((#symFunClauses(177) DotP ( Var ( "a" ) )) DotP ( 
+      Var ( "a" ) )) ((Con ( "refl'" ) { #symExpr(137) }) Var ( "a" ))) = ((
+      Con ( "refl'" ) { #symExpr(137) }) Var ( "a" )))
+</fun>

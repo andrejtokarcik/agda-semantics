@@ -1,0 +1,27 @@
+<k>
+    .K
+</k>
+<mgu>
+    subst(.KList)
+</mgu>
+<ctx-stack>
+    .List
+</ctx-stack>
+<sig>
+    Fun ( "id8" ) |-> { #symVariable(3) : Set ( 0 ) } -> ( #symVariable(2)
+       : #symVariable(3) ) -> #symVariable(3)
+</sig>
+<ctx>
+    .Map
+</ctx>
+<meta>
+    .Map
+</meta>
+<ncat>
+    Name ( "id8" ) |-> Fun ( "id8" )
+</ncat>
+<fun>
+    Fun ( "id8" ) |-> 'fc((#symFunClauses(26) { #symVariable(24) }) = (\ {
+       Var ( "A" ) : #symExpr(20) } -> \ ( Var ( "x" ) : #symVariable(24) ) ->
+       Var ( "x" ) { #symExpr(19) }))
+</fun>

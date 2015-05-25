@@ -3,11 +3,11 @@
 
   <test
     definition="agda.k"
-    programs="."
     extension="agda"
-    results="." >
+    programs="covered"
+    results="covered" >
     <all-programs>
-      <krun-option name="--parser" value="agda-kshow -itests -v0" />
+      <krun-option name="--parser" value="agda-kshow -itests/covered -v0 --ignore-interfaces" />
       <!--
       <krun-option name="&#x002d;&#x002d;pattern" value="&lt;k&gt; V:K &lt;/k&gt;" />
       <krun-option name="&#x002d;&#x002d;pattern" value="&lt;data&gt; D:K &lt;/data&gt;" />
